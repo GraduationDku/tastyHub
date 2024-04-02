@@ -2,6 +2,8 @@ package com.example.tastyhub.common.domain.user.service;
 
 import static com.example.tastyhub.fixture.user.UserFixture.DUPLICATED_NICK_NAME;
 import static com.example.tastyhub.fixture.user.UserFixture.DUPLICATED_USER_NAME;
+import static com.example.tastyhub.fixture.user.UserFixture.SIGNUP_REQUEST;
+import static com.example.tastyhub.fixture.user.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -20,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +30,8 @@ class UserServiceImplTest {
 
     @Mock
     UserRepository userRepository;
+    @Mock
+    PasswordEncoder passwordEncoder;
 
     @InjectMocks
     UserServiceImpl userService;
@@ -77,12 +82,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("signup 성공")
     void signup() {
-
-    }
-
-    @Test
-    @DisplayName("signup 실패")
-    void failSignup() {
+        userService.signup(SIGNUP_REQUEST);
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
