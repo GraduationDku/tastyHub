@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.cookstep.entity;
 
-import com.example.tastyhub.TimeStamped;
+import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

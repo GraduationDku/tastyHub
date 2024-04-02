@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.foodInformation.entity;
 
-import com.example.tastyhub.TimeStamped;
+import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
