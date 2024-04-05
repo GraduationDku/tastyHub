@@ -1,5 +1,8 @@
 package com.example.tastyhub.common.domain.user.service;
 
+import static com.example.tastyhub.common.utils.Jwt.JwtUtill.AUTHORIZATION_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.JwtUtill.REFRESH_HEADER;
+
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
@@ -7,10 +10,10 @@ import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
+import com.example.tastyhub.common.utils.Jwt.JwtUtill;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final JwtUtill jwtUtill;
 
 
     @Override
@@ -62,7 +67,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void login(LoginRequest loginRequest, HttpServletResponse response) {
-
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword()+username.substring(0,2);
+        User byUsername = userRepository.findByUsername(username);
+        if (!passwordEncoder.matches(password, byUsername.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
+        }
+        String accessToken = jwtUtill.createAccessToken(byUsername.getUsername(),
+            byUsername.getUserType());
+        String refreshToken = jwtUtill.createRefreshToken(byUsername.getUsername(),
+            byUsername.getUserType());
+        response.addHeader(AUTHORIZATION_HEADER, accessToken);
+        response.addHeader(REFRESH_HEADER, refreshToken);
     }
 
 

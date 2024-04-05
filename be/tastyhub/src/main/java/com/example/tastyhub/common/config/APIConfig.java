@@ -7,5 +7,4 @@ public class APIConfig {
     public final static String VILLAGE_API = "/village";
 
 
-
 }

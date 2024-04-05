@@ -45,7 +45,7 @@ public class JwtUtill {
     }
 
     // username, userType를 가지고 AccessToken 을 생성하는 메서드
-    public String createAceesToken(String username, userType role) {
+    public String createAccessToken(String username, userType role) {
  
         Date issuedAt = new Date();
         Date expireAt = new Date(issuedAt.getTime() + ACCESS_TOKEN_TIME);
