@@ -16,7 +16,7 @@
 |:---:|:---:|:---:|:---:|
 |학과|소프트웨어학과|소프트웨어학과|소프트웨어학과|
 |학번|32197083|32183786|32207352|
-|역할|Backend, 팀 리더, Junit Test(단위), API 문서화, API 설계 및 개발, query 최적화|Backend, 서버 환경 구축, 클라우드 서버 관리, CI/CD 구축, API 설계 및 개발|Frontend, UI/UX, 성능 최적화 , 크로스 브라우징, 반응형 디자인|
+|역할|**Backend**, 팀 리더, Junit Test(단위), API 문서화, API 설계 및 개발, query 최적화|**Backend**, 서버 환경 구축, 클라우드 서버 관리, CI/CD 구축, API 설계 및 개발|**Frontend**, UI/UX, 성능 최적화 , 크로스 브라우징, 반응형 디자인|
 |사용기술|Java, Spring, JPA, Query DSL, MySQL, Security, Rest Docs, docker, git action, jenkins, nginx|Java, Spring, JPA, MySQL, EC2, S3, RDS, docker, jenkins|React, Typescript, Css, Redux, Sass, vercel, Prettier|
 <br>
 
