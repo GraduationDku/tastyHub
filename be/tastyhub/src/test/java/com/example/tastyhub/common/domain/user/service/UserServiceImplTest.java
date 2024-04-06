@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
-import com.example.tastyhub.common.utils.Jwt.JwtUtill;
+import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Assertions;
@@ -44,7 +44,7 @@ class UserServiceImplTest {
     RedisUtil redisUtil;
 
     @Mock
-    JwtUtill jwtUtill;
+    JwtUtil jwtUtill;
 
     @InjectMocks
     UserServiceImpl userService;

@@ -1,7 +1,7 @@
 package com.example.tastyhub.common.domain.user.service;
 
-import static com.example.tastyhub.common.utils.Jwt.JwtUtill.AUTHORIZATION_HEADER;
-import static com.example.tastyhub.common.utils.Jwt.JwtUtill.REFRESH_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
 
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
@@ -10,7 +10,7 @@ import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
-import com.example.tastyhub.common.utils.Jwt.JwtUtill;
+import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     private final RedisUtil redisUtil;
 
-    private final JwtUtill jwtUtill;
+    private final JwtUtil jwtUtill;
 
 
     @Override
