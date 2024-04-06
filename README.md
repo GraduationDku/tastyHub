@@ -1,4 +1,4 @@
-<img width="641" alt="스크린샷 2024-04-07 02 54 47" src="https://github.com/GraduationDku/tastyHub/assets/112964257/6ac962da-e41f-43ca-a933-b0cd19f08bff"><div align="center">
+<div align="center">
 <h2> 👨🏻‍🍳 TastyHub 👩🏻‍🍳 </h2>
 8조 레시피 공유 플랫폼
 </div>
@@ -33,7 +33,7 @@
 |레시피 전체 조회|레시피 작성 화면|레시피 조회 화면|
 |<img width="875" alt="스크린샷 2024-04-07 02 56 57" src="https://github.com/GraduationDku/tastyHub/assets/112964257/9e0fcbaa-702d-4905-b3d8-c89358b7c9c8">|<img width="875" alt="스크린샷 2024-04-07 02 57 23" src="https://github.com/GraduationDku/tastyHub/assets/112964257/3a5a5898-f76e-44df-b1ca-4a8bf323027b">|<img width="873" alt="스크린샷 2024-04-07 02 57 54" src="https://github.com/GraduationDku/tastyHub/assets/112964257/a552dff7-0137-4e69-8c05-d16cb1a15236">|
 |재료 공유 화면|채팅 화면|마이페이지|
-|<img width="873" alt="스크린샷 2024-04-07 02 58 23" src="https://github.com/GraduationDku/tastyHub/assets/112964257/8e573419-829e-47c7-9fc6-62836f873118">|<img width="874" alt="스크린샷 2024-04-07 02 59 03" src="https://github.com/GraduationDku/tastyHub/assets/112964257/7f019667-4327-4007-baaf-f1be10f08485">|<img width="874" alt="스크린샷 2024-04-07 02 59 38" src="https://github.com/GraduationDku/tastyHub/assets/112964257/f8ecb5f1-2680-4f26-8ab8-a63cbdad89ba">
+|<img width="873" alt="스크린샷 2024-04-07 02 58 23" src="https://github.com/GraduationDku/tastyHub/assets/112964257/8e573419-829e-47c7-9fc6-62836f873118">|<img width="874" alt="스크린샷 2024-04-07 02 59 03" src="https://github.com/GraduationDku/tastyHub/assets/112964257/7f019667-4327-4007-baaf-f1be10f08485">|<img width="874" alt="스크린샷 2024-04-07 02 59 38" src="https://github.com/GraduationDku/tastyHub/assets/112964257/f8ecb5f1-2680-4f26-8ab8-a63cbdad89ba">|
 
 
 
