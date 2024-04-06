@@ -5,7 +5,7 @@ import com.example.tastyhub.common.verified.email.dtos.VerifiedEmailRequest;
 
 public interface EmailService  {
 
-    void AuthEmail(AuthEmailRequest authEmail);
+    void authEmail(AuthEmailRequest authEmail);
 
     boolean verifiedEmail(VerifiedEmailRequest verifiedEmailRequest);
 }

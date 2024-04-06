@@ -22,7 +22,7 @@ public class EmailController {
 
     @PostMapping
     public ResponseEntity<StatusResponse> AuthEmail(AuthEmailRequest authEmail) {
-        emailService.AuthEmail(authEmail);
+        emailService.authEmail(authEmail);
         return RESPONSE_OK;
     }
 

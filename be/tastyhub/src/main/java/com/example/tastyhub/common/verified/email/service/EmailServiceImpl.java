@@ -56,7 +56,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void AuthEmail(AuthEmailRequest authEmail) {
+    public void authEmail(AuthEmailRequest authEmail) {
         String email = authEmail.getEmail();
         if (redisUtil.existData(email)){
             redisUtil.deleteData(email);
