@@ -2,12 +2,13 @@
 <h2> 👨🏻‍🍳 TastyHub 👩🏻‍🍳 </h2>
 8조 레시피 공유 플랫폼
 </div>
+<br>
 
 ## 목차
   - [팀 멤버 및 역할](#팀-멤버-및-역할) 
   - [프로젝트 목표](#프로젝트-목표)
   - [프로젝트 소개](#프로젝트-소개)
-
+<br>
 ## 팀 멤버 및 역할
 
 |이름|[김민수](https://github.com/skyriv213)|[임세현](https://github.com/Chelly142)|[박승은](https://github.com/sep037)|
@@ -15,8 +16,10 @@
 |학과|소프트웨어학과|소프트웨어학과|소프트웨어학과|
 |학번|32197083|32183786|32207352|
 |역할|Backend, 팀 리더, Junit Test(단위), API 문서화, API 설계 및 개발, query 최적화|Backend, 서버 환경 구축, 클라우드 서버 관리, CI/CD 구축, API 설계 및 개발|Frontend, UI/UX, 성능 최적화 , 크로스 브라우징, 반응형 디자인|
+|:---|:---|:---|:---|
 |사용기술|Java, Spring, JPA, Query DSL, MySQL, Security, Rest Docs, docker, git action, jenkins, nginx|Java, Spring, JPA, MySQL, EC2, S3, RDS, docker, jenkins|React, Typescript, Css, Redux, Sass, vercel, Prettier|
-
+|:---|:---|:---|:---|
+<br>
 
 ## 프로젝트 목표
 <details>
@@ -27,7 +30,7 @@
   <summary>레시피 공유 및 소통</summary>
   - 온라인 레시피 공유 플랫폼 운영 : 사용자들이 자신의 레시피를 업로드하고 공유할 수 있는 온라인 플랫폼을 구축한다. 레시피 검색, 리뷰 및 댓글 기능을 제공하여 소통 촉진
 </details>
-
+<br>
 ## 프로젝트 소개
 
 |첫 화면|로그인|회원가입|
