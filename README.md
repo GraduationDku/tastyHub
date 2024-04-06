@@ -9,6 +9,7 @@
   - [프로젝트 목표](#프로젝트-목표)
   - [프로젝트 소개](#프로젝트-소개)
 <br>
+
 ## 팀 멤버 및 역할
 
 |이름|[김민수](https://github.com/skyriv213)|[임세현](https://github.com/Chelly142)|[박승은](https://github.com/sep037)|
