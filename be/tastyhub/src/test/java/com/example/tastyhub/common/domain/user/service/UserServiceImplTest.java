@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.utils.Jwt.JwtUtill;
+import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +39,9 @@ class UserServiceImplTest {
     UserRepository userRepository;
     @Mock
     PasswordEncoder passwordEncoder;
+
+    @Mock
+    RedisUtil redisUtil;
 
     @Mock
     JwtUtill jwtUtill;
@@ -104,6 +109,7 @@ class UserServiceImplTest {
         userService.login(LOGIN_REQUEST, response);
         verify(userRepository, times(1)).findByUsername(LOGIN_REQUEST.getUsername());
         verify(jwtUtill, times(1)).createAccessToken(any(), any());
+        verify(redisUtil, times(1)).setDataExpire(any(), any(), anyLong());
         verify(jwtUtill, times(1)).createRefreshToken(any(), any());
 
     }

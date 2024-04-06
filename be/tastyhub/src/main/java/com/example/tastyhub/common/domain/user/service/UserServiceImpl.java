@@ -11,6 +11,7 @@ import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.utils.Jwt.JwtUtill;
+import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    public static final long REFRESH_TOKEN_TIME = 60 * 60 * 60 * 1000L;
+
+
+    private final RedisUtil redisUtil;
 
     private final JwtUtill jwtUtill;
 
@@ -77,6 +83,8 @@ public class UserServiceImpl implements UserService {
             byUsername.getUserType());
         String refreshToken = jwtUtill.createRefreshToken(byUsername.getUsername(),
             byUsername.getUserType());
+
+        redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
         response.addHeader(AUTHORIZATION_HEADER, accessToken);
         response.addHeader(REFRESH_HEADER, refreshToken);
     }
