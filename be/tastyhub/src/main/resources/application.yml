@@ -11,13 +11,13 @@ spring:
   #mysql 설정
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://tastyhub:3306/test?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: 1234
 
