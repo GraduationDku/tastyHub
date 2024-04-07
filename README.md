@@ -31,6 +31,11 @@
 </details>
 <br>
 
+## 시스템 아키텍처 설계
+
+<img width="1236" alt="스크린샷 2024-04-07 22 38 13" src="https://github.com/GraduationDku/tastyHub/assets/112964257/1a87e2bc-4cb2-480c-9855-1566dbec9d9e">
+<br>
+
 ## 프로젝트 소개
 
 |첫 화면|로그인|회원가입|
