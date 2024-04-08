@@ -5,6 +5,8 @@ function Signup({ setScreen }) {
   const [password,setPassword] = useState('')
   const [nickname,setNickname] = useState('')
   const [email,setEmail] = useState('')
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+
 
   const handleSignup = async (e) => {
    e.preventDefault();
@@ -27,7 +29,7 @@ function Signup({ setScreen }) {
       localStorage.setItem('accessToken', authorization);
       localStorage.setItem('refreshToken',refreshToken);
       console.log('회원가입 성공');
-      setScreen('login');
+      setScreen('village');
     } else {
       console.error('회원가입 실패');
     }
