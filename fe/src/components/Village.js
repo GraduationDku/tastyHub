@@ -20,7 +20,7 @@ function Village() {
 
   const sendLocationToServer = async (latitude, longitude) => {
     try {
-      const response = await fetch('/api/location', {
+      const response = await fetch('/village/location', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,6 @@ function Village() {
 
       if (response.ok) {
         console.log("위치 정보가 성공적으로 서버로 전송되었습니다.");
-        // 서버로부터의 응답 처리
       } else {
         console.error("서버로부터 에러 응답을 받았습니다.");
       }
