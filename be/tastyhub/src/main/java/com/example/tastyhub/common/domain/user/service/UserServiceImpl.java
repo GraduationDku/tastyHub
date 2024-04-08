@@ -58,7 +58,6 @@ public class UserServiceImpl implements UserService {
         String username = signupRequest.getUsername();
         String password = signupRequest.getPassword() + username.substring(0,2); // 레인보우 테이블을 취약 -> salt 사용을 통해 해결
         String userImg = "refact"; // s3 연결 후
-//        String village = signupRequest.get village CRUD 이후
         User user = User.builder()
             .username(username)
             .password(passwordEncoder.encode(password))
