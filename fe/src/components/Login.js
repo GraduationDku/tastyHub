@@ -47,7 +47,7 @@ function Login({ setScreen }) {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>로그인</button>
-      <button onClick={() => setScreen('signup')}>회원가입</button>
+      <button onClick={() => setScreen('signup')}>Sign Up</button>
     </div>
   );
   };
