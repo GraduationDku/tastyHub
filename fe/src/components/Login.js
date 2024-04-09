@@ -30,24 +30,27 @@ function Login({ setScreen }) {
       }
     } catch (error) {
       console.error('로그인 중 오류 발생:', error);
-      alert("아이디 및 비밀번호가 일치하지 않습니다.");
     }
   };
   return (
     <div>
-      <h2>Login</h2>
+      <h2>로그인</h2>
       <input
         type="text"
         placeholder="ID"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
+      <br></br>
+      <br></br>
       <input
         type="password"
         placeholder="PASSWORD"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      <br></br>
+      <br></br>
       <button onClick={handleLogin}>로그인</button>
       <button onClick={() => setScreen('signup')}>Sign Up</button>
     </div>
