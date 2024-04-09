@@ -32,8 +32,8 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
-            message.setFrom(mail);   // 보내는 이메일
-            message.setRecipients(RecipientType.TO, sender); // 보낼 이메일 설정
+            message.setFrom(sender);   // 보내는 이메일
+            message.setRecipients(RecipientType.TO, mail); // 보낼 이메일 설정
             message.setSubject("[TastyHub] 회원가입을 위한 이메일 인증");  // 제목 설정
             String body = "";
             body += "<h1>" + "안녕하세요." + "</h1>";

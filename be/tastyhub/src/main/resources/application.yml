@@ -8,6 +8,7 @@ spring:
     redis:
       host: localhost
       port: 6379
+      password: 1234
   #mysql 설정
   jpa:
     hibernate:
@@ -24,9 +25,10 @@ spring:
   # mail 설정
   mail:
     host: smtp.gmail.com
-    port: 465
+    port: 587
     username: tastyhub0123@gmail.com
-    password: z i s r k y a z r b n k r w m y
+    password: rqgdeshjicxbwfze
+
     properties:
       mail:
         smtp:
