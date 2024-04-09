@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.ingredient.entity;
 
-import com.example.tastyhub.TimeStamped;
+import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,13 +33,13 @@ public class Ingredient extends TimeStamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ingredient_id")
     private Long id;
-
+    private String ingredientName;
     private String amount;
 
     @Enumerated(EnumType.STRING)
     private IngredientType ingredientType;
     public enum IngredientType{
-        Seasioning, Source, Vegetable, Meat, Fish, Etc
+        seasoning, Source, Vegetable, Meat, Fish, Etc
     }
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Recipe.class)

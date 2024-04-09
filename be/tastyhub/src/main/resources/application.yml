@@ -1,0 +1,46 @@
+# localhost ver config setting
+spring:
+  application:
+    name: tastyhub
+
+  data:
+    # redis 설정
+    redis:
+      host: localhost
+      port: 6379
+      password: 1234
+  #mysql 설정
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 1234
+
+  # mail 설정
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tastyhub0123@gmail.com
+    password: rqgdeshjicxbwfze
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
+jwt:
+  secret:
+    key: "ASDSAIkAak8Sk8Sdi122r1jaEKdAIkAak8SdiIkAak8SSk8Sdi1SSIkAak15ASdsa15ka95sjS"
+
+
+
+

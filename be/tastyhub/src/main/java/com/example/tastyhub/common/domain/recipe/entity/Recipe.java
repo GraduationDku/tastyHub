@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.recipe.entity;
 
-import com.example.tastyhub.TimeStamped;
+import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
 import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation;
 import com.example.tastyhub.common.domain.ingredient.entity.Ingredient;
@@ -46,8 +46,7 @@ public class Recipe extends TimeStamped {
 
     private String foodImg;
 
-    private Long numLike;
-
+//    private Long numLike;
 
     //연관관계
     @ManyToOne(fetch = FetchType.LAZY)

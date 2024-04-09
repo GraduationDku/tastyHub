@@ -50,7 +50,7 @@ public class User {
 
     private String nickname;
 
-    private String phoneNumber;
+    private String email;
 
     @Enumerated(EnumType.STRING)
     private userType userType;

@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.post.entity;
 
-import com.example.tastyhub.TimeStamped;
+import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.comment.entity.Comment;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;

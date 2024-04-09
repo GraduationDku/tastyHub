@@ -1,4 +1,4 @@
-package com.example.tastyhub;
+package com.example.tastyhub.common.utils;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

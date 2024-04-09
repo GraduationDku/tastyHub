@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.userReview.entity;
 
-import com.example.tastyhub.TimeStamped;
+import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
