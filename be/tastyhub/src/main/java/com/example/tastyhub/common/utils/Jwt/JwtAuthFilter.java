@@ -1,6 +1,8 @@
 package com.example.tastyhub.common.utils.Jwt;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,32 +28,44 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private static final List<String> EXCLUDE_URLS = Arrays.asList("/email",
+            "/email/verified",
+            "/user/overlap/nickname",
+            "/user/overlap/username",
+            "/user/login",
+            "/user/signup",
+            "/village/location");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String token = jwtUtil.resolveAccessToken(request);
+        if (!shouldExclude(request)) {
+            // 토큰이 유효하지 않는 경우
+            if (!jwtUtil.validateToken(token)) {
+                jwtExceptionHandler(response, "Token error", HttpStatus.UNAUTHORIZED.value());
+                return;
+            }
 
-        //토큰이 유효하지 않는 경우
-        if (!jwtUtil.validateToken(token)) {
-            jwtExceptionHandler(response, "Token error", HttpStatus.UNAUTHORIZED.value());
-            return;
+            Claims info = jwtUtil.getUserInfoFromToken(token);
+            String name = info.getSubject();
+
+            // Admin인 경우
+            if (jwtUtil.isAdminToken(token)) {
+                setAdminAuthentication(name);
+                return;
+            }
+
+            setAuthentication(name);
         }
-
-        Claims info = jwtUtil.getUserInfoFromToken(token);
-        String name = info.getSubject();
-
-        //Admin인 경우
-        if (jwtUtil.isAdminToken(token)) {
-            setAdminAuthentication(name);
-            return;
-        }
-    
-        setAuthentication(name);
 
         filterChain.doFilter(request, response);
 
+    }
+
+    private boolean shouldExclude(HttpServletRequest request) {
+        return EXCLUDE_URLS.stream().anyMatch(url -> request.getRequestURI().contains(url));
     }
 
     public Authentication createAuthentication(String username) {
