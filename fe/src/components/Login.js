@@ -26,9 +26,11 @@ function Login({ setScreen }) {
         console.log('로그인 성공');
       } else {
         console.error('로그인 실패');
+        alert("아이디 및 비밀번호가 일치하지 않습니다.");
       }
     } catch (error) {
       console.error('로그인 중 오류 발생:', error);
+      alert("아이디 및 비밀번호가 일치하지 않습니다.");
     }
   };
   return (
