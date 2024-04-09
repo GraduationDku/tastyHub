@@ -1,13 +1,97 @@
 import React, { useState } from 'react';
 
 function Signup({ setScreen }) {
-  const [username,setUsername] = useState('')
-  const [password,setPassword] = useState('')
-  const [nickname,setNickname] = useState('')
-  const [email,setEmail] = useState('')
+  const [username,setUsername] = useState('');
+  const [password,setPassword] = useState('');
+  const [nickname,setNickname] = useState('');
+  const [email,setEmail] = useState('');
+  const [usernameAvailable, setUsernameAvailable] = useState('');
+  const [nicknameAvailable, setNicknameAvailable] = useState('');
+  const [emailAvailable, setEmailAvailable] = useState('');
+
+  const usernamePattern = /^[a-zA-Z0-9]+$/; // 영어와 숫자만
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 기본 이메일 형식
+  const validateUsername = (username) => usernamePattern.test(username);
+  const validateEmail = (email) => emailPattern.test(email);
+
 
   const handleSignup = async (e) => {
    e.preventDefault();
+
+   const isUsernameValid = validateUsername(username);
+   const isEmailValid = validateEmail(email);
+
+   setUsernameAvailable(isUsernameValid);
+   setEmailAvailable(isEmailValid);
+
+   if (!isUsernameValid || !isEmailValid) {
+    // 유효하지 않은 입력이 있으면 여기서 처리
+    console.error('입력이 유효하지 않습니다.');
+    alert('잘못된 입력입니다.');
+    return;
+  }
+
+   const checkUsername = async (e) => {
+    try {
+      const response = await fetch('/user/overlap/username', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nickname,
+        }),
+      });
+      if (response.ok) {
+        alert('사용 가능한 이름입니다.');
+      } else {
+        console.error('사용 불가능한 이름입니다.');
+      }
+    } catch (error) {
+      console.error('닉네임 입력 중 오류 발생:', error);
+    }
+   }
+
+   const checkNickname = async (e) => {
+    try {
+      const response = await fetch('/user/overlap/nickname', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nickname,
+        }),
+      });
+      if (response.ok) {
+        alert('사용 가능한 이름입니다.');
+      } else {
+        console.error('사용 불가능한 이름입니다.');
+      }
+    } catch (error) {
+      console.error('닉네임 입력 중 오류 발생:', error);
+    }
+   }
+   const checkEmail = async (e) => {
+    try {
+      const response = await fetch('/email/verified', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+        }),
+      });
+      if (response.ok) {
+        alert('사용 가능한 이메일입니다.');
+      } else {
+        console.error('사용 불가능한 이메일입니다.');
+      }
+    } catch (error) {
+      console.error('이메일 검증 중 오류 발생:', error);
+    }
+   }
    try {
     const response = await fetch('/user/signup', {
       method: 'POST',
@@ -48,7 +132,7 @@ function Signup({ setScreen }) {
       />
       <br></br>
       <br></br>
-      PW
+      PW :
       <input
         type="text"
         placeholder="Password"
@@ -57,7 +141,7 @@ function Signup({ setScreen }) {
       />
       <br></br>
       <br></br>
-      닉네임
+      닉네임 :
       <input
         type="text"
         placeholder="이름을 입력하세요"
@@ -66,7 +150,7 @@ function Signup({ setScreen }) {
       />
       <br></br>
       <br></br>
-      E-Mail
+      E-Mail :
       <input
         type="text"
         placeholder="Email"
