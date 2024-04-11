@@ -66,8 +66,13 @@ function Village() {
         console.error("Error Code = " + error.code + " - " + error.message);
       });
     } else {
-      alert("Geolocation is not supported by this browser.");
+      alert("위치를 불러올 수 없습니다..");
     }
+  };
+
+  const handleConfirmLocation = () => {
+    // 여기는 레시피 화면 구현하면 추가할게용
+    console.log("레시피 화면으로 이동");
   };
 
   return (
@@ -79,6 +84,8 @@ function Village() {
           <p>위도: {location.lat}, 경도: {location.lng}</p>
           <p>주소: {addressTownName}</p>
           <div id="map" style={{width: "100%", height: "400px"}}></div>
+          <button onClick={handleConfirmLocation}>네, 맞아요</button>
+          <button onClick={getLocation}>아니에요</button>
         </>
       )}
     </div> 
