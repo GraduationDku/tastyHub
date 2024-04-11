@@ -11,6 +11,7 @@ function App() {
       {screen === 'home' && <HomeScreen setScreen={setScreen} />}
       {screen === 'login' && <Login setScreen={setScreen} />}
       {screen === 'signup' && <Signup setScreen={setScreen} />}
+      {screen === 'village' && <Village setScreen={setScreen}/>}
     </div>
   );
 }
