@@ -1,53 +1,67 @@
 import React, { useState, useEffect } from 'react';
 
 function Village() {
-  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [location, setLocation] = useState({ lat: null, lng: null });
+  const [addressTownName, setAddress] = useState('');
+
+  // 네이버 지도 API로부터 주소 가져오기
+  const getAddressFromNaver = async (lat, lng) => {
+    const clientId = '';
+    const clientSecret = '';
+    // 역지오코딩 API 요청 URL
+    const url = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${longitude},${latitude}&orders=addr&output=json`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-NCP-APIGW-API-KEY-ID': clientId,
+          'X-NCP-APIGW-API-KEY': clientSecret,
+        },
+        body: JSON.stringify({
+          lat,
+          lng,
+          addressTownName
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // 주소 구성
+        const addressData = data.results[0]?.region;
+        const addressTownName = `${addressData.area1.name} ${addressData.area2.name} ${addressData.area3.name}`;
+        setAddress(addressTownName); // 상태 업데이트
+      } else {
+        console.error("서버로부터 에러 응답을 받았습니다.");
+      }
+    } catch (error) {
+      console.error("주소 가져오기 중 오류 발생:", error);
+    }
+  };
 
   useEffect(() => {
-    if (location.latitude && location.longitude) {
+    if (location.lat && location.lng) {
+      getAddressFromNaver(location.lat, location.lng); // 주소 가져오기
+      // 네이버 지도 초기화
       const mapOptions = {
-        center: new naver.maps.LatLng(location.latitude, location.longitude),
+        center: new naver.maps.LatLng(location.lat, location.lng),
         zoom: 10,
       };
       const map = new naver.maps.Map('map', mapOptions);
-
+      // 네이버 지도에 마커 표시
       new naver.maps.Marker({
-        position: new naver.maps.LatLng(location.latitude, location.longitude),
+        position: new naver.maps.LatLng(location.lat, location.lng),
         map: map,
       });
     }
   }, [location]);
 
-  const sendLocationToServer = async (latitude, longitude) => {
-    try {
-      const response = await fetch('/village/location', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-           lat,
-           lng
-           }),
-      });
-
-      if (response.ok) {
-        console.log("위치 정보가 성공적으로 서버로 전송되었습니다.");
-      } else {
-        console.error("서버로부터 에러 응답을 받았습니다.");
-      }
-    } catch (error) {
-      console.error("위치 정보 전송 중 오류 발생:", error);
-    }
-  };
-
+  // 현재 위치 가져오기
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation({ latitude, longitude });
-        // 위치 정보를 서버로 전송
-        sendLocationToServer(latitude, longitude);
+        const { lat, lng } = position.coords;
+        setLocation({ lat, lng});
       }, (error) => {
         console.error("Error Code = " + error.code + " - " + error.message);
       });
@@ -60,9 +74,10 @@ function Village() {
     <div>
       <h2>나의 동네가 맞나요?</h2>
       <button onClick={getLocation}>현재 위치 가져오기</button>
-      {location.latitude && location.longitude && (
+      {location.lat && location.lng && (
         <>
-          <p>위도: {location.latitude}, 경도: {location.longitude}</p>
+          <p>위도: {location.lat}, 경도: {location.lng}</p>
+          <p>주소: {addressTownName}</p>
           <div id="map" style={{width: "100%", height: "400px"}}></div>
         </>
       )}
