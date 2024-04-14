@@ -31,6 +31,12 @@
 </details>
 <br>
 
+## Git Commit
+<img width="967" alt="스크린샷 2024-04-08 15 28 25" src="https://github.com/GraduationDku/tastyHub/assets/112964257/ce4f22cd-858b-4695-8fe2-4048621b4ee3">
+<img width="1630" alt="스크린샷 2024-04-08 15 28 39" src="https://github.com/GraduationDku/tastyHub/assets/112964257/9a536ee7-3b89-4be1-b77e-d098ffd8be60">
+
+
+
 ## 시스템 아키텍처 설계
 
 <img width="1236" alt="스크린샷 2024-04-07 22 38 13" src="https://github.com/GraduationDku/tastyHub/assets/112964257/1a87e2bc-4cb2-480c-9855-1566dbec9d9e">

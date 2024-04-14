@@ -10,7 +10,9 @@ import com.example.tastyhub.common.verified.email.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,13 +23,13 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping
-    public ResponseEntity<StatusResponse> AuthEmail(AuthEmailRequest authEmail) {
+    public ResponseEntity<StatusResponse> AuthEmail(@RequestBody AuthEmailRequest authEmail) {
         emailService.authEmail(authEmail);
         return RESPONSE_OK;
     }
 
     @PostMapping("/verified")
-    public ResponseEntity<Boolean> verifiedEmail(VerifiedEmailRequest verifiedEmailRequest) {
+    public ResponseEntity<Boolean> verifiedEmail(@RequestBody VerifiedEmailRequest verifiedEmailRequest) {
         boolean value = emailService.verifiedEmail(verifiedEmailRequest);
         return ResponseEntity.ok().body(value);
     }

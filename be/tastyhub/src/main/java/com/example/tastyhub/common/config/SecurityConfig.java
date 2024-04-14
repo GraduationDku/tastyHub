@@ -23,6 +23,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final String[] permitAllArray ={
+      "/email",
+      "/email/verified",
+      "/user/overlap/nickname",
+      "/user/overlap/username",
+      "/user/login",
+      "/user/signup",
+      "/village/location",
 
     };
     private final JwtUtil jwtUtil;
@@ -42,8 +49,6 @@ public class SecurityConfig {
           .requestMatchers(permitAllArray).permitAll()
           .anyRequest().authenticated())
           .addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService),UsernamePasswordAuthenticationFilter.class);
-        
-        
 
 //    http.formLogin().loginPage("/users/login");
 
