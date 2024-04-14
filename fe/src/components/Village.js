@@ -24,7 +24,7 @@ function Village() {
           addressTownName
         })
       });
-
+ 
       if (response.ok) {
         const data = await response.json();
         // 주소 구성
