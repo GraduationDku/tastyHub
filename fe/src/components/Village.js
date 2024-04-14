@@ -3,13 +3,20 @@ import React, { useState, useEffect } from 'react';
 function Village() {
   const [location, setLocation] = useState({ lat: null, lng: null });
   const [addressTownName, setAddress] = useState('');
+  const [mapLoaded, setMapLoaded] = useState(false);
 
-  // 네이버 지도 API로부터 주소 가져오기
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tyevkp01u2";
+    script.async = true;
+    script.onload = () => setMapLoaded(true);
+    document.head.appendChild(script);
+  }, []);
+
   const getAddressFromNaver = async (lat, lng) => {
-    const clientId = '';
-    const clientSecret = '';
-    // 역지오코딩 API 요청 URL
-    const url = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${longitude},${latitude}&orders=addr&output=json`;
+    const clientId = 'tyevkp01u2';
+    const clientSecret = 'hn1A68yG8Ln4HisR4p|JzmRVJZK2gPIWM31PjLxJ';
+    const url = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${lng},${lat}&orders=addr&output=json`;
 
     try {
       const response = await fetch(url, {
@@ -17,20 +24,14 @@ function Village() {
         headers: {
           'X-NCP-APIGW-API-KEY-ID': clientId,
           'X-NCP-APIGW-API-KEY': clientSecret,
-        },
-        body: JSON.stringify({
-          lat,
-          lng,
-          addressTownName
-        })
+        }
       });
- 
+
       if (response.ok) {
         const data = await response.json();
-        // 주소 구성
         const addressData = data.results[0]?.region;
         const addressTownName = `${addressData.area1.name} ${addressData.area2.name} ${addressData.area3.name}`;
-        setAddress(addressTownName); // 상태 업데이트
+        setAddress(addressTownName);
       } else {
         console.error("서버로부터 에러 응답을 받았습니다.");
       }
@@ -40,38 +41,45 @@ function Village() {
   };
 
   useEffect(() => {
-    if (location.lat && location.lng) {
-      getAddressFromNaver(location.lat, location.lng); // 주소 가져오기
-      // 네이버 지도 초기화
+    const checkNaver = setInterval(() => {
+      if (mapLoaded && location.lat && location.lng) {
+        getAddressFromNaver(location.lat, location.lng);
+        initializeNaverMap();
+        clearInterval(checkNaver);
+      }
+    }, 100);
+
+    return () => clearInterval(checkNaver);
+  }, [mapLoaded, location]);
+
+  const initializeNaverMap = () => {
+    if (window.naver && window.naver.maps) {
       const mapOptions = {
-        center: new naver.maps.LatLng(location.lat, location.lng),
+        center: new window.naver.maps.LatLng(location.lat, location.lng),
         zoom: 10,
       };
-      const map = new naver.maps.Map('map', mapOptions);
-      // 네이버 지도에 마커 표시
-      new naver.maps.Marker({
-        position: new naver.maps.LatLng(location.lat, location.lng),
+      const map = new window.naver.maps.Map('map', mapOptions);
+      new window.naver.maps.Marker({
+        position: new window.naver.maps.LatLng(location.lat, location.lng),
         map: map,
       });
     }
-  }, [location]);
+  };
 
-  // 현재 위치 가져오기
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { lat, lng } = position.coords;
-        setLocation({ lat, lng});
+        setLocation({ lat, lng });
       }, (error) => {
         console.error("Error Code = " + error.code + " - " + error.message);
       });
     } else {
-      alert("위치를 불러올 수 없습니다..");
+      alert("위치를 불러올 수 없습니다.");
     }
   };
 
   const handleConfirmLocation = () => {
-    // 여기는 레시피 화면 구현하면 추가할게용
     console.log("레시피 화면으로 이동");
   };
 
@@ -83,12 +91,12 @@ function Village() {
         <>
           <p>위도: {location.lat}, 경도: {location.lng}</p>
           <p>주소: {addressTownName}</p>
-          <div id="map" style={{width: "100%", height: "400px"}}></div>
+          <div id="map" style={{ width: "100%", height: "400px" }}></div>
           <button onClick={handleConfirmLocation}>네, 맞아요</button>
           <button onClick={getLocation}>아니에요</button>
         </>
       )}
-    </div> 
+    </div>
   );
 }
 
