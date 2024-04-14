@@ -6,12 +6,12 @@ volumes:
 
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./fe
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
+  frontend:
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
   #   networks:
   #     - app-tier
   
