@@ -30,8 +30,8 @@ function Village() {
       if (response.ok) {
         const data = await response.json();
         const addressData = data.results[0]?.region;
-        const addressTownName = `${addressData.area1.name} ${addressData.area2.name} ${addressData.area3.name}`;
-        setAddress(addressTownName);
+        const formattedAddress = `${addressData.area1.name} ${addressData.area2.name} ${addressData.area3.name}`;
+        setAddress(formattedAddress);
       } else {
         console.error("서버로부터 에러 응답을 받았습니다.");
       }
@@ -79,8 +79,32 @@ function Village() {
     }
   };
 
-  const handleConfirmLocation = () => {
-    console.log("레시피 화면으로 이동");
+  const handleConfirmLocation = async () => {
+    const serverEndpoint = 'http://localhost:8080/village/location';
+
+    try {
+      const response = await fetch(serverEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          latitude: location.lat,
+          longitude: location.lng,
+          address: addressTownName
+        })
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('서버로부터 응답 받음:', responseData);
+        // 여기에서 레시피 화면으로 이동하는 로직을 추가하면 됩니다.
+      } else {
+        console.error('서버 에러:', response.status);
+      }
+    } catch (error) {
+      console.error('서버 요청 중 오류 발생:', error);
+    }
   };
 
   return (

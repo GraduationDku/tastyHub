@@ -33,7 +33,7 @@ function Signup({ setScreen }) {
 
    const checkUsername = async (e) => {
     try {
-      const response = await fetch('/user/overlap/username', {
+      const response = await fetch('http://localhost:3000/user/overlap/username', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ function Signup({ setScreen }) {
 
    const checkNickname = async (e) => {
     try {
-      const response = await fetch('/user/overlap/nickname', {
+      const response = await fetch('http://localhost:3000/user/overlap/nickname', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ function Signup({ setScreen }) {
    }
    const checkEmail = async (e) => {
     try {
-      const response = await fetch('/email/verified', {
+      const response = await fetch('http://localhost:3000/email/verified', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
