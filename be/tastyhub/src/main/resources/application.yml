@@ -6,9 +6,9 @@ spring:
   data:
     # redis 설정
     redis:
-      host: localhost
+      host: redis
       port: 6379
-      password: 1234
+#      password: 1234
   #mysql 설정
   jpa:
     hibernate:
@@ -18,7 +18,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/tastyhub?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: 1234
 
