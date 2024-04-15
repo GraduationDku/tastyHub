@@ -33,8 +33,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             "/user/overlap/nickname",
             "/user/overlap/username",
             "/user/login",
-            "/user/signup",
-            "/village/location");
+            "/user/signup"
+            );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -50,7 +50,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             Claims info = jwtUtil.getUserInfoFromToken(token);
             String name = info.getSubject();
-
             // Admin인 경우
             if (jwtUtil.isAdminToken(token)) {
                 setAdminAuthentication(name);

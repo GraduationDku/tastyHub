@@ -63,8 +63,8 @@ public class JwtUtil {
         claims.put(AUTHORIZATION_KEY, role); //권한
 
         return BEARER_PREFIX + Jwts.builder()
-                .setSubject(username)
                 .setClaims(claims)
+                .setSubject(username)
                 .setIssuedAt(issuedAt) //발급 시기
                 .setExpiration(expireAt) //만료 시기
                 .signWith(key, signatureAlgorithm) // 사용할 암호화 알고리즘과 , signature 에 들어갈 key값 세팅
@@ -83,8 +83,8 @@ public class JwtUtil {
 
         return BEARER_PREFIX +
             Jwts.builder()
-                .setSubject(username)
                 .setClaims(claims)
+                .setSubject(username)
                 .setIssuedAt(issuedAt) //발급 시기
                 .setExpiration(expireAt) // 만료 시기
                 .signWith(key, signatureAlgorithm) // 사용할 암호화 알고리즘과 , signature 에 들어갈 key값 세팅

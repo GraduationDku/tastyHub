@@ -35,14 +35,12 @@ public class UserDetailsImpl implements UserDetails {
     
     @Override
     public String getPassword() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+        return this.user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
+        return this.user.getUsername();
     }
 
     @Override
