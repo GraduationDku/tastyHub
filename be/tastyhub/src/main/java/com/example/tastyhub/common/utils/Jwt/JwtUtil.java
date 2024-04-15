@@ -1,11 +1,11 @@
 package com.example.tastyhub.common.utils.Jwt;
 
+import io.jsonwebtoken.io.Encoders;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
-import org.springframework.beans.factory.annotation.Value;
+import javax.crypto.SecretKey;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -32,9 +32,16 @@ public class JwtUtil {
     private static final String BEARER_PREFIX = "Bearer ";
     private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L;
     private static final long REFRESH_TOKEN_TIME = 60 * 60 * 60 * 1000L;
- 
-    @Value("${jwt.secret.key}")
-    private String secretKey;
+
+    //    @Value("${jwt.secret.key}")
+
+    private static SecretKey makeKey() {
+        return Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    }
+
+    private String secretKey = Encoders.BASE64.encode(makeKey().getEncoded());
+
+
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
 
@@ -55,7 +62,7 @@ public class JwtUtil {
         Claims claims = Jwts.claims();
         claims.put(AUTHORIZATION_KEY, role); //권한
 
-        return Jwts.builder()
+        return BEARER_PREFIX + Jwts.builder()
                 .setSubject(username)
                 .setClaims(claims)
                 .setIssuedAt(issuedAt) //발급 시기

@@ -75,8 +75,9 @@ public class UserServiceImpl implements UserService {
     public void login(LoginRequest loginRequest, HttpServletResponse response) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword()+username.substring(0,2);
-        User byUsername = userRepository.findByUsername(username);
-        if (!passwordEncoder.matches(password, byUsername.getPassword())) {
+        User byUsername = findByUsername(username);
+        boolean a=passwordEncoder.matches(password, byUsername.getPassword());
+        if (!passwordEncoder.matches(password,byUsername.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
         }
         String accessToken = jwtUtill.createAccessToken(byUsername.getUsername(),
@@ -87,6 +88,11 @@ public class UserServiceImpl implements UserService {
         redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
         response.addHeader(AUTHORIZATION_HEADER, accessToken);
         response.addHeader(REFRESH_HEADER, refreshToken);
+    }
+
+    private User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다."));
     }
 
 
