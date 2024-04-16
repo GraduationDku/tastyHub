@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
 
-    private RecipeRepository recipeRepository;
+    private final RecipeRepository recipeRepository;
 
 
     @Override
@@ -123,15 +123,18 @@ public class RecipeServiceImpl implements RecipeService {
     }
     // 세현
     @Override
+    @Transactional
     public Page<PagingRecipeResponse> getAllRecipes(Pageable pageable) {
         return recipeRepository.findAllandPaging(pageable);
     }
     @Override
+    @Transactional
     public Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable) {
         return recipeRepository.findPopular(pageable);
     }
 
     @Override
+    @Transactional
     public Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable) {
         return recipeRepository.searchByKeyword(foodName,pageable);
     }

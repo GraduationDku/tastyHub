@@ -18,12 +18,12 @@ public interface RecipeService {
     RecipeDto getRecipe(Long recipeId);
 
     void updateRecipe(Long recipeId, User user, RecipeUpdateDto recipeUpdateDto);
-    // 세현
+    
     Page<PagingRecipeResponse> getAllRecipes(Pageable pageable);
 
     Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable);
 
     Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable);
-// 세현
+    
 
 }

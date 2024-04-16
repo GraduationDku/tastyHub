@@ -33,6 +33,7 @@ public class SecurityConfig {
       "/user/overlap/username",
       "/user/login",
       "/user/signup",
+      "/recipe/list",
 
     };
     private final JwtUtil jwtUtil;

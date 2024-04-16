@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.recipe.dtos;
 
-import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationResponseDto;
+import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +12,5 @@ public class PagingRecipeResponse {
     private String foodName;
     private String foodImgUrl;
 
-    private FoodInformationResponseDto foodInformation;
-
+    private FoodInformationDto foodInformationDto;
 }
