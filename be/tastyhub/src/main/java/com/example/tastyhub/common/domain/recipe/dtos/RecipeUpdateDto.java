@@ -1,11 +1,8 @@
 package com.example.tastyhub.common.domain.recipe.dtos;
 
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateDto;
 import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
-import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationCreateDto;
-import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationUpdateDto;
-import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
-import com.example.tastyhub.common.domain.ingredient.dtos.IngredientUpdateDto;
+import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
+import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +16,9 @@ public class RecipeUpdateDto {
 
     private MultipartFile foodImg;
 
-    private FoodInformationUpdateDto foodInformation;
+    private FoodInformationDto foodInformation;
 
-    private List<IngredientUpdateDto> ingredients;
+    private List<IngredientDto> ingredients;
 
     private List<CookStepUpdateDto> cookSteps;
 
