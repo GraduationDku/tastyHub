@@ -1,7 +1,6 @@
 package com.example.tastyhub.common.domain.ingredient.entity;
 
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
-import com.example.tastyhub.common.domain.ingredient.dtos.IngredientUpdateDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.CascadeType;

@@ -40,6 +40,8 @@ public class CookStep extends TimeStamped {
     // 조리 시 필요한 내용
     private String text;
 
+    private String stepImgUrl;
+
     //연관 관계
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Recipe.class)
     @JoinColumn(name = "recipe_id", nullable = false)
@@ -49,6 +51,7 @@ public class CookStep extends TimeStamped {
         return CookStep.builder()
             .stepNumber(cookStepCreateDto.getStepNumber())
             .text(cookStepCreateDto.getText())
+            .stepImgUrl("refactor")
             .build();
     }
 
