@@ -9,7 +9,6 @@ import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor

@@ -8,6 +8,7 @@ import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import com.example.tastyhub.common.domain.ingredient.entity.Ingredient;
+import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
@@ -18,6 +19,9 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -117,6 +121,21 @@ public class RecipeServiceImpl implements RecipeService {
 
 
     }
+    // 세현
+    @Override
+    public Page<PagingRecipeResponse> getAllRecipes(Pageable pageable) {
+        return recipeRepository.findAllandPaging(pageable);
+    }
+    @Override
+    public Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable) {
+        return recipeRepository.findPopular(pageable);
+    }
+
+    @Override
+    public Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable) {
+        return recipeRepository.searchByKeyword(foodName,pageable);
+    }
+// 세현
 
 
 }

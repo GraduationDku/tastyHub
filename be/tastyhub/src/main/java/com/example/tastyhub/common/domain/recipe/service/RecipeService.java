@@ -5,6 +5,12 @@ import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
+
 public interface RecipeService {
 
     void createRecipe(RecipeCreateDto recipeCreateDto, User user);
@@ -12,4 +18,12 @@ public interface RecipeService {
     RecipeDto getRecipe(Long recipeId);
 
     void updateRecipe(Long recipeId, User user, RecipeUpdateDto recipeUpdateDto);
+    // 세현
+    Page<PagingRecipeResponse> getAllRecipes(Pageable pageable);
+
+    Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable);
+
+    Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable);
+// 세현
+
 }
