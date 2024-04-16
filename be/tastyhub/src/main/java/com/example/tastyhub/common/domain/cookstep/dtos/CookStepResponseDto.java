@@ -1,12 +1,14 @@
 package com.example.tastyhub.common.domain.cookstep.dtos;
 
 import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class CookStepResponseDto {
 
     private Long cookStepId;

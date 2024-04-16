@@ -1,11 +1,13 @@
 package com.example.tastyhub.common.domain.ingredient.dtos;
 
 import com.example.tastyhub.common.domain.ingredient.entity.Ingredient;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class IngredientDto {
 
     private Long ingredientId;

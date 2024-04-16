@@ -1,6 +1,7 @@
 package com.example.tastyhub.common.domain.ingredient.entity;
 
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
+import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.CascadeType;
@@ -52,9 +53,9 @@ public class Ingredient extends TimeStamped {
             .build();
     }
 
-    public void update(IngredientUpdateDto ingredientUpdateDto) {
-        this.ingredientName = ingredientUpdateDto.getIngredientName();
-        this.amount = ingredientUpdateDto.getAmount();
+    public void update(IngredientDto ingredientDto) {
+        this.ingredientName = ingredientDto.getIngredientName();
+        this.amount = ingredientDto.getAmount();
 
     }
 }

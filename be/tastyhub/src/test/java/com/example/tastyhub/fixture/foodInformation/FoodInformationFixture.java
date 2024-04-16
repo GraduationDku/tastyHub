@@ -1,5 +1,6 @@
 package com.example.tastyhub.fixture.foodInformation;
 
+import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationCreateDto;
 import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
 import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation;
 
@@ -19,7 +20,11 @@ public class FoodInformationFixture {
         .cookingTime(50L)
         .serving("1")
         .build();
-
+    public static final FoodInformationCreateDto FOOD_INFORMATION_CREATE_DTO = FoodInformationCreateDto.builder()
+        .text("text")
+        .cookingTime(50L)
+        .serving("1")
+        .build();
 
 
 }

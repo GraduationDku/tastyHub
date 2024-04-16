@@ -1,13 +1,17 @@
 package com.example.tastyhub.fixture.recipe;
 
 import static com.example.tastyhub.fixture.cookStep.CookStepFixture.COOK_STEP;
+import static com.example.tastyhub.fixture.cookStep.CookStepFixture.COOK_STEP_CREATE_DTO;
 import static com.example.tastyhub.fixture.cookStep.CookStepFixture.COOK_STEP_RESPONSE_DTO;
 import static com.example.tastyhub.fixture.foodInformation.FoodInformationFixture.FOOD_INFORMATION;
+import static com.example.tastyhub.fixture.foodInformation.FoodInformationFixture.FOOD_INFORMATION_CREATE_DTO;
 import static com.example.tastyhub.fixture.foodInformation.FoodInformationFixture.FOOD_INFORMATION_DTO;
 import static com.example.tastyhub.fixture.ingredient.IngredientFixture.INGREDIENT;
+import static com.example.tastyhub.fixture.ingredient.IngredientFixture.INGREDIENT_CREATE_DTO;
 import static com.example.tastyhub.fixture.ingredient.IngredientFixture.INGREDIENT_DTO;
 
 import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation;
+import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import java.util.Collection;
@@ -32,7 +36,15 @@ public class RecipeFixture {
         .cookSteps(Collections.singletonList(COOK_STEP_RESPONSE_DTO))
         .ingredients(Collections.singletonList(INGREDIENT_DTO))
         .build();
-    
+
+    public static final RecipeCreateDto RECIPE_CREATE_DTO = RecipeCreateDto.builder()
+        .foodName("name")
+        .foodImg(null)
+        .foodInformation(FOOD_INFORMATION_CREATE_DTO)
+        .cookSteps(Collections.singletonList(COOK_STEP_CREATE_DTO))
+        .ingredients(Collections.singletonList(INGREDIENT_CREATE_DTO))
+        .build();
+
 
 
 }
