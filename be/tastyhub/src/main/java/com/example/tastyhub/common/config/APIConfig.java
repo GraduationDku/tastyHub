@@ -6,5 +6,8 @@ public class APIConfig {
     public final static String EMAIL_API = "/email";
     public final static String VILLAGE_API = "/village";
 
+    public final static String RECIPE_API = "/recipe";
+
+
 
 }
