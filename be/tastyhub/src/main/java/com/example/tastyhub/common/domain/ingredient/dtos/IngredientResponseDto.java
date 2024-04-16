@@ -1,0 +1,20 @@
+package com.example.tastyhub.common.domain.ingredient.dtos;
+
+import com.example.tastyhub.common.domain.ingredient.entity.Ingredient;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class IngredientResponseDto {
+
+    private Long ingredientId;
+    private String ingredientName;
+    private String amount;
+
+    public IngredientResponseDto(Ingredient ingredient) {
+        this.ingredientId = ingredient.getId();
+        this.ingredientName = ingredient.getIngredientName();
+        this.amount = ingredient.getAmount();
+    }
+}

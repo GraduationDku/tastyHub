@@ -1,12 +1,12 @@
 package com.example.tastyhub.common.domain.ingredient.entity;
 
+import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
+import com.example.tastyhub.common.domain.ingredient.dtos.IngredientUpdateDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,15 +36,26 @@ public class Ingredient extends TimeStamped {
     private String ingredientName;
     private String amount;
 
-    @Enumerated(EnumType.STRING)
-    private IngredientType ingredientType;
-    public enum IngredientType{
-        seasoning, Source, Vegetable, Meat, Fish, Etc
-    }
+//    @Enumerated(EnumType.STRING)
+//    private IngredientType ingredientType;
+//    public enum IngredientType{
+//        seasoning, Source, Vegetable, Meat, Fish, Etc
+//    }
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Recipe.class)
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
+    public static Ingredient makeIngredient(IngredientCreateDto ingredientCreateDto) {
+        return Ingredient.builder()
+            .ingredientName(ingredientCreateDto.getIngredientName())
+            .amount(ingredientCreateDto.getAmount())
+            .build();
+    }
 
+    public void update(IngredientUpdateDto ingredientUpdateDto) {
+        this.ingredientName = ingredientUpdateDto.getIngredientName();
+        this.amount = ingredientUpdateDto.getAmount();
+
+    }
 }
