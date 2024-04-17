@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.recipe.repository;
 
+import static com.example.tastyhub.common.domain.foodInformation.entity.QFoodInformation.foodInformation;
 import static com.example.tastyhub.common.domain.recipe.entity.QRecipe.recipe;
 
 import java.util.List;
@@ -7,10 +8,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
-import com.querydsl.core.types.Projections;
+import com.example.tastyhub.common.domain.recipe.dtos.QPagingRecipeResponse;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,14 +25,15 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
     @Override
     public Page<PagingRecipeResponse> findAllandPaging(Pageable pageable) {
         List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
-                .select(Projections.constructor(PagingRecipeResponse.class, recipe.id.as("foodid"), recipe.foodName,
-                        recipe.foodImgUrl, recipe.foodInformation))
+                .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
+                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving))
                 .from(recipe)
+                .leftJoin(recipe.foodInformation, foodInformation)
                 .orderBy(recipe.createdAt.desc())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-                long totalSize = countQuery().fetch().get(0);
+        long totalSize = countQuery().fetch().get(0);
 
         return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
     }
@@ -51,7 +52,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
 
     private JPAQuery<Long> countQuery() {
         return jpaQueryFactory.select(Wildcard.count)
-            .from(recipe);
-      }
+                .from(recipe);
+    }
 
 }
