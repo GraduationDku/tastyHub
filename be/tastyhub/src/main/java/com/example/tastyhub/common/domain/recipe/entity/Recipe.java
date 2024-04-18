@@ -1,7 +1,5 @@
 package com.example.tastyhub.common.domain.recipe.entity;
 
-import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
-import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
 import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation;

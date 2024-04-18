@@ -40,14 +40,35 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
 
     @Override
     public Page<PagingRecipeResponse> findPopular(Pageable pageable) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findPopular'");
+        List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
+                .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
+                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving))
+                .from(recipe)
+                .leftJoin(recipe.foodInformation, foodInformation)
+                .orderBy(recipe.likes.size().desc())
+                .limit(7)
+                .fetch();
+
+        long totalSize = countQuery().fetch().get(0);
+
+        return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
     }
 
     @Override
     public Page<PagingRecipeResponse> searchByKeyword(String keyword, Pageable pageable) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchByKeyword'");
+        List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
+                .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
+                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving))
+                .from(recipe)
+                .where(recipe.foodName.contains(keyword))
+                .leftJoin(recipe.foodInformation, foodInformation)
+                .orderBy(recipe.createdAt.desc())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long totalSize = countQuery().fetch().get(0);
+
+        return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
     }
 
     private JPAQuery<Long> countQuery() {

@@ -34,6 +34,11 @@ public class SecurityConfig {
       "/user/login",
       "/user/signup",
       "/recipe/list",
+      "/recipe/popular",
+      "/recipe/detail",
+      "/recipe/detail/{recipeId}",
+      "/recipe/search/",
+      "/recipe/search/{keyword}",
 
     };
     private final JwtUtil jwtUtil;

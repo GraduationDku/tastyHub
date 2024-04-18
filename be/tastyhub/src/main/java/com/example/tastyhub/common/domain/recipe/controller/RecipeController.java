@@ -17,6 +17,7 @@ import com.example.tastyhub.common.utils.SetHttpHeaders;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,11 +35,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(RECIPE_API)
+@Slf4j
 public class RecipeController {
     private final RecipeService recipeService;
     private final SetHttpHeaders setHttpHeaders;
 
-    @GetMapping("/popural")
+    @GetMapping("/popular")
     public ResponseEntity<Page<PagingRecipeResponse>> getPopuralRecipes(
             @PageableDefault(size = 7, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
@@ -52,11 +54,12 @@ public class RecipeController {
                 .body(recipeService.getAllRecipes(pageable));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(@RequestBody RecipeSearchDto recipeSearchDto,
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(@PathVariable String keyword,
             @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+                log.info("CTL : " + keyword);
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(
-                recipeService.getSearchedRecipes(recipeSearchDto.getFoodName(), pageable));
+                recipeService.getSearchedRecipes(keyword, pageable));
     }
 
     /**
