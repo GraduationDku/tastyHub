@@ -3,10 +3,14 @@ package com.example.tastyhub.common.domain.user.service;
 import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER;
 import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
 
+import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
+import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
+import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
+import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
@@ -14,6 +18,7 @@ import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -88,6 +93,22 @@ public class UserServiceImpl implements UserService {
         redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
         response.addHeader(AUTHORIZATION_HEADER, accessToken);
         response.addHeader(REFRESH_HEADER, refreshToken);
+    }
+
+    @Override
+    public String findId(FindIdRequest findIdRequest) {
+
+        return null;
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest changePasswordRequest, User user) {
+
+    }
+
+    @Override
+    public List<UserDto> getUserList(SearchUserDto searchUserDto) {
+        return null;
     }
 
     private User findByUsername(String username) {

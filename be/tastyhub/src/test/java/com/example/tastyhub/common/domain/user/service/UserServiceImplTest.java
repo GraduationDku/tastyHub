@@ -21,6 +21,7 @@ import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -105,7 +106,7 @@ class UserServiceImplTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
 
         given(passwordEncoder.matches(any(), any())).willReturn(true);
-        given(userRepository.findByUsername(any())).willReturn(USER);
+        given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
         userService.login(LOGIN_REQUEST, response);
         verify(userRepository, times(1)).findByUsername(LOGIN_REQUEST.getUsername());
         verify(jwtUtill, times(1)).createAccessToken(any(), any());
@@ -119,7 +120,7 @@ class UserServiceImplTest {
     void failLogin() {
         HttpServletResponse response = mock(HttpServletResponse.class);
 
-        given(userRepository.findByUsername(any())).willReturn(USER);
+        given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
         given(passwordEncoder.matches(any(), any())).willReturn(false);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -127,5 +128,35 @@ class UserServiceImplTest {
         });
 
         assertEquals("비밀번호가 일치하지않습니다.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("아이디 찾기")
+    void findId() {
+    }
+
+    @Test
+    @DisplayName("아이디 찾기 실패")
+    void findIdFail() {
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경하기")
+    void changePassword() {
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경하기 실패")
+    void changePasswordFail() {
+    }
+
+    @Test
+    @DisplayName("사용자 리스트 반환하기")
+    void getUserList() {
+    }
+
+    @Test
+    @DisplayName("사용자 리스트 반환하기 실패")
+    void getUserListFail() {
     }
 }
