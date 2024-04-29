@@ -52,6 +52,7 @@ public class Post extends TimeStamped {
     private User user;
 
     @OneToMany(mappedBy = "post")
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
 }

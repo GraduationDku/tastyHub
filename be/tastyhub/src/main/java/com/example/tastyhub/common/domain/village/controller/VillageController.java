@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class VillageController {
 
-    private VillageService villageService;
+    private final VillageService villageService;
 
     @PostMapping("/location")
 
