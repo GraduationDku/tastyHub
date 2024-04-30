@@ -2,12 +2,15 @@ package com.example.tastyhub.common.domain.village.entity;
 
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.user.entity.User;
+import com.example.tastyhub.common.domain.village.dtos.LocationRequest;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -35,6 +38,13 @@ public class Village extends TimeStamped {
 
     private long lng; //경도
 
-    @OneToOne(mappedBy = "village", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id") // 외래 키 설정
     private User user;
+
+    public void update(LocationRequest locationRequest) {
+        this.addressTownName = locationRequest.getAddressTownName();
+        this.lat = locationRequest.getLat();
+        this.lng = locationRequest.getLng();
+    }
 }

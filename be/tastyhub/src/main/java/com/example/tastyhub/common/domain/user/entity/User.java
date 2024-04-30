@@ -96,8 +96,7 @@ public class User {
     @Builder.Default
     private List<UserReview> userReaderReviews = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "village_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Village village;
 
     public void updateUserInfo(UserUpdateRequest userUpdateRequest){
