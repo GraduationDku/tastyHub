@@ -67,6 +67,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeDto getRecipe(Long recipeId) {
         Recipe recipe = recipeFindById(recipeId);
         FoodInformationDto foodInformationDto = FoodInformationDto.builder()
+            .foodInformationId(recipe.getFoodInformation().getId())
             .text(recipe.getFoodInformation().getText())
             .cookingTime(recipe.getFoodInformation().getCookingTime())
             .serving(recipe.getFoodInformation().getServing())
