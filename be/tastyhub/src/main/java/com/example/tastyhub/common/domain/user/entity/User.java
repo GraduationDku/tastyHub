@@ -6,6 +6,7 @@ import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import com.example.tastyhub.common.domain.scrap.entity.Scrap;
+import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 import com.example.tastyhub.common.domain.village.entity.Village;
 import jakarta.persistence.CascadeType;
@@ -99,4 +100,7 @@ public class User {
     @JoinColumn(name = "village_id")
     private Village village;
 
+    public void updateUserInfo(UserUpdateRequest userUpdateRequest){
+        this.nickname = userUpdateRequest.getNickname();
+    }
 }

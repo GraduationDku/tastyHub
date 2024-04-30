@@ -4,7 +4,7 @@ import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER
 import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
-import com.example.tastyhub.common.domain.user.dtos.DeleteRequest;
+import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
@@ -12,6 +12,7 @@ import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
 import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
+import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
@@ -118,7 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(DeleteRequest deleteRequest, User user){
+    public void delete(UserDeleteRequest deleteRequest, User user){
         String username = deleteRequest.getUsername();
         String password = deleteRequest.getPassword()+username.substring(0,2);
         
@@ -127,6 +128,12 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
         }
         userRepository.delete(user);
+    }
+
+    @Override
+    public void updateUserInfo(UserUpdateRequest userUpdateRequest, User user) {
+        user.updateUserInfo(userUpdateRequest);
+        userRepository.save(user);
     }
 
 
