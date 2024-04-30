@@ -6,23 +6,19 @@ function RecipeDetails({ recipeId }) {
   useEffect(() => {
     async function fetchRecipeDetails() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe/details/${recipeId}`);
-        const data = await response.json({
+        // GET 요청은 body를 포함하지 않아야 하며, 요청 옵션을 정확하게 설정합니다.
+        const response = await fetch(`http://localhost:8080/recipe/details/${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            recipeId,
-            foodName,
-            foodImgUrl,
-            foodInformation,
-            foodInformationId,
-            ingredients,
-            cooksteps
-          }),
+          }
         });
-        setRecipeDetails(data);
+        if (response.ok) {
+          const data = await response.json(); // 응답을 JSON 형식으로 파싱합니다.
+          setRecipeDetails(data); // 파싱된 데이터를 상태로 설정합니다.
+        } else {
+          throw new Error('Failed to fetch recipe details');
+        }
       } catch (error) {
         console.error('Error fetching recipe details:', error);
       }
@@ -31,7 +27,7 @@ function RecipeDetails({ recipeId }) {
     if (recipeId) {
       fetchRecipeDetails();
     }
-  }, [recipeId]);
+  }, [recipeId]); // recipeId가 변경될 때마다 새로 데이터를 불러옵니다.
 
   return (
     <div>
@@ -51,14 +47,14 @@ function RecipeDetails({ recipeId }) {
           <div>
             <h3>Cooking Steps:</h3>
             <ol>
-              {recipeDetails.cooksteps.map((step, index) => (
+              {recipeDetails.cookSteps.map((step, index) => (
                 <li key={index}>{step}</li>
               ))}
             </ol>
           </div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <p>Loading...</p> // 데이터 로딩 중임을 표시
       )}
     </div>
   );
