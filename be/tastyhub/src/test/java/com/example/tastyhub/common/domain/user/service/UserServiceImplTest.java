@@ -1,10 +1,14 @@
 package com.example.tastyhub.common.domain.user.service;
 
+import static com.example.tastyhub.fixture.user.UserFixture.CHANGE_PASSWORD_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.DUPLICATED_NICK_NAME;
 import static com.example.tastyhub.fixture.user.UserFixture.DUPLICATED_USER_NAME;
+import static com.example.tastyhub.fixture.user.UserFixture.FIND_ID_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.LOGIN_REQUEST;
+import static com.example.tastyhub.fixture.user.UserFixture.SEARCH_USER_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.SIGNUP_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
+import static com.example.tastyhub.fixture.user.UserFixture.USER_DTO_LIST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -17,10 +21,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
+import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -133,30 +140,64 @@ class UserServiceImplTest {
     @Test
     @DisplayName("아이디 찾기")
     void findId() {
+        given(userRepository.findByEmail(FIND_ID_REQUEST.getEmail())).willReturn(
+            Optional.ofNullable(USER));
+        userService.findId(FIND_ID_REQUEST);
+        verify(userRepository, times(1)).findByEmail(any());
     }
 
     @Test
     @DisplayName("아이디 찾기 실패")
     void findIdFail() {
+
+        given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(USER));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.findId(FIND_ID_REQUEST);
+        });
+
+        assertEquals("해당 회원은 존재하지 않습니다.", exception.getMessage());
+
     }
 
     @Test
     @DisplayName("비밀번호 변경하기")
     void changePassword() {
+        given(userRepository.findByUsername(USER.getUsername())).willReturn(
+            Optional.ofNullable(USER));
+        userService.changePassword(CHANGE_PASSWORD_REQUEST, USER);
+        verify(userRepository, times(1)).findByUsername(any());
+
     }
 
     @Test
     @DisplayName("비밀번호 변경하기 실패")
     void changePasswordFail() {
+
+        given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.changePassword(CHANGE_PASSWORD_REQUEST, USER);
+        });
+
+        assertEquals("비밀번호가 일치하지않습니다.", exception.getMessage());
     }
 
     @Test
     @DisplayName("사용자 리스트 반환하기")
     void getUserList() {
+        given(userRepository.findAllByNickname(any())).willReturn(USER_DTO_LIST);
+        userService.getUserList(SEARCH_USER_DTO);
+        verify(userRepository, times(1)).findAllByNickname(any());
     }
 
     @Test
     @DisplayName("사용자 리스트 반환하기 실패")
     void getUserListFail() {
+        given(userRepository.findAllByNickname(any())).willReturn(Collections.EMPTY_LIST);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.getUserList(SEARCH_USER_DTO);
+        });
+        assertEquals("해당 닉네임을 가진 사용자가 없습니다.", exception.getMessage());
     }
 }
