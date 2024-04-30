@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import FindUsername from '/Users/sep037/Desktop/fe/fe/src/components/FindUsername';
 
 function Login({ setScreen }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showFindUsername, setShowFindUsername] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -53,6 +55,8 @@ function Login({ setScreen }) {
       <br></br>
       <button onClick={handleLogin}>로그인</button>
       <button onClick={() => setScreen('signup')}>Sign Up</button>
+      <button onClick={() => setShowFindUsername(true)}>아이디 찾기</button>
+      {showFindUsername && <FindUsername setVisible={setShowFindUsername} />}
     </div>
   );
   };
