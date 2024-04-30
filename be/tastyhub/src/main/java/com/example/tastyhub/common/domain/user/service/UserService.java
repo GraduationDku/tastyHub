@@ -1,6 +1,7 @@
 package com.example.tastyhub.common.domain.user.service;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
+import com.example.tastyhub.common.domain.user.dtos.DeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
@@ -27,4 +28,6 @@ public interface UserService {
     void changePassword(ChangePasswordRequest changePasswordRequest, User user);
 
     List<UserDto> getUserList(SearchUserDto searchUserDto);
+    
+    void delete(DeleteRequest deleteRequest, User user);
 }

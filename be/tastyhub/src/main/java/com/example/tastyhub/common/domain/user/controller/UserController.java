@@ -5,6 +5,7 @@ import static com.example.tastyhub.common.config.APIConfig.USER_API;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
+import com.example.tastyhub.common.domain.user.dtos.DeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
@@ -21,6 +22,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -93,4 +95,13 @@ public class UserController {
         List<UserDto> userDtoList =userService.getUserList(searchUserDto);
         return ResponseEntity.ok().body(userDtoList);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<StatusResponse> delete(@RequestBody DeleteRequest deleteRequest,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+            userService.delete(deleteRequest, userDetails.getUser());
+            return RESPONSE_OK;
+            
+        }
 }

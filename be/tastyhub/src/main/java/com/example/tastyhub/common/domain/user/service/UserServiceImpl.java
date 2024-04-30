@@ -4,6 +4,7 @@ import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER
 import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
+import com.example.tastyhub.common.domain.user.dtos.DeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
@@ -114,6 +115,18 @@ public class UserServiceImpl implements UserService {
     private User findByUsername(String username) {
         return userRepository.findByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다."));
+    }
+
+    @Override
+    public void delete(DeleteRequest deleteRequest, User user){
+        String username = deleteRequest.getUsername();
+        String password = deleteRequest.getPassword()+username.substring(0,2);
+        
+        boolean isCorrectedPassword=passwordEncoder.matches(password, user.getPassword());
+        if (!isCorrectedPassword) {
+            throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
+        }
+        userRepository.delete(user);
     }
 
 
