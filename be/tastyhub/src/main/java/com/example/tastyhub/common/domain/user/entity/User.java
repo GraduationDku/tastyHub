@@ -6,6 +6,7 @@ import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import com.example.tastyhub.common.domain.scrap.entity.Scrap;
+import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 import com.example.tastyhub.common.domain.village.entity.Village;
 import jakarta.persistence.CascadeType;
@@ -95,8 +96,14 @@ public class User {
     @Builder.Default
     private List<UserReview> userReaderReviews = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "village_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Village village;
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
+    public void updateUserInfo(UserUpdateRequest userUpdateRequest){
+        this.nickname = userUpdateRequest.getNickname();
+    }
 }

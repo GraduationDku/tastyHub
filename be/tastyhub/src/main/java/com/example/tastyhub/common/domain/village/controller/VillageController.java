@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -27,10 +28,15 @@ public class VillageController {
     private final VillageService villageService;
 
     @PostMapping("/location")
-
-    public ResponseEntity<StatusResponse> postMethodName(@RequestBody LocationRequest locationRequest,
+    public ResponseEntity<StatusResponse> setLocation(@RequestBody LocationRequest locationRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        villageService.location(locationRequest, userDetails.getUser());
+        villageService.setLocation(locationRequest, userDetails.getUser());
+        return RESPONSE_OK;
+    }
+    @PatchMapping("/modify/location")
+    public ResponseEntity<StatusResponse> modifyLocation(@RequestBody LocationRequest locationRequest,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        villageService.modifyLocation(locationRequest, userDetails.getUser());
         return RESPONSE_OK;
     }
 

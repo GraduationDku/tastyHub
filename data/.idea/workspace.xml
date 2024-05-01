@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="12319a62-312e-418b-8156-cb9016545727" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/remakeData.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/remakeData.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../be/tastyhub/src/main/java/com/example/tastyhub/common/domain/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../be/tastyhub/src/main/java/com/example/tastyhub/common/domain/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../be/tastyhub/src/main/java/com/example/tastyhub/common/domain/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../be/tastyhub/src/main/java/com/example/tastyhub/common/domain/user/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../be/tastyhub/src/main/java/com/example/tastyhub/common/domain/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../be/tastyhub/src/main/java/com/example/tastyhub/common/domain/user/service/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../be/tastyhub/src/test/java/com/example/tastyhub/common/domain/user/service/UserServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../be/tastyhub/src/test/java/com/example/tastyhub/common/domain/user/service/UserServiceImplTest.java" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +44,8 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;recipe&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;user-village&quot;,
+
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -86,13 +90,15 @@
       <workItem from="1712746903470" duration="2999000" />
       <workItem from="1713140489029" duration="2000" />
       <workItem from="1714217461035" duration="6720000" />
-      <workItem from="1714302021439" duration="7164000" />
+      <workItem from="1714302021439" duration="7919000" />
+
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
