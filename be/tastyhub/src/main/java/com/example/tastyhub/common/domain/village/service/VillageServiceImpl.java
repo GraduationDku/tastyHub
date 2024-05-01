@@ -18,7 +18,7 @@ public class VillageServiceImpl implements VillageService{
 
     @Override
     @Transactional
-    public void location(LocationRequest locationRequest, User user) {
+    public void setLocation(LocationRequest locationRequest, User user) {
         String addressTownName = locationRequest.getAddressTownName();
         long lat = locationRequest.getLat();
         long lng = locationRequest.getLng();
@@ -30,6 +30,17 @@ public class VillageServiceImpl implements VillageService{
                 .lng(lng)
                 .user(user)
                 .build();
+
+        villageRepository.save(village);
+    }
+    @Override
+    @Transactional
+    public void modifyLocation(LocationRequest locationRequest, User user) {
+        
+
+        Village village = villageRepository.findByUserId(user.getId()).get();
+
+        village.update(locationRequest);
 
         villageRepository.save(village);
     }
