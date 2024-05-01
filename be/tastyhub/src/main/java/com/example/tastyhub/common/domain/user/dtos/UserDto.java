@@ -7,6 +7,8 @@ import lombok.Getter;
 @Builder
 public class UserDto {
 
+    private Long userId;
+
     private String nickname;
 
     private String userImg;

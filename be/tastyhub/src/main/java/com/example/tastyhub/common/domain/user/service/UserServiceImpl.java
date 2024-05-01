@@ -115,8 +115,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getUserList(SearchUserDto searchUserDto) {
-//        List<UserDto> userDtoList = userRepository.findAllByNickname(searchUserDto.getNickname());
-        return null;
+        List<UserDto> userDtoList = userRepository.findAllByNickname(searchUserDto.getNickname());
+        return userDtoList;
     }
 
     private User findByUsername(String username) {

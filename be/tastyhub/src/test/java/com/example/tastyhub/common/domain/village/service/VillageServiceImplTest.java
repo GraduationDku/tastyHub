@@ -27,7 +27,7 @@ class VillageServiceImplTest {
     @Test
     @DisplayName("지역정보 저장 성공")
     void location() {
-        villageService.location(LOCATION_REQUEST, USER);
+        villageService.setLocation(LOCATION_REQUEST, USER);
         verify(villageRepository, times(1)).save(any());
     }
 }
