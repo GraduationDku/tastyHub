@@ -33,7 +33,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             "/user/overlap/nickname",
             "/user/overlap/username",
             "/user/login",
-            "/user/signup"
+            "/user/signup",
+            "/recipe/list",
+            "/recipe/popular",
+            "/recipe/search",
+            "/recipe/detail"
             );
 
     @Override

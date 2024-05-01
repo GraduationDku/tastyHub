@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Builder
@@ -34,6 +35,7 @@ import lombok.NoArgsConstructor;
 
 @Table(name = "recipes")
 @Entity
+@DynamicUpdate
 public class Recipe extends TimeStamped {
 
 
@@ -44,7 +46,7 @@ public class Recipe extends TimeStamped {
 
     private String foodName;
 
-    private String foodImg;
+    private String foodImgUrl;
 
 //    private Long numLike;
 
@@ -76,6 +78,11 @@ public class Recipe extends TimeStamped {
     @Builder.Default
     private List<Scrap> scraps = new ArrayList<>();
 
-
+//    public void update(RecipeUpdateDto recipeUpdateDto) {
+//        this.foodName = recipeUpdateDto.getFoodName();
+////        this.foodImgUrl = recipeUpdateDto.getFoodImg();
+//        this.getCookSteps() =;
+//
+//    }
 
 }
