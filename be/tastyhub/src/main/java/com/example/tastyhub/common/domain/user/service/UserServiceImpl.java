@@ -19,6 +19,7 @@ import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,7 +62,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void signup(SignupRequest signupRequest) {
         String username = signupRequest.getUsername();
-        String password = signupRequest.getPassword() + username.substring(0,2); // 레인보우 테이블을 취약 -> salt 사용을 통해 해결
+        String password = signupRequest.getPassword() + username.substring(0,
+            2); // 레인보우 테이블을 취약 -> salt 사용을 통해 해결
         String userImg = "refact"; // s3 연결 후
         User user = User.builder()
             .username(username)
@@ -79,10 +81,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void login(LoginRequest loginRequest, HttpServletResponse response) {
         String username = loginRequest.getUsername();
-        String password = loginRequest.getPassword()+username.substring(0,2);
+        String password = loginRequest.getPassword() + username.substring(0, 2);
         User byUsername = findByUsername(username);
-        boolean a=passwordEncoder.matches(password, byUsername.getPassword());
-        if (!passwordEncoder.matches(password,byUsername.getPassword())) {
+        boolean a = passwordEncoder.matches(password, byUsername.getPassword());
+        if (!passwordEncoder.matches(password, byUsername.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
         }
         String accessToken = jwtUtill.createAccessToken(byUsername.getUsername(),
@@ -97,17 +99,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String findId(FindIdRequest findIdRequest) {
-
-        return null;
+        User user = findByEmail(findIdRequest);
+        String subId = user.getUsername().substring(0, user.getUsername().length() - 4);
+        return subId+"****";
     }
 
-    @Override
-    public void changePassword(ChangePasswordRequest changePasswordRequest, User user) {
 
+    @Override
+    @Transactional
+    public void changePassword(ChangePasswordRequest changePasswordRequest, User user) {
+        user.updatePassword(changePasswordRequest.getChangePassword());
     }
 
     @Override
     public List<UserDto> getUserList(SearchUserDto searchUserDto) {
+//        List<UserDto> userDtoList = userRepository.findAllByNickname(searchUserDto.getNickname());
         return null;
     }
 
@@ -116,5 +122,9 @@ public class UserServiceImpl implements UserService {
             .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다."));
     }
 
+    private User findByEmail(FindIdRequest findIdRequest) {
+        return userRepository.findByEmail(findIdRequest.getEmail())
+            .orElseThrow(() -> new IllegalArgumentException("해당 회원은 존재하지 않습니다."));
+    }
 
 }

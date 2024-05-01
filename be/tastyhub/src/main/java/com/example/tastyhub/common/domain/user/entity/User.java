@@ -99,4 +99,8 @@ public class User {
     @JoinColumn(name = "village_id")
     private Village village;
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
 }
