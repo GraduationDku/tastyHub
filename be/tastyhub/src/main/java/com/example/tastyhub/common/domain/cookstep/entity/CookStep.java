@@ -1,5 +1,7 @@
 package com.example.tastyhub.common.domain.cookstep.entity;
 
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateDto;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.CascadeType;
@@ -38,9 +40,31 @@ public class CookStep extends TimeStamped {
     // 조리 시 필요한 내용
     private String text;
 
+    private String stepImgUrl;
+
     //연관 관계
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Recipe.class)
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
+
+    public static CookStep makeCookStep(CookStepCreateDto cookStepCreateDto) {
+        return CookStep.builder()
+            .stepNumber(cookStepCreateDto.getStepNumber())
+            .text(cookStepCreateDto.getText())
+            .stepImgUrl("refactor")
+            .build();
+    }
+
+//    public static CookStep updaCookStep(CookStepCreateDto cookStepCreateDto) {
+//        return CookStep.builder()
+//            .stepNumber(cookStepCreateDto.getStepNumber())
+//            .text(cookStepCreateDto.getText())
+//            .build();
+//    }
+
+    public void update(CookStepUpdateDto cookStepUpdateDto) {
+        this.text = cookStepUpdateDto.getText();
+        this.stepNumber = cookStepUpdateDto.getStepNumber();
+    }
 
 }
