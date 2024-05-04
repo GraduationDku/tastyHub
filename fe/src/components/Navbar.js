@@ -1,6 +1,6 @@
 // Navbar.js
 import React from 'react';
-import '/Users/sep037/Desktop/fe/fe/src/css/Navbar.css';
+import '../css/Navbar.css';
 
 const Navbar = ({ setScreen }) => {
   return (

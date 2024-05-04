@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FindUsername from '/Users/sep037/Desktop/fe/fe/src/components/FindUsername';
+import FindUsername from "../components/FindUsername";
 
 function Login({ setScreen }) {
   const [username, setUsername] = useState('');
