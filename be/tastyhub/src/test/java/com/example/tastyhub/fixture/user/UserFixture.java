@@ -7,7 +7,9 @@ import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
 import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
+import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
+import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import java.util.Collections;
@@ -56,6 +58,7 @@ public class UserFixture {
 
     public static final ChangePasswordRequest CHANGE_PASSWORD_REQUEST =
         ChangePasswordRequest.builder()
+            .beforePassword("beforePassword")
             .changePassword("changePassword")
             .build();
 
@@ -72,4 +75,15 @@ public class UserFixture {
 
     public static final List<UserDto> USER_DTO_LIST =
         Collections.singletonList(USER_DTO);
+
+
+    public static final UserDeleteRequest USER_DELETE_REQUEST =
+        UserDeleteRequest.builder()
+            .username("username")
+            .password("password")
+            .build();
+
+
+    public static final UserUpdateRequest USER_UPDATE_REQUEST =
+        new UserUpdateRequest("nickname");
 }

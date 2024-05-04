@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="12319a62-312e-418b-8156-cb9016545727" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../be/tastyhub/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../be/tastyhub/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../be/tastyhub/src/test/java/com/example/tastyhub/common/domain/user/service/UserServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../be/tastyhub/src/test/java/com/example/tastyhub/common/domain/user/service/UserServiceImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
