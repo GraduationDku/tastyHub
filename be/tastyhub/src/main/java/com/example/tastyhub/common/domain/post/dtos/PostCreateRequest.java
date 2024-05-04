@@ -1,4 +1,4 @@
-package com.example.tastyhub.common.domain.user.dtos;
+package com.example.tastyhub.common.domain.post.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
-
-    private String username;
-    private String password;
-
+public class PostCreateRequest {
+    private String title;
+    private String text;
 }
