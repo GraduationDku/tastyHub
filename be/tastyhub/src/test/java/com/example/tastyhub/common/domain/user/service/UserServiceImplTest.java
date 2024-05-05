@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -148,7 +149,7 @@ class UserServiceImplTest {
         given(userRepository.findByEmail(FIND_ID_REQUEST.getEmail())).willReturn(
             Optional.ofNullable(USER));
         userService.findId(FIND_ID_REQUEST);
-        verify(userRepository, times(1)).findByEmail(any());
+        verify(userRepository, times(1)).findByEmail(anyString());
     }
 
     @Test
@@ -234,13 +235,9 @@ class UserServiceImplTest {
     @Test
     @DisplayName("사용자 정보 업데이트")
     void updateUserInfo() {
-
+        given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
         userService.updateUserInfo(USER_UPDATE_REQUEST,USER);
+        verify(userRepository, times(1)).findByUsername(any());
     }
 
-    @Test
-    @DisplayName("사용자 정보 업데이트")
-    void updateUserInfoFail() {
-
-    }
 }

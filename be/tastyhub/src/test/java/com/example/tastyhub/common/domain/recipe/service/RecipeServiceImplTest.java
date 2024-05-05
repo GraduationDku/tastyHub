@@ -59,7 +59,7 @@ class RecipeServiceImplTest {
         });
         assertEquals("해당 레시피는 존재하지 않습니다",exception.getMessage());
     }
-    
+
 
     @Test
     @DisplayName("모든 레시피 조회 성공")

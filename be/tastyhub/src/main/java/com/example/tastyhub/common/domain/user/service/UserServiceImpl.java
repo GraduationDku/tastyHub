@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(UserUpdateRequest userUpdateRequest, User user) {
-        User find_user = userRepository.findById(user.getId()).get();
+        User find_user = userRepository.findByUsername(user.getUsername()).orElseThrow(()-> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
         find_user.updateUserInfo(userUpdateRequest);
     }
 
