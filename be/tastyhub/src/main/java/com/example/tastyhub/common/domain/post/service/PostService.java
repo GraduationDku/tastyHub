@@ -10,4 +10,6 @@ public interface PostService {
 
     void updatePost(Long postId, PostUpdateRequest postUpdateRequest, User user);
 
+    void deletePost(Long postId, User user);
+
 }

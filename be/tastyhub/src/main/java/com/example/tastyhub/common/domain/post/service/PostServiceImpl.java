@@ -29,4 +29,9 @@ public class PostServiceImpl implements PostService {
         post.update(postUpdateRequest);
     }
 
+    @Override
+    public void deletePost(Long postId, User user) {
+        postRepository.deleteById(postId);
+    }
+
 }
