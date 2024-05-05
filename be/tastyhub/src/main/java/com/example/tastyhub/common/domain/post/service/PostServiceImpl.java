@@ -3,6 +3,7 @@ package com.example.tastyhub.common.domain.post.service;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.post.dtos.PostCreateRequest;
+import com.example.tastyhub.common.domain.post.dtos.PostUpdateRequest;
 import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.post.entity.Post.PostState;
 import com.example.tastyhub.common.domain.post.repository.PostRepository;
@@ -20,6 +21,12 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder().title(postCreateRequest.getTitle()).text(postCreateRequest.getText())
                 .postState(PostState.Start).user(user).build();
         postRepository.save(post);
+    }
+
+    @Override
+    public void updatePost(Long postId, PostUpdateRequest postUpdateRequest, User user) {
+        Post post = postRepository.findById(postId).get();
+        post.update(postUpdateRequest);
     }
 
 }
