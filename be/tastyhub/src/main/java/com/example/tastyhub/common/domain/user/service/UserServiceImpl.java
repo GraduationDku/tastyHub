@@ -142,8 +142,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(UserUpdateRequest userUpdateRequest, User user) {
-        user.updateUserInfo(userUpdateRequest);
-        userRepository.save(user);
+        User find_user = userRepository.findById(user.getId()).get();
+        find_user.updateUserInfo(userUpdateRequest);
     }
 
 
