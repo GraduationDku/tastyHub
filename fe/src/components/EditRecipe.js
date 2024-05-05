@@ -4,7 +4,9 @@ function EditRecipe({ recipeId }) {
   const [formData, setFormData] = useState({
     foodName: '',
     foodImgUrl: '',
-    foodInformation: ''
+    foodInformation: '',
+    ingredients: '', // 추가된 필드
+    cookSteps: '' // 추가된 필드
   });
 
   useEffect(() => {
