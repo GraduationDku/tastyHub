@@ -7,6 +7,8 @@ import Navbar from './components/Navbar';
 import Recipedetails from './components/Recipedetails';
 import MainScreen from './components/MainScreen';
 import Recipe from './components/Recipe';
+import CreateRecipe from './components/CreateRecipe';
+
 
 function App() {
   const [screen, setScreen] = useState('home'); //초기값은 home
@@ -25,8 +27,9 @@ function App() {
       {screen === 'signup' && <Signup setScreen={setScreen} />}
       {screen === 'village' && <Village setScreen={setScreen}/>}
       {screen === 'main' && <MainScreen onRecipeSelect={setScreen}/>}
-      {screen === 'recipe' && <Recipe onRecipeSelect={setScreen}/>}
       {screen === 'recipeDetails' && <Recipedetails setScreen={setScreen}/>}
+      {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen}/>}
+      {screen === 'create' && <CreateRecipe setScreen={setScreen}/>}      
     </div>
   );
 }
