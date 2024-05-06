@@ -79,7 +79,9 @@ jacocoTestReport {
                     "**/dtos/*",
                     "**/entity/*",
                     "**/dto/*",
-                    "**/utils/*"
+                    "**/utils/*",
+                    "**/contoller/*",
+                    "**/repository/*"
             ])
         }))
     }
