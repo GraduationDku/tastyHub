@@ -51,5 +51,9 @@ public class Comment extends TimeStamped {
         this.text = commentUpdateRequest.getText();
     }
 
+    public void delete() {
+        this.isAlive =false;
+    }
+
 
 }

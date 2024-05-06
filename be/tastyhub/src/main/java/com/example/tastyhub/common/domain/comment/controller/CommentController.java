@@ -37,6 +37,13 @@ public class CommentController {
                 commentService.updateComment(commentId,commentCreateRequest, userDetails.getUser());
         return RESPONSE_OK;
     }
+    @PatchMapping("/delete/{commentId}")
+    public ResponseEntity<StatusResponse> deleteComment(@RequestParam Long commentId, 
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                commentService.deleteComment(commentId, userDetails.getUser());
+        return RESPONSE_OK;
+    }
+
 
 
 }

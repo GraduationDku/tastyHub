@@ -30,4 +30,10 @@ public class CommentServiceImpl implements CommentService{
         comment.update(commentUpdateRequest);
     }
 
+    @Override
+    public void deleteComment(Long commentId, User user) {
+        Comment comment = commentRepository.findById(commentId).get();
+        comment.delete();
+    }
+
 }
