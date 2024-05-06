@@ -35,6 +35,8 @@ public class Comment extends TimeStamped {
 
     private String text;
 
+    private Boolean isAlive;
+
     //연관관계
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Post.class)
     @JoinColumn(name = "post_id", nullable = false)
@@ -43,5 +45,6 @@ public class Comment extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
 
 }
