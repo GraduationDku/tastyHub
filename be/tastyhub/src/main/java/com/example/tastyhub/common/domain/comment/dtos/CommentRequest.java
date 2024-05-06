@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CommentCreateRequest {
+public class CommentRequest {
     private String text;
 }
