@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.post.dtos;
 
-import com.example.tastyhub.common.domain.comment.dtos.CommentDto;
+import com.example.tastyhub.common.domain.comment.entity.Comment;
 import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.post.entity.Post.PostState;
 import java.util.List;
@@ -22,7 +22,7 @@ public class PostResponse {
     private String userImg;
     private String latestUpdateTime;
 
-    private List<CommentDto> commentDtoList;
+    private List<Comment> comments;
 
 
     // 댓글 기능 업데이트 시 댓글리스트 추가 예정
@@ -33,6 +33,7 @@ public class PostResponse {
         this.nickname = post.getUser().getNickname();
         this.userImg = post.getUser().getUserImg();
         this.latestUpdateTime = String.valueOf(post.getModifiedAt());
+        this.comments = post.getComments();
     }
 
 }
