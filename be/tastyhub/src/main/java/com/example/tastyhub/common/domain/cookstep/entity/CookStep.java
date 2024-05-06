@@ -65,6 +65,10 @@ public class CookStep extends TimeStamped {
     public void update(CookStepUpdateDto cookStepUpdateDto) {
         this.text = cookStepUpdateDto.getText();
         this.stepNumber = cookStepUpdateDto.getStepNumber();
+//        this.stepImgUrl = cookStepUpdateDto.getStepImg();
     }
 
+    public void updateFromDto(CookStepUpdateDto dto) {
+
+    }
 }

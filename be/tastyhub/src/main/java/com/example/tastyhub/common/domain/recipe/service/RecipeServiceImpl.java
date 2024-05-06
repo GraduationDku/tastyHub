@@ -2,12 +2,14 @@ package com.example.tastyhub.common.domain.recipe.service;
 
 import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateDto;
 import com.example.tastyhub.common.domain.cookstep.dtos.CookStepResponseDto;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
 import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
 import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
 import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import com.example.tastyhub.common.domain.ingredient.entity.Ingredient;
+import com.example.tastyhub.common.domain.ingredient.service.IngredientService;
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
@@ -17,7 +19,9 @@ import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -94,40 +98,30 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeDto;
     }
 
-    private Recipe recipeFindById(Long recipeId) {
-        return recipeRepository.findById(recipeId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 레시피는 존재하지 않습니다"));
-    }
-
     @Override
+    @Transactional
     public void updateRecipe(Long recipeId, User user, RecipeUpdateDto recipeUpdateDto) {
-//        Recipe recipe = recipeFindById(recipeId);
-//        if (!recipe.getUser().equals(user)) {
-//            throw new IllegalArgumentException("해당 유저는 접근권한이 없습니다.");
-//        }
-//
-//        FoodInformationUpdateDto foodInformation = recipeUpdateDto.getFoodInformation();
-//
-//
-//        List<IngredientUpdateDto> ingredientUpdateDtoList = recipeUpdateDto.getIngredients();
-//        List<CookStepUpdateDto> cookStepUpdateDtoList = recipeUpdateDto.getCookSteps();
-//
-//        List<Object> ingredients = ingredientUpdateDtoList.stream().map(Ingredient::new)
-//            .collect(Collectors.toList());
-//
-//        List<CookStep> cookSteps = cookStepUpdateDtoList.stream().map(CookStep::new)
-//            .collect(Collectors.toList());
-//
-//        recipe.update();
+        Recipe recipe = checkRecipeAndUser(recipeId, user);
 
+        // 기존 Ingredient 리스트 처리
+        List<Ingredient> updatedIngredients = getUpdatedIngredients(
+            recipeUpdateDto, recipe);
 
+        // 기존 CookStep 리스트 처리
+        List<CookStep> updatedCookSteps = getCookSteps(
+            recipeUpdateDto, recipe);
+
+        // Recipe 객체에 대한 최종 업데이트 호출
+        recipe.update(updatedIngredients, updatedCookSteps);
     }
+
     // 세현
     @Override
     @Transactional
     public Page<PagingRecipeResponse> getAllRecipes(Pageable pageable) {
         return recipeRepository.findAllandPaging(pageable);
     }
+
     @Override
     @Transactional
     public Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable) {
@@ -137,9 +131,69 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     @Transactional
     public Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable) {
-        return recipeRepository.searchByKeyword(foodName,pageable);
+        return recipeRepository.searchByKeyword(foodName, pageable);
     }
-// 세현
 
+    @Override
+    @Transactional
+    public void deleteRecipe(Long recipeId, User user) {
+        Recipe recipe = checkRecipeAndUser(recipeId, user);
+        recipeRepository.delete(recipe);
+    }
 
+    public Recipe checkRecipeAndUser(Long recipeId, User user) {
+        Recipe recipe = recipeFindById(recipeId);
+        if (!recipe.getUser().equals(user)) {
+            throw new IllegalArgumentException("해당 유저는 접근권한이 없습니다.");
+        }
+        return recipe;
+    }
+
+    // 세현
+    @Generated
+    private static List<CookStep> getCookSteps(RecipeUpdateDto recipeUpdateDto, Recipe recipe) {
+        List<CookStep> existingCookSteps = recipe.getCookSteps();
+        Map<Long, CookStep> existingCookStepMap = existingCookSteps.stream()
+            .collect(Collectors.toMap(CookStep::getId, cookStep -> cookStep));
+
+        List<CookStepUpdateDto> cookStepUpdateDtos = recipeUpdateDto.getCookSteps();
+        List<CookStep> updatedCookSteps = cookStepUpdateDtos.stream()
+            .map(dto -> {
+                CookStep cookStep = existingCookStepMap.get(dto.getCookStepId());
+                if (cookStep == null) {
+                    cookStep = new CookStep(); // 새 객체 생성
+                }
+                cookStep.update(dto); // dto 정보로 기존 객체 업데이트
+                return cookStep;
+            })
+            .collect(Collectors.toList());
+        return updatedCookSteps;
+    }
+
+    @Generated
+    private static List<Ingredient> getUpdatedIngredients(RecipeUpdateDto recipeUpdateDto,
+        Recipe recipe) {
+        List<Ingredient> existingIngredients = recipe.getIngredients();
+        Map<Long, Ingredient> existingIngredientMap = existingIngredients.stream()
+            .collect(Collectors.toMap(Ingredient::getId, ingredient -> ingredient));
+
+        List<IngredientDto> ingredientDtos = recipeUpdateDto.getIngredients();
+        List<Ingredient> updatedIngredients = ingredientDtos.stream()
+            .map(dto -> {
+                Ingredient ingredient = existingIngredientMap.get(dto.getIngredientId());
+                if (ingredient == null) {
+                    ingredient = new Ingredient(); // 새 객체 생성
+                }
+                ingredient.update(dto); // dto 정보로 기존 객체 업데이트
+                return ingredient;
+            })
+            .collect(Collectors.toList());
+        return updatedIngredients;
+    }
+
+    @Generated
+    private Recipe recipeFindById(Long recipeId) {
+        return recipeRepository.findById(recipeId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 레시피는 존재하지 않습니다"));
+    }
 }

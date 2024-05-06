@@ -46,6 +46,8 @@ public class Ingredient extends TimeStamped {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
+
+
     public static Ingredient makeIngredient(IngredientCreateDto ingredientCreateDto) {
         return Ingredient.builder()
             .ingredientName(ingredientCreateDto.getIngredientName())

@@ -3,9 +3,16 @@ package com.example.tastyhub.common.domain.recipe.dtos;
 import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
 import com.querydsl.core.annotations.QueryProjection;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class PagingRecipeResponse {
     private Long foodId;
     private String foodName;

@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -110,20 +111,28 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void changePassword(ChangePasswordRequest changePasswordRequest, User user) {
+        User user1 = findByUsername(user.getUsername());
+        String password = changePasswordRequest.getBeforePassword()+user1.getUsername().substring(0,2);
+        if (!passwordEncoder.matches(password, user1.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
+        }
         user.updatePassword(changePasswordRequest.getChangePassword());
     }
 
     @Override
+    @Transactional
     public List<UserDto> getUserList(SearchUserDto searchUserDto) {
         List<UserDto> userDtoList = userRepository.findAllByNickname(searchUserDto.getNickname());
         return userDtoList;
     }
 
+    @Generated
     private User findByUsername(String username) {
         return userRepository.findByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다."));
     }
 
+    @Generated
     private User findByEmail(FindIdRequest findIdRequest) {
         return userRepository.findByEmail(findIdRequest.getEmail())
             .orElseThrow(() -> new IllegalArgumentException("해당 회원은 존재하지 않습니다."));
@@ -142,8 +151,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(UserUpdateRequest userUpdateRequest, User user) {
-        user.updateUserInfo(userUpdateRequest);
-        userRepository.save(user);
+        User find_user = userRepository.findByUsername(user.getUsername()).orElseThrow(()-> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
+        find_user.updateUserInfo(userUpdateRequest);
     }
 
 
