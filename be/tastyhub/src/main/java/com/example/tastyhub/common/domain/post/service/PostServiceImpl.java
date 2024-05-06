@@ -3,6 +3,7 @@ package com.example.tastyhub.common.domain.post.service;
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
 import java.util.List;
+import lombok.Generated;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.post.dtos.PostCreateRequest;
@@ -28,8 +29,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void updatePost(Long postId, PostUpdateRequest postUpdateRequest, User user) {
-        Post post = postRepository.findById(postId).get();
+        Post post = findById(postId);
         post.update(postUpdateRequest);
+    }
+
+    private Post findById(Long postId) {
+        return postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 게시글은 존재하지 않습니다."));
     }
 
     @Override
@@ -56,6 +62,7 @@ public class PostServiceImpl implements PostService {
         return postResponse;
     }
 
+    @Generated
     private Post getPostFindByPostId(Long postId) {
         return postRepository.findById(postId)
             .orElseThrow(() -> new IllegalArgumentException("해당 게시물은 존재하지 않습니다."));

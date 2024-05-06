@@ -9,6 +9,8 @@ import com.example.tastyhub.common.domain.post.dtos.PostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostUpdateRequest;
 import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.post.entity.Post.PostState;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.security.core.parameters.P;
 
 public class PostFixture {
@@ -48,4 +50,7 @@ public class PostFixture {
         .title("title")
         .build();
 
+
+    public static final List<PagingPostResponse> PAGING_POST_RESPONSES = Collections.singletonList(
+        PAGING_POST_RESPONSE);
 }

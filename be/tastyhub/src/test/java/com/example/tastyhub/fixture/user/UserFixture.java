@@ -1,5 +1,7 @@
 package com.example.tastyhub.fixture.user;
 
+import static com.example.tastyhub.fixture.village.VillageFixture.VILLAGE;
+
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
@@ -48,6 +50,7 @@ public class UserFixture {
             .userImg(null)
             .email("email@gmail.com")
             .nickname("nickname")
+            .village(VILLAGE)
             .build();
 
 
