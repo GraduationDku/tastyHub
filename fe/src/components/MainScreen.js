@@ -15,7 +15,11 @@ function MainScreen() {
         });
         if (response.ok) {
           const data = await response.json();
-          setRecipes(data);
+          if (Array.isArray(data.content)) {
+            setRecipes(data.content);
+          } else {
+            console.error('Data.content is not an array', data.content);
+          }
         } else {
           throw new Error('Failed to fetch recipes');
         }
@@ -23,12 +27,12 @@ function MainScreen() {
         console.error('Error fetching weekly recipes:', error);
       }
     }
-
     fetchWeeklyRecipes();
   }, []);
 
   const handleRecipeClick = (recipe) => {
     setSelectedRecipe(recipe);
+    console.log('Selected recipe:', recipe);
   };
 
   return (
@@ -45,7 +49,15 @@ function MainScreen() {
         <div>
           <h2>{selectedRecipe.title}</h2>
           <img src={selectedRecipe.foodImgUrl} alt={selectedRecipe.foodName} style={{ width: '300px' }} />
-          <p>{selectedRecipe.foodInformation}</p>
+          {selectedRecipe.foodInformation ? (
+            <>
+              <p>{selectedRecipe.foodInformation.text || 'No description available'}</p>
+              <p>Cooking Time: {selectedRecipe.foodInformation.cookingTime || 'N/A'} minutes</p>
+              <p>Serving: {selectedRecipe.foodInformation.serving || 'N/A'}</p>
+            </>
+          ) : (
+            <p>No additional food information available.</p>
+          )}
         </div>
       )}
     </div>

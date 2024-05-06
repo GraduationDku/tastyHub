@@ -13,8 +13,8 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
           }
         });
         const data = await response.json();
-        if (data.recipes) {
-          setRecipes(data.recipes);  // 'recipes' 키로 레시피 데이터를 추출하여 상태에 저장
+        if (Array.isArray(data.content)) {
+          setRecipes(data.content); // 레시피 데이터를 상태에 저장
         } else {
           console.error('레시피 데이터 형식이 예상과 다릅니다:', data);
         }
@@ -36,9 +36,10 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
             <h3>{recipe.foodName}</h3>
             <img src={recipe.foodImgUrl} alt={recipe.foodName} style={{ width: '100px', height: '100px' }} />
             <div>
-              <p>설명: {recipe.foodInformation.text}</p>
-              <p>요리 시간: {recipe.foodInformation.cookingTime}분</p>
-              <p>인분: {recipe.foodInformation.serving}</p>
+              {/* foodInformation 객체의 속성을 확인하여 데이터가 존재하는지 확인 */}
+              <p>설명: {recipe.foodInformation ? recipe.foodInformation.text : '정보 없음'}</p>
+              <p>요리 시간: {recipe.foodInformation ? recipe.foodInformation.cookingTime + '분' : '정보 없음'}</p>
+              <p>인분: {recipe.foodInformation ? recipe.foodInformation.serving : '정보 없음'}</p>
             </div>
             <button onClick={(e) => {
               e.stopPropagation(); // 클릭 이벤트의 전파를 중지
