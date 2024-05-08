@@ -1,8 +1,10 @@
 package com.example.tastyhub.common.domain.recipe.controller;
+
 import static com.example.tastyhub.common.config.APIConfig.RECIPE_API;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,29 +39,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping(RECIPE_API)
 @Slf4j
 public class RecipeController {
+
     private final RecipeService recipeService;
     private final SetHttpHeaders setHttpHeaders;
 
     @GetMapping("/popular")
     public ResponseEntity<Page<PagingRecipeResponse>> getPopuralRecipes(
-            @PageableDefault(size = 7, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        @PageableDefault(size = 7, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
-                .body(recipeService.getPopularRecipes(pageable));
+            .body(recipeService.getPopularRecipes(pageable));
     }
 
     @GetMapping("/list")
     public ResponseEntity<Page<PagingRecipeResponse>> getAllRecipes(
-            @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
-                .body(recipeService.getAllRecipes(pageable));
+            .body(recipeService.getAllRecipes(pageable));
     }
 
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(@PathVariable String keyword,
-            @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
-                log.info("CTL : " + keyword);
+    public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(
+        @PathVariable String keyword,
+        @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        log.info("CTL : " + keyword);
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(
-                recipeService.getSearchedRecipes(keyword, pageable));
+            recipeService.getSearchedRecipes(keyword, pageable));
     }
 
     /**
@@ -86,10 +90,18 @@ public class RecipeController {
      * writer : skyriv213 method : 레시피 수정하기
      */
     @PatchMapping("/modify/{recipeId}")
-    public ResponseEntity<StatusResponse> updateRecipe(@PathVariable Long recipeId,@RequestBody RecipeUpdateDto recipeUpdateDto,
+    public ResponseEntity<StatusResponse> updateRecipe(@PathVariable Long recipeId,
+        @RequestBody RecipeUpdateDto recipeUpdateDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //
-//        recipeService.updateRecipe(recipeId, userDetails.getUser(), recipeUpdateDto);
+        recipeService.updateRecipe(recipeId, userDetails.getUser(), recipeUpdateDto);
+        return RESPONSE_OK;
+    }
+
+    @DeleteMapping("/{recipeId}")
+    public ResponseEntity<StatusResponse> deleteRecipe(@PathVariable Long recipeId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        recipeService.deleteRecipe(recipeId, userDetails.getUser());
         return RESPONSE_OK;
     }
 }

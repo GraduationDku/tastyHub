@@ -24,6 +24,7 @@ public interface RecipeService {
     Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable);
 
     Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable);
-    
 
+
+    void deleteRecipe(Long recipeId, User user);
 }

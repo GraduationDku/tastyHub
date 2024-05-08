@@ -3,6 +3,8 @@ package com.example.tastyhub.fixture.ingredient;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import com.example.tastyhub.common.domain.ingredient.entity.Ingredient;
+import java.util.Collections;
+import java.util.List;
 
 public class IngredientFixture {
 
@@ -24,4 +26,6 @@ public class IngredientFixture {
         .build();
 
 
+    public static final List<IngredientDto> INGREDIENT_DTO_LIST = Collections.singletonList(
+        INGREDIENT_DTO);
 }

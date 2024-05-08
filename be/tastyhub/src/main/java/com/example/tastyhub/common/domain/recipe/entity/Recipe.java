@@ -46,6 +46,7 @@ public class Recipe extends TimeStamped {
 
     private String foodName;
 
+    @Column(name = "food_img")
     private String foodImgUrl;
 
 //    private Long numLike;
@@ -78,11 +79,11 @@ public class Recipe extends TimeStamped {
     @Builder.Default
     private List<Scrap> scraps = new ArrayList<>();
 
-//    public void update(RecipeUpdateDto recipeUpdateDto) {
-//        this.foodName = recipeUpdateDto.getFoodName();
-////        this.foodImgUrl = recipeUpdateDto.getFoodImg();
-//        this.getCookSteps() =;
-//
-//    }
+    public void update(List<Ingredient> ingredients, List<CookStep> cookSteps) {
+        this.ingredients = ingredients;
+        this.cookSteps = cookSteps;
+    }
+
+
 
 }

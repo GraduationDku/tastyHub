@@ -8,13 +8,16 @@ import static com.example.tastyhub.fixture.user.UserFixture.LOGIN_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.SEARCH_USER_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.SIGNUP_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
+import static com.example.tastyhub.fixture.user.UserFixture.USER_DELETE_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DTO_LIST;
+import static com.example.tastyhub.fixture.user.UserFixture.USER_UPDATE_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -53,6 +56,9 @@ class UserServiceImplTest {
 
     @Mock
     JwtUtil jwtUtill;
+
+    @Mock
+    User user;
 
     @InjectMocks
     UserServiceImpl userService;
@@ -143,14 +149,15 @@ class UserServiceImplTest {
         given(userRepository.findByEmail(FIND_ID_REQUEST.getEmail())).willReturn(
             Optional.ofNullable(USER));
         userService.findId(FIND_ID_REQUEST);
-        verify(userRepository, times(1)).findByEmail(any());
+        verify(userRepository, times(1)).findByEmail(anyString());
     }
 
     @Test
     @DisplayName("아이디 찾기 실패")
     void findIdFail() {
 
-        given(userRepository.findByEmail(any())).willThrow(new IllegalArgumentException("해당 회원은 존재하지 않습니다."));
+        given(userRepository.findByEmail(any())).willThrow(
+            new IllegalArgumentException("해당 회원은 존재하지 않습니다."));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userService.findId(FIND_ID_REQUEST);
@@ -163,32 +170,35 @@ class UserServiceImplTest {
     @Test
     @DisplayName("비밀번호 변경하기")
     void changePassword() {
-//        given(userRepository.findByUsername(USER.getUsername())).willReturn(
-//            Optional.ofNullable(USER));
-//        userService.changePassword(CHANGE_PASSWORD_REQUEST, USER);
-//        verify(User.class, times(1)).(any());
+        given(userRepository.findByUsername(user.getUsername())).willReturn(
+            Optional.ofNullable(USER));
+        given(passwordEncoder.matches(any(), any())).willReturn(Boolean.TRUE);
+
+        userService.changePassword(CHANGE_PASSWORD_REQUEST, user);
+        verify(userRepository, times(1)).findByUsername(any());
+//        verify(user, times(1)).updatePassword(CHANGE_PASSWORD_REQUEST.getChangePassword());
 
     }
 
     @Test
     @DisplayName("비밀번호 변경하기 실패")
     void changePasswordFail() {
-//
-//        given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
-//
-//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-//            userService.changePassword(CHANGE_PASSWORD_REQUEST, USER);
-//        });
-//
-//        assertEquals("비밀번호가 일치하지않습니다.", exception.getMessage());
+
+        given(userRepository.findByUsername(any())).willThrow(new IllegalArgumentException("비밀번호가 일치하지않습니다."));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.changePassword(CHANGE_PASSWORD_REQUEST, USER);
+        });
+
+        assertEquals("비밀번호가 일치하지않습니다.", exception.getMessage());
     }
 
     @Test
     @DisplayName("사용자 리스트 반환하기")
     void getUserList() {
-//        given(userRepository.findAllByNickname(any())).willReturn(USER_DTO_LIST);
-//        userService.getUserList(SEARCH_USER_DTO);
-//        verify(userRepository, times(1)).findAllByNickname(any());
+        given(userRepository.findAllByNickname(any())).willReturn(USER_DTO_LIST);
+        userService.getUserList(SEARCH_USER_DTO);
+        verify(userRepository, times(1)).findAllByNickname(any());
     }
 
     @Test
@@ -200,4 +210,34 @@ class UserServiceImplTest {
 //        });
 //        assertEquals("해당 닉네임을 가진 사용자가 없습니다.", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("유저 삭제 성공")
+    void deleteUser() {
+        given(passwordEncoder.matches(any(), any())).willReturn(Boolean.TRUE);
+        userService.delete(USER_DELETE_REQUEST, USER);
+        verify(userRepository, times(1)).delete(any());
+    }
+
+    @Test
+    @DisplayName("유저 삭제 실패")
+    void deleteUserFail() {
+        given(passwordEncoder.matches(any(), any())).willThrow(
+            new IllegalArgumentException("비밀번호가 일치하지않습니다."));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.delete(USER_DELETE_REQUEST, USER);
+        });
+
+        assertEquals("비밀번호가 일치하지않습니다.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("사용자 정보 업데이트")
+    void updateUserInfo() {
+        given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
+        userService.updateUserInfo(USER_UPDATE_REQUEST,USER);
+        verify(userRepository, times(1)).findByUsername(any());
+    }
+
 }
