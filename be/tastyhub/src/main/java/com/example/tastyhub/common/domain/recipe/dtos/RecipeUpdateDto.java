@@ -14,7 +14,7 @@ public class RecipeUpdateDto {
 
     private String foodName;
 
-    private MultipartFile foodImg;
+    private String foodImg;
 
     private FoodInformationDto foodInformation;
 
