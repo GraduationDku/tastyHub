@@ -5,8 +5,6 @@ import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
-import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
-import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
 import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
@@ -21,6 +19,7 @@ import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
+
 import java.util.Optional;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void checkDuplicatedUsername(DuplicatedUserName duplicatedUserName) {
-        if (!userRepository.existsByUsername(duplicatedUserName.getUsername())) {
+    public void checkDuplicatedUsername(String username) {
+        if (!userRepository.existsByUsername(username)) {
             return;
         }
         throw new IllegalArgumentException("이미 존재하는 username입니다");
@@ -54,8 +53,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void checkDuplicatedNickname(DuplicatedNickName duplicatedNickName) {
-        if (!userRepository.existsByNickname(duplicatedNickName.getNickname())) {
+    public void checkDuplicatedNickname(String nickname) {
+        if (!userRepository.existsByNickname(nickname)) {
             return;
         }
         throw new IllegalArgumentException("이미 존재하는 nickname입니다");
