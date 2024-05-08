@@ -127,7 +127,6 @@ public class RecipeServiceImpl implements RecipeService {
     public Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable) {
         return recipeRepository.findPopular(pageable);
     }
-
     @Override
     @Transactional
     public Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable) {
@@ -173,6 +172,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Generated
     private static List<Ingredient> getUpdatedIngredients(RecipeUpdateDto recipeUpdateDto,
         Recipe recipe) {
+
         List<Ingredient> existingIngredients = recipe.getIngredients();
         Map<Long, Ingredient> existingIngredientMap = existingIngredients.stream()
             .collect(Collectors.toMap(Ingredient::getId, ingredient -> ingredient));
