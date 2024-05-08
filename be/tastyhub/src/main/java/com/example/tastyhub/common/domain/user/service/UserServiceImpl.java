@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -125,11 +126,13 @@ public class UserServiceImpl implements UserService {
         return userDtoList;
     }
 
+    @Generated
     private User findByUsername(String username) {
         return userRepository.findByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다."));
     }
 
+    @Generated
     private User findByEmail(FindIdRequest findIdRequest) {
         return userRepository.findByEmail(findIdRequest.getEmail())
             .orElseThrow(() -> new IllegalArgumentException("해당 회원은 존재하지 않습니다."));

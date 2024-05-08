@@ -46,6 +46,7 @@ public class Recipe extends TimeStamped {
 
     private String foodName;
 
+    @Column(name = "food_img")
     private String foodImgUrl;
 
 //    private Long numLike;

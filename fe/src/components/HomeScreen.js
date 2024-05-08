@@ -1,12 +1,15 @@
 import React from 'react';
+import '../css/HomeScreen.css'
 
 function HomeScreen({ setScreen }) {
   return (
-    <div>
+    <div className="homescreen">
       <h1>TastyHub</h1>
-      <button onClick={() => alert('Navigating to main screen...')}>비회원</button>
+      <img src={require('../css/img/logo.png')} alt="TastyHub Logo" />
+      <button className='top' onClick={() => alert('Navigating to main screen...')}>비회원</button>
       <br></br>
-      <button onClick={() => setScreen('login')}> 회원</button>
+      <br/>
+      <button className='bottom' onClick={() => setScreen('login')}> 회원</button>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.village.service;
 
+import lombok.Generated;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.user.entity.User;
@@ -44,6 +45,7 @@ public class VillageServiceImpl implements VillageService{
         villageRepository.save(village);
     }
 
+    @Generated
     private Village findByUserId(User user) {
         return villageRepository.findByUserId(user.getId())
             .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다"));

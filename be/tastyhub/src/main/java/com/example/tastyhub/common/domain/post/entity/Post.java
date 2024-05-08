@@ -2,6 +2,7 @@ package com.example.tastyhub.common.domain.post.entity;
 
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.comment.entity.Comment;
+import com.example.tastyhub.common.domain.post.dtos.PostUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,5 +55,10 @@ public class Post extends TimeStamped {
     @OneToMany(mappedBy = "post")
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
+
+    public void update(PostUpdateRequest postUpdateRequest) {
+        this.title = postUpdateRequest.getTitle();
+        this.text = postUpdateRequest.getTitle();
+    }
 
 }

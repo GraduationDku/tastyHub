@@ -3,6 +3,7 @@ package com.example.tastyhub.common.domain.recipe.repository;
 import static com.example.tastyhub.common.domain.foodInformation.entity.QFoodInformation.foodInformation;
 import static com.example.tastyhub.common.domain.recipe.entity.QRecipe.recipe;
 
+import com.querydsl.core.types.Projections;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -41,8 +42,10 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
     @Override
     public Page<PagingRecipeResponse> findPopular(Pageable pageable) {
         List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
-                .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
-                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving))
+                .select(
+                    new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
+                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving)
+                )
                 .from(recipe)
                 .leftJoin(recipe.foodInformation, foodInformation)
                 .orderBy(recipe.likes.size().desc())

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function FindUsername({ setVisible }) {
+function FindUsername() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState(null);
@@ -42,8 +42,8 @@ function FindUsername({ setVisible }) {
       <button onClick={handleFindUsername} disabled={loading}>
         {loading ? '로딩 중...' : '아이디 찾기'}
       </button>
-      <button onClick={() => setVisible(false)}>닫기</button>
     </div>
   );
 }
+
 export default FindUsername;
