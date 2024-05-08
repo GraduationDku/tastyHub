@@ -57,14 +57,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse getPost(Long postId) {
-        Post post = getPostFindByPostId(postId);
-        PostResponse postResponse = new PostResponse(post);
+
+        PostResponse postResponse = getPostFindByPostId(postId);
         return postResponse;
     }
 
     @Generated
-    private Post getPostFindByPostId(Long postId) {
-        return postRepository.findById(postId)
+    private PostResponse getPostFindByPostId(Long postId) {
+        return postRepository.findByIdQuery(postId)
             .orElseThrow(() -> new IllegalArgumentException("해당 게시물은 존재하지 않습니다."));
     }
 
