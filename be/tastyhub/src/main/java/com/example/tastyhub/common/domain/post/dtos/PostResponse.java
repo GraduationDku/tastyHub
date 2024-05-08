@@ -20,6 +20,7 @@ public class PostResponse {
     private PostState postState;
     private String nickname;
     private String userImg;
+    private String text;
     private String latestUpdateTime;
 
     private List<Comment> comments;
@@ -29,6 +30,7 @@ public class PostResponse {
     public PostResponse(Post post) {
         this.postId = post.getId();
         this.title = post.getTitle();
+        this.text = post.getText();
         this.postState = post.getPostState();
         this.nickname = post.getUser().getNickname();
         this.userImg = post.getUser().getUserImg();
