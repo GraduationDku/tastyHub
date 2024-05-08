@@ -8,6 +8,9 @@ import Recipedetails from './components/Recipedetails';
 import MainScreen from './components/MainScreen';
 import Recipe from './components/Recipe';
 import CreateRecipe from './components/CreateRecipe';
+import FindUsername from './components/FindUsername';
+
+
 
 function App() {
   const [screen, setScreen] = useState('home'); // 초기 화면 설정
@@ -31,6 +34,7 @@ function App() {
       {screen === 'recipeDetails' && <Recipedetails recipeId={selectedRecipeId} setScreen={setScreen} />}
       {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
       {screen === 'create' && <CreateRecipe setScreen={setScreen} />}
+      {screen === 'findUsername' && <FindUsername setScreen={setScreen}/>}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../css/Recipe.css';
 
 function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   const [recipes, setRecipes] = useState([]);
@@ -14,12 +15,12 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
         });
         const data = await response.json();
         if (Array.isArray(data.content)) {
-          setRecipes(data.content); // 레시피 데이터를 상태에 저장
+          setRecipes(data.content);
         } else {
-          console.error('레시피 데이터 형식이 예상과 다릅니다:', data);
+          console.error('Invalid data format:', data);
         }
       } catch (error) {
-        console.error('레시피를 불러오는 중 오류 발생:', error);
+        console.error('Error fetching recipes:', error);
       }
     }
 
@@ -27,27 +28,29 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   }, []);
 
   return (
-    <div>
-      <h1>전체 레시피 조회</h1>
-      <button onClick={() => setScreen('create')}>레시피 작성하기</button>
-      <ul>
-        {recipes.map(recipe => (
-          <li key={recipe.foodId} onClick={() => onRecipeSelect(recipe.foodId)}>
-            <h3>{recipe.foodName}</h3>
-            <img src={recipe.foodImgUrl} alt={recipe.foodName} style={{ width: '100px', height: '100px' }} />
-            <div>
-              {/* foodInformation 객체의 속성을 확인하여 데이터가 존재하는지 확인 */}
-              <p>설명: {recipe.foodInformation ? recipe.foodInformation.text : '정보 없음'}</p>
-              <p>요리 시간: {recipe.foodInformation ? recipe.foodInformation.cookingTime + '분' : '정보 없음'}</p>
-              <p>인분: {recipe.foodInformation ? recipe.foodInformation.serving : '정보 없음'}</p>
-            </div>
-            <button onClick={(e) => {
-              e.stopPropagation(); // 클릭 이벤트의 전파를 중지
-              onEdit(recipe.foodId);
-            }}>수정하기</button>
-          </li>
-        ))}
-      </ul>
+    <div className='recipe'>
+      <div className='box'>
+        <h1>전체 레시피 조회</h1>
+        <button onClick={() => setScreen('create')}>레시피 작성하기</button>
+        <ul>
+          {recipes.map(recipe => (
+            <li key={recipe.foodId} onClick={() => onRecipeSelect(recipe.foodId)}>
+              <h3>{recipe.foodName}</h3>
+              <img src={recipe.foodImgUrl} alt={recipe.foodName} style={{ width: '100px', height: '100px' }} />
+              <div>
+                <p>설명: {recipe.foodInformationDto ? recipe.foodInformationDto.text : '정보 없음'}</p>
+                <p>요리 시간: {recipe.foodInformationDto ? recipe.foodInformationDto.cookingTime + '분' : '정보 없음'}</p>
+                <p>인분: {recipe.foodInformationDto ? recipe.foodInformationDto.serving : '정보 없음'}</p>
+              </div>
+              <button onClick={(e) => {
+                e.stopPropagation();
+                console.log('Edit button clicked for:', recipe.foodId);
+                onEdit(recipe.foodId);
+                }}>수정하기</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

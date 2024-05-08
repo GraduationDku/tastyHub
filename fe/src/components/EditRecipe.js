@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function EditRecipe({ recipeId }) {
+function EditRecipe({ recipeId, onEdit }) {
   const [formData, setFormData] = useState({
     foodName: '',
     foodImgUrl: '',
