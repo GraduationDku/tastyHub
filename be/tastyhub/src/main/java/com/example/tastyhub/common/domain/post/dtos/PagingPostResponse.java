@@ -19,7 +19,4 @@ public class PagingPostResponse {
     private PostState postState;
     private String nickname;
     private String userImg;
-    private List<Comment> comments;
-
-
 }

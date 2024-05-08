@@ -22,8 +22,8 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
                     post.title,
                     post.postState,
                     post.user.nickname,
-                    post.user.userImg,
-                    post.comments))
+                    post.user.userImg
+                    ))
                 .from(post)
                 .where(post.user.village.eq(village))
                 .leftJoin(post.user).fetchJoin()
@@ -40,8 +40,8 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
                     post.title,
                     post.postState,
                     post.user.nickname,
-                    post.user.userImg,
-                    post.comments))
+                    post.user.userImg
+                    ))
                 .from(post)
                 .where(post.user.village.eq(village))
                 .leftJoin(post.user).fetchJoin()
