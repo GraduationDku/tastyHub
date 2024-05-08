@@ -61,7 +61,7 @@ class UserServiceImplTest {
     @DisplayName("username 중복 x")
     void checkDuplicatedUsername() {
         when(userRepository.existsByUsername(any())).thenReturn(false);
-        userService.checkDuplicatedUsername(DUPLICATED_USER_NAME);
+        userService.checkDuplicatedUsername("username");
         verify(userRepository, times(1)).existsByUsername(any());
     }
 
@@ -71,7 +71,7 @@ class UserServiceImplTest {
         when(userRepository.existsByUsername(any())).thenReturn(true);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userService.checkDuplicatedUsername(DUPLICATED_USER_NAME);
+            userService.checkDuplicatedUsername("username");
         });
 
         assertEquals("이미 존재하는 username입니다", exception.getMessage());
@@ -82,7 +82,7 @@ class UserServiceImplTest {
     @DisplayName("nickname 중복 x")
     void checkDuplicatedNickname() {
         when(userRepository.existsByNickname(any())).thenReturn(false);
-        userService.checkDuplicatedNickname(DUPLICATED_NICK_NAME);
+        userService.checkDuplicatedNickname(USER.getNickname());
         verify(userRepository, times(1)).existsByNickname(any());
 
     }
@@ -93,7 +93,7 @@ class UserServiceImplTest {
         when(userRepository.existsByNickname(any())).thenReturn(true);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userService.checkDuplicatedNickname(DUPLICATED_NICK_NAME);
+            userService.checkDuplicatedNickname(USER.getNickname());
         });
 
         assertEquals("이미 존재하는 nickname입니다", exception.getMessage());
