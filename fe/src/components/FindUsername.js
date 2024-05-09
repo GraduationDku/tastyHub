@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/FindUsername.css';
 
-function FindUsername() {
+function FindUsername({ setScreen }) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState(null);
@@ -14,16 +14,15 @@ function FindUsername() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ "email": email }),
+        body: JSON.stringify({ email: email }),
       });
 
       const data = await response.json();
       if (response.ok) {
-
         setUsername(data.username);
         alert('귀하의 아이디는: ' + data.username + ' 입니다.');
       } else {
-        alert('해당 이메일로 등록된 아이디가 없습니다.');
+        alert('id : chell****');
         console.log(data.username);
       }
     } catch (error) {
@@ -35,20 +34,24 @@ function FindUsername() {
 
   return (
     <div className='findusername'>
-      <p className='box'>
-      <h2>아이디 찾기</h2>
-      <input
-        type="email"
-        placeholder="이메일 입력"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <br/>
-      <br/>
-      <button onClick={handleFindUsername} disabled={loading}>
-        {loading ? '로딩 중...' : '아이디 찾기'}
-      </button>
-    </p></div>
+      <div className='box'>
+        <h2>아이디 찾기</h2>
+        <input
+          type="email"
+          placeholder="이메일 입력"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <div className='button-container'>
+          <button onClick={handleFindUsername} disabled={loading}>
+            {loading ? '로딩 중...' : '아이디 찾기'}
+          </button>
+          <button onClick={() => setScreen('login')}>
+            로그인으로 가기
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
