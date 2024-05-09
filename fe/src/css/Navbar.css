@@ -40,3 +40,10 @@
   margin-right: 0;
   display:flex;
 }
+
+.navbar input {
+  width : 200px;
+  height:30px;
+  border : none;
+  border-radius:10px;
+}

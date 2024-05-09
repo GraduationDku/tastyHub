@@ -1,55 +1,57 @@
 import React, { useState, useEffect } from 'react';
+import '../css/Village.css';
 
-function Village() {
+function Village({setScreen}) {
   const [location, setLocation] = useState({ lat: null, lng: null });
   const [addressTownName, setAddress] = useState('');
   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tyevkp01u2";
+    script.src = "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tyevkp01u2&submodules=geocoder";
     script.async = true;
-    script.onload = () => setMapLoaded(true);
+    script.onload = () => {
+      console.log("Naver Maps API is loaded.");
+      setMapLoaded(true);
+    };
     document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
 
-  const getAddressFromNaver = async (lat, lng) => {
-    const clientId = 'tyevkp01u2';
-    const clientSecret = 'hn1A68yG8Ln4HisR4p|JzmRVJZK2gPIWM31PjLxJ';
-    const url = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${lng},${lat}&orders=addr&output=json`;
+  const getAddressFromNaver = (lat, lng) => {
+    if (window.naver && window.naver.maps) {
+      window.naver.maps.Service.reverseGeocode({
+        coords: new window.naver.maps.LatLng(lat, lng),
+        orders: [
+          window.naver.maps.Service.OrderType.ADDR,
+          window.naver.maps.Service.OrderType.ROAD_ADDR
+        ].join(',')
+      }, function(status, response) {
+        if (status === window.naver.maps.Service.Status.OK) {
+          const result = response.result;
+          const address = result.items[0].address;
+          const roadAddress = result.items.find(item => item.isRoadAddress)?.address;
+          const jibunAddress = result.items.find(item => !item.isRoadAddress)?.address;
 
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'X-NCP-APIGW-API-KEY-ID': clientId,
-          'X-NCP-APIGW-API-KEY': clientSecret,
+          const finalAddress = roadAddress || jibunAddress || address;
+          setAddress(finalAddress);
+          console.log("주소 변환 결과:", finalAddress);
+        } else {
+          console.error("주소 정보를 가져오는데 실패했습니다.");
+          console.log(lat,lng);
         }
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        const addressData = data.results[0]?.region;
-        const formattedAddress = `${addressData.area1.name} ${addressData.area2.name} ${addressData.area3.name}`;
-        setAddress(formattedAddress);
-      } else {
-        console.error("서버로부터 에러 응답을 받았습니다.");
-      }
-    } catch (error) {
-      console.error("주소 가져오기 중 오류 발생:", error);
     }
   };
-
+  
   useEffect(() => {
-    const checkNaver = setInterval(() => {
-      if (mapLoaded && location.lat && location.lng) {
-        getAddressFromNaver(location.lat, location.lng);
-        initializeNaverMap();
-        clearInterval(checkNaver);
-      }
-    }, 100);
-
-    return () => clearInterval(checkNaver);
+    if (mapLoaded && location.lat && location.lng) {
+      getAddressFromNaver(location.lat, location.lng);
+      initializeNaverMap();
+    }
   }, [mapLoaded, location]);
 
   const initializeNaverMap = () => {
@@ -68,20 +70,25 @@ function Village() {
 
   const getLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { lat, lng } = position.coords;
-        setLocation({ lat, lng });
-      }, (error) => {
-        console.error("Error Code = " + error.code + " - " + error.message);
-      });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log("Location obtained:", latitude, longitude);
+          setLocation({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error("Error obtaining location:", error.message);
+          alert("위치 정보를 가져오는데 실패했습니다. 에러 메시지: " + error.message);
+        },
+        { timeout: 5000 }
+      );
     } else {
-      alert("위치를 불러올 수 없습니다.");
+      alert("이 브라우저에서는 위치 서비스를 지원하지 않습니다.");
     }
   };
 
   const handleConfirmLocation = async () => {
     const serverEndpoint = 'http://localhost:8080/village/location';
-
     try {
       const response = await fetch(serverEndpoint, {
         method: 'POST',
@@ -89,18 +96,17 @@ function Village() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          latitude: location.lat,
-          longitude: location.lng,
-          address: addressTownName
+          "lat": location.lat,
+          "lng": location.lng,
+          "addressTownName": addressTownName
         })
       });
 
       if (response.ok) {
         const responseData = await response.json();
         console.log('서버로부터 응답 받음:', responseData);
-        // 여기에서 레시피 화면으로 이동하는 로직을 추가하면 됩니다.
       } else {
-        console.error('서버 에러:', response.status);
+        console.error('서버 에러:', response.status, await response.text());
       }
     } catch (error) {
       console.error('서버 요청 중 오류 발생:', error);
@@ -108,18 +114,21 @@ function Village() {
   };
 
   return (
-    <div>
-      <h2>나의 동네가 맞나요?</h2>
-      <button onClick={getLocation}>현재 위치 가져오기</button>
-      {location.lat && location.lng && (
-        <>
-          <p>위도: {location.lat}, 경도: {location.lng}</p>
-          <p>주소: {addressTownName}</p>
-          <div id="map" style={{ width: "100%", height: "400px" }}></div>
-          <button onClick={handleConfirmLocation}>네, 맞아요</button>
-          <button onClick={getLocation}>아니에요</button>
-        </>
-      )}
+    <div className='village'>
+      <div className='box'>
+        <h2>나의 동네가 맞나요?</h2>
+        <button onClick={getLocation}>현재 위치 가져오기</button>
+        {location.lat && location.lng && (
+          <>
+            <p>위도: {location.lat}, 경도: {location.lng}</p>
+            <p>주소: {addressTownName}</p>
+            <div className='map' id="map" style={{ width: "100%", height: "400px" }}></div>
+            <br/>
+            <button onClick={() => setScreen('main')}>맞아요</button>
+            <button onClick={getLocation}>아니에요</button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

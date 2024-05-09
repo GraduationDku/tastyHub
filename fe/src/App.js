@@ -9,6 +9,7 @@ import MainScreen from './components/MainScreen';
 import Recipe from './components/Recipe';
 import CreateRecipe from './components/CreateRecipe';
 import FindUsername from './components/FindUsername';
+import SearchRecipe from './components/SearchRecipe';
 
 
 
@@ -35,6 +36,8 @@ function App() {
       {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
       {screen === 'create' && <CreateRecipe setScreen={setScreen} />}
       {screen === 'findUsername' && <FindUsername setScreen={setScreen}/>}
+      {screen === 'search' && <SearchRecipe setScreen={setScreen}/>}
+    
     </div>
   );
 }

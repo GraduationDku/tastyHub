@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../css/FindUsername.css';
 
 function FindUsername() {
   const [email, setEmail] = useState('');
@@ -8,20 +9,22 @@ function FindUsername() {
   const handleFindUsername = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/user/findUsername', {
+      const response = await fetch('http://localhost:8080/user/findid', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ "email": email }),
       });
 
       const data = await response.json();
       if (response.ok) {
+
         setUsername(data.username);
         alert('귀하의 아이디는: ' + data.username + ' 입니다.');
       } else {
         alert('해당 이메일로 등록된 아이디가 없습니다.');
+        console.log(data.username);
       }
     } catch (error) {
       console.error('아이디 찾기 오류:', error);
@@ -31,7 +34,8 @@ function FindUsername() {
   };
 
   return (
-    <div>
+    <div className='findusername'>
+      <p className='box'>
       <h2>아이디 찾기</h2>
       <input
         type="email"
@@ -39,10 +43,12 @@ function FindUsername() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
+      <br/>
+      <br/>
       <button onClick={handleFindUsername} disabled={loading}>
         {loading ? '로딩 중...' : '아이디 찾기'}
       </button>
-    </div>
+    </p></div>
   );
 }
 
