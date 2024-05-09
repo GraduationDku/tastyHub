@@ -67,6 +67,9 @@
 }
 
 .mainscreen .box2 .info{
-  font-style : bold;
   font-weight:bold;
+}
+
+.mainscreen img{
+  border-radius:15px;
 }

@@ -32,14 +32,14 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
         <h1>전체 레시피 조회</h1>
         <div className='box'>
         <button onClick={() => setScreen('create')}>레시피 작성하기</button>
+        <div className='seperate'>
         <ul>
           {recipes.map(recipe => (
             <li key={recipe.foodId} onClick={() => onRecipeSelect(recipe.foodId)}>
               <h3>{recipe.foodName}</h3>
-              <img src={recipe.foodImgUrl} alt={recipe.foodName} style={{ width: '100px', height: '100px' }} />
+              <img src={recipe.foodImgUrl} alt={recipe.foodName} style={{ width: '50%'}} />
               <div>
-                <p>요리 시간: {recipe.foodInformationDto ? recipe.foodInformationDto.cookingTime + '분' : '정보 없음'}</p>
-                <p>{recipe.foodInformationDto ? recipe.foodInformationDto.serving : '정보 없음'}인분</p>
+                <p>요리 시간: {recipe.foodInformationDto ? recipe.foodInformationDto.cookingTime + '분' : '정보 없음'} | {recipe.foodInformationDto ? recipe.foodInformationDto.serving : '정보 없음'}인분</p>
                 <p>설명: {recipe.foodInformationDto ? recipe.foodInformationDto.text : '정보 없음'}</p>
                 
               </div>
@@ -47,6 +47,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
             </li>
           ))}
         </ul>
+        </div>
       </div>
     </div>
   );

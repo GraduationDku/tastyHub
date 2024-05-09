@@ -24,3 +24,25 @@
   margin: auto; /* Center the box horizontally */
   width: 800px;
 }
+
+.recipe button {
+  border : none;
+  width : 150px;
+  height : 40px;
+  border-radius : 10px;
+  margin: 0 10px;
+}
+
+.recipe .seperate {
+  border-bottom: 1px solid #ddd;
+}
+
+.recipe .box {
+  color: #5C5F5C
+}
+
+.recipe .box img{
+  border-radius:20px;
+}
+
+

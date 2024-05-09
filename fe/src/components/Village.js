@@ -121,7 +121,7 @@ function Village({setScreen}) {
         {location.lat && location.lng && (
           <>
             <p>위도: {location.lat}, 경도: {location.lng}</p>
-            <p>주소: {addressTownName}</p>
+            <p> {addressTownName}</p>
             <div className='map' id="map" style={{ width: "100%", height: "400px" }}></div>
             <br/>
             <button onClick={() => setScreen('main')}>맞아요</button>
