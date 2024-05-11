@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,9 @@ class EmailServiceImplTest {
     JavaMailSender javaMailSender;
 
     @Mock
+    UserRepository userRepository;
+
+    @Mock
     RedisUtil redisUtil;
 
     @InjectMocks
@@ -34,6 +38,7 @@ class EmailServiceImplTest {
     @DisplayName("이메일 전송 성공")
     void authEmail() {
         emailService.authEmail(AUTH_EMAIL_REQUEST);
+        verify(userRepository, times(1)).existsByEmail(any());
         verify(redisUtil, times(1)).existData(AUTH_EMAIL_REQUEST.getEmail());
         verify(javaMailSender, times(1)).send((MimeMessage) any());
     }

@@ -1,6 +1,7 @@
 package com.example.tastyhub.common.domain.comment.entity;
 
 import com.example.tastyhub.common.utils.TimeStamped;
+import com.example.tastyhub.common.domain.comment.dtos.CommentRequest;
 import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -35,6 +36,8 @@ public class Comment extends TimeStamped {
 
     private String text;
 
+    private Boolean isAlive;
+
     //연관관계
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Post.class)
     @JoinColumn(name = "post_id", nullable = false)
@@ -43,5 +46,14 @@ public class Comment extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public void update(CommentRequest commentUpdateRequest) {
+        this.text = commentUpdateRequest.getText();
+    }
+
+    public void delete() {
+        this.isAlive =false;
+    }
+
 
 }

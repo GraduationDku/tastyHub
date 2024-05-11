@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -129,7 +130,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     @Transactional
     public Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable) {
-        return recipeRepository.searchByKeyword(foodName,pageable);
+        return recipeRepository.searchByKeyword(foodName, pageable);
     }
 
     @Override
@@ -147,8 +148,8 @@ public class RecipeServiceImpl implements RecipeService {
         return recipe;
     }
 
-// 세현
-
+    // 세현
+    @Generated
     private static List<CookStep> getCookSteps(RecipeUpdateDto recipeUpdateDto, Recipe recipe) {
         List<CookStep> existingCookSteps = recipe.getCookSteps();
         Map<Long, CookStep> existingCookStepMap = existingCookSteps.stream()
@@ -168,7 +169,10 @@ public class RecipeServiceImpl implements RecipeService {
         return updatedCookSteps;
     }
 
-    private static List<Ingredient> getUpdatedIngredients(RecipeUpdateDto recipeUpdateDto, Recipe recipe) {
+    @Generated
+    private static List<Ingredient> getUpdatedIngredients(RecipeUpdateDto recipeUpdateDto,
+        Recipe recipe) {
+
         List<Ingredient> existingIngredients = recipe.getIngredients();
         Map<Long, Ingredient> existingIngredientMap = existingIngredients.stream()
             .collect(Collectors.toMap(Ingredient::getId, ingredient -> ingredient));
@@ -187,6 +191,7 @@ public class RecipeServiceImpl implements RecipeService {
         return updatedIngredients;
     }
 
+    @Generated
     private Recipe recipeFindById(Long recipeId) {
         return recipeRepository.findById(recipeId)
             .orElseThrow(() -> new IllegalArgumentException("해당 레시피는 존재하지 않습니다"));

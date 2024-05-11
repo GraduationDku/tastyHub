@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -40,15 +41,15 @@ public class UserController {
 
     @GetMapping("/overlap/nickname")
     public ResponseEntity<StatusResponse> checkDuplicatedNickname(
-            @RequestBody DuplicatedNickName duplicatedNickName) {
-        userService.checkDuplicatedNickname(duplicatedNickName);
+            @RequestParam String nickname) {
+        userService.checkDuplicatedNickname(nickname);
         return RESPONSE_OK;
     }
 
     @GetMapping("/overlap/username")
     public ResponseEntity<StatusResponse> checkDuplicatedUsername(
-            @RequestBody DuplicatedUserName duplicatedUserName) {
-        userService.checkDuplicatedUsername(duplicatedUserName);
+            @RequestParam String username) {
+        userService.checkDuplicatedUsername(username);
         return RESPONSE_OK;
     }
 
