@@ -17,27 +17,36 @@ import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.user.entity.User;
+import com.example.tastyhub.common.utils.S3.S3UploadService;
+
 import jakarta.transaction.Transactional;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RecipeServiceImpl implements RecipeService {
-
+    private final S3UploadService s3UploadService;
     private final RecipeRepository recipeRepository;
 
 
     @Override
     @Transactional
-    public void createRecipe(RecipeCreateDto recipeCreateDto, User user) {
+    public void createRecipe(RecipeCreateDto recipeCreateDto, MultipartFile img, User user) throws Exception {
+        String imgUrl = new String();
+        
         FoodInformation foodInformation = FoodInformation.builder()
             .text(recipeCreateDto.getFoodInformation().getText())
             .serving(recipeCreateDto.getFoodInformation().getServing())
@@ -53,17 +62,29 @@ public class RecipeServiceImpl implements RecipeService {
         List<CookStep> cookSteps = cookStepCreateDtos.stream().map(CookStep::makeCookStep)
             .collect(Collectors.toList());
 
-        Recipe recipe = Recipe.builder()
-            .foodName(recipeCreateDto.getFoodName())
-            .foodImgUrl("refactoring")
-            .user(user)
-
-            .foodInformation(foodInformation)
-            .ingredients(ingredients)
-            .cookSteps(cookSteps)
-            .build();
-
-        recipeRepository.save(recipe);
+            try {
+                imgUrl = s3UploadService.upload(img,"image/recipeimg");
+                Recipe recipe = Recipe.builder()
+                    .foodName(recipeCreateDto.getFoodName())
+                    .foodImgUrl(imgUrl)
+                    .user(user)
+                    .foodInformation(foodInformation)
+                    .ingredients(ingredients)
+                    .cookSteps(cookSteps)
+                    .build();
+        
+                recipeRepository.save(recipe);
+            } catch (Exception e) {
+                // 레시피 저장에 실패한 경우, S3에서 이미지 삭제
+                if (!imgUrl.isEmpty()) {
+                    try {
+                        s3UploadService.delete(imgUrl);
+                    } catch (IOException ioException) {
+                        log.error("Failed to delete uploaded image from S3", ioException);
+                    }
+                }
+                throw e; // 예외를 다시 던져 트랜잭션 롤백 활성화
+            }
     }
 
     @Override

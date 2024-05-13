@@ -2,6 +2,7 @@ package com.example.tastyhub.common.utils.S3;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,9 +26,12 @@ public class S3UploadServiceImpl implements S3UploadService {
   @Value("${spring.file-dir}")
   private String fileDirectory;
 
+  @Value("${cloud.aws.s3.bucket}")
+  private String bucket;
+
   // 핵심 비즈니스 로직
   @Override
-  public String upload(MultipartFile multipartFile, String bucket, String dirName) throws IOException {
+  public String upload(MultipartFile multipartFile, String dirName) throws IOException {
     File uploadFile = convert(multipartFile).orElseThrow(
         () -> new IllegalArgumentException("파일 변환에 실패했습니다")
     );
@@ -83,5 +87,19 @@ public class S3UploadServiceImpl implements S3UploadService {
     int pos = originalFilename.lastIndexOf(".");
     return originalFilename.substring(pos + 1);
   }
+
+  // S3에 업로드된 이미지 지우기
+  public void delete(String imgUrl) throws IOException {
+    try {
+      URL url = new URL(imgUrl);
+      String path = url.getPath().substring(1);  // Remove leading '/'
+      String[] parts = path.split("/", 2);
+      String key = parts[1];
+
+      amazonS3Client.deleteObject(bucket, key);
+    } catch (Exception e) {
+        throw new IOException("S3 이미지 삭제에 실패했습니다.", e);
+    }
+}
     
 }

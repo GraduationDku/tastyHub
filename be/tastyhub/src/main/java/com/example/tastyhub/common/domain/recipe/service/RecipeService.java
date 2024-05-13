@@ -8,12 +8,13 @@ import com.example.tastyhub.common.domain.user.entity.User;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 
 public interface RecipeService {
 
-    void createRecipe(RecipeCreateDto recipeCreateDto, User user);
+    void createRecipe(RecipeCreateDto recipeCreateDto,MultipartFile img, User user) throws Exception;
 
     RecipeDto getRecipe(Long recipeId);
 

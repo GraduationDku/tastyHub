@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface S3UploadService {
-    String upload(MultipartFile multipartFile, String bucket, String dirName) throws IOException;
+    String upload(MultipartFile multipartFile, String dirName) throws IOException;
 
     String putS3(File uploadFile, String bucket, String fileName);
 
@@ -18,4 +18,6 @@ public interface S3UploadService {
     String createStoreFileName(String originalFilename);
 
     String extractExt(String originalFilename);
+
+    void delete(String imgUrl) throws IOException;
 }
