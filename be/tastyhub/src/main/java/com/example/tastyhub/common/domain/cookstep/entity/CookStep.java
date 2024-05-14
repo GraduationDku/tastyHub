@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +37,8 @@ public class CookStep extends TimeStamped {
 
     // 조리과정 숫자
     private Long stepNumber;
-
+    
+    @Size(max=1024)
     // 조리 시 필요한 내용
     private String text;
 

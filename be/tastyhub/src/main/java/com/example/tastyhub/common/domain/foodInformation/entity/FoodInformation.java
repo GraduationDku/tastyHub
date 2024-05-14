@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class FoodInformation extends TimeStamped {
     @Column(name = "food_information_id")
     private Long id;
 
-
+    @Size(max=1024)
     private String text;
 
     private Long cookingTime;
