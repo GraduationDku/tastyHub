@@ -10,14 +10,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class S3Uploader {
 
   private final AmazonS3Client amazonS3Client;
@@ -55,11 +58,8 @@ public class S3Uploader {
   public void delete(String imgUrl) throws IOException {
     try {
       URL url = new URL(imgUrl);
-      String path = url.getPath().substring(1);  // Remove leading '/'
-      String[] parts = path.split("/", 2);
-      String key = parts[1];
-
-      amazonS3Client.deleteObject(bucket, key);
+      String path = url.getPath().substring(1);
+      amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, path));
     } catch (Exception e) {
         throw new IOException("S3 이미지 삭제에 실패했습니다.", e);
     }
