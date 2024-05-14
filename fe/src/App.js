@@ -38,6 +38,7 @@ function App() {
       {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
       {screen === 'create' && <CreateRecipe setScreen={setScreen} />}
       {screen === 'findUsername' && <FindUsername setScreen={setScreen} />}
+      
       {screen === 'searchResults' && (
         <div className="search-results">
           <h1>검색 결과</h1>

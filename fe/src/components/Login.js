@@ -22,8 +22,13 @@ function Login({ setScreen }) {
       if (response.ok) {
         const authorization = response.headers.get('Authorization');
         const refreshToken = response.headers.get('Refresh');
+        console.log(response);
+
         localStorage.setItem('accessToken', authorization);
         localStorage.setItem('refreshToken', refreshToken);
+
+        console.log(refreshToken);
+        console.log(authorization);
         console.log('로그인 성공');
         setScreen('main');
       } else {
