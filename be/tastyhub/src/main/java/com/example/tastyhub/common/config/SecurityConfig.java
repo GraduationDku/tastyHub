@@ -1,7 +1,13 @@
 package com.example.tastyhub.common.config;
 
+import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -41,6 +47,8 @@ public class SecurityConfig {
       "/recipe/search/{keyword}",
 
     };
+
+
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -55,6 +63,7 @@ public class SecurityConfig {
           config.setAllowedMethods(Collections.singletonList("*"));
           config.setAllowedOriginPatterns(Collections.singletonList("*"));
           config.setAllowCredentials(true);
+          config.setExposedHeaders(Arrays.asList("Authorization", "Refresh"));
           return config;
       };
   }
