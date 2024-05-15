@@ -15,5 +15,7 @@ public interface ChatRoomService {
 
     void enterNewChatRoom(Long roomId, User user);
 
-    void deleteChatRoom(Long roomId, User user);
+    void outChatRoom(Long roomId, User user);
+
+    void deleteChatRoom(Long roomId, Long postId, User user);
 }

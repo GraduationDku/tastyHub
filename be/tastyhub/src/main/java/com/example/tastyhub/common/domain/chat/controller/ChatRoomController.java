@@ -9,7 +9,6 @@ import com.example.tastyhub.common.domain.chat.service.ChatRoomService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
 import java.util.List;
-import lombok.Builder.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -84,17 +83,29 @@ public class ChatRoomController {
     }
 
     /***
-     * 채팅방 삭제하기(나가기)
+     * 채팅방 나가기
      * @param roomId
      * @param userDetails
      * @return RESPONSE_OK
      */
     @DeleteMapping("/{roomId}")
-    public ResponseEntity<StatusResponse> deleteChatRoom(@PathVariable Long roomId,
+    public ResponseEntity<StatusResponse> outChatRoom(@PathVariable Long roomId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        chatRoomService.deleteChatRoom(roomId, userDetails.getUser());
+        chatRoomService.outChatRoom(roomId, userDetails.getUser());
         return RESPONSE_OK;
     }
 
-    
+    /***
+     * 채팅방 삭제하기
+     * @param roomId
+     * @param postId
+     * @param userDetails
+     * @return RESPONSE_OK
+     */
+    @DeleteMapping("/{roomId}/{postId}")
+    public ResponseEntity<StatusResponse> deleteChatRoom(@PathVariable Long roomId,
+        @PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        chatRoomService.deleteChatRoom(roomId, postId, userDetails.getUser());
+        return RESPONSE_OK;
+    }
 }
