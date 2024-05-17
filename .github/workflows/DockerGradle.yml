@@ -92,7 +92,7 @@ jobs:
 
     - name: docker image build
       run: docker build -t ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub .
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}
+      # working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
     - name: docker login
       uses: docker/login-action@v2
