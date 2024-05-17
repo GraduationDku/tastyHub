@@ -51,7 +51,7 @@ jobs:
     #   run: ./be/tastyhub gradle build
 
   dependency-submission:
-
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
