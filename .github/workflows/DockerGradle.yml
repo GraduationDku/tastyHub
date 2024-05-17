@@ -37,10 +37,6 @@ jobs:
       run: ./gradlew build
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
-    - name: init with Gradle
-      uses: gradle/gradle-build-action@v2
-    - run: gradle init
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
 
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
@@ -55,6 +51,7 @@ jobs:
     
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      working-directory: ${{ secrets.WORKINGDIRECTORY }}
       with:
         arguments: build
 
