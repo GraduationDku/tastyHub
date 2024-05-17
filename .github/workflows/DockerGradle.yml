@@ -95,9 +95,9 @@ jobs:
     - name: docker image build
       uses: docker/build-push-action@v2
       # run: docker build -t ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub .
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}
-      with:
-        push: true
+      # working-directory: ${{ secrets.WORKINGDIRECTORY }}
+      # with:
+      #   push: true
         # tags: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}:${{ steps.vars.outputs.tag }}
         
 
