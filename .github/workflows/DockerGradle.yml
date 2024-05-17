@@ -49,15 +49,15 @@ jobs:
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
     
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}
-      with:
-        arguments: build
+    # - name: Build with Gradle
+    #   uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+    #   working-directory: ${{ secrets.WORKINGDIRECTORY }}
+    #   with:
+    #     arguments: build
 
 
-    - name: Verify .jar file existence
-      run: ls -la ./${{ secrets.WorkingDirectory }}/build/libs/
+    # - name: Verify .jar file existence
+    #   run: ls -la ./${{ secrets.WorkingDirectory }}/build/libs/
 
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
