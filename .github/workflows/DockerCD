@@ -1,8 +1,8 @@
 name: Docker Image CD
 
 on:
-  pull_request:
-    branches: [ "docker2" ]
+  push:
+    branches: [ "dev" ]
 
 jobs:
   build:
