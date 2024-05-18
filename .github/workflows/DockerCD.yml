@@ -30,8 +30,8 @@ jobs:
 
     - name: Copy JAR file to build context
       run: |
-        cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/
-        ls $GITHUB_WORKSPACE/
+        cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/be/build/libs/
+        ls $GITHUB_WORKSPACE/be/build/libs/
 
   push:
     runs-on: ubuntu-latest
