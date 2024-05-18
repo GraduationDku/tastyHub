@@ -1,11 +1,21 @@
 package com.example.tastyhub.fixture.user;
 
+import static com.example.tastyhub.fixture.village.VillageFixture.VILLAGE;
+
+import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
+import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
+import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
+import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
+import com.example.tastyhub.common.domain.user.dtos.UserDto;
+import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
+import java.util.Collections;
+import java.util.List;
 
 public class UserFixture {
 
@@ -40,5 +50,43 @@ public class UserFixture {
             .userImg(null)
             .email("email@gmail.com")
             .nickname("nickname")
+            .village(VILLAGE)
             .build();
+
+
+    public static final FindIdRequest FIND_ID_REQUEST =
+        FindIdRequest.builder()
+            .email("example@email.com")
+            .build();
+
+    public static final ChangePasswordRequest CHANGE_PASSWORD_REQUEST =
+        ChangePasswordRequest.builder()
+            .beforePassword("beforePassword")
+            .changePassword("changePassword")
+            .build();
+
+    public static final UserDto USER_DTO =
+        UserDto.builder()
+            .nickname("nickname")
+            .userImg("uri")
+            .build();
+
+    public static final SearchUserDto SEARCH_USER_DTO =
+        SearchUserDto.builder()
+            .nickname("nickname").build();
+
+
+    public static final List<UserDto> USER_DTO_LIST =
+        Collections.singletonList(USER_DTO);
+
+
+    public static final UserDeleteRequest USER_DELETE_REQUEST =
+        UserDeleteRequest.builder()
+            .username("username")
+            .password("password")
+            .build();
+
+
+    public static final UserUpdateRequest USER_UPDATE_REQUEST =
+        new UserUpdateRequest("nickname");
 }

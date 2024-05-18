@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../css/Login.css';
 
 function Login({ setScreen }) {
   const [username, setUsername] = useState('');
@@ -32,31 +33,41 @@ function Login({ setScreen }) {
       console.error('로그인 중 오류 발생:', error);
     }
   };
+
+  const handleFindUsername = () => {
+    window.open('/findUsername', '_blank');
+  };
+
   return (
-    <div>
-      <h2>로그인</h2>
-      <input
-        type="text"
-        placeholder="ID"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br></br>
-      <br></br>
-      <input
-        type="password"
-        placeholder="PASSWORD"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br></br>
-      <br></br>
-      <button onClick={handleLogin}>로그인</button>
-      <button onClick={() => setScreen('signup')}>Sign Up</button>
+    <div className='login'>
+      <div className='box'>
+        <h2>LOGIN</h2>
+        <br/>
+        <input
+          type="text"
+          placeholder="ID"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <br></br>
+        <br></br>
+        <input
+          type="password"
+          placeholder="PASSWORD"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <br></br>
+        <br/>
+        <div className='button-container'>
+          <button onClick={handleLogin}>로그인</button><br/>
+          <br/><br/>
+          <button onClick={() => setScreen('signup')}>회원가입</button>
+          <button onClick={() => setScreen('findUsername')}>아이디 찾기</button>
+        </div>
+      </div>
     </div>
   );
-  };
-  
-
+}
 
 export default Login;

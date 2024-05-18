@@ -1,168 +1,267 @@
 import React, { useState } from 'react';
+import '../css/Signup.css';
 
 function Signup({ setScreen }) {
-  const [username,setUsername] = useState('');
-  const [password,setPassword] = useState('');
-  const [nickname,setNickname] = useState('');
-  const [email,setEmail] = useState('');
-  const [usernameAvailable, setUsernameAvailable] = useState('');
-  const [nicknameAvailable, setNicknameAvailable] = useState('');
-  const [emailAvailable, setEmailAvailable] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+  const [verifiedCode, setVerifiedCode] = useState('');
+  const [usernameAvailable, setUsernameAvailable] = useState(false);
+  const [nicknameAvailable, setNicknameAvailable] = useState(false);
+  const [emailAvailable, setEmailAvailable] = useState(false);
+  const [verificationSuccess, setVerificationSuccess] = useState(false);
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [usernameButtonText, setUsernameButtonText] = useState("아이디 확인");
+  const [nicknameButtonText, setNicknameButtonText] = useState("닉네임 확인");
+  const [emailButtonText, setEmailButtonText] = useState("이메일 중복 확인");
+  const [verifyButtonText, setVerifyButtonText] = useState("인증번호 확인");
 
-  const usernamePattern = /^[a-zA-Z0-9]+$/; // 영어와 숫자만
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 기본 이메일 형식
-  const validateUsername = (username) => usernamePattern.test(username);
-  const validateEmail = (email) => emailPattern.test(email);
+  const handlePasswordMatchCheck = () => {
+    if (password === confirmPassword) {
+      setPasswordsMatch(true);
+      alert('비밀번호가 일치합니다.');
+    } else {
+      setPasswordsMatch(false);
+      alert('비밀번호가 일치하지 않습니다.');
+    }
+  };
 
-
-  const handleSignup = async (e) => {
-   e.preventDefault();
-
-   const isUsernameValid = validateUsername(username);
-   const isEmailValid = validateEmail(email);
-
-   setUsernameAvailable(isUsernameValid);
-   setEmailAvailable(isEmailValid);
-
-   if (!isUsernameValid || !isEmailValid) {
-    // 유효하지 않은 입력이 있으면 여기서 처리
-    console.error('입력이 유효하지 않습니다.');
-    alert('잘못된 입력입니다.');
-    return;
-  }
-
-   const checkUsername = async (e) => {
+  const checkUsernameAvailability = async () => {
     try {
-      const response = await fetch('http://localhost:8080/user/overlap/username', {
+      const response = await fetch(`http://localhost:8080/user/overlap/username?username=${username}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const result = await response.json();
+        if (result.available) {
+          alert('사용 가능한 아이디입니다.');
+          setUsernameAvailable(true);
+          setUsernameButtonText("확인되었습니다.");
+        } else {
+          alert('사용 불가능한 아이디입니다.');
+          setUsernameAvailable(false);
+          console.log(username);
+        }
+      } else {
+        const errorText = await response.text();
+        alert(`오류가 발생했습니다: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('아이디 검사 중 오류 발생:', error);
+    }
+  };
+
+  const checkNicknameAvailability = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/user/overlap/nickname?nickname=${encodeURIComponent(nickname)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const result = await response.json();
+      if (response.ok) {
+        if (result.available) {
+          alert('사용 가능한 닉네임입니다.');
+          setNicknameAvailable(true);
+          setNicknameButtonText("확인되었습니다.");
+        } else {
+          alert('사용 불가능한 닉네임입니다.');
+          setNicknameAvailable(false);
+        }
+      } else {
+        const errorText = await response.text();
+        alert(`오류가 발생했습니다: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('닉네임 검사 중 오류 발생:', error);
+    }
+  };
+  
+
+  const checkEmailAvailability = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/user/overlap/email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          nickname,
-        }),
+        body: JSON.stringify({ email }),
       });
+      const result = await response.json();
       if (response.ok) {
-        alert('사용 가능한 이름입니다.');
+        if (result.available) {
+          alert('사용 가능한 이메일입니다.');
+          setEmailAvailable(true);
+          setEmailButtonText("확인되었습니다.");
+        } else {
+          alert('이미 사용 중인 이메일입니다.');
+          setEmailAvailable(false);
+        }
       } else {
-        console.error('사용 불가능한 이름입니다.');
+        const errorText = await response.text();
+        alert(`오류가 발생했습니다: ${errorText}`);
       }
     } catch (error) {
-      console.error('닉네임 입력 중 오류 발생:', error);
+      console.error('이메일 중복 검사 중 오류 발생:', error);
     }
-   }
+  };
 
-   const checkNickname = async (e) => {
+  const sendVerificationCode = async () => {
     try {
-      const response = await fetch('http://localhost:8080/user/overlap/nickname', {
+      const response = await fetch('http://localhost:8080/email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          nickname,
-        }),
+        body: JSON.stringify({ email }),
       });
       if (response.ok) {
-        alert('사용 가능한 이름입니다.');
+        alert('인증번호가 이메일로 발송되었습니다.');
       } else {
-        console.error('사용 불가능한 이름입니다.');
+        const errorText = await response.text();
+        alert(`오류가 발생했습니다: ${errorText}`);
       }
     } catch (error) {
-      console.error('닉네임 입력 중 오류 발생:', error);
+      console.error('이메일 인증번호 발송 중 오류 발생:', error);
     }
-   }
-   const checkEmail = async (e) => {
+  };
+
+  const verifyCode = async () => {
     try {
       const response = await fetch('http://localhost:8080/email/verified', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ email, verifiedCode }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        if (result.verified) {
+          alert('이메일 인증 성공!');
+          setVerificationSuccess(true);
+          setVerifyButtonText("확인되었습니다.");
+        } else {
+          alert('인증번호가 일치하지 않습니다.');
+          setVerificationSuccess(false);
+        }
+      } else {
+        const errorText = await response.text();
+        alert(`오류가 발생했습니다: ${errorText}`);
+        setVerificationSuccess(false);
+      }
+    } catch (error) {
+      console.error('인증번호 검증 중 오류 발생:', error);
+      setVerificationSuccess(false);
+    }
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (!usernameAvailable || !nicknameAvailable || !emailAvailable || !passwordsMatch) {
+      alert('모든 필드의 유효성을 확인하세요.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8080/user/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           username,
+          password,
+          nickname,
+          email,
         }),
       });
       if (response.ok) {
-        alert('사용 가능한 이메일입니다.');
+        const authorization = response.headers.get('Authorization');
+        const refreshToken = response.headers.get('Refresh');
+        localStorage.setItem('accessToken', authorization);
+        localStorage.setItem('refreshToken', refreshToken);
+        console.log('회원가입 성공');
+        setScreen('login');
       } else {
-        console.error('사용 불가능한 이메일입니다.');
+        console.error('회원가입 실패');
       }
     } catch (error) {
-      console.error('이메일 검증 중 오류 발생:', error);
+      console.error('회원가입 중 오류 발생:', error);
     }
-   }
-   try {
-    const response = await fetch('http://localhost:8080/user/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        password,
-        nickname,
-        email,
-      }),
-    });
-    if (response.ok) {
-      const authorization = response.headers.get('Authorization');
-      const refreshToken = response.headers.get('Refresh');
-      localStorage.setItem('accessToken', authorization);
-      localStorage.setItem('refreshToken',refreshToken);
-      console.log('회원가입 성공');
-      setScreen('login');
-    } else {
-      console.error('회원가입 실패');
-    }
-  } catch (error) {
-    console.error('회원가입 중 오류 발생:', error);
-  }
   };
 
   return (
-    <div>
-      <h2>회원가입</h2>
-      ID : 
-      <input
-        type="text"
-        placeholder="ID"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br></br>
-      <br></br>
-      PW :
-      <input
-        type="text"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br></br>
-      <br></br>
-      닉네임 :
-      <input
-        type="text"
-        placeholder="이름을 입력하세요"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-      />
-      <br></br>
-      <br></br>
-      E-Mail :
-      <input
-        type="text"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <br></br>
-      <br></br>
-      <button onClick={handleSignup}>회원가입하기</button>
+    <div className='signup'>
+      <div className='box'>
+        <h2>회원가입</h2>
+        <div className='inbox'>
+          <span className="label1">ID :</span>
+          <input
+            type="text"
+            placeholder="ID"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <button onClick={checkUsernameAvailability}>{usernameButtonText}</button>
+          <br /><br />
+          <span className="label2">PW :</span>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <br /><br />
+          <span className="label6"></span>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <button onClick={handlePasswordMatchCheck}>비밀번호 일치 확인</button>
+          
+          <br /><br />
+          <span className="label3">닉네임 :</span>
+          <input 
+            type="text"
+            placeholder="닉네임을 입력하세요"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+          />
+          <button onClick={checkNicknameAvailability}>{nicknameButtonText}</button>
+          <br /><br />
+          <span className="label4">E-Mail :</span>
+          <input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button onClick={checkEmailAvailability}>{emailButtonText}</button>
+          <button onClick={sendVerificationCode}>이메일 인증번호 보내기</button>
+          <br /><br />
+          <span className="label5">PIN :</span>
+          <input
+            type="text"
+            placeholder="Enter verification code"
+            value={verifiedCode}
+            onChange={(e) => setVerifiedCode(e.target.value)}
+          />
+          <button onClick={verifyCode}>{verifyButtonText}</button>
+          <br /><br />
+          <button onClick={handleSignup} disabled={!usernameAvailable || !nicknameAvailable || !emailAvailable || !passwordsMatch}>회원가입하기</button>
+        </div>
+      </div>
     </div>
   );
 }
-
 
 export default Signup;

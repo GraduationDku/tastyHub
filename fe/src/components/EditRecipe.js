@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
 
-function EditRecipe({ recipeId }) {
+function EditRecipe({ recipeId, onEdit }) {
   const [formData, setFormData] = useState({
     foodName: '',
     foodImgUrl: '',
-    foodInformation: ''
+    foodInformation: '',
+    ingredients: '', // 추가된 필드
+    cookSteps: '' // 추가된 필드
   });
 
   useEffect(() => {
     async function fetchRecipeDetails() {
       try {
         const response = await fetch(`http://localhost:8080/recipe/details/${recipeId}`);
-        const data = await response.json({
-          foodName,
-          foodImg,
-          foodInformationId,
-          foodInformation,
-          ingredients,
-          cookSteps
+        console.log('Request URL:', response.url); // 요청 URL 로그
+        const data = await response.json();
+        setFormData({
+          foodName: data.foodName || '',
+          foodImgUrl: data.foodImgUrl || '',
+          foodInformation: data.foodInformation || '',
+          ingredients: data.ingredients || '',
+          cookSteps: data.cookSteps || ''
         });
-        
       } catch (error) {
         console.error('Error fetching recipe details:', error);
       }
@@ -70,10 +72,18 @@ function EditRecipe({ recipeId }) {
         Description:
         <textarea name="foodInformation" value={formData.foodInformation} onChange={handleChange} />
       </label>
+      {/* 추가된 필드들 */}
+      <label>
+        Ingredients:
+        <input type="text" name="ingredients" value={formData.ingredients} onChange={handleChange} />
+      </label>
+      <label>
+        Cook Steps:
+        <input type="text" name="cookSteps" value={formData.cookSteps} onChange={handleChange} />
+      </label>
       <button type="submit">Update Recipe</button>
     </form>
   );
 }
 
 export default EditRecipe;
-

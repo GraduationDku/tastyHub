@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.village.service;
 
+import lombok.Generated;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.user.entity.User;
@@ -18,7 +19,8 @@ public class VillageServiceImpl implements VillageService{
 
     @Override
     @Transactional
-    public void location(LocationRequest locationRequest, User user) {
+    public void
+    setLocation(LocationRequest locationRequest, User user) {
         String addressTownName = locationRequest.getAddressTownName();
         long lat = locationRequest.getLat();
         long lng = locationRequest.getLng();
@@ -33,5 +35,21 @@ public class VillageServiceImpl implements VillageService{
 
         villageRepository.save(village);
     }
+    @Override
+    public void modifyLocation(LocationRequest locationRequest, User user) {
+
+        Village village = findByUserId(user);
+
+        village.update(locationRequest);
+
+        villageRepository.save(village);
+    }
+
+    @Generated
+    private Village findByUserId(User user) {
+        return villageRepository.findByUserId(user.getId())
+            .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다"));
+    }
+
 
 }

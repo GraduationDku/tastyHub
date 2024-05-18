@@ -8,6 +8,7 @@ import com.example.tastyhub.common.domain.user.entity.User;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 
@@ -24,6 +25,7 @@ public interface RecipeService {
     Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable);
 
     Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable);
-    
 
+
+    void deleteRecipe(Long recipeId, User user);
 }

@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.verified.email.service;
 
+import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import com.example.tastyhub.common.verified.email.dtos.AuthEmailRequest;
 import com.example.tastyhub.common.verified.email.dtos.VerifiedEmailRequest;
@@ -17,6 +18,8 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
 
     private final RedisUtil redisUtil;
+
+    private final UserRepository userRepository;
     private static int authNumber;
 
     @Value("${spring.mail.username}")
@@ -58,6 +61,9 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void authEmail(AuthEmailRequest authEmail) {
         String email = authEmail.getEmail();
+        if(userRepository.existsByEmail(email)){
+            throw new IllegalArgumentException("해당 이메일로 이미 가입된 사용자가 존재합니다.");
+        }
         if (redisUtil.existData(email)){
             redisUtil.deleteData(email);
         }

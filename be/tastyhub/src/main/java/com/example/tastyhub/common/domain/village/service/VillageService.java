@@ -6,6 +6,8 @@ import com.example.tastyhub.common.domain.village.dtos.LocationRequest;
 public interface VillageService {
 
 
-    void location(LocationRequest locationRequest, User user);
+    void setLocation(LocationRequest locationRequest, User user);
+
+    void modifyLocation(LocationRequest locationRequest, User user);
 
 }

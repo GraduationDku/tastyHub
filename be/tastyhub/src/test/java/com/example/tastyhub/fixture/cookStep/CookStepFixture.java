@@ -4,6 +4,8 @@ import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateDto;
 import com.example.tastyhub.common.domain.cookstep.dtos.CookStepResponseDto;
 import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
 import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
+import java.util.Collections;
+import java.util.List;
 import org.mockito.internal.matchers.Null;
 
 public class CookStepFixture {
@@ -34,5 +36,8 @@ public class CookStepFixture {
         .text("text")
         .stepImg(null)
         .build();
+
+    public static final List<CookStepUpdateDto> COOK_STEP_UPDATE_DTO_LIST = Collections.singletonList(
+        COOK_STEP_UPDATE_DTO);
 
 }
