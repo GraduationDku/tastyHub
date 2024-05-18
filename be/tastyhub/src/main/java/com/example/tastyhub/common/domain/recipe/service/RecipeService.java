@@ -5,6 +5,7 @@ import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 
+import java.io.IOException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,7 @@ public interface RecipeService {
 
     RecipeDto getRecipe(Long recipeId);
 
-    void updateRecipe(Long recipeId, User user, RecipeUpdateDto recipeUpdateDto);
+    void updateRecipe(Long recipeId, MultipartFile img,User user, RecipeUpdateDto recipeUpdateDto) throws IOException;
     
     Page<PagingRecipeResponse> getAllRecipes(Pageable pageable);
 
@@ -27,5 +28,5 @@ public interface RecipeService {
     Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable);
 
 
-    void deleteRecipe(Long recipeId, User user);
+    void deleteRecipe(Long recipeId, User user) throws IOException;
 }
