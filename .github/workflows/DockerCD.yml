@@ -53,9 +53,15 @@ jobs:
         password: ${{ secrets.DOCKER_REPOSITORY }}
 
     - name: Build and push Docker image
-      run: |
-        docker buildx build --push \
-          --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub/my-app-back:latest \
-          --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub/my-app-back:${{ github.sha }} \
-          --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile \
-          $GITHUB_WORKSPACE/be/tastyhub/
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+        tags: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }}
+        context: $GITHUB_WORKSPACE/be/tastyhub/
+        
+      # run: |
+      #   docker buildx build --push \
+      #     --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub/my-app-back:latest \
+      #     --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub/my-app-back:${{ github.sha }} \
+          # --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile \
+          # $GITHUB_WORKSPACE/be/tastyhub/
