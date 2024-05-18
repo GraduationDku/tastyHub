@@ -1,5 +1,5 @@
 FROM amazoncorretto:17
-LABEL authors="skyriv213"
+LABEL org.opencontainers.image.source=https://github.com/GraduationDku/tastyHub
 
 ARG JAR_FILE=./***/build/libs/*.jar
 
