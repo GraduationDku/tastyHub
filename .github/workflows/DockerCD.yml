@@ -18,17 +18,14 @@ jobs:
         distribution: 'temurin'
 
     - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}
+      run: chmod +x ${{ secrets.WORKINGDIRECTORY }}/gradlew
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew clean build
+      run: ./${{ secrets.WORKINGDIRECTORY }}/gradlew clean build
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
-     
     - name: Copy JAR file to build context
-      run: cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar .
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}
+      run: cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/
 
   push:
     runs-on: ubuntu-latest
@@ -51,5 +48,5 @@ jobs:
         docker buildx build --push \
           --tag skyriv213/tastyhub/my-app:latest \
           --tag skyriv213/tastyhub/my-app:${{ github.sha }} \
-          .
-
+          --file $GITHUB_WORKSPACE/Dockerfile \
+          $GITHUB_WORKSPACE

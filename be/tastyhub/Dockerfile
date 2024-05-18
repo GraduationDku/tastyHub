@@ -1,8 +1,9 @@
 FROM amazoncorretto:17
-LABEL authors="skyriv213"
-ARG JAR_FILE=./build/libs/*.jar
+
+ARG JAR_FILE=app.jar
 
 COPY ${JAR_FILE} app.jar
+
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
