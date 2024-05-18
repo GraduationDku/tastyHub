@@ -32,7 +32,7 @@ jobs:
       run: |
         # mkdir $GITHUB_WORKSPACE/be/build/libs && \
         # cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/be/build/libs
-        ls $GITHUB_WORKSPACE/be/tastyhub/build/
+        ls $GITHUB_WORKSPACE/be/tastyhub/build/libs/
 
   # push:
   #   runs-on: ubuntu-latest
