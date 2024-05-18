@@ -6,20 +6,18 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
-import com.example.tastyhub.common.domain.recipe.dtos.RecipeSearchDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.recipe.service.RecipeService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
-import com.example.tastyhub.common.utils.S3.S3UploadService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,15 +71,10 @@ public class RecipeController {
      * writer : skyriv213 method : 레시피 생성하기
      */
     @PostMapping("/create")
-    public ResponseEntity<StatusResponse> createRecipe(@RequestParam("img") MultipartFile img, @RequestBody RecipeCreateDto recipeCreateDto,
+    public ResponseEntity<StatusResponse> createRecipe(@RequestBody RecipeCreateDto recipeCreateDto,
         @AuthenticationPrincipal
         UserDetailsImpl userDetails) {
-        try {
-            recipeService.createRecipe(recipeCreateDto,img, userDetails.getUser());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
+        recipeService.createRecipe(recipeCreateDto, userDetails.getUser());
         return RESPONSE_OK;
     }
 
