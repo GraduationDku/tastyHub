@@ -14,7 +14,7 @@ import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 
 public interface RecipeService {
 
-    void createRecipe(RecipeCreateDto recipeCreateDto, User user);
+    void createRecipe(RecipeCreateDto recipeCreateDto, MultipartFile img, User user) throws Exception;
 
     RecipeDto getRecipe(Long recipeId);
 

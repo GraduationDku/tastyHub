@@ -71,10 +71,15 @@ public class RecipeController {
      * writer : skyriv213 method : 레시피 생성하기
      */
     @PostMapping("/create")
-    public ResponseEntity<StatusResponse> createRecipe(@RequestBody RecipeCreateDto recipeCreateDto,
+    public ResponseEntity<StatusResponse> createRecipe(@RequestPart("img") MultipartFile img, @RequestPart("data") RecipeCreateDto recipeCreateDto,
         @AuthenticationPrincipal
         UserDetailsImpl userDetails) {
-        recipeService.createRecipe(recipeCreateDto, userDetails.getUser());
+        try {
+            recipeService.createRecipe(recipeCreateDto,img, userDetails.getUser());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         return RESPONSE_OK;
     }
 
