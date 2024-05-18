@@ -8,6 +8,9 @@
 name: Java CI with Gradle with Docker
 
 on:
+  push:
+    branches: [ "docker2" ]
+
   pull_request:
     branches: [ "docker2" ]
 
