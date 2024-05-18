@@ -50,7 +50,7 @@ jobs:
     - name: Build and push Docker image
       run: |
         docker buildx build --push \
-          --tag skyriv213/tastyhub/my-app:latest \
-          --tag skyriv213/tastyhub/my-app:${{ github.sha }} \
-          --file $GITHUB_WORKSPACE/Dockerfile \
-          $GITHUB_WORKSPACE
+          --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub/my-app-back:latest \
+          --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub/my-app-back:${{ github.sha }} \
+          --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile \
+          ${{ secrets.WORKINGDIRECTORY }}
