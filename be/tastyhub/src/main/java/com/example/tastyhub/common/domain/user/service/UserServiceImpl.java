@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             if(!img.isEmpty()){
-                imgUrl = s3Uploader.upload(img,"image/recipeimg");
+                imgUrl = s3Uploader.upload(img,"image/userImg");
             }
             User user = User.builder()
                 .username(username)
@@ -164,21 +164,40 @@ public class UserServiceImpl implements UserService {
             .orElseThrow(() -> new IllegalArgumentException("해당 회원은 존재하지 않습니다."));
     }
     @Override
-    public void delete(UserDeleteRequest deleteRequest, User user){
+    public void delete(UserDeleteRequest deleteRequest, User user) throws java.io.IOException{
         String username = deleteRequest.getUsername();
         String password = deleteRequest.getPassword()+username.substring(0,2);
+        String imgUrl = user.getUserImg();
         
         boolean isCorrectedPassword=passwordEncoder.matches(password, user.getPassword());
         if (!isCorrectedPassword) {
             throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
         }
         userRepository.delete(user);
+        s3Uploader.delete(imgUrl);
     }
 
     @Override
-    public void updateUserInfo(UserUpdateRequest userUpdateRequest, User user) {
-        User find_user = userRepository.findByUsername(user.getUsername()).orElseThrow(()-> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
-        find_user.updateUserInfo(userUpdateRequest);
+    public void updateUserInfo(UserUpdateRequest userUpdateRequest,MultipartFile img, User user) throws java.io.IOException {
+        String imgUrl = new String();
+        
+        try {
+            if(!img.isEmpty()){
+                imgUrl = s3Uploader.upload(img,"image/userImg");
+            }
+            User find_user = userRepository.findByUsername(user.getUsername()).orElseThrow(()-> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
+            find_user.updateUserInfo(userUpdateRequest,imgUrl);
+            } catch (Exception e) {
+                // 레시피 저장에 실패한 경우, S3에서 이미지 삭제
+                if (!imgUrl.isEmpty()) {
+                    try {
+                        s3Uploader.delete(imgUrl);
+                    } catch (IOException ioException) {
+                        log.error("Failed to delete uploaded image from S3", ioException);
+                    }
+                }
+                throw e; // 예외를 다시 던져 트랜잭션 롤백 활성화
+            }
     }
 
 

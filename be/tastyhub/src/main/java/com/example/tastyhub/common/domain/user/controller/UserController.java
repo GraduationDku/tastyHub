@@ -102,16 +102,16 @@ public class UserController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<StatusResponse> delete(@RequestBody UserDeleteRequest deleteRequest,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         userService.delete(deleteRequest, userDetails.getUser());
         return RESPONSE_OK;
 
     }
 
     @PatchMapping("/modify/information")
-    public ResponseEntity<StatusResponse> updateUserInfo(@RequestBody UserUpdateRequest userUpdateRequest,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-            userService.updateUserInfo(userUpdateRequest, userDetails.getUser());
+    public ResponseEntity<StatusResponse> updateUserInfo(@RequestPart("img") MultipartFile img, @RequestPart("data") UserUpdateRequest userUpdateRequest,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException{
+            userService.updateUserInfo(userUpdateRequest, img, userDetails.getUser());
             return RESPONSE_OK;
         }
 

@@ -103,7 +103,8 @@ public class User {
         this.password = password;
     }
 
-    public void updateUserInfo(UserUpdateRequest userUpdateRequest){
+    public void updateUserInfo(UserUpdateRequest userUpdateRequest,String imgUrl){
         this.nickname = userUpdateRequest.getNickname();
+        this.userImg = imgUrl;
     }
 }

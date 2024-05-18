@@ -32,7 +32,7 @@ public interface UserService {
 
     List<UserDto> getUserList(SearchUserDto searchUserDto);
     
-    void delete(UserDeleteRequest deleteRequest, User user);
+    void delete(UserDeleteRequest deleteRequest, User user) throws IOException;
 
-    void updateUserInfo(UserUpdateRequest userUpdateRequest, User user);
+    void updateUserInfo(UserUpdateRequest userUpdateRequest, MultipartFile img, User user) throws IOException;
 }

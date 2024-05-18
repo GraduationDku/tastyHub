@@ -62,7 +62,7 @@ public class RecipeServiceImpl implements RecipeService {
                 .collect(Collectors.toList());
 
         try {
-            imgUrl = s3Uploader.upload(img, "image/recipeimg");
+            imgUrl = s3Uploader.upload(img, "image/recipeImg");
             Recipe recipe = Recipe.builder()
                     .foodName(recipeCreateDto.getFoodName())
                     .foodImgUrl(imgUrl)
@@ -129,7 +129,7 @@ public class RecipeServiceImpl implements RecipeService {
         String originalImgUrl = recipe.getFoodImgUrl();
         String imgUrl = new String();
         try {
-            imgUrl = s3Uploader.upload(img, "image/recipeimg");
+            imgUrl = s3Uploader.upload(img, "image/recipeImg");
             // 기존 Ingredient 리스트 처리
             List<Ingredient> updatedIngredients = getUpdatedIngredients(
                     recipeUpdateDto, recipe);
