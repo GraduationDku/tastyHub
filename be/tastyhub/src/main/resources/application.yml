@@ -2,12 +2,16 @@
 spring:
   application:
     name: tastyhub
-
   data:
     # redis 설정
     redis:
       host: localhost
       port: 6379
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  
 #      password: 1234
   #mysql 설정
   jpa:
@@ -44,5 +48,13 @@ jwt:
     key: "ASDSAIkAak8Sk8Sdi122r1jaEKdAIkAak8SdiIkAak8SSk8Sdi1SSIkAak15ASdsa15ka95sjS"
 
 
-
-
+cloud:
+  aws:
+    s3:
+      bucket: tastyhub-bucket
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: 
+      secretKey: 
+  
