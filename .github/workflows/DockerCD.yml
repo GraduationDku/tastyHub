@@ -44,6 +44,7 @@ jobs:
     - name: Build and push Docker image
       run: |
         docker buildx build --push \
-          --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/my-app:latest \
-          --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/my-app:${{ github.sha }} \
-          .
+          --tag skyriv213/tastyhub/my-app:latest \
+          --tag skyriv213/tastyhub/my-app:${{ github.sha }} \
+          --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile \
+          ${{ secrets.WORKINGDIRECTORY }}
