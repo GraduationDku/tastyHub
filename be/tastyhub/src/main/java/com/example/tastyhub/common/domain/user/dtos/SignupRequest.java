@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
@@ -17,6 +16,4 @@ public class SignupRequest {
     private String password;
     private String nickname;
     private String email;
-    private MultipartFile userImg;
-
 }

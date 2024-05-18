@@ -18,6 +18,8 @@ import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(USER_API)
@@ -54,8 +58,8 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<StatusResponse> signup(@RequestBody SignupRequest signupRequest) {
-        userService.signup(signupRequest);
+    public ResponseEntity<StatusResponse> signup(@RequestPart("img") MultipartFile img, @RequestPart("data") SignupRequest signupRequest) throws IOException {
+        userService.signup(signupRequest, img);
         return RESPONSE_OK;
     }
 

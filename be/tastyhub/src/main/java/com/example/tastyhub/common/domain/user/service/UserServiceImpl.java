@@ -3,6 +3,7 @@ package com.example.tastyhub.common.domain.user.service;
 import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER;
 import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
 
+import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
@@ -16,6 +17,9 @@ import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
+import com.example.tastyhub.common.utils.S3.S3Uploader;
+
+import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -23,11 +27,15 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -40,6 +48,8 @@ public class UserServiceImpl implements UserService {
     private final RedisUtil redisUtil;
 
     private final JwtUtil jwtUtill;
+
+    private final S3Uploader s3Uploader;
 
 
     @Override
@@ -62,21 +72,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void signup(SignupRequest signupRequest) {
+    public void signup(SignupRequest signupRequest, MultipartFile img) throws java.io.IOException {
         String username = signupRequest.getUsername();
         String password = signupRequest.getPassword() + username.substring(0,
             2); // 레인보우 테이블을 취약 -> salt 사용을 통해 해결
-        String userImg = "refact"; // s3 연결 후
-        User user = User.builder()
-            .username(username)
-            .password(passwordEncoder.encode(password))
-            .userImg(userImg)
-            .email(signupRequest.getEmail())
-            .nickname(signupRequest.getNickname())
-            .village(null)
-            .userType(userType.COMMON)
-            .build();
-        userRepository.save(user);
+        String imgUrl = "refact"; // 기본 이미지 url
+        
+
+        try {
+            if(!img.isEmpty()){
+                imgUrl = s3Uploader.upload(img,"image/recipeimg");
+            }
+            User user = User.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .userImg(imgUrl)
+                .email(signupRequest.getEmail())
+                .nickname(signupRequest.getNickname())
+                .village(null)
+                .userType(userType.COMMON)
+                .build();
+            userRepository.save(user);
+            } catch (Exception e) {
+                // 레시피 저장에 실패한 경우, S3에서 이미지 삭제
+                if (!imgUrl.isEmpty()) {
+                    try {
+                        s3Uploader.delete(imgUrl);
+                    } catch (IOException ioException) {
+                        log.error("Failed to delete uploaded image from S3", ioException);
+                    }
+                }
+                throw e; // 예외를 다시 던져 트랜잭션 롤백 활성화
+            }
     }
 
 
