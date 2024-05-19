@@ -1,6 +1,7 @@
 FROM amazoncorretto:17
-LABEL authors="skyriv213"
-ARG JAR_FILE=./build/libs/*.jar
+LABEL org.opencontainers.image.source=https://github.com/GraduationDku/tastyHub
+
+ARG JAR_FILE=./***/build/libs/*.jar
 
 COPY ${JAR_FILE} app.jar
 EXPOSE 8080
