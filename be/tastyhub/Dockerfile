@@ -3,7 +3,7 @@ LABEL org.opencontainers.image.source=https://github.com/GraduationDku/tastyHub
 
 ARG JAR_FILE=./***/build/libs/*.jar
 
-Run ls -la /app
+Run find . -type f -name "*.jar"
 
 
 COPY ${JAR_FILE} app.jar
