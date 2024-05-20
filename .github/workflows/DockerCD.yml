@@ -71,6 +71,9 @@ jobs:
         username: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}
         password: ${{ secrets.DOCKER_REPOSITORY }}
 
+    - name: check file path
+      run: ls -R
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
