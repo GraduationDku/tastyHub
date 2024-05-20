@@ -39,11 +39,11 @@ jobs:
     #   run: ls -la ${{ secrets.WORKINGDIRECTORY }}//build/libs/
     #   working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
-    - name: Copy JAR file to build context
-      run: |
-        mkdir $GITHUB_WORKSPACE/be/build/libs && \
-        cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/be/tastyhub/build/libs
-        ls $GITHUB_WORKSPACE/be/tastyhub/build/libs/
+    # - name: Copy JAR file to build context
+    #   run: |
+    #     mkdir $GITHUB_WORKSPACE/be/build/libs && \
+    #     cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/be/tastyhub/build/libs
+    #     ls $GITHUB_WORKSPACE/be/tastyhub/build/libs/
 
     # - name: 모든 루트 폴더 검사
     #   run : find . -type f -name "*.jar"
@@ -51,8 +51,8 @@ jobs:
 
 
     - name: List build directory contents
-      run: ls -la ${{ secrets.WORKINGDIRECTORY }}/build/libs/
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}
+      run: ls -R
+      # working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
 
   push:
