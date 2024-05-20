@@ -15,6 +15,10 @@ const Comment = ({ postId, refreshComments }) => {
                 body: JSON.stringify({ text })
             });
             if (response.ok) {
+                const authorization = response.headers.get('Authorization');
+                const refreshToken = response.headers.get('Refresh');
+                localStorage.setItem('accessToken', authorization);
+                localStorage.setItem('refreshToken', refreshToken);
                 setText('');
                 refreshComments();
             } else {
@@ -35,6 +39,10 @@ const Comment = ({ postId, refreshComments }) => {
                 body: JSON.stringify({ text: editingText })
             });
             if (response.ok) {
+                const authorization = response.headers.get('Authorization');
+                const refreshToken = response.headers.get('Refresh');
+                localStorage.setItem('accessToken', authorization);
+                localStorage.setItem('refreshToken', refreshToken);
                 setEditingCommentId(null);
                 setEditingText('');
                 refreshComments();
@@ -55,6 +63,10 @@ const Comment = ({ postId, refreshComments }) => {
                 }
             });
             if (response.ok) {
+                const authorization = response.headers.get('Authorization');
+                const refreshToken = response.headers.get('Refresh');
+                localStorage.setItem('accessToken', authorization);
+                localStorage.setItem('refreshToken', refreshToken);
                 refreshComments();
             } else {
                 throw new Error('Failed to delete comment');

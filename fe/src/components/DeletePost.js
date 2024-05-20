@@ -10,6 +10,10 @@ const DeletePost = ({postId}) => {
         }
       });
       if(response.ok){
+        const authorization = response.headers.get('Authorization');
+        const refreshToken = response.headers.get('Refresh');
+        localStorage.setItem('accessToken', authorization);
+        localStorage.setItem('refreshToken', refreshToken);
         alert('Post deleted successfully!');
       } else{
         throw new Error('Failed to delete post');

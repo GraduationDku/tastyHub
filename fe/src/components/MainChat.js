@@ -10,6 +10,12 @@ const MainChat = () => {
                 const response = await fetch('http://localhost:8080/chatroom');
                 const data = await response.json();
                 setChatRooms(data.chatRoomDtoList);
+                if(response.ok){
+                    const authorization = response.headers.get('Authorization');
+                    const refreshToken = response.headers.get('Refresh');
+                    localStorage.setItem('accessToken', authorization);
+                    localStorage.setItem('refreshToken', refreshToken);
+                }
             } catch (error) {
                 console.error('Error fetching chat rooms:', error);
             } finally {

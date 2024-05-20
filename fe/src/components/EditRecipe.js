@@ -48,6 +48,10 @@ function EditRecipe({ recipeId }) {
         body: JSON.stringify(formData)
       });
       if (response.ok) {
+        const authorization = response.headers.get('Authorization');
+        const refreshToken = response.headers.get('Refresh');
+        localStorage.setItem('accessToken', authorization);
+        localStorage.setItem('refreshToken', refreshToken);
         alert('Recipe updated successfully!');
       } else {
         throw new Error('Failed to update recipe');

@@ -15,6 +15,10 @@ function PostDetails({ postId }) {
             });
             if (response.ok) {
                 const data = await response.json();
+                const authorization = response.headers.get('Authorization');
+                const refreshToken = response.headers.get('Refresh');
+                localStorage.setItem('accessToken', authorization);
+                localStorage.setItem('refreshToken', refreshToken);
                 setPostDetails(data);
             } else {
                 throw new Error('Failed to fetch post details');

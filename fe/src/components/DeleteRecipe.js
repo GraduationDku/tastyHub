@@ -10,6 +10,10 @@ const DeleteRecipe = ({ recipeId }) => {
                 }
             });
             if (response.ok) {
+                const authorization = response.headers.get('Authorization');
+                const refreshToken = response.headers.get('Refresh');
+                localStorage.setItem('accessToken', authorization);
+                localStorage.setItem('refreshToken', refreshToken);
                 alert('Recipe deleted successfully!');
                 // You can call a callback here if needed
             } else {

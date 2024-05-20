@@ -23,9 +23,13 @@ const SendChat = ({ roomId, username }) => {
 
         stompClient.onConnect = () => {
             setConnected(true);
+            const authorization = response.headers.get('Authorization');
+            const refreshToken = response.headers.get('Refresh');
+            localStorage.setItem('accessToken', authorization);
+            localStorage.setItem('refreshToken', refreshToken);
             stompClient.subscribe(`/app/chat/rooms/${roomId}`, (message) => { //클라이언트가 저 경로를 구독하여 서버로부터 해당 경로로 전송되는 메세지를 수신하는 함수
-                const receivedMessage = JSON.parse(message.body);
-                setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+            const receivedMessage = JSON.parse(message.body);
+            setMessages((prevMessages) => [...prevMessages, receivedMessage]);
             });
         };
 

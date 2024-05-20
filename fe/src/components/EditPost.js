@@ -38,6 +38,10 @@ function EditPost({ postId }) {
                 body: JSON.stringify(formData)
             });
             if (response.ok) {
+                const authorization = response.headers.get('Authorization');
+                const refreshToken = response.headers.get('Refresh');
+                localStorage.setItem('accessToken', authorization);
+                localStorage.setItem('refreshToken', refreshToken);
                 alert('Post updated successfully!');
             } else {
                 throw new Error('Failed to update post');

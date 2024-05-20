@@ -39,7 +39,7 @@ function CreatePost(){
     console.error('Error:', error);
     alert('Error Creating Post');
   }
-}}
+}
 
 return (
   <>
@@ -50,4 +50,6 @@ return (
     <input type="text" name ="text" value={formData.text} onChamge = {handleChange} />
   </form>
   </>
-)
+)}
+
+export default CreatePost;

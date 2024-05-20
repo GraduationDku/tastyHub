@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 
-function post({setScreen, onPostSelect}){
+function Post({setScreen, onPostSelect}){
   const [posts, setPosts] = useState([]);
 
   useEffect(()=> {
@@ -12,6 +12,12 @@ function post({setScreen, onPostSelect}){
             'Content-Type':'application/json'
           }
         });
+        if(response.ok){
+          const authorization = response.headers.get('Authorization');
+          const refreshToken = response.headers.get('Refresh');
+          localStorage.setItem('accessToken', authorization);
+          localStorage.setItem('refreshToken', refreshToken);
+        }
         const data = await response.json();
         if(Array.isArray(data)){
           setPosts(data);
@@ -45,3 +51,4 @@ function post({setScreen, onPostSelect}){
   )
 
 }
+export default Post;

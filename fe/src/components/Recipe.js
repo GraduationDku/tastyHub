@@ -13,6 +13,12 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
             'Content-Type': 'application/json'
           }
         });
+        if(response.ok){
+          const authorization = response.headers.get('Authorization');
+          const refreshToken = response.headers.get('Refresh');
+          localStorage.setItem('accessToken', authorization);
+          localStorage.setItem('refreshToken', refreshToken);
+        }
         const data = await response.json();
         if (Array.isArray(data.content)) {
           setRecipes(data.content);

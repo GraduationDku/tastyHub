@@ -11,6 +11,7 @@ import CreateRecipe from './components/CreateRecipe';
 import FindUsername from './components/FindUsername';
 import MainChat from './components/MainChat';
 import Post from './components/Post';
+import CreatePost from './components/CreatePost';
 import './App.css';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
       {screen === 'findUsername' && <FindUsername setScreen={setScreen} />}
       {screen === 'mainchat' && <MainChat setScreen = {setScreen}/>}
       {screen === 'post' && <Post setScreen={setScreen} />}
+      {screen === 'createpost' && <CreatePost setScreen={setScreen}/>}
       
       {screen === 'searchResults' && (
         <div className="search-results">
