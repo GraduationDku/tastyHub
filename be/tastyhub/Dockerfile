@@ -12,4 +12,4 @@ Run find . -type f -name "app.jar"
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar","./***/build/libs/app.jar"]
+ENTRYPOINT ["java", "-jar","app.jar"]
