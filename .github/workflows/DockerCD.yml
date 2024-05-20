@@ -50,8 +50,8 @@ jobs:
     #   working-directory: $GITHUB_WORKSPACE
 
 
-    - name: List build directory contents
-      run: ls -R
+    # - name: List build directory contents
+    #   run: ls -R
       # working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
 
@@ -82,5 +82,5 @@ jobs:
         docker buildx build --push \
           --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:latest \
           --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }} \
-          --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile \
-          $GITHUB_WORKSPACE/be/tastyhub/
+          --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile 
+          # $GITHUB_WORKSPACE/be/tastyhub/
