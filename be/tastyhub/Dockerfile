@@ -3,7 +3,10 @@ LABEL org.opencontainers.image.source=https://github.com/GraduationDku/tastyHub
 
 ARG JAR_FILE=./***/build/libs/*.jar
 
+Run ls -l /
+
+
 COPY ${JAR_FILE} app.jar
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar","./***/build/libs/app.jar"]
