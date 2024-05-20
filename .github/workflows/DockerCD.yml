@@ -27,7 +27,7 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: ./gradlew clean build
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}s
+      working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
     # - name : git 워크스페이스 검사
     #   run : echo $GITHUB_WORKSPACE
