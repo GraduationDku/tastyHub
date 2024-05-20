@@ -29,11 +29,11 @@ jobs:
       run: ./gradlew clean build
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
-    - name: 모든 루트 폴더 검사
-      run : find . -type f -name "*.jar"
+    # - name: 모든 루트 폴더 검사
+    #   run : find . -type f -name "*.jar"
 
     - name : git 워크스페이스 검사
-      run : ls -R
+      run : echo $GITHUB_WORKSPACE
       working-directory: $GITHUB_WORKSPACE
 
     - name: List build directory contents
