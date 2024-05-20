@@ -4,7 +4,7 @@ name: Docker Image CD
 
 on:
   push:
-    branches: [ "dockerwork" ]
+    branches: [ "dev" ]
 
 #dddd
 jobs:
@@ -26,7 +26,7 @@ jobs:
     - name: make application.yml
       if: |
         contains(github.ref, 'main') ||
-        contains(github.ref, 'dockerwork')
+        contains(github.ref, 'dev')
       run: |
         # mkdir ./src/main/resources # resources 폴더 생성
         cd ./src/main/resources # resources 폴더로 이동
@@ -80,9 +80,9 @@ jobs:
     #   working-directory: $GITHUB_WORKSPACE
 
 
-    - name: List build directory contents
-      run: ls -R
-      working-directory: ${{ secrets.WORKINGDIRECTORY }}
+    # - name: List build directory contents
+    #   run: ls -R
+    #   working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
 
   # push:
