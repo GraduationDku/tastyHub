@@ -45,9 +45,9 @@ jobs:
         cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/be/tastyhub/build/libs
         ls $GITHUB_WORKSPACE/be/tastyhub/build/libs/
 
-    - name: 모든 루트 폴더 검사
-      run : find . -type f -name "*.jar"
-      working-directory: $GITHUB_WORKSPACE
+    # - name: 모든 루트 폴더 검사
+    #   run : find . -type f -name "*.jar"
+    #   working-directory: $GITHUB_WORKSPACE
 
 
     - name: List build directory contents
