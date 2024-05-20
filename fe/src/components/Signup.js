@@ -18,6 +18,7 @@ function Signup({ setScreen }) {
   const [emailButtonText, setEmailButtonText] = useState("이메일 중복 확인");
   const [verifyButtonText, setVerifyButtonText] = useState("인증번호 확인");
 
+  
   const handlePasswordMatchCheck = () => {
     if (password === confirmPassword) {
       setPasswordsMatch(true);
@@ -37,19 +38,13 @@ function Signup({ setScreen }) {
         },
       });
       if (response.ok) {
-        const result = await response.json();
-        if (result.available) {
-          alert('사용 가능한 아이디입니다.');
-          setUsernameAvailable(true);
-          setUsernameButtonText("확인되었습니다.");
-        } else {
-          alert('사용 불가능한 아이디입니다.');
-          setUsernameAvailable(false);
-          console.log(username);
-        }
+        alert('사용 가능한 아이디입니다.');
+        setUsernameAvailable(true);
+        setUsernameButtonText("확인되었습니다.");
       } else {
         const errorText = await response.text();
         alert(`오류가 발생했습니다: ${errorText}`);
+        setUsernameAvailable(false);
       }
     } catch (error) {
       console.error('아이디 검사 중 오류 발생:', error);
@@ -58,57 +53,23 @@ function Signup({ setScreen }) {
 
   const checkNicknameAvailability = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/user/overlap/nickname?nickname=${encodeURIComponent(nickname)}`, {
+      const response = await fetch(`http://localhost:8080/user/overlap/nickname?nickname=${nickname}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      const result = await response.json();
       if (response.ok) {
-        if (result.available) {
-          alert('사용 가능한 닉네임입니다.');
-          setNicknameAvailable(true);
-          setNicknameButtonText("확인되었습니다.");
-        } else {
-          alert('사용 불가능한 닉네임입니다.');
-          setNicknameAvailable(false);
-        }
+        alert('사용 가능한 닉네임입니다.');
+        setNicknameAvailable(true);
+        setNicknameButtonText("확인되었습니다.");
       } else {
         const errorText = await response.text();
         alert(`오류가 발생했습니다: ${errorText}`);
+        setNicknameAvailable(false);
       }
     } catch (error) {
       console.error('닉네임 검사 중 오류 발생:', error);
-    }
-  };
-  
-
-  const checkEmailAvailability = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/user/overlap/email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-      const result = await response.json();
-      if (response.ok) {
-        if (result.available) {
-          alert('사용 가능한 이메일입니다.');
-          setEmailAvailable(true);
-          setEmailButtonText("확인되었습니다.");
-        } else {
-          alert('이미 사용 중인 이메일입니다.');
-          setEmailAvailable(false);
-        }
-      } else {
-        const errorText = await response.text();
-        alert(`오류가 발생했습니다: ${errorText}`);
-      }
-    } catch (error) {
-      console.error('이메일 중복 검사 중 오류 발생:', error);
     }
   };
 
@@ -119,7 +80,7 @@ function Signup({ setScreen }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ "email": email }),
       });
       if (response.ok) {
         alert('인증번호가 이메일로 발송되었습니다.');
@@ -139,28 +100,34 @@ function Signup({ setScreen }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, verifiedCode }),
+        body: JSON.stringify({ "email": email, "verifiedCode": verifiedCode }),
       });
-      const result = await response.json();
       if (response.ok) {
-        if (result.verified) {
+        const verificationResult = await response.json();
+        if (verificationResult) { // 인증번호가 일치할 경우
           alert('이메일 인증 성공!');
           setVerificationSuccess(true);
           setVerifyButtonText("확인되었습니다.");
+          setEmailAvailable(true); // 인증 성공 시, emailAvailable도 true로 설정
         } else {
           alert('인증번호가 일치하지 않습니다.');
           setVerificationSuccess(false);
+          setEmailAvailable(false); // 인증 실패 시, emailAvailable도 false로 설정
         }
       } else {
         const errorText = await response.text();
         alert(`오류가 발생했습니다: ${errorText}`);
         setVerificationSuccess(false);
+        setEmailAvailable(false); // 서버 에러 발생 시, emailAvailable도 false로 설정
       }
     } catch (error) {
       console.error('인증번호 검증 중 오류 발생:', error);
       setVerificationSuccess(false);
+      setEmailAvailable(false); // 예외 발생 시, emailAvailable도 false로 설정
     }
   };
+  
+  
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -176,10 +143,10 @@ function Signup({ setScreen }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username,
-          password,
-          nickname,
-          email,
+          "username": username,
+          "password": password,
+          "nickname": nickname,
+          "email": email,
         }),
       });
       if (response.ok) {
@@ -188,9 +155,10 @@ function Signup({ setScreen }) {
         localStorage.setItem('accessToken', authorization);
         localStorage.setItem('refreshToken', refreshToken);
         console.log('회원가입 성공');
-        setScreen('login');
+        setScreen('village');
       } else {
         console.error('회원가입 실패');
+
       }
     } catch (error) {
       console.error('회원가입 중 오류 발생:', error);
@@ -227,7 +195,6 @@ function Signup({ setScreen }) {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <button onClick={handlePasswordMatchCheck}>비밀번호 일치 확인</button>
-          
           <br /><br />
           <span className="label3">닉네임 :</span>
           <input 
@@ -245,7 +212,6 @@ function Signup({ setScreen }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button onClick={checkEmailAvailability}>{emailButtonText}</button>
           <button onClick={sendVerificationCode}>이메일 인증번호 보내기</button>
           <br /><br />
           <span className="label5">PIN :</span>
@@ -257,7 +223,9 @@ function Signup({ setScreen }) {
           />
           <button onClick={verifyCode}>{verifyButtonText}</button>
           <br /><br />
-          <button onClick={handleSignup} disabled={!usernameAvailable || !nicknameAvailable || !emailAvailable || !passwordsMatch}>회원가입하기</button>
+          <button onClick={() => setScreen('village')}>동네 정보 입력</button>
+          <button onClick={handleSignup} >회원가입하기</button>
+          
         </div>
       </div>
     </div>

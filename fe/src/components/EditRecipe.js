@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function EditRecipe({ recipeId, onEdit }) {
+function EditRecipe({ recipeId }) {
   const [formData, setFormData] = useState({
     foodName: '',
     foodImgUrl: '',
@@ -40,14 +40,18 @@ function EditRecipe({ recipeId, onEdit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/recipe/update/${recipeId}`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:8080/recipe/details/${recipeId}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData)
       });
       if (response.ok) {
+        const authorization = response.headers.get('Authorization');
+        const refreshToken = response.headers.get('Refresh');
+        localStorage.setItem('accessToken', authorization);
+        localStorage.setItem('refreshToken', refreshToken);
         alert('Recipe updated successfully!');
       } else {
         throw new Error('Failed to update recipe');

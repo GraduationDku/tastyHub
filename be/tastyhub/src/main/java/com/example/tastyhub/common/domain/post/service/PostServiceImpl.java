@@ -1,8 +1,12 @@
 package com.example.tastyhub.common.domain.post.service;
 
+import com.example.tastyhub.common.domain.comment.dtos.CommentDto;
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.Generated;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +22,14 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
+
     private final PostRepository postRepository;
 
     @Override
     public void createPost(PostCreateRequest postCreateRequest, User user) {
-        Post post = Post.builder().title(postCreateRequest.getTitle()).text(postCreateRequest.getText())
-                .postState(PostState.Start).user(user).build();
+        Post post = Post.builder().title(postCreateRequest.getTitle())
+            .text(postCreateRequest.getText())
+            .postState(PostState.Start).user(user).build();
         postRepository.save(post);
     }
 
@@ -45,27 +51,45 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PagingPostResponse> getAllPost(User user) {
-        List<PagingPostResponse> postResponses = postRepository.findAllPostResponse(user.getVillage());
+        List<PagingPostResponse> postResponses = postRepository.findAllPostResponse(
+            user.getVillage());
         return postResponses;
     }
 
     @Override
     public List<PagingPostResponse> getAllRecentPost(User user) {
-        List<PagingPostResponse> postResponses = postRepository.findAllRecentPostResponse(user.getVillage());
+        List<PagingPostResponse> postResponses = postRepository.findAllRecentPostResponse(
+            user.getVillage());
         return postResponses;
     }
 
     @Override
     public PostResponse getPost(Long postId) {
-        Post post = getPostFindByPostId(postId);
-        PostResponse postResponse = new PostResponse(post);
+
+        PostResponse postResponse = getPostFindByPostId(postId);
         return postResponse;
     }
 
     @Generated
-    private Post getPostFindByPostId(Long postId) {
-        return postRepository.findById(postId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 게시물은 존재하지 않습니다."));
+    private PostResponse getPostFindByPostId(Long postId) {
+
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 게시글은 존재하지 않습니다."));
+
+        PostResponse postResponse = PostResponse.builder()
+            .title(post.getTitle())
+            .postState(post.getPostState())
+            .userImg(post.getUser().getUserImg())
+            .nickname(post.getUser().getNickname())
+            .commentDtos(
+                post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
+            .postId(post.getId())
+            .text(post.getText())
+            .latestUpdateTime(String.valueOf(post.getModifiedAt()))
+            .build();
+        return postResponse;
+//        return postRepository.findByIdQuery(postId)
+//            .orElseThrow(() -> new IllegalArgumentException("해당 게시물은 존재하지 않습니다."));
     }
 
 }

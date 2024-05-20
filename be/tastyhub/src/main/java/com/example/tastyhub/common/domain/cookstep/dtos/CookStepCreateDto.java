@@ -9,6 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class CookStepCreateDto {
 
     private Long stepNumber;
-    private MultipartFile stepImg;
+    private String stepImg;
     private String text;
 }

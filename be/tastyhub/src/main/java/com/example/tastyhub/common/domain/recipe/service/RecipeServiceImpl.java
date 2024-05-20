@@ -55,7 +55,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         Recipe recipe = Recipe.builder()
             .foodName(recipeCreateDto.getFoodName())
-            .foodImgUrl("refactoring")
+            .foodImgUrl("after s3")
             .user(user)
 
             .foodInformation(foodInformation)
