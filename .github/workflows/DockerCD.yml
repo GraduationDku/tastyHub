@@ -26,9 +26,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
-    # - name: Build with Gradle Wrapper
-    #   run: ./gradlew clean build
-    #   working-directory: ${{ secrets.WORKINGDIRECTORY }}
+    - name: Build with Gradle Wrapper
+      run: ./gradlew clean build
+      working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
     # - name : git 워크스페이스 검사
     #   run : echo $GITHUB_WORKSPACE
@@ -72,16 +72,15 @@ jobs:
         password: ${{ secrets.DOCKER_REPOSITORY }}
 
     - name: Build and push Docker image
-      # uses: docker/build-push-action@v5
-      # with:
-      #   push: true
-      #   tags: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }}
-      #   context: $GITHUB_WORKSPACE/be/tastyhub/
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }}, ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:latest
         
-      run: |
-        .${{ secrets.WORKINGDIRECTORY }}/gradlew clean build
-        docker buildx build --push \
-          --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:latest \
-          --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }} \
-          --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile \
-          ${{ secrets.WORKINGDIRECTORY }}
+      # run: |
+      #   docker buildx build --push \
+      #     --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:latest \
+      #     --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }} \
+      #     --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile \
+      #     ${{ secrets.WORKINGDIRECTORY }}
