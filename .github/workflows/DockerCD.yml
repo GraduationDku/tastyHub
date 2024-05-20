@@ -30,7 +30,7 @@ jobs:
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
     - name: 모든 루트 폴더 검사
-      run : ls -R
+      run : find . -type f -name "*.jar"
 
     - name: List build directory contents
       run: ls -la ${{ secrets.WORKINGDIRECTORY }}/build/libs/
