@@ -51,7 +51,7 @@ jobs:
 
 
     - name: List build directory contents
-      run: ls -la ${{ secrets.WORKINGDIRECTORY }}//build/libs/
+      run: ls -la ${{ secrets.WORKINGDIRECTORY }}/build/libs/
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
 
