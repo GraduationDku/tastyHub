@@ -79,6 +79,7 @@ jobs:
       #   context: $GITHUB_WORKSPACE/be/tastyhub/
         
       run: |
+        ls -R
         docker buildx build --push \
           --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:latest \
           --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }} \
