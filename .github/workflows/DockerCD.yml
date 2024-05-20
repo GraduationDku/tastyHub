@@ -28,11 +28,13 @@ jobs:
         contains(github.ref, 'main') ||
         contains(github.ref, 'dockerwork')
       run: |
-        mkdir ${{ secrets.WORKINGDIRECTORY }}/src/main/resources # resources 폴더 생성
+        mkdir ./src/main/resources # resources 폴더 생성
         cd ./src/main/resources # resources 폴더로 이동
         touch ./application.yml # application.yml 생성
         echo "${{ secrets.DEVLOCAL }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
       shell: bash
+      working-directory: ${{ secrets.WORKINGDIRECTORY }}
+
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
