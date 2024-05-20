@@ -82,5 +82,5 @@ jobs:
         docker buildx build --push \
           --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:latest \
           --tag ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }} \
-          --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile 
-          # $GITHUB_WORKSPACE/be/tastyhub/
+          --file ${{ secrets.WORKINGDIRECTORY }}/Dockerfile \
+          ${{ secrets.WORKINGDIRECTORY }}
