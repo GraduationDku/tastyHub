@@ -1,6 +1,5 @@
 package com.example.tastyhub.common.domain.user.entity;
 
-import com.example.tastyhub.common.domain.chat.entity.ChatRoom;
 import com.example.tastyhub.common.domain.comment.entity.Comment;
 import com.example.tastyhub.common.domain.like.entity.Like;
 import com.example.tastyhub.common.domain.post.entity.Post;
@@ -8,6 +7,7 @@ import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import com.example.tastyhub.common.domain.scrap.entity.Scrap;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
+import com.example.tastyhub.common.domain.userChat.entity.UserChatRoom;
 import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 import com.example.tastyhub.common.domain.village.entity.Village;
 import jakarta.persistence.CascadeType;
@@ -18,9 +18,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -102,15 +99,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Village village;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "user_chatrooms",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "chat_room_id")
-    )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<ChatRoom> chatRooms = new ArrayList<>();
-
+    private List<UserChatRoom> userChatRooms = new ArrayList<>();
     public void updatePassword(String password) {
         this.password = password;
     }

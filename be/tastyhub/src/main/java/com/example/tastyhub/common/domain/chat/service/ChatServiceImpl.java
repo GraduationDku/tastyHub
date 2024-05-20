@@ -21,11 +21,11 @@ public class ChatServiceImpl implements ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
             .orElseThrow(() -> new IllegalArgumentException("해당 채팅방은 존재하지않습니다"));
 
-        Chat chat = Chat.builder().chatRoom(chatRoom).from(chatMessage.getFrom())
+        Chat chat = Chat.builder().chatRoom(chatRoom).sender(chatMessage.getFrom())
             .text(chatMessage.getText())
             .build();
         chatRepository.save(chat);
-        return ChatDto.builder().from(chat.getFrom()).text(chat.getText()).time(
+        return ChatDto.builder().from(chat.getSender()).text(chat.getText()).time(
             String.valueOf(chat.getLocalDateTime())).build();
     }
 }

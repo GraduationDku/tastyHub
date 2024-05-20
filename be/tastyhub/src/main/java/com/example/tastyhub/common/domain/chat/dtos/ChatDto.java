@@ -20,7 +20,7 @@ public class ChatDto {
 
 
     public ChatDto(Chat chat) {
-        this.from = chat.getFrom();
+        this.from = chat.getSender();
         this.text = chat.getText();
         this.time = String.valueOf(chat.getLocalDateTime());
     }
