@@ -1,7 +1,7 @@
 FROM amazoncorretto:17
 LABEL org.opencontainers.image.source=https://github.com/GraduationDku/tastyHub
 
-ARG JAR_FILE=./***/build/libs/*.jar
+ARG JAR_FILE=./build/libs/*.jar
 
 Run find . -type f -name "*.jar"
 
