@@ -8,7 +8,7 @@ Run find . -type f -name "*.jar"
 
 COPY ${JAR_FILE} app.jar
 
-Run find . -type f -name "*.jar"
+Run find . -type f -name "app.jar"
 
 EXPOSE 8080
 
