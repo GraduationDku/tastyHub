@@ -43,6 +43,7 @@ jobs:
       run: ./gradlew clean build
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
