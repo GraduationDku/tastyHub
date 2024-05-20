@@ -29,6 +29,10 @@ jobs:
       run: ./gradlew clean build
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
+    - name: List build directory contents
+      run: ls -la ${{ secrets.WORKINGDIRECTORY }}/build/libs/
+      working-directory: ${{ secrets.WORKINGDIRECTORY }}
+
     # - name: Copy JAR file to build context
     #   run: |
     #     # mkdir $GITHUB_WORKSPACE/be/build/libs && \
