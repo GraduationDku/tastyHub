@@ -74,7 +74,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
-        context: .
+        context: ${{ secrets.WORKINGDIRECTORY }}
         push: true
         tags: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }}, ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:latest
         
