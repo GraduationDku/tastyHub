@@ -4,11 +4,12 @@ name: Docker Image CD
 
 on:
   push:
-    branches: [ "dockerwork" ]
+    branches: [ "dev" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
 
@@ -29,25 +30,11 @@ jobs:
       run: ./gradlew clean build
       working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
-    # - name : git 워크스페이스 검사
-    #   run : echo $GITHUB_WORKSPACE
-    #   working-directory: $GITHUB_WORKSPACE
-
-
-    # - name: List build directory contents
-    #   run: ls -la ${{ secrets.WORKINGDIRECTORY }}//build/libs/
-    #   working-directory: ${{ secrets.WORKINGDIRECTORY }}
-
     - name: Copy JAR file to build context
       run: |
-        # mkdir $GITHUB_WORKSPACE/be/build/libs && \
-        # cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/be/build/libs
+        mkdir $GITHUB_WORKSPACE/be/build/libs && \
+        cp ${{ secrets.WORKINGDIRECTORY }}/build/libs/*.jar $GITHUB_WORKSPACE/be/tastyhub/build/libs
         ls $GITHUB_WORKSPACE/be/tastyhub/build/libs/
-
-    # - name: 모든 루트 폴더 검사
-    #   run : find . -type f -name "*.jar"
-    #   working-directory: $GITHUB_WORKSPACE
-
 
   push:
     runs-on: ubuntu-latest
