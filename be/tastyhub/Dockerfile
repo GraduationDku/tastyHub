@@ -7,6 +7,9 @@ Run find . -type f -name "*.jar"
 
 
 COPY ${JAR_FILE} app.jar
+
+Run find . -type f -name "*.jar"
+
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar","./***/build/libs/app.jar"]
