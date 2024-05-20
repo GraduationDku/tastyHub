@@ -25,7 +25,7 @@ jobs:
   
     - name: make application.yml
       if: |
-        # contains(github.ref, 'main') ||
+        contains(github.ref, 'main') ||
         contains(github.ref, 'dockerwork')
       run: |
         mkdir ./src/main/resources # resources 폴더 생성
