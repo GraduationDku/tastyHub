@@ -40,8 +40,8 @@ function EditRecipe({ recipeId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/recipe/update/${recipeId}`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:8080/recipe/details/${recipeId}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },

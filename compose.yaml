@@ -46,9 +46,8 @@ services:
 
   backend:
     container_name: back_spring
-    build:
-      context: ./be/tastyhub
-      dockerfile: Dockerfile
+    image : skyriv213/tastyhub
+    platform: linux/x86_64    # 추가된 라인
     restart: always
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tastyhub?useSSL=false&allowPublicKeyRetrieval=true

@@ -9,6 +9,8 @@ import MainScreen from './components/MainScreen';
 import Recipe from './components/Recipe';
 import CreateRecipe from './components/CreateRecipe';
 import FindUsername from './components/FindUsername';
+import MainChat from './components/MainChat';
+import Post from './components/Post';
 import './App.css';
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
       {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
       {screen === 'create' && <CreateRecipe setScreen={setScreen} />}
       {screen === 'findUsername' && <FindUsername setScreen={setScreen} />}
+      {screen === 'mainchat' && <MainChat setScreen = {setScreen}/>}
+      {screen === 'post' && <Post setScreen={setScreen} />}
       
       {screen === 'searchResults' && (
         <div className="search-results">
