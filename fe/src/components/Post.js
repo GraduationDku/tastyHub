@@ -33,7 +33,7 @@ function Post({setScreen, onPostSelect}){
 
   return(
     <><div>재료 공유 게시글 조회</div>
-    <button onClick={() => setScreen('createposts')}>게시글 작성하기</button>
+    <button onClick={() => setScreen('createpost')}>게시글 작성하기</button>
     <ul>
           {posts.map(post => (
             <li key={post.pagingPostResponseList.postId} onClick={() => onPostSelect(post.pagingPostResponseList.postId)}>

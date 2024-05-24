@@ -39,9 +39,9 @@ const MainChat = () => {
                         <h2>{chatRoom.chatTitle}</h2>
                         {chatRoom.from && (
                             <div>
-                                <p><strong>From:</strong> {chatRoom.from}</p>
-                                <p><strong>Message:</strong> {chatRoom.text}</p>
-                                <p><strong>Time:</strong> {chatRoom.time}</p>
+                                <p><strong></strong> {chatRoom.from}</p>
+                                <p><strong></strong> {chatRoom.text}</p>
+                                <p><strong></strong> {chatRoom.time}</p>
                             </div>
                         )}
                     </li>
