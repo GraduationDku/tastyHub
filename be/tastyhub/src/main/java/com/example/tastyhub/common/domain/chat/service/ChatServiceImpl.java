@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChatServiceImpl implements ChatService {
 
-    private ChatRepository chatRepository;
-    private ChatRoomRepository chatRoomRepository;
+    private final ChatRepository chatRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
 
     @Override
@@ -25,7 +25,6 @@ public class ChatServiceImpl implements ChatService {
             .text(chatMessage.getText())
             .build();
         chatRepository.save(chat);
-        return ChatDto.builder().from(chat.getSender()).text(chat.getText()).time(
-            String.valueOf(chat.getLocalDateTime())).build();
+        return chatMessage;
     }
 }

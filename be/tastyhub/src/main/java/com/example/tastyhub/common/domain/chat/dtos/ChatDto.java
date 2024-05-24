@@ -16,12 +16,12 @@ public class ChatDto {
 
     private String text;
 
-    private String time;
+//    private String time;
 
 
     public ChatDto(Chat chat) {
         this.from = chat.getSender();
         this.text = chat.getText();
-        this.time = String.valueOf(chat.getLocalDateTime());
+//        this.time = chat.getLocalDateTime();
     }
 }

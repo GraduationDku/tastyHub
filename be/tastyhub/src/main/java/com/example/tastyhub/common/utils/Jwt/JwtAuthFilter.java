@@ -37,7 +37,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             "/recipe/list",
             "/recipe/popular",
             "/recipe/search",
-            "/recipe/detail"
+            "/recipe/detail",
+        "/chat/**",
+        "chat"
             );
 
     @Override
