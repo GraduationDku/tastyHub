@@ -197,7 +197,7 @@ class UserServiceImplTest {
     @DisplayName("사용자 리스트 반환하기")
     void getUserList() {
         given(userRepository.findAllByNickname(any())).willReturn(USER_DTO_LIST);
-        userService.getUserList(SEARCH_USER_DTO);
+        userService.getUserList(USER.getNickname());
         verify(userRepository, times(1)).findAllByNickname(any());
     }
 

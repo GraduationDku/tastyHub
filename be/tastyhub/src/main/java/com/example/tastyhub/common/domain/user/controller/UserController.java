@@ -73,7 +73,7 @@ public class UserController {
     @PostMapping("/findid")
     public ResponseEntity<String> findId(@RequestBody FindIdRequest findIdRequest) {
         String username = userService.findId(findIdRequest);
-        return ResponseEntity.ok().body(username);
+        return ResponseEntity.ok(username);
     }
 
     /**
@@ -90,9 +90,9 @@ public class UserController {
      * 사용자 검색하기 - skyriv213
      */
 
-    @GetMapping("search-list")
-    public ResponseEntity<List<UserDto>> getUserList(@RequestBody SearchUserDto searchUserDto) {
-        List<UserDto> userDtoList = userService.getUserList(searchUserDto);
+    @GetMapping("/search-list")
+    public ResponseEntity<List<UserDto>> getUserList(@RequestParam String nickname) {
+        List<UserDto> userDtoList = userService.getUserList(nickname);
         return ResponseEntity.ok().body(userDtoList);
     }
 

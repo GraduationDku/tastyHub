@@ -7,7 +7,6 @@ import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
-import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
@@ -20,7 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
 
-import java.util.Optional;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -120,8 +118,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDto> getUserList(SearchUserDto searchUserDto) {
-        List<UserDto> userDtoList = userRepository.findAllByNickname(searchUserDto.getNickname());
+    public List<UserDto> getUserList(String nickname) {
+        List<UserDto> userDtoList = userRepository.findAllByNickname(nickname);
         return userDtoList;
     }
 
