@@ -27,10 +27,6 @@ function CreatePost(){
         })
       });
       if(response.ok){
-        const authorization = response.headers.get('Authorization');
-        const refreshToken = response.headers.get('Refresh');
-        localStorage.setItem('accessToken', authorization);
-        localStorage.setItem('refreshToken', refreshToken);
         alert('Recipe created successfully!');
       }else{
         throw new Error('Failed to create Post');
@@ -47,7 +43,8 @@ return (
     제목 :
     <input type = "text" name = "title" value={formData.title} onChange={handleChange} />
     내용 :
-    <input type="text" name ="text" value={formData.text} onChamge = {handleChange} />
+    <input type="text" name ="text" value={formData.text} onChange = {handleChange} />
+    <button onClick={handleSubmit}>작성하기</button>
   </form>
   </>
 )}
