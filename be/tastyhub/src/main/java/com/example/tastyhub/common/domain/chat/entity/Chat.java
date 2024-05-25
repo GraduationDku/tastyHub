@@ -23,7 +23,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @AllArgsConstructor
 
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "chats")
 public class Chat {
@@ -37,8 +37,7 @@ public class Chat {
 
     private String text;
 
-    @CreatedDate
-    private LocalDateTime localDateTime;
+//    private String localDateTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chat_room_id")

@@ -32,20 +32,29 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final String[] permitAllArray ={
-      "/email",
-      "/email/verified",
-      "/user/overlap/nickname",
-      "/user/overlap/username",
-      "/user/login",
-      "/user/signup",
-      "/recipe/list",
-      "/recipe/popular",
-      "/recipe/detail",
-      "/recipe/detail/{recipeId}",
-      "/recipe/search/",
-      "/recipe/search/{keyword}",
 
+    private final String[] permitAllArray = {
+        "/email",
+        "/email/verified",
+        "/user/overlap/nickname",
+        "/user/overlap/username",
+        "/user/login",
+        "/user/signup",
+        "/recipe/list",
+        "/recipe/popular",
+        "/recipe/detail",
+        "/recipe/detail/{recipeId}",
+        "/recipe/search/",
+        "/recipe/search/{keyword}",
+        "/chat",
+        "/chat/**"
+
+    };
+
+    private final String[] permitOrigin = {
+        "http://localhost:8080",
+        "https://apic.app",
+        "http://localhost:3000"
     };
 
 
@@ -53,34 +62,39 @@ public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     CorsConfigurationSource corsConfigurationSource() {
-      return request -> {
-          CorsConfiguration config = new CorsConfiguration();
-          config.setAllowedHeaders(Collections.singletonList("*"));
-          config.setAllowedMethods(Collections.singletonList("*"));
-          config.setAllowedOriginPatterns(Collections.singletonList("*"));
-          config.setAllowCredentials(true);
-          config.setExposedHeaders(Arrays.asList("Authorization", "Refresh"));
-          return config;
-      };
-  }
+        return request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedHeaders(Collections.singletonList("*"));
+            config.setAllowedMethods(Collections.singletonList("*"));
+            config.setAllowedOrigins(List.of(permitOrigin));
+            config.setAllowedOriginPatterns(List.of(permitAllArray));
+            config.setAllowCredentials(true);
+            config.setExposedHeaders(Arrays.asList("Authorization", "Refresh"));
+            return config;
+        };
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-      http.csrf(AbstractHttpConfigurer::disable)
-          .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource())) 
-          .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-          .authorizeHttpRequests(auth -> auth
-          .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-          .requestMatchers(permitAllArray).permitAll()
-          .anyRequest().authenticated())
-          .addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService),UsernamePasswordAuthenticationFilter.class);
+        http.csrf(AbstractHttpConfigurer::disable)
+            .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
+            .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers(permitAllArray).permitAll()
+                .anyRequest().authenticated())
+            .addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService),
+                UsernamePasswordAuthenticationFilter.class);
 
 //    http.formLogin().loginPage("/users/login");
 
-    return http.build();
-  }
+        return http.build();
+    }
 }
