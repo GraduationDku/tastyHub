@@ -6,27 +6,23 @@ function MainChat({onChatroomSelect, setScreen}){
     useEffect(() => {
         const fetchChatRooms = async () => {
             try {
-                const response = await fetch('http://localhost:8080/chatroom', {
+                const response = await fetch('http://localhost:8080/room', {
                     method : 'GET',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization' : localStorage.getItem('accessToken')
                     }
                 });
-                
+                console.log(response);
                 if(response.ok){
-                    const authorization = response.headers.get('Authorization');
-                    const refreshToken = response.headers.get('Refresh');
-                    localStorage.setItem('accessToken', authorization);
-                    localStorage.setItem('refreshToken', refreshToken);
-                    console.log(response);
-                }
                     const data = await response.json();
                     console.log(data);
                     if(Array.isArray(data)){
-                    setChatRooms(data.chatRoomDtoList);
+                    setChatRooms(data);
                     } else {
                         console.error('Invaild data format:', data)
                     }
+                }
             } catch (error) {
                 console.error('Error fetching chat rooms:', error);
             }
@@ -35,14 +31,13 @@ function MainChat({onChatroomSelect, setScreen}){
         fetchChatRooms();
     }, []);
 
-
     return (
         <div className="main-chat">
             <h1>Chat Rooms</h1>
             <ul>
                 {chatRooms.map(chatRoom => (
-                    <li key={chatRoom.chatRoomId} onClick={() => onChatroomSelect(chatRoom.chatRoodId)}>
-                        <h2>{chatRoom.chatTitle}</h2>
+                    <li key={chatRoom.chatRoomId}>
+                        <button onClick={()=> setScreen('sendchat')}>{chatRoom.chatRoomTitle}</button>
                             <div>
                                 <p><strong></strong> {chatRoom.from}</p>
                                 <p><strong></strong> {chatRoom.text}</p>

@@ -12,6 +12,7 @@ import FindUsername from './components/FindUsername';
 import MainChat from './components/MainChat';
 import Post from './components/Post';
 import CreatePost from './components/CreatePost';
+import SendChat from './components/SendChat';
 import './App.css';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
       {screen === 'mainchat' && <MainChat setScreen = {setScreen}/>}
       {screen === 'post' && <Post setScreen={setScreen} />}
       {screen === 'createpost' && <CreatePost setScreen={setScreen}/>}
+      {screen === 'sendchat' && <SendChat setScreen={setScreen}/>}
       
       {screen === 'searchResults' && (
         <div className="search-results">
