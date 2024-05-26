@@ -98,9 +98,6 @@ asciidoctor {
     configurations 'asciidoctorExtensions'
     dependsOn test
 }
-//asciidoctor.doFirst {
-//    delete file('src/main/resources/static/docs')
-//}
 
 
 bootJar {
@@ -111,6 +108,9 @@ bootJar {
     }
 }
 
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
 
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
