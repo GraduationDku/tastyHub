@@ -1,5 +1,4 @@
 = API
-
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -8,3 +7,4 @@
 
 include::user.adoc[]
 include::post.adoc[]
+include::comment.adoc[]
