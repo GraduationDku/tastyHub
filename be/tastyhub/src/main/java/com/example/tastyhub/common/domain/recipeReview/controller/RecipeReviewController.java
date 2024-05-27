@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
+import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
 import com.example.tastyhub.common.domain.recipeReview.service.RecipeReviewService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 
 
@@ -46,6 +48,14 @@ public class RecipeReviewController {
     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<PagingRecipeReviewResponse> pagingRecipeReviewResponseList = recipeReviewService.getRecipeReviews(recipeId);
         return ResponseEntity.ok().body(pagingRecipeReviewResponseList);
+    }
+
+    @PatchMapping("/modify/{recipeReviewId}")
+    public ResponseEntity<StatusResponse> updateRecipeReview(@PathVariable Long recipeReviewId,
+        @RequestBody RecipeReviewUpdateRequest recipeReviewUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
+            recipeReviewService.updateRecipeReview(recipeReviewId,recipeReviewUpdateRequest, userDetails.getUser());
+            return RESPONSE_OK;
+        
     }
     
 }

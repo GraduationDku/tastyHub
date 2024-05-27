@@ -8,6 +8,7 @@ import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
+import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import com.example.tastyhub.common.domain.recipeReview.repository.RecipeReviewRepository;
 import com.example.tastyhub.common.domain.user.entity.User;
@@ -38,6 +39,14 @@ public class RecipeReviewServiceImpl implements RecipeReviewService {
     @Override
     public List<PagingRecipeReviewResponse> getRecipeReviews(Long recipeId) {
         return recipeReviewRepository.findAllRecipeReviewResponse(recipeId);
+    }
+
+    @Override
+    @Transactional
+    public void updateRecipeReview(Long recipeReviewId, RecipeReviewUpdateRequest recipeReviewUpdateRequest,
+            User user) {
+                RecipeReview recipeReview = recipeReviewRepository.findById(recipeReviewId).get();
+                recipeReview.update(recipeReviewUpdateRequest);
     }
 
 }
