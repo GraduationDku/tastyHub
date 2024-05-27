@@ -9,7 +9,8 @@ function Post({setScreen, onPostSelect}){
         const response = await fetch('http://localhost:8080/post/list',{
           method: 'GET',
           headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            'Authorization' : localStorage.getItem('accessToken')
           }
         });
         if(response.ok){

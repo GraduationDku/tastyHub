@@ -20,6 +20,7 @@ function CreatePost(){
         method: 'POST',
         headers: {
           'content-Type': 'application/json',
+          'Authorization' : localStorage.getItem('accessToken')
         },
         body : JSON.stringify({
           "text" : formData.text,

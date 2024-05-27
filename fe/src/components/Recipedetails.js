@@ -11,14 +11,11 @@ function RecipeDetails({ recipeId }) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization' : localStorage.getItem('accessToken')
           }
         });
         if (response.ok) {
           const data = await response.json();
-          const authorization = response.headers.get('Authorization');
-          const refreshToken = response.headers.get('Refresh');
-          localStorage.setItem('accessToken', authorization);
-          localStorage.setItem('refreshToken', refreshToken);
           setRecipeDetails(data);
         } else {
           throw new Error('Failed to fetch recipe details');

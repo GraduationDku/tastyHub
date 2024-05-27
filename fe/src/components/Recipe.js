@@ -10,14 +10,13 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
         const response = await fetch('http://localhost:8080/recipe/list', {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization' : localStorage.getItem('accessToken')
           }
         });
         if(response.ok){
-          const authorization = response.headers.get('Authorization');
-          const refreshToken = response.headers.get('Refresh');
-          localStorage.setItem('accessToken', authorization);
-          localStorage.setItem('refreshToken', refreshToken);
+         console.log(response);
+         alert('successful !');
         }
         const data = await response.json();
         if (Array.isArray(data.content)) {

@@ -34,14 +34,11 @@ function EditPost({ postId }) {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization' : localStorage.getItem('accessToken')
                 },
                 body: JSON.stringify(formData)
             });
             if (response.ok) {
-                const authorization = response.headers.get('Authorization');
-                const refreshToken = response.headers.get('Refresh');
-                localStorage.setItem('accessToken', authorization);
-                localStorage.setItem('refreshToken', refreshToken);
                 alert('Post updated successfully!');
             } else {
                 throw new Error('Failed to update post');

@@ -51,6 +51,7 @@ function CreateRecipe() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization' : localStorage.getItem('accessToken')
         },
         body: JSON.stringify({
           "foodName": formData.foodName,
@@ -61,10 +62,6 @@ function CreateRecipe() {
         })
       });
       if (response.ok) {
-        const authorization = response.headers.get('Authorization');
-        const refreshToken = response.headers.get('Refresh');
-        localStorage.setItem('accessToken', authorization);
-        localStorage.setItem('refreshToken', refreshToken);
         alert('Recipe created successfully!');
       } else {
         throw new Error('Failed to create recipe');
