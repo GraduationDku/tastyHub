@@ -1,9 +1,12 @@
 package com.example.tastyhub.common.domain.recipeReview.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
+import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import com.example.tastyhub.common.domain.recipeReview.repository.RecipeReviewRepository;
@@ -30,6 +33,11 @@ public class RecipeReviewServiceImpl implements RecipeReviewService {
                     .text(recipeReviewCreateRequest.getText())
                     .build();
         recipeReviewRepository.save(recipeReview);
+    }
+
+    @Override
+    public List<PagingRecipeReviewResponse> getRecipeReviews(Long recipeId) {
+        return recipeReviewRepository.findAllRecipeReviewResponse(recipeId);
     }
 
 }
