@@ -18,7 +18,9 @@ import './App.css';
 function App() {
   const [screen, setScreen] = useState('home');
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+  const [username, setUsername] = useState('');
 
   const handleRecipeSelect = (id) => {
     setSelectedRecipeId(id);
@@ -28,6 +30,11 @@ function App() {
   const handleSearchComplete = (results) => {
     setSearchResults(results);
     setScreen('searchResults');
+  };
+
+  const handleChatroomSelect = (roomId) => {
+    setSelectedRoomId(roomId);
+    setScreen('sendchat');
   };
 
   return (
@@ -42,11 +49,10 @@ function App() {
       {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
       {screen === 'create' && <CreateRecipe setScreen={setScreen} />}
       {screen === 'findUsername' && <FindUsername setScreen={setScreen} />}
-      {screen === 'mainchat' && <MainChat setScreen = {setScreen}/>}
+      {screen === 'mainchat' && <MainChat setScreen={setScreen} onChatroomSelect={handleChatroomSelect} />}
       {screen === 'post' && <Post setScreen={setScreen} />}
       {screen === 'createpost' && <CreatePost setScreen={setScreen}/>}
-      {screen === 'sendchat' && <SendChat setScreen={setScreen}/>}
-      
+      {screen === 'sendchat' && selectedRoomId && <SendChat roomId={selectedRoomId} username={username}/>}
       {screen === 'searchResults' && (
         <div className="search-results">
           <h1>검색 결과</h1>

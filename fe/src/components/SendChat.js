@@ -10,6 +10,7 @@ const SendChat = ({ roomId, username }) => {
     const [input, setInput] = useState('');
 
     useEffect(() => {
+
         const stompClient = new Client({
             brokerURL: SOCKET_URL,
             reconnectDelay: 5000,
@@ -54,24 +55,57 @@ const SendChat = ({ roomId, username }) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    };
+
     return (
-        <div>
-            <ul>
+        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <ul style={{ listStyleType: 'none', padding: 0, flex: 1, overflowY: 'auto' }}>
                 {messages.map((msg, index) => (
-                    <li key={index}>
-                        <strong>{msg.from}</strong>: {msg.text}
+                    <li
+                        key={index}
+                        style={{
+                            display: 'flex',
+                            justifyContent: msg.from === username ? 'flex-end' : 'flex-start',
+                            padding: '5px 0'
+                        }}
+                    >
+                        <div
+                            style={{
+                                background: msg.from === username ? '#DCF8C6' : '#FFF',
+                                padding: '10px',
+                                borderRadius: '10px',
+                                maxWidth: '60%',
+                                wordWrap: 'break-word',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                            }}
+                        >
+                            {msg.from !== username && <strong>{msg.from} </strong>}
+                            {msg.text}
+                        </div>
                     </li>
                 ))}
             </ul>
-            <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="메세지를 입력하세요."
-                disabled={!connected}
-            />
-            <button onClick={sendMessage} disabled={!connected}>
-                전송
-            </button>
+            <div style={{ display: 'flex', position: 'fixed', bottom: 0, width: '100%', backgroundColor: '#fff', padding: '10px', boxSizing: 'border-box', borderTop: '1px solid #ccc' }}>
+                <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="메세지를 입력하세요."
+                    disabled={!connected}
+                    style={{ flex: 1, padding: '10px', boxSizing: 'border-box', marginRight: '10px' }}
+                />
+                <button
+                    onClick={sendMessage}
+                    disabled={!connected}
+                    style={{ padding: '10px', boxSizing: 'border-box' }}
+                >
+                    전송
+                </button>
+            </div>
         </div>
     );
 };

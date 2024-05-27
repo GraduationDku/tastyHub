@@ -15,8 +15,6 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
           }
         });
         if(response.ok){
-         console.log(response);
-         alert('successful !');
         }
         const data = await response.json();
         if (Array.isArray(data.content)) {
