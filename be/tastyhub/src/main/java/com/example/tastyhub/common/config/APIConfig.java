@@ -12,5 +12,7 @@ public class APIConfig {
     public final static String CHATTING_API = "/chatroom";
 
     public final static String LIKE_API = "/like";
+    public final static String RECIPEREVIEW_API = "/recipe-review";
+    public final static String USERREVIEW_API = "/user-review";
 
 }
