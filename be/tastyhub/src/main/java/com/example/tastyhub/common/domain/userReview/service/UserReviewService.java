@@ -15,4 +15,6 @@ public interface UserReviewService {
 
     void updateUserReview(Long userReviewId, UserReviewUpdateRequest userReviewUpdateRequest, User user);
 
+    void deleteUserReview(Long userReviewId, User user);
+
 }

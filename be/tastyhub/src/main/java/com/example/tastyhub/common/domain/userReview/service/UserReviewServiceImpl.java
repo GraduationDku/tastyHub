@@ -49,4 +49,8 @@ public class UserReviewServiceImpl implements UserReviewService{
                 userReview.update(userReviewUpdateRequest);
     }
 
+    @Override
+    public void deleteUserReview(Long userReviewId, User user) {
+        userReviewRepository.deleteById(userReviewId);
+    }
 }
