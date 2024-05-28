@@ -16,4 +16,6 @@ public interface RecipeReviewService {
 
     void updateRecipeReview(Long recipeReviewId, RecipeReviewUpdateRequest recipeReviewUpdateRequest, User user);
 
+    void deleteRecipeReview(Long recipeReviewId, User user);
+
 }

@@ -49,4 +49,9 @@ public class RecipeReviewServiceImpl implements RecipeReviewService {
                 recipeReview.update(recipeReviewUpdateRequest);
     }
 
+    @Override
+    public void deleteRecipeReview(Long recipeReviewId, User user) {
+        recipeReviewRepository.deleteById(recipeReviewId);
+    }
+
 }
