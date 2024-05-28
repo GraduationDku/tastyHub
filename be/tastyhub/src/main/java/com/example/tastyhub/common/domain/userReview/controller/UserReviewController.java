@@ -8,9 +8,9 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
 import com.example.tastyhub.common.domain.userReview.dtos.PagingUserReviewResponse;
 import com.example.tastyhub.common.domain.userReview.dtos.UserReviewCreateRequest;
+import com.example.tastyhub.common.domain.userReview.dtos.UserReviewUpdateRequest;
 import com.example.tastyhub.common.domain.userReview.service.UserReviewService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,14 @@ public class UserReviewController {
     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<PagingUserReviewResponse> pagingUserReviewResponseList = userReviewService.getUserReviews(userId);
         return ResponseEntity.ok().body(pagingUserReviewResponseList);
+    }
+
+    @PatchMapping("/modify/{userReviewId}")
+    public ResponseEntity<StatusResponse> updateUserReview(@PathVariable Long userReviewId,
+        @RequestBody UserReviewUpdateRequest userReviewUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
+            userReviewService.updateUserReview(userReviewId,userReviewUpdateRequest, userDetails.getUser());
+            return RESPONSE_OK;
+        
     }
     
 }
