@@ -60,4 +60,8 @@ public class Ingredient extends TimeStamped {
         this.amount = ingredientDto.getAmount();
 
     }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
 }

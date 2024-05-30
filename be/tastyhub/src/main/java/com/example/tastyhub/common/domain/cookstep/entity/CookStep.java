@@ -71,4 +71,8 @@ public class CookStep extends TimeStamped {
     public void updateFromDto(CookStepUpdateDto dto) {
 
     }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
 }

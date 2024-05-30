@@ -79,9 +79,11 @@ public class Recipe extends TimeStamped {
     @Builder.Default
     private List<Scrap> scraps = new ArrayList<>();
 
-    public void update(List<Ingredient> ingredients, List<CookStep> cookSteps) {
+    public void update(List<Ingredient> ingredients, List<CookStep> cookSteps, String foodName, String imgUrl) {
         this.ingredients = ingredients;
         this.cookSteps = cookSteps;
+        this.foodName = foodName;
+        this.foodImgUrl = imgUrl;
     }
 
 
