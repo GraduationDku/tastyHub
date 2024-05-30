@@ -5,6 +5,7 @@ import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_CREATE_DTO;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_UPDATE_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
+import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_IMAGE;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,8 +37,8 @@ class RecipeServiceImplTest {
 
     @Test
     @DisplayName("레시피 생성 성공")
-    void createRecipe() {
-        recipeService.createRecipe(RECIPE_CREATE_DTO,USER);
+    void createRecipe() throws Exception {
+        recipeService.createRecipe(RECIPE_CREATE_DTO, RECIPE_IMAGE, USER);
         verify(recipeRepository, times(1)).save(any());
 
     }

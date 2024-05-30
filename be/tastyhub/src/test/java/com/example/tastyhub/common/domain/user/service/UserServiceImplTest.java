@@ -11,6 +11,7 @@ import static com.example.tastyhub.fixture.user.UserFixture.USER;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DELETE_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DTO_LIST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_UPDATE_REQUEST;
+import static com.example.tastyhub.fixture.user.UserFixture.USER_IMAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -30,6 +31,8 @@ import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -108,8 +111,8 @@ class UserServiceImplTest {
 
     @Test
     @DisplayName("signup 성공")
-    void signup() {
-        userService.signup(SIGNUP_REQUEST);
+    void signup() throws IOException {
+        userService.signup(SIGNUP_REQUEST, USER_IMAGE);
         verify(userRepository, times(1)).save(any());
     }
 
@@ -213,7 +216,7 @@ class UserServiceImplTest {
 
     @Test
     @DisplayName("유저 삭제 성공")
-    void deleteUser() {
+    void deleteUser() throws IOException {
         given(passwordEncoder.matches(any(), any())).willReturn(Boolean.TRUE);
         userService.delete(USER_DELETE_REQUEST, USER);
         verify(userRepository, times(1)).delete(any());
@@ -234,9 +237,9 @@ class UserServiceImplTest {
 
     @Test
     @DisplayName("사용자 정보 업데이트")
-    void updateUserInfo() {
+    void updateUserInfo() throws IOException {
         given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
-        userService.updateUserInfo(USER_UPDATE_REQUEST,USER);
+        userService.updateUserInfo(USER_UPDATE_REQUEST,USER_IMAGE, USER);
         verify(userRepository, times(1)).findByUsername(any());
     }
 
