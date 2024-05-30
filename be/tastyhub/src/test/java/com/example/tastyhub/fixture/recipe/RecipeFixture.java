@@ -49,7 +49,7 @@ public class RecipeFixture {
 
     public static final RecipeCreateDto RECIPE_CREATE_DTO = RecipeCreateDto.builder()
         .foodName("name")
-        .foodImg(null)
+        .foodImg("imgUrl")
         .foodInformation(FOOD_INFORMATION_CREATE_DTO)
         .cookSteps(Collections.singletonList(COOK_STEP_CREATE_DTO))
         .ingredients(Collections.singletonList(INGREDIENT_CREATE_DTO))

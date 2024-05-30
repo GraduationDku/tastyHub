@@ -4,7 +4,6 @@ import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
-import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
@@ -30,7 +29,7 @@ public interface UserService {
 
     void changePassword(ChangePasswordRequest changePasswordRequest, User user);
 
-    List<UserDto> getUserList(SearchUserDto searchUserDto);
+    List<UserDto> getUserList(String searchUserDto);
     
     void delete(UserDeleteRequest deleteRequest, User user) throws IOException;
 

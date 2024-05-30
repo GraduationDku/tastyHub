@@ -1,0 +1,99 @@
+= User API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+---
+
+== 회원 가입하기
+
+=== Request
+
+include::{snippets}/userController/signup/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/signup/http-response.adoc[]
+
+== 로그인하기
+
+=== Request
+
+include::{snippets}/userController/login/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/login/http-response.adoc[]
+
+== 회원 정보 수정하기
+
+=== Request
+
+include::{snippets}/userController/modify/information/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/modify/information/http-response.adoc[]
+
+== 회원 정보 중복 검사하기 - 닉네임
+
+=== Request
+
+include::{snippets}/userController/overlap/nickname/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/overlap/nickname/http-response.adoc[]
+
+== 회원 정보 중복 검사하기 - 유저 아이디
+
+=== Request
+
+include::{snippets}/userController/overlap/username/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/overlap/username/http-response.adoc[]
+
+== 비밀번호 재설정
+
+=== Request
+
+include::{snippets}/userController/reset/password/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/reset/password/http-response.adoc[]
+
+== 회원 검색하기
+
+=== Request
+
+include::{snippets}/userController/search-list/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/search-list/http-response.adoc[]
+
+
+== 회원 아이디 찾기
+
+=== Request
+
+include::{snippets}/userController/findid/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/findid/http-response.adoc[]
+
+== 회원 탈퇴하기
+
+=== Request
+
+include::{snippets}/userController/delete/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/userController/delete/http-response.adoc[]

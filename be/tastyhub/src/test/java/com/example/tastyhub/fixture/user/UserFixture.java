@@ -44,6 +44,7 @@ public class UserFixture {
             .username("username")
             .password("password")
             .build();
+
     public static final User USER =
         User.builder()
             .username("username")
@@ -69,13 +70,15 @@ public class UserFixture {
 
     public static final UserDto USER_DTO =
         UserDto.builder()
+            .userId(1L)
             .nickname("nickname")
             .userImg("uri")
             .build();
 
     public static final SearchUserDto SEARCH_USER_DTO =
         SearchUserDto.builder()
-            .nickname("nickname").build();
+            .nickname("nickname")
+            .build();
 
 
     public static final List<UserDto> USER_DTO_LIST =
