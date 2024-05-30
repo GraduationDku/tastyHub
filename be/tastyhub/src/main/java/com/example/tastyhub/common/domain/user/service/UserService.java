@@ -10,11 +10,15 @@ import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
-    void signup(SignupRequest signupRequest);
+    void signup(SignupRequest signupRequest, MultipartFile img) throws IOException;
 
     void checkDuplicatedNickname(String duplicatedNickName);
 
@@ -28,7 +32,7 @@ public interface UserService {
 
     List<UserDto> getUserList(SearchUserDto searchUserDto);
     
-    void delete(UserDeleteRequest deleteRequest, User user);
+    void delete(UserDeleteRequest deleteRequest, User user) throws IOException;
 
-    void updateUserInfo(UserUpdateRequest userUpdateRequest, User user);
+    void updateUserInfo(UserUpdateRequest userUpdateRequest, MultipartFile img, User user) throws IOException;
 }
