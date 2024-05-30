@@ -34,10 +34,6 @@ public class UserFixture {
     public static final SignupRequest SIGNUP_REQUEST =
         SignupRequest.builder()
             .username("username")
-<<<<<<< HEAD
-=======
-//            .userImg(null)
->>>>>>> 5b5065a2e0ec675385551e8e6b479e3c13bcd404
             .password("password")
             .email("email01@gmail.com")
             .nickname("nickname")
