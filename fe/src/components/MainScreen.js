@@ -56,9 +56,10 @@ function MainScreen() {
           <img src={selectedRecipe.foodImgUrl} alt={selectedRecipe.foodName} style={{ width: '300px' }} />
           {selectedRecipe.foodInformationDto ? (
             <>
+              <p className='info'>요리 시간: {selectedRecipe.foodInformationDto.cookingTime || 'N/A'}분 | {selectedRecipe.foodInformationDto.serving || 'N/A'}인분</p>
+              <p></p>
               <p>{selectedRecipe.foodInformationDto.text || 'No description available'}</p>
-              <p>Cooking Time: {selectedRecipe.foodInformationDto.cookingTime || 'N/A'} minutes</p>
-              <p>Serving: {selectedRecipe.foodInformationDto.serving || 'N/A'}인분</p>
+              
             </>
           ) : (
             <p>No additional food information available.</p>

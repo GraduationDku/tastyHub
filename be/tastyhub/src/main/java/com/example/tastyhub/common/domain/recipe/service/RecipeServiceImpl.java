@@ -88,6 +88,7 @@ public class RecipeServiceImpl implements RecipeService {
             throw e; // 예외를 다시 던져 트랜잭션 롤백 활성화
         }
 
+
     }
 
     @Override

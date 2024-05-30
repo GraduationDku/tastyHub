@@ -10,7 +10,7 @@ public class CookStepUpdateDto {
 
     private Long cookStepId;
     private Long stepNumber;
-    private MultipartFile stepImg;
+    private String stepImg;
     private String text;
 
 }

@@ -24,7 +24,12 @@ function Login({ setScreen }) {
         const refreshToken = response.headers.get('Refresh');
         localStorage.setItem('accessToken', authorization);
         localStorage.setItem('refreshToken', refreshToken);
+        
+        console.log(response);
+        console.log(refreshToken);
+        console.log(authorization);
         console.log('로그인 성공');
+        setScreen('main');
       } else {
         console.error('로그인 실패');
         alert("아이디 및 비밀번호가 일치하지 않습니다.");
