@@ -26,23 +26,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
-    private static final List<String> EXCLUDE_URLS = Arrays.asList("/email",
-            "/email/verified",
-            "/user/overlap/nickname",
-            "/user/overlap/username",
-            "/user/login",
-            "/user/signup",
-            "/recipe/list",
-            "/recipe/popular",
-            "/recipe/search",
-            "/recipe/detail"
-            );
+    private static final List<String> EXCLUDE_URLS = Arrays.asList(
+        "/email",
+        "/email/verified",
+        "/user/overlap/nickname",
+        "/user/overlap/username",
+        "/user/login",
+        "/user/signup",
+        "/recipe/list",
+        "/recipe/popular",
+        "/recipe/search",
+        "/recipe/detail",
+        "/chat/**",
+        "/chat"
+    );
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain)
+        throws ServletException, IOException {
 
         String token = jwtUtil.resolveAccessToken(request);
         if (!shouldExclude(request)) {
@@ -73,7 +78,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     public Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, null,
+            userDetails.getAuthorities());
     }
 
     public void setAuthentication(String username) {
@@ -86,7 +92,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     public Authentication createAdminAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, null,
+            userDetails.getAuthorities());
     }
 
     public void setAdminAuthentication(String username) {
@@ -102,7 +109,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         try {
             String json = new ObjectMapper().writeValueAsString(
-                    new StatusResponse(statusCode, msg));
+                new StatusResponse(statusCode, msg));
             response.getWriter().write(json);
         } catch (Exception e) {
             log.error(e.getMessage());

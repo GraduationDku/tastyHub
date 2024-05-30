@@ -51,7 +51,7 @@ public class CookStep extends TimeStamped {
         return CookStep.builder()
             .stepNumber(cookStepCreateDto.getStepNumber())
             .text(cookStepCreateDto.getText())
-            .stepImgUrl("refactor")
+            .stepImgUrl("after S3")
             .build();
     }
 

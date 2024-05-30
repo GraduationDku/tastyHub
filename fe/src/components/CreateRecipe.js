@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../css/CreateRecipe.css';
 
 function CreateRecipe() {
   const [formData, setFormData] = useState({
@@ -52,11 +53,11 @@ function CreateRecipe() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          foodName: formData.foodName,
-          foodImgUrl: formData.foodImgUrl, // 이 부분은 서버에서 처리 방식에 따라 수정될 수 있음
-          foodInformation: formData.foodInformation,
-          ingredients: formData.ingredients,
-          cookSteps: formData.cookSteps
+          "foodName": formData.foodName,
+          "foodImgUrl": formData.foodImgUrl, // 이 부분은 서버에서 처리 방식에 따라 수정될 수 있음
+          "foodInformation": formData.foodInformation,
+          "ingredients": formData.ingredients,
+          "cookSteps": formData.cookSteps
         })
       });
       if (response.ok) {
@@ -75,14 +76,17 @@ function CreateRecipe() {
   };
 
   return (
+    <div className='createrecipe'>
     <form onSubmit={handleSubmit}>
-      <label>
-        Recipe Name:
+      <br/>
+      <br/>
+      <div className='label1'>
+        레시피 이름 :
         <input type="text" name="foodName" value={formData.foodName} onChange={handleChange} />
         <br /><br />
-      </label>
-      <label>
-        Image File(s):
+      </div>
+      <div className='label2'>
+        사진 파일 :
         <input type="file" accept="image/*" multiple onChange={handleImageChange} />
         <div>
           {imagePreviews.map((preview, index) => (
@@ -90,24 +94,25 @@ function CreateRecipe() {
           ))}
         </div>
         <br /><br />
-      </label>
-      <label>
-        Description:
-        <textarea name="foodInformation" value={formData.foodInformation} onChange={handleChange} />
+      </div>
+      <div className='label3'>
+        설명 :
+        <input name="foodInformation" value={formData.foodInformation} onChange={handleChange} />
         <br /><br />
-      </label>
-      <label>
-        Ingredients:
+      </div>
+      <div className='label4'>
+        재료 :
         <input type="text" name="ingredients" value={formData.ingredients} onChange={handleChange} />
         <br /><br />
-      </label>
-      <label>
-        Cooking Steps:
-        <textarea name="cookSteps" value={formData.cookSteps} onChange={handleChange} />
+      </div>
+      <div className='label5'>
+        순서 :
+        <input name="cookSteps" value={formData.cookSteps} onChange={handleChange} />
         <br /><br />
-      </label>
+      </div>
       <button type="submit">Create Recipe</button>
     </form>
+    </div>
   );
 }
 

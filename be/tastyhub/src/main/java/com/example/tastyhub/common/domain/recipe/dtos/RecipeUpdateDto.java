@@ -13,6 +13,7 @@ public class RecipeUpdateDto {
 
     private String foodName;
 
+
     private FoodInformationDto foodInformation;
 
     private List<IngredientDto> ingredients;

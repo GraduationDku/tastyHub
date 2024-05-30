@@ -20,7 +20,7 @@ public class RecipeCreateDto {
 
     private String foodName;
 
-    private MultipartFile foodImg;
+    private String foodImg;
 
     private FoodInformationCreateDto foodInformation;
 
