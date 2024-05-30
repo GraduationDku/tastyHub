@@ -6,5 +6,6 @@
 :toclevels: 0
 
 include::user.adoc[]
+include::recipe.adoc[]
 include::post.adoc[]
 include::comment.adoc[]

@@ -94,10 +94,12 @@ asciidoctor {
     doFirst {
         delete file('src/main/resources/static/docs')
         mkdir "./build/generated-snippets"
+        mkdir ".src/main/resources/static/docs"
     }
     configurations 'asciidoctorExtensions'
     dependsOn test
 }
+
 
 
 bootJar {
@@ -108,14 +110,14 @@ bootJar {
     }
 }
 
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
-}
+//asciidoctor.doFirst {
+//    delete file('src/main/resources/static/docs')
+//}
 
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
-    from file("build/docs/asciidoc/**")
-    into file("src/main/resources/static/docs")
+    from file("./build/docs/asciidoc/**")
+    into file("./src/main/resources/static/docs")
 }
 
 build {
