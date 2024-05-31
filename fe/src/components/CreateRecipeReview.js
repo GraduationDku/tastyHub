@@ -12,7 +12,7 @@ function CreateRecipeReview({ recipeId }) {
     setError(null);
 
     try {
-      const response = await fetch(`/recipe-review/create/${recipeId}`, {
+      const response = await fetch(`http://localhost:8080/recipe-review/create/${recipeId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

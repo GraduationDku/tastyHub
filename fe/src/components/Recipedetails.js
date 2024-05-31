@@ -70,7 +70,6 @@ function RecipeDetails({ recipeId }) {
           </ol>
         </div>
 
-        {/* 리뷰 작성 컴포넌트를 여기에 추가 */}
         <div>
           <h3>Write a Review:</h3>
           <CreateRecipeReview recipeId={recipeId} />
