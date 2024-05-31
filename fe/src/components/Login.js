@@ -9,7 +9,7 @@ function Login({ setScreen }) {
     e.preventDefault();
     try {
       const response = await fetch('http://localhost:8080/user/login', {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -22,9 +22,13 @@ function Login({ setScreen }) {
       if (response.ok) {
         const authorization = response.headers.get('Authorization');
         const refreshToken = response.headers.get('Refresh');
+        const responseBody = await response.json();
+        const nickname = responseBody.nickname;
+
         localStorage.setItem('accessToken', authorization);
         localStorage.setItem('refreshToken', refreshToken);
-        
+        localStorage.setItem('nickname', nickname);
+
         console.log(response);
         console.log(refreshToken);
         console.log(authorization);

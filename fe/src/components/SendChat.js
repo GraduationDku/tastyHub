@@ -3,13 +3,14 @@ import { Client } from '@stomp/stompjs';
 
 const SOCKET_URL = `ws://localhost:8080/chat`;
 
-const SendChat = ({ roomId, username }) => {
+const SendChat = ({ roomId }) => {
     const [client, setClient] = useState(null);
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
 
     useEffect(() => {
+        const nickname = localStorage.getItem('nickname');
 
         const stompClient = new Client({
             brokerURL: SOCKET_URL,
@@ -42,9 +43,10 @@ const SendChat = ({ roomId, username }) => {
     }, [roomId]);
 
     const sendMessage = () => {
-        if (client && connected) {
+        const nickname = localStorage.getItem('nickname');
+        if (client && connected && nickname) {
             const message = {
-                from: username,
+                from: nickname,
                 text: input,
             };
             client.publish({
@@ -69,13 +71,13 @@ const SendChat = ({ roomId, username }) => {
                         key={index}
                         style={{
                             display: 'flex',
-                            justifyContent: msg.from === username ? 'flex-end' : 'flex-start',
+                            justifyContent: msg.from === localStorage.getItem('nickname') ? 'flex-end' : 'flex-start',
                             padding: '5px 0'
                         }}
                     >
                         <div
                             style={{
-                                background: msg.from === username ? '#DCF8C6' : '#FFF',
+                                background: msg.from === localStorage.getItem('nickname') ? '#DCF8C6' : '#FFF',
                                 padding: '10px',
                                 borderRadius: '10px',
                                 maxWidth: '60%',
@@ -83,7 +85,7 @@ const SendChat = ({ roomId, username }) => {
                                 boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                             }}
                         >
-                            {msg.from !== username && <strong>{msg.from} </strong>}
+                            {msg.from !== localStorage.getItem('nickname') && <strong>{msg.from} </strong>}
                             {msg.text}
                         </div>
                     </li>
