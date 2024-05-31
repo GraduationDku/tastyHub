@@ -63,12 +63,12 @@ public class UserController {
         return RESPONSE_OK;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<StatusResponse> login(@RequestBody LoginRequest loginRequest,
+    @GetMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest,
             HttpServletResponse response) {
 
-        userService.login(loginRequest, response);
-        return RESPONSE_OK;
+        String nickname = userService.login(loginRequest, response);
+        return ResponseEntity.ok(nickname);
     }
 
     /**
