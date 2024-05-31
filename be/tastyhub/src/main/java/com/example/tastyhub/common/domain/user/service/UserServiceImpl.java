@@ -5,6 +5,7 @@ import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
 
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
@@ -106,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String login(LoginRequest loginRequest, HttpServletResponse response) {
+    public NicknameResponseDto login(LoginRequest loginRequest, HttpServletResponse response) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword() + username.substring(0, 2);
         User byUsername = findByUsername(username);
@@ -122,7 +123,9 @@ public class UserServiceImpl implements UserService {
         redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
         response.addHeader(AUTHORIZATION_HEADER, accessToken);
         response.addHeader(REFRESH_HEADER, refreshToken);
-        return byUsername.getNickname();
+        NicknameResponseDto nicknameResponseDto = NicknameResponseDto.builder().nickname(byUsername.getNickname())
+            .build();
+        return nicknameResponseDto;
     }
 
     @Override

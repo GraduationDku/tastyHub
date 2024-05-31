@@ -8,6 +8,7 @@ import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
 import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
@@ -64,10 +65,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest,
+    public ResponseEntity<NicknameResponseDto> login(@RequestBody LoginRequest loginRequest,
             HttpServletResponse response) {
 
-        String nickname = userService.login(loginRequest, response);
+        NicknameResponseDto nickname = userService.login(loginRequest, response);
         return ResponseEntity.ok().body(nickname);
     }
 
