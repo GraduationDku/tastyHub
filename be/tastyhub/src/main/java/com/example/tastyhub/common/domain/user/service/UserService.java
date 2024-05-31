@@ -21,7 +21,7 @@ public interface UserService {
 
     void checkDuplicatedNickname(String duplicatedNickName);
 
-    void login(LoginRequest loginRequest, HttpServletResponse response);
+    String login(LoginRequest loginRequest, HttpServletResponse response);
 
     void checkDuplicatedUsername(String duplicatedName);
 

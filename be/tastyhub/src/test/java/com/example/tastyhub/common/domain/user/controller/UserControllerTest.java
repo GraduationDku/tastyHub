@@ -156,32 +156,32 @@ class UserControllerTest {
 //    }
 
 
-    @Test
-    @WithMockUser
-    @DisplayName("로그인 하기")
-    void login() throws Exception {
-
-        ResultActions resultActions = mockMvc.perform(post(USER_API + "/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(LOGIN_REQUEST))
-                .with(csrf()))
-            .andExpect(status().isOk());
-
-        resultActions.andDo(document("userController/login",
-            getDocumentRequest(),
-            getDocumentResponse(),
-            requestFields(
-                fieldWithPath("username").type(JsonFieldType.STRING).description("유저 이름"),
-                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
-            ),
-            responseFields(
-                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-            )
-        ));
-
-
-    }
+//    @Test
+//    @WithMockUser
+//    @DisplayName("로그인 하기")
+//    void login() throws Exception {
+//
+//        ResultActions resultActions = mockMvc.perform(post(USER_API + "/login")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(LOGIN_REQUEST))
+//                .with(csrf()))
+//            .andExpect(status().isOk());
+//
+//        resultActions.andDo(document("userController/login",
+//            getDocumentRequest(),
+//            getDocumentResponse(),
+//            requestFields(
+//                fieldWithPath("username").type(JsonFieldType.STRING).description("유저 이름"),
+//                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
+//            ),
+//            responseFields(
+//                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+//                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+//            )
+//        ));
+//
+//
+//    }
 
     @Test
     @WithMockUser

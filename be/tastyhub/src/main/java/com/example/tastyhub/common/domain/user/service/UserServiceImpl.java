@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void login(LoginRequest loginRequest, HttpServletResponse response) {
+    public String login(LoginRequest loginRequest, HttpServletResponse response) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword() + username.substring(0, 2);
         User byUsername = findByUsername(username);
@@ -122,6 +122,7 @@ public class UserServiceImpl implements UserService {
         redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
         response.addHeader(AUTHORIZATION_HEADER, accessToken);
         response.addHeader(REFRESH_HEADER, refreshToken);
+        return byUsername.getNickname();
     }
 
     @Override
