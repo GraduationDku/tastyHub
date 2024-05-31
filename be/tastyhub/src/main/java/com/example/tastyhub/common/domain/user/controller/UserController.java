@@ -68,7 +68,7 @@ public class UserController {
             HttpServletResponse response) {
 
         String nickname = userService.login(loginRequest, response);
-        return ResponseEntity.ok(nickname);
+        return ResponseEntity.ok().body(nickname);
     }
 
     /**
