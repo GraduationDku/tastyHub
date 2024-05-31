@@ -63,7 +63,7 @@ public class UserController {
         return RESPONSE_OK;
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest,
             HttpServletResponse response) {
 
