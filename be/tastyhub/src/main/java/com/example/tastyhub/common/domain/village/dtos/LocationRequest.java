@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class LocationRequest {
     private long lat;
     private long lng;
-    private String addressTownName;
+//    private String addressTownName;
     
 }

@@ -43,7 +43,7 @@ public class Village extends TimeStamped {
     private User user;
 
     public void update(LocationRequest locationRequest) {
-        this.addressTownName = locationRequest.getAddressTownName();
+//        this.addressTownName = locationRequest.getAddressTownName();
         this.lat = locationRequest.getLat();
         this.lng = locationRequest.getLng();
     }
