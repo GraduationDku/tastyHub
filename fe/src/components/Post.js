@@ -15,6 +15,7 @@ function Post({setScreen, onPostSelect}){
         });
         if(response.ok){
           const data = await response.json();
+          console.log(response);
         if(Array.isArray(data)){
           setPosts(data);
         }else{

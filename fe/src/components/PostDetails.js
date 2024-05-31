@@ -49,7 +49,6 @@ function PostDetails({ postId }) {
             <p>{postDetails.nickname}</p>
             <p>{postDetails.latestUpdateTime}</p>
             
-            <h2>Comments</h2>
             <Comment postId={postId} refreshComments={fetchPostDetails} />
             
             {postDetails.commentDtos.length > 0 ? (
@@ -65,7 +64,7 @@ function PostDetails({ postId }) {
                     ))}
                 </ul>
             ) : (
-                <p>No comments available</p>
+                <p>No comments</p>
             )}
         </div>
     );
