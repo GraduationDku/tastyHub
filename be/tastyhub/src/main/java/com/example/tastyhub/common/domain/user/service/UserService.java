@@ -1,6 +1,7 @@
 package com.example.tastyhub.common.domain.user.service;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
@@ -21,7 +22,7 @@ public interface UserService {
 
     void checkDuplicatedNickname(String duplicatedNickName);
 
-    String login(LoginRequest loginRequest, HttpServletResponse response);
+    NicknameResponseDto login(LoginRequest loginRequest, HttpServletResponse response);
 
     void checkDuplicatedUsername(String duplicatedName);
 
