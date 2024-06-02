@@ -5,8 +5,6 @@ import static com.example.tastyhub.fixture.user.UserFixture.USER;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
-import com.example.tastyhub.common.domain.post.entity.Post.PostState;
 import com.example.tastyhub.common.domain.userReview.dtos.PagingUserReviewResponse;
 import com.example.tastyhub.common.domain.userReview.dtos.UserReviewCreateRequest;
 import com.example.tastyhub.common.domain.userReview.dtos.UserReviewUpdateRequest;
@@ -15,6 +13,7 @@ import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 public class UserReviewFixture {
     public static final UserReview USER_REVIEW =
         UserReview.builder()
+            .id(1L)
             .reader(USER)
             .writer(USER)
             .grade(0)
