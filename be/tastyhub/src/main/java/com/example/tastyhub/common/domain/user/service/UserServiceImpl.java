@@ -11,6 +11,7 @@ import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
+import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
@@ -123,16 +124,14 @@ public class UserServiceImpl implements UserService {
         redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
         response.addHeader(AUTHORIZATION_HEADER, accessToken);
         response.addHeader(REFRESH_HEADER, refreshToken);
-        NicknameResponseDto nicknameResponseDto = NicknameResponseDto.builder().nickname(byUsername.getNickname())
-            .build();
-        return nicknameResponseDto;
+        return new NicknameResponseDto(byUsername.getNickname());
     }
 
     @Override
-    public String findId(FindIdRequest findIdRequest) {
+    public UserNameResponse findId(FindIdRequest findIdRequest) {
         User user = findByEmail(findIdRequest);
         String subId = user.getUsername().substring(0, user.getUsername().length() - 4);
-        return subId+"****";
+        return new UserNameResponse(subId+"****");
     }
 
 

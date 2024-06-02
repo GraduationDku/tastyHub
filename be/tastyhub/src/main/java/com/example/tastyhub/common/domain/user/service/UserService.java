@@ -7,6 +7,7 @@ import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
+import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +27,7 @@ public interface UserService {
 
     void checkDuplicatedUsername(String duplicatedName);
 
-    String findId(FindIdRequest findIdRequest);
+    UserNameResponse findId(FindIdRequest findIdRequest);
 
     void changePassword(ChangePasswordRequest changePasswordRequest, User user);
 

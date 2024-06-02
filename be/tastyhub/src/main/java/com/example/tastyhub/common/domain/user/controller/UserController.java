@@ -13,6 +13,7 @@ import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
+import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.service.UserService;
 import com.example.tastyhub.common.dto.StatusResponse;
@@ -76,9 +77,9 @@ public class UserController {
      * 아이디 찾기 - skyriv213
      */
     @PostMapping("/findid")
-    public ResponseEntity<String> findId(@RequestBody FindIdRequest findIdRequest) {
-        String username = userService.findId(findIdRequest);
-        return ResponseEntity.ok(username);
+    public ResponseEntity<UserNameResponse> findId(@RequestBody FindIdRequest findIdRequest) {
+        UserNameResponse username = userService.findId(findIdRequest);
+        return ResponseEntity.ok().body(username);
     }
 
     /**
