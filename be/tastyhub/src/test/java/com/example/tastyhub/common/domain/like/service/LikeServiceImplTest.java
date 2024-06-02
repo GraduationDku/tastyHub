@@ -1,0 +1,52 @@
+package com.example.tastyhub.common.domain.like.service;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static com.example.tastyhub.fixture.user.UserFixture.USER;
+import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.example.tastyhub.common.domain.like.repository.LikeRepository;
+
+@ExtendWith(MockitoExtension.class)
+public class LikeServiceImplTest {
+    @Mock
+    LikeRepository likeRepository;
+
+    @Mock
+    LikeServiceImpl likeService;
+
+    @Test
+    @DisplayName("좋아요가 존재할 때 삭제")
+    void likeAlreadyExists() {
+        when(likeRepository.existsByRecipeIdAndUserId(USER.getId(), RECIPE.getId())).thenReturn(true);
+
+        // when
+        likeService.like(RECIPE.getId(),USER);
+
+        // then
+        verify(likeRepository, times(1)).deleteByRecipeIdAndUserId(any(), any());
+        verify(likeRepository, times(0)).save(any());
+    }
+
+    @Test
+    @DisplayName("좋아요가 존재하지 않을 때 생성")
+    void likeDoesNotExist() {
+       
+        when(likeRepository.existsByRecipeIdAndUserId(USER.getId(), RECIPE.getId())).thenReturn(false);
+
+        // when
+        likeService.like(RECIPE.getId(),USER);
+
+        // then
+        verify(likeRepository, times(0)).deleteByRecipeIdAndUserId(any(), any());
+        verify(likeRepository, times(1)).save(any());
+    }
+}
