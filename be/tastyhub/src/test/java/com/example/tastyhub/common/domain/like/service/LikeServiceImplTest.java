@@ -10,6 +10,7 @@ import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,7 +21,7 @@ public class LikeServiceImplTest {
     @Mock
     LikeRepository likeRepository;
 
-    @Mock
+    @InjectMocks
     LikeServiceImpl likeService;
 
     @Test
