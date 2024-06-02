@@ -34,16 +34,17 @@ public class Village extends TimeStamped {
 
     private String addressTownName;
 
-    private long lat; //위도
+    private double lat; //위도
 
-    private long lng; //경도
+    private double lng; //경도
+
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id") // 외래 키 설정
     private User user;
 
-    public void update(LocationRequest locationRequest) {
-//        this.addressTownName = locationRequest.getAddressTownName();
+    public void update(LocationRequest locationRequest, String addressTownName) {
+        this.addressTownName = addressTownName;
         this.lat = locationRequest.getLat();
         this.lng = locationRequest.getLng();
     }

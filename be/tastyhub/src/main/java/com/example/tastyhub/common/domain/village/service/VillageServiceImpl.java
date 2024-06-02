@@ -22,8 +22,8 @@ public class VillageServiceImpl implements VillageService {
   @Override
   @Transactional
   public void setLocation(LocationRequest locationRequest, User user) {
-    long lat = locationRequest.getLat();
-    long lng = locationRequest.getLng();
+    double lat = locationRequest.getLat();
+    double lng = locationRequest.getLng();
 
     String addressFromCoordinates;
     addressFromCoordinates = naverService.getAddressFromCoordinates(lat, lng);
@@ -43,7 +43,15 @@ public class VillageServiceImpl implements VillageService {
 
     Village village = findByUserId(user);
 
-    village.update(locationRequest);
+    double lat = locationRequest.getLat();
+    double lng = locationRequest.getLng();
+
+    String addressFromCoordinates;
+    addressFromCoordinates = naverService.getAddressFromCoordinates(lat, lng);
+
+
+
+    village.update(locationRequest,addressFromCoordinates);
 
     villageRepository.save(village);
   }

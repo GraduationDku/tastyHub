@@ -44,7 +44,7 @@ public class NaverService {
     String address = "";
     try {
       JsonNode root = objectMapper.readTree(response.getBody());
-      address = root.path("results").get(0).path("region").path("area1").path("name").asText();
+      address = root.path("results").get(0).path("region").path("area3").path("name").asText();
     } catch (Exception e) {
       e.printStackTrace();
     }
