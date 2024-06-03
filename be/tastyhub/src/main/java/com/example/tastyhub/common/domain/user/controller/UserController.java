@@ -8,16 +8,20 @@ import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
 import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
 import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
+import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.service.UserService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +33,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(USER_API)
@@ -54,25 +60,25 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<StatusResponse> signup(@RequestBody SignupRequest signupRequest) {
-        userService.signup(signupRequest);
+    public ResponseEntity<StatusResponse> signup(@RequestPart("img") MultipartFile img, @RequestPart("data") SignupRequest signupRequest) throws IOException {
+        userService.signup(signupRequest, img);
         return RESPONSE_OK;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<StatusResponse> login(@RequestBody LoginRequest loginRequest,
+    public ResponseEntity<NicknameResponseDto> login(@RequestBody LoginRequest loginRequest,
             HttpServletResponse response) {
 
-        userService.login(loginRequest, response);
-        return RESPONSE_OK;
+        NicknameResponseDto nickname = userService.login(loginRequest, response);
+        return ResponseEntity.ok().body(nickname);
     }
 
     /**
      * 아이디 찾기 - skyriv213
      */
     @PostMapping("/findid")
-    public ResponseEntity<String> findId(@RequestBody FindIdRequest findIdRequest) {
-        String username = userService.findId(findIdRequest);
+    public ResponseEntity<UserNameResponse> findId(@RequestBody FindIdRequest findIdRequest) {
+        UserNameResponse username = userService.findId(findIdRequest);
         return ResponseEntity.ok().body(username);
     }
 
@@ -90,24 +96,24 @@ public class UserController {
      * 사용자 검색하기 - skyriv213
      */
 
-    @GetMapping("search-list")
-    public ResponseEntity<List<UserDto>> getUserList(@RequestBody SearchUserDto searchUserDto) {
-        List<UserDto> userDtoList = userService.getUserList(searchUserDto);
+    @GetMapping("/search-list")
+    public ResponseEntity<List<UserDto>> getUserList(@RequestParam String nickname) {
+        List<UserDto> userDtoList = userService.getUserList(nickname);
         return ResponseEntity.ok().body(userDtoList);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<StatusResponse> delete(@RequestBody UserDeleteRequest deleteRequest,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         userService.delete(deleteRequest, userDetails.getUser());
         return RESPONSE_OK;
 
     }
 
     @PatchMapping("/modify/information")
-    public ResponseEntity<StatusResponse> updateUserInfo(@RequestBody UserUpdateRequest userUpdateRequest,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-            userService.updateUserInfo(userUpdateRequest, userDetails.getUser());
+    public ResponseEntity<StatusResponse> updateUserInfo(@RequestPart("img") MultipartFile img, @RequestPart("data") UserUpdateRequest userUpdateRequest,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException{
+            userService.updateUserInfo(userUpdateRequest, img, userDetails.getUser());
             return RESPONSE_OK;
         }
 

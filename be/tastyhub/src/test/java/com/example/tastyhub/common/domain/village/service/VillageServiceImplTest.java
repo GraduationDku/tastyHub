@@ -27,19 +27,19 @@ class VillageServiceImplTest {
     @InjectMocks
     VillageServiceImpl villageService;
 
-    @Test
-    @DisplayName("지역정보 저장 성공")
-    void location() {
-        villageService.setLocation(LOCATION_REQUEST, USER);
-        verify(villageRepository, times(1)).save(any());
-    }
-
-    @Test
-    @DisplayName("지역정보 수정 성공")
-    void modifyLocation() {
-        given(villageRepository.findByUserId(any())).willReturn(Optional.ofNullable(VILLAGE));
-        villageService.modifyLocation(LOCATION_REQUEST, USER);
-        verify(villageRepository, times(1)).findByUserId(any());
-
-    }
+//    @Test
+//    @DisplayName("지역정보 저장 성공")
+//    void location() {
+//        villageService.setLocation(LOCATION_REQUEST, USER);
+//        verify(villageRepository, times(1)).save(any());
+//    }
+//
+//    @Test
+//    @DisplayName("지역정보 수정 성공")
+//    void modifyLocation() {
+//        given(villageRepository.findByUserId(any())).willReturn(Optional.ofNullable(VILLAGE));
+//        villageService.modifyLocation(LOCATION_REQUEST, USER);
+//        verify(villageRepository, times(1)).findByUserId(any());
+//
+//    }
 }

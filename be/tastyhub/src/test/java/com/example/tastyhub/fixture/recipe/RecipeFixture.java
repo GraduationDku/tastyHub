@@ -24,6 +24,8 @@ import java.util.Collections;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 public class RecipeFixture {
 
@@ -47,7 +49,7 @@ public class RecipeFixture {
 
     public static final RecipeCreateDto RECIPE_CREATE_DTO = RecipeCreateDto.builder()
         .foodName("name")
-        .foodImg(null)
+        .foodImg("imgUrl")
         .foodInformation(FOOD_INFORMATION_CREATE_DTO)
         .cookSteps(Collections.singletonList(COOK_STEP_CREATE_DTO))
         .ingredients(Collections.singletonList(INGREDIENT_CREATE_DTO))
@@ -57,7 +59,6 @@ public class RecipeFixture {
         .builder()
         .foodName("foodname")
         .foodInformation(FOOD_INFORMATION_DTO)
-        .foodImg(RECIPE_CREATE_DTO.getFoodImg())
         .cookSteps(COOK_STEP_UPDATE_DTO_LIST)
         .ingredients(INGREDIENT_DTO_LIST)
         .build();
@@ -73,4 +74,10 @@ public class RecipeFixture {
     public static final Page<PagingRecipeResponse> PAGING_RECIPE_RESPONSE_PAGE = new PageImpl<>(
         Collections.singletonList(PAGING_RECIPE_RESPONSE));
 
+    public static final MultipartFile RECIPE_IMAGE = new MockMultipartFile(
+            "file",
+            "recipe.jpg",
+            "image/jpeg",
+            "Test image content".getBytes()
+        );
 }

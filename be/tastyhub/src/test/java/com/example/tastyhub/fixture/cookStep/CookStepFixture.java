@@ -20,7 +20,7 @@ public class CookStepFixture {
     public static final CookStepCreateDto COOK_STEP_CREATE_DTO = CookStepCreateDto.builder()
         .stepNumber(1L)
         .text("text")
-        .stepImg(null)
+        .stepImg("ImgUrl")
         .build();
 
     public static final CookStepResponseDto COOK_STEP_RESPONSE_DTO = CookStepResponseDto.builder()
@@ -34,7 +34,7 @@ public class CookStepFixture {
         .cookStepId(1L)
         .stepNumber(1L)
         .text("text")
-        .stepImg(null)
+        .stepImg("ImgUrl")
         .build();
 
     public static final List<CookStepUpdateDto> COOK_STEP_UPDATE_DTO_LIST = Collections.singletonList(

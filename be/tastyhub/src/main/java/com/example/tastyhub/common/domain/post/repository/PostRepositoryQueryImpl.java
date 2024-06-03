@@ -28,7 +28,7 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
                     post.user.userImg
                 ))
                 .from(post)
-                .where(post.user.village.eq(village))
+                .where(post.user.village.addressTownName.eq(village.getAddressTownName()))
                 .leftJoin(post.user).fetchJoin()
                 .leftJoin(post.user.village).fetchJoin()
                 .fetch();
@@ -46,7 +46,7 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
                     post.user.userImg
                 ))
                 .from(post)
-                .where(post.user.village.eq(village))
+                .where(post.user.village.addressTownName.eq(village.getAddressTownName()))
                 .leftJoin(post.user).fetchJoin()
                 .leftJoin(post.user.village).fetchJoin()
                 .limit(10)

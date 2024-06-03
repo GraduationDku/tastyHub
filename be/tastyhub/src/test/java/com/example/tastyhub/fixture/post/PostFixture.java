@@ -1,6 +1,7 @@
 package com.example.tastyhub.fixture.post;
 
 
+import static com.example.tastyhub.fixture.comment.CommentFixture.COMMENT_DTOS;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
 
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
@@ -34,7 +35,9 @@ public class PostFixture {
         .title("title")
         .latestUpdateTime("time")
         .nickname("nickname")
+        .text("text")
         .userImg("img")
+        .commentDtos(COMMENT_DTOS)
         .build();
 
     public static final PostUpdateRequest POST_UPDATE_REQUEST = PostUpdateRequest.builder()
