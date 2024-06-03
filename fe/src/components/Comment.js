@@ -11,14 +11,11 @@ const Comment = ({ postId, refreshComments }) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization' : localStorage.getItem('accessToken')
                 },
                 body: JSON.stringify({ text })
             });
             if (response.ok) {
-                const authorization = response.headers.get('Authorization');
-                const refreshToken = response.headers.get('Refresh');
-                localStorage.setItem('accessToken', authorization);
-                localStorage.setItem('refreshToken', refreshToken);
                 setText('');
                 refreshComments();
             } else {

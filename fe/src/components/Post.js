@@ -9,21 +9,19 @@ function Post({setScreen, onPostSelect}){
         const response = await fetch('http://localhost:8080/post/list',{
           method: 'GET',
           headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            'Authorization' : localStorage.getItem('accessToken')
           }
         });
         if(response.ok){
-          const authorization = response.headers.get('Authorization');
-          const refreshToken = response.headers.get('Refresh');
-          localStorage.setItem('accessToken', authorization);
-          localStorage.setItem('refreshToken', refreshToken);
-        }
-        const data = await response.json();
+          const data = await response.json();
+          console.log(response);
         if(Array.isArray(data)){
           setPosts(data);
         }else{
           console.error('Invaild data format:',data);
         }
+        }   
       }catch (error){
         console.error('Error fetching posts:', error);
       }
