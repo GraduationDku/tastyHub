@@ -9,23 +9,37 @@ import MainScreen from './components/MainScreen';
 import Recipe from './components/Recipe';
 import CreateRecipe from './components/CreateRecipe';
 import FindUsername from './components/FindUsername';
-
-
+import MainChat from './components/MainChat';
+import Post from './components/Post';
+import CreatePost from './components/CreatePost';
+import SendChat from './components/SendChat';
+import './App.css';
 
 function App() {
-  const [screen, setScreen] = useState('home'); // 초기 화면 설정
-  const [selectedRecipeId, setSelectedRecipeId] = useState(null); // 선택된 레시피 ID 관리
+  const [screen, setScreen] = useState('home');
+  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [username, setUsername] = useState('');
 
-  // 레시피 선택 핸들러
   const handleRecipeSelect = (id) => {
-    setSelectedRecipeId(id); // 선택된 레시피 ID 설정
-    setScreen('recipeDetails'); // 화면을 레시피 상세 정보로 변경
-  }
+    setSelectedRecipeId(id);
+    setScreen('recipeDetails');
+  };
+
+  const handleSearchComplete = (results) => {
+    setSearchResults(results);
+    setScreen('searchResults');
+  };
+
+  const handleChatroomSelect = (roomId) => {
+    setSelectedRoomId(roomId);
+    setScreen('sendchat');
+  };
 
   return (
     <div>
-      {screen !== 'home' && <Navbar setScreen={setScreen} />}
-      {/* {screen !== 'home' && screen !== 'login' && screen !== 'signup' && <Navbar setScreen={setScreen} />} */}
+      {screen !== 'home' && <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />}
       {screen === 'home' && <HomeScreen setScreen={setScreen} />}
       {screen === 'login' && <Login setScreen={setScreen} />}
       {screen === 'signup' && <Signup setScreen={setScreen} />}
@@ -34,7 +48,36 @@ function App() {
       {screen === 'recipeDetails' && <Recipedetails recipeId={selectedRecipeId} setScreen={setScreen} />}
       {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
       {screen === 'create' && <CreateRecipe setScreen={setScreen} />}
-      {screen === 'findUsername' && <FindUsername setScreen={setScreen}/>}
+      {screen === 'findUsername' && <FindUsername setScreen={setScreen} />}
+      {screen === 'mainchat' && <MainChat setScreen={setScreen} onChatroomSelect={handleChatroomSelect} />}
+      {screen === 'post' && <Post setScreen={setScreen} />}
+      {screen === 'createpost' && <CreatePost setScreen={setScreen}/>}
+      {screen === 'sendchat' && selectedRoomId && <SendChat roomId={selectedRoomId} username={username}/>}
+      {screen === 'searchResults' && (
+        <div className="search-results">
+          <h1>검색 결과</h1>
+          <div className='box'>
+            {searchResults.length > 0 ? (
+              <ul>
+                {searchResults.map((recipe) => (
+                  <li key={recipe.foodId} onClick={() => handleRecipeSelect(recipe.foodId)}>
+                    <h2>{recipe.foodName}</h2>
+                    <img src={recipe.foodImgUrl} alt={recipe.foodName} />
+                    <div>
+                      <p>{recipe.foodInformationDto.text}</p>
+                      <p>조리 시간 : {recipe.foodInformationDto.cookingTime} 분</p>
+                      <p>{recipe.foodInformationDto.serving}인분</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No recipes found</p>
+            )}
+            <button onClick={() => setScreen('main')}>Go Back</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

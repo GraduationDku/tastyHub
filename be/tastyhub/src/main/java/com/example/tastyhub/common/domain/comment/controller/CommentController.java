@@ -6,6 +6,7 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,19 +27,19 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/create/{postId}")
-    public ResponseEntity<StatusResponse> createComment(@RequestParam Long postId, @RequestBody CommentRequest commentCreateRequest,
+    public ResponseEntity<StatusResponse> createComment(@PathVariable Long postId, @RequestBody CommentRequest commentCreateRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
                 commentService.createComment(postId,commentCreateRequest, userDetails.getUser());
         return RESPONSE_OK;
     }
     @PatchMapping("/modify/{commentId}")
-    public ResponseEntity<StatusResponse> updateComment(@RequestParam Long commentId, @RequestBody CommentRequest commentCreateRequest,
+    public ResponseEntity<StatusResponse> updateComment(@PathVariable Long commentId, @RequestBody CommentRequest commentCreateRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
                 commentService.updateComment(commentId,commentCreateRequest, userDetails.getUser());
         return RESPONSE_OK;
     }
     @PatchMapping("/delete/{commentId}")
-    public ResponseEntity<StatusResponse> deleteComment(@RequestParam Long commentId, 
+    public ResponseEntity<StatusResponse> deleteComment(@PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
                 commentService.deleteComment(commentId, userDetails.getUser());
         return RESPONSE_OK;

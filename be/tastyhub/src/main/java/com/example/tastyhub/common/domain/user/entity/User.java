@@ -7,6 +7,7 @@ import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import com.example.tastyhub.common.domain.scrap.entity.Scrap;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
+import com.example.tastyhub.common.domain.userChat.entity.UserChatRoom;
 import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 import com.example.tastyhub.common.domain.village.entity.Village;
 import jakarta.persistence.CascadeType;
@@ -17,7 +18,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -99,11 +99,16 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Village village;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<UserChatRoom> userChatRooms = new ArrayList<>();
     public void updatePassword(String password) {
         this.password = password;
     }
 
-    public void updateUserInfo(UserUpdateRequest userUpdateRequest){
+    public void updateUserInfo(UserUpdateRequest userUpdateRequest,String imgUrl){
         this.nickname = userUpdateRequest.getNickname();
+        this.userImg = imgUrl;
     }
+
 }

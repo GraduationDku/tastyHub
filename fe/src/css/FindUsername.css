@@ -1,0 +1,48 @@
+.findusername {
+  height: 100vh;
+  width: 100vw;
+  background-color: #FAF6C0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.findusername .box {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #AEC7A1;
+  border-radius: 10px;
+  width: 30%;
+  height : 30%;
+  text-align: center;
+  color: #5C5F5C;
+  margin: 20px;
+  font-size: 30px;
+}
+
+.findusername input {
+  border: none;
+  width: 250px;
+  height: 40px;
+  border-radius: 10px;
+  margin-bottom: 20px; /* Input과 버튼 사이의 간격 조정 */
+}
+
+.findusername .button-container {
+  display: flex;
+  justify-content: space-around; /* 버튼 사이의 간격을 균등하게 조정 */
+  margin-top: 20px;
+}
+
+.findusername button {
+  border: none;
+  width: 160px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer; /* 버튼 위에 마우스를 올렸을 때 커서 변경 */
+  background-color: #D9D7F1; /* 버튼 배경색 */
+  color: black; /* 버튼 텍스트 색상 */
+  font-size: 15px;
+  margin: 0 10px; /* 좌우 버튼 간격 */
+}

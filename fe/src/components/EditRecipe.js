@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function EditRecipe({ recipeId, onEdit }) {
+function EditRecipe({ recipeId }) {
   const [formData, setFormData] = useState({
     foodName: '',
     foodImgUrl: '',
@@ -40,10 +40,11 @@ function EditRecipe({ recipeId, onEdit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/recipe/update/${recipeId}`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:8080/recipe/details/${recipeId}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization' : localStorage.getItem('accessToken')
         },
         body: JSON.stringify(formData)
       });

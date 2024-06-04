@@ -17,6 +17,9 @@ import com.example.tastyhub.common.domain.user.entity.User.userType;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserFixture {
 
     public static final DuplicatedUserName DUPLICATED_USER_NAME =
@@ -31,7 +34,6 @@ public class UserFixture {
     public static final SignupRequest SIGNUP_REQUEST =
         SignupRequest.builder()
             .username("username")
-            .userImg(null)
             .password("password")
             .email("email01@gmail.com")
             .nickname("nickname")
@@ -42,6 +44,7 @@ public class UserFixture {
             .username("username")
             .password("password")
             .build();
+
     public static final User USER =
         User.builder()
             .username("username")
@@ -67,13 +70,15 @@ public class UserFixture {
 
     public static final UserDto USER_DTO =
         UserDto.builder()
+            .userId(1L)
             .nickname("nickname")
             .userImg("uri")
             .build();
 
     public static final SearchUserDto SEARCH_USER_DTO =
         SearchUserDto.builder()
-            .nickname("nickname").build();
+            .nickname("nickname")
+            .build();
 
 
     public static final List<UserDto> USER_DTO_LIST =
@@ -89,4 +94,11 @@ public class UserFixture {
 
     public static final UserUpdateRequest USER_UPDATE_REQUEST =
         new UserUpdateRequest("nickname");
+
+    public static final MultipartFile USER_IMAGE = new MockMultipartFile(
+            "file",
+            "user.jpg",
+            "image/jpeg",
+            "Test image content".getBytes()
+        );
 }

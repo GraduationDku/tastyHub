@@ -22,9 +22,19 @@ function Login({ setScreen }) {
       if (response.ok) {
         const authorization = response.headers.get('Authorization');
         const refreshToken = response.headers.get('Refresh');
+        const data = await response.json(); // Extract JSON data
+        const nickname = data.nickname; // Extract nickname from JSON data
+
         localStorage.setItem('accessToken', authorization);
         localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('nickname', nickname);
+
+        console.log(nickname);
+        console.log(response);
+        console.log(refreshToken);
+        console.log(authorization);
         console.log('로그인 성공');
+        setScreen('main');
       } else {
         console.error('로그인 실패');
         alert("아이디 및 비밀번호가 일치하지 않습니다.");

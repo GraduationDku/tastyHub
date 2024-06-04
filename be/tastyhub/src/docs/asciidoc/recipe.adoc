@@ -1,0 +1,85 @@
+= Recipe API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+---
+
+== 인기 레시피 조회하기
+
+=== Request
+
+include::{snippets}/recipeController/popular/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/recipeController/popular/http-response.adoc[]
+
+
+== 전체 레시피 조회하기
+
+=== Request
+
+include::{snippets}/recipeController/list/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/recipeController/list/http-response.adoc[]
+
+
+== 레시피 키워드로 검색
+
+=== Request
+
+include::{snippets}/recipeController/search/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/recipeController/search/http-response.adoc[]
+
+
+== 레시피 생성
+
+=== Request
+
+include::{snippets}/recipeController/create/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/recipeController/create/http-response.adoc[]
+
+
+== 레시피 정보 가져오기
+
+=== Request
+
+include::{snippets}/recipeController/delete/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/recipeController/delete/http-response.adoc[]
+
+
+== 레시피 업데이트
+
+=== Request
+
+include::{snippets}/recipeController/modify/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/recipeController/modify/http-response.adoc[]
+
+
+== 레시피 삭제하기
+
+=== Request
+
+include::{snippets}/recipeController/delete/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/recipeController/delete/http-response.adoc[]
+
