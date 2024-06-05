@@ -93,8 +93,11 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public RecipeDto getRecipe(Long recipeId) {
+    public RecipeDto getRecipe(Long recipeId, User user) {
         Recipe recipe = recipeFindById(recipeId);
+        boolean isLiked = recipeRepository.isLiked(user.getId(), recipeId);
+        boolean isScraped = recipeRepository.isScraped(user.getId(), recipeId);
+
         FoodInformationDto foodInformationDto = FoodInformationDto.builder()
                 .foodInformationId(recipe.getFoodInformation().getId())
                 .text(recipe.getFoodInformation().getText())
@@ -115,6 +118,8 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeDto recipeDto = RecipeDto.builder()
                 .foodId(recipe.getId())
                 .foodName(recipe.getFoodName())
+                .isLiked(isLiked)
+                .isScraped(isScraped)
                 .foodImgUrl(recipe.getFoodImgUrl())
                 .foodInformation(foodInformationDto)
                 .ingredients(ingredients)

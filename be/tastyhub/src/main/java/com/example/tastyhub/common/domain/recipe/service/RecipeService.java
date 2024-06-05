@@ -17,7 +17,7 @@ public interface RecipeService {
 
     void createRecipe(RecipeCreateDto recipeCreateDto, MultipartFile img, User user) throws Exception;
 
-    RecipeDto getRecipe(Long recipeId);
+    RecipeDto getRecipe(Long recipeId, User user);
 
     void updateRecipe(Long recipeId, MultipartFile img,User user, RecipeUpdateDto recipeUpdateDto) throws IOException;
     

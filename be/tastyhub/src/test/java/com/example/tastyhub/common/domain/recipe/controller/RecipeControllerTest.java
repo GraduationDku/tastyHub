@@ -253,7 +253,7 @@ class RecipeControllerTest {
   @DisplayName("레시피 정보 가져오기")
   void getRecipe() throws Exception {
 
-    when(recipeService.getRecipe(any())).thenReturn(RECIPE_DTO);
+    when(recipeService.getRecipe(any(),any())).thenReturn(RECIPE_DTO);
 
     ResultActions resultActions = mockMvc.perform(
             get(RECIPE_API + "/detail/{recipeId}", RECIPE.getId())

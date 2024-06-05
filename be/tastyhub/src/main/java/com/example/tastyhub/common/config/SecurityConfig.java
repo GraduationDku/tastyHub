@@ -42,8 +42,6 @@ public class SecurityConfig {
         "/user/signup",
         "/recipe/list",
         "/recipe/popular",
-        "/recipe/detail",
-        "/recipe/detail/{recipeId}",
         "/recipe/search/",
         "/recipe/search/{keyword}",
         "/chat",

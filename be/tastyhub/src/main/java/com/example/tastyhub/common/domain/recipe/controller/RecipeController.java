@@ -95,8 +95,8 @@ public class RecipeController {
      * writer : skyriv213 method : 단일레시피 조회하기
      */
     @GetMapping("/detail/{recipeId}")
-    public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long recipeId) {
-        RecipeDto recipeDto = recipeService.getRecipe(recipeId);
+    public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long recipeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        RecipeDto recipeDto = recipeService.getRecipe(recipeId, userDetails.getUser());
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(recipeDto);
     }
 

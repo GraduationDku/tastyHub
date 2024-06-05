@@ -2,8 +2,10 @@ package com.example.tastyhub.common.domain.recipe.repository;
 
 import static com.example.tastyhub.common.domain.foodInformation.entity.QFoodInformation.foodInformation;
 import static com.example.tastyhub.common.domain.recipe.entity.QRecipe.recipe;
+import static com.example.tastyhub.common.domain.like.entity.QLike.like;
+import static com.example.tastyhub.common.domain.scrap.entity.QScrap.scrap;
 
-import com.querydsl.core.types.Projections;
+
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -96,5 +98,33 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
         return jpaQueryFactory.select(Wildcard.count)
                 .from(recipe);
     }
+
+@Override
+public boolean isLiked(Long userId, Long recipeId) {
+        Long count = jpaQueryFactory
+            .select(like.count())
+            .from(like)
+            .where(
+                    like.user.id.eq(userId)
+                    .and(like.recipe.id.eq(recipeId))
+            )
+            .fetchOne();
+
+    return count != null && count > 0;
+}
+
+@Override
+public boolean isScraped(Long userId, Long recipeId) {
+        Long count = jpaQueryFactory
+            .select(scrap.count())
+            .from(scrap)
+            .where(
+                    scrap.user.id.eq(userId)
+                    .and(scrap.recipe.id.eq(recipeId))
+            )
+            .fetchOne();
+
+    return count != null && count > 0;
+}
 
 }
