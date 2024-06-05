@@ -2,6 +2,7 @@ package com.example.tastyhub.common.domain.like.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.tastyhub.common.domain.like.dtos.LikeCountRequest;
 import com.example.tastyhub.common.domain.like.entity.Like;
 import com.example.tastyhub.common.domain.like.repository.LikeRepository;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
@@ -35,5 +36,12 @@ public class LikeServiceImpl implements LikeService {
 
     private boolean checkLike(Long recipeId, Long userId) {
         return likeRepository.existsByRecipeIdAndUserId(recipeId, userId);
+    }
+
+
+    @Override
+    public LikeCountRequest count(Long recipeId) {
+        LikeCountRequest likeCountRequest =  LikeCountRequest.builder().count(likeRepository.countByRecipeId(recipeId)).build();
+        return likeCountRequest;
     }
 }
