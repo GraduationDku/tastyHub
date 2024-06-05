@@ -12,7 +12,7 @@ public class VillageFixture {
         .builder()
         .lat((long) 37.395628)
         .lng((long) 126.929901)
-        .addressTownName("탄현동")
+//        .addressTownName("탄현동")
         .build();
 
     public static Village VILLAGE = Village.builder()

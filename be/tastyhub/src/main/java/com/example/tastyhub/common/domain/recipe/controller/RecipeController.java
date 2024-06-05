@@ -3,6 +3,7 @@ package com.example.tastyhub.common.domain.recipe.controller;
 import static com.example.tastyhub.common.config.APIConfig.RECIPE_API;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
+import java.io.IOException;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,10 +72,15 @@ public class RecipeController {
      * writer : skyriv213 method : 레시피 생성하기
      */
     @PostMapping("/create")
-    public ResponseEntity<StatusResponse> createRecipe(@RequestBody RecipeCreateDto recipeCreateDto,
+    public ResponseEntity<StatusResponse> createRecipe(@RequestPart("img") MultipartFile img, @RequestPart("data") RecipeCreateDto recipeCreateDto,
         @AuthenticationPrincipal
         UserDetailsImpl userDetails) {
-        recipeService.createRecipe(recipeCreateDto, userDetails.getUser());
+        try {
+            recipeService.createRecipe(recipeCreateDto,img, userDetails.getUser());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         return RESPONSE_OK;
     }
 
@@ -89,19 +95,20 @@ public class RecipeController {
 
     /**
      * writer : skyriv213 method : 레시피 수정하기
+     * @throws IOException 
      */
     @PatchMapping("/modify/{recipeId}")
-    public ResponseEntity<StatusResponse> updateRecipe(@PathVariable Long recipeId,
-        @RequestBody RecipeUpdateDto recipeUpdateDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<StatusResponse> updateRecipe(@PathVariable Long recipeId, @RequestPart("img") MultipartFile img,
+        @RequestPart("data") RecipeUpdateDto recipeUpdateDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
 //
-        recipeService.updateRecipe(recipeId, userDetails.getUser(), recipeUpdateDto);
+        recipeService.updateRecipe(recipeId, img, userDetails.getUser(), recipeUpdateDto);
         return RESPONSE_OK;
     }
 
     @DeleteMapping("/{recipeId}")
     public ResponseEntity<StatusResponse> deleteRecipe(@PathVariable Long recipeId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         recipeService.deleteRecipe(recipeId, userDetails.getUser());
         return RESPONSE_OK;
     }

@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.village.service;
 
+import com.example.tastyhub.common.domain.naver.service.NaverService;
 import lombok.Generated;
 import org.springframework.stereotype.Service;
 
@@ -13,43 +14,53 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class VillageServiceImpl implements VillageService{
+public class VillageServiceImpl implements VillageService {
 
-    private final VillageRepository villageRepository;
+  private final VillageRepository villageRepository;
 
-    @Override
-    @Transactional
-    public void
-    setLocation(LocationRequest locationRequest, User user) {
-        String addressTownName = locationRequest.getAddressTownName();
-        long lat = locationRequest.getLat();
-        long lng = locationRequest.getLng();
-        
+  private final NaverService naverService;
+  @Override
+  @Transactional
+  public void setLocation(LocationRequest locationRequest, User user) {
+    double lat = locationRequest.getLat();
+    double lng = locationRequest.getLng();
 
-        Village village = Village.builder()
-                .addressTownName(addressTownName)
-                .lat(lat)
-                .lng(lng)
-                .user(user)
-                .build();
+    String addressFromCoordinates;
+    addressFromCoordinates = naverService.getAddressFromCoordinates(lat, lng);
 
-        villageRepository.save(village);
-    }
-    @Override
-    public void modifyLocation(LocationRequest locationRequest, User user) {
+    Village village = Village.builder()
+        .addressTownName(addressFromCoordinates)
+        .lat(lat)
+        .lng(lng)
+        .user(user)
+        .build();
 
-        Village village = findByUserId(user);
+    villageRepository.save(village);
+  }
 
-        village.update(locationRequest);
+  @Override
+  public void modifyLocation(LocationRequest locationRequest, User user) {
 
-        villageRepository.save(village);
-    }
+    Village village = findByUserId(user);
 
-    @Generated
-    private Village findByUserId(User user) {
-        return villageRepository.findByUserId(user.getId())
-            .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다"));
-    }
+    double lat = locationRequest.getLat();
+    double lng = locationRequest.getLng();
+
+    String addressFromCoordinates;
+    addressFromCoordinates = naverService.getAddressFromCoordinates(lat, lng);
+
+
+
+    village.update(locationRequest,addressFromCoordinates);
+
+    villageRepository.save(village);
+  }
+
+  @Generated
+  private Village findByUserId(User user) {
+    return villageRepository.findByUserId(user.getId())
+        .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다"));
+  }
 
 
 }

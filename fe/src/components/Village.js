@@ -3,7 +3,6 @@ import '../css/Village.css';
 
 function Village({setScreen}) {
   const [location, setLocation] = useState({ lat: null, lng: null });
-  const [addressTownName, setAddress] = useState('');
   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
@@ -20,36 +19,9 @@ function Village({setScreen}) {
       document.head.removeChild(script);
     };
   }, []);
-
-  const getAddressFromNaver = (lat, lng) => {
-    if (window.naver && window.naver.maps) {
-      window.naver.maps.Service.reverseGeocode({
-        coords: new window.naver.maps.LatLng(lat, lng),
-        orders: [
-          window.naver.maps.Service.OrderType.ADDR,
-          window.naver.maps.Service.OrderType.ROAD_ADDR
-        ].join(',')
-      }, function(status, response) {
-        if (status === window.naver.maps.Service.Status.OK) {
-          const result = response.result;
-          const address = result.items[0].address;
-          const roadAddress = result.items.find(item => item.isRoadAddress)?.address;
-          const jibunAddress = result.items.find(item => !item.isRoadAddress)?.address;
-
-          const finalAddress = roadAddress || jibunAddress || address;
-          setAddress(finalAddress);
-          console.log("주소 변환 결과:", finalAddress);
-        } else {
-          console.error("주소 정보를 가져오는데 실패했습니다.");
-          console.log(lat,lng);
-        }
-      });
-    }
-  };
   
   useEffect(() => {
     if (mapLoaded && location.lat && location.lng) {
-      getAddressFromNaver(location.lat, location.lng);
       initializeNaverMap();
     }
   }, [mapLoaded, location]);
@@ -80,7 +52,7 @@ function Village({setScreen}) {
           console.error("Error obtaining location:", error.message);
           alert("위치 정보를 가져오는데 실패했습니다. 에러 메시지: " + error.message);
         },
-        { timeout: 5000 }
+        { timeout: 10000 }
       );
     } else {
       alert("이 브라우저에서는 위치 서비스를 지원하지 않습니다.");
@@ -98,13 +70,13 @@ function Village({setScreen}) {
         body: JSON.stringify({
           "lat": location.lat,
           "lng": location.lng,
-          "addressTownName": addressTownName
         })
       });
 
       if (response.ok) {
         const responseData = await response.json();
         console.log('서버로부터 응답 받음:', responseData);
+        
       } else {
         console.error('서버 에러:', response.status, await response.text());
       }
@@ -121,7 +93,6 @@ function Village({setScreen}) {
         {location.lat && location.lng && (
           <>
             <p>위도: {location.lat}, 경도: {location.lng}</p>
-            <p> {addressTownName}</p>
             <div className='map' id="map" style={{ width: "100%", height: "400px" }}></div>
             <br/>
             <button onClick={() => setScreen('main')}>맞아요</button>

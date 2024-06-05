@@ -11,14 +11,11 @@ function PostDetails({ postId }) {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization' : localStorage.getItem('accessToken')
                 }
             });
             if (response.ok) {
                 const data = await response.json();
-                const authorization = response.headers.get('Authorization');
-                const refreshToken = response.headers.get('Refresh');
-                localStorage.setItem('accessToken', authorization);
-                localStorage.setItem('refreshToken', refreshToken);
                 setPostDetails(data);
             } else {
                 throw new Error('Failed to fetch post details');
@@ -52,7 +49,6 @@ function PostDetails({ postId }) {
             <p>{postDetails.nickname}</p>
             <p>{postDetails.latestUpdateTime}</p>
             
-            <h2>Comments</h2>
             <Comment postId={postId} refreshComments={fetchPostDetails} />
             
             {postDetails.commentDtos.length > 0 ? (
@@ -68,7 +64,7 @@ function PostDetails({ postId }) {
                     ))}
                 </ul>
             ) : (
-                <p>No comments available</p>
+                <p>No comments</p>
             )}
         </div>
     );

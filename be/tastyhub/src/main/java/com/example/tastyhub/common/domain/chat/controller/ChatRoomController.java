@@ -5,6 +5,7 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.tastyhub.common.domain.chat.dtos.ChatDto;
 import com.example.tastyhub.common.domain.chat.dtos.ChatRoomDto;
+import com.example.tastyhub.common.domain.chat.dtos.CheckDto;
 import com.example.tastyhub.common.domain.chat.service.ChatRoomService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
@@ -107,5 +108,11 @@ public class ChatRoomController {
         @PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         chatRoomService.deleteChatRoom(roomId, postId, userDetails.getUser());
         return RESPONSE_OK;
+    }
+
+    @GetMapping("/check/{roomId}")
+    public ResponseEntity<CheckDto> checkRoomCondition(@PathVariable Long roomId) {
+        CheckDto checkDto = chatRoomService.checkRoomCondition(roomId);
+        return ResponseEntity.ok().body(checkDto);
     }
 }
