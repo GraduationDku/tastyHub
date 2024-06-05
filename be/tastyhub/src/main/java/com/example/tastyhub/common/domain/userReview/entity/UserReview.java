@@ -2,6 +2,8 @@ package com.example.tastyhub.common.domain.userReview.entity;
 
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.user.entity.User;
+import com.example.tastyhub.common.domain.userReview.dtos.UserReviewUpdateRequest;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,4 +45,9 @@ public class UserReview extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
     @JoinColumn(name = "reader_id", nullable = false)
     private User reader;
+
+    public void update(UserReviewUpdateRequest userReviewUpdateRequest) {
+        this.grade = userReviewUpdateRequest.getGrade();
+        this.text = userReviewUpdateRequest.getText();
+    }
 }

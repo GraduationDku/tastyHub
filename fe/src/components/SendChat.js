@@ -1,86 +1,115 @@
 import React, { useEffect, useState } from 'react';
 import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 
-const SOCKET_URL = `http://localhost:8080/app/chat/rooms/${roomId}/send`;
+const SOCKET_URL = `ws://localhost:8080/chat`;
 
-const SendChat = ({ roomId, username }) => {
-    const [client, setClient] = useState(null); //STOMP 클라이언트를 저장하는 상태 변수
-    const [connected, setConnected] = useState(false); //서버와의 연결 상태 저장
-    const [messages, setMessages] = useState([]); //수신한 메세지 저장
-    const [input, setInput] = useState(''); //사용자가 입력한 메세지 저장하는 상태 변수
+const SendChat = ({ roomId }) => {
+    const [client, setClient] = useState(null);
+    const [connected, setConnected] = useState(false);
+    const [messages, setMessages] = useState([]);
+    const [input, setInput] = useState('');
 
     useEffect(() => {
-        const stompClient = new Client({ //STOMP 클라이언트가 서버랑 연결되었을 때 호출되는 콜백 함수
-            webSocketFactory: () => new SockJS(SOCKET_URL), //웹 소켓 연결을 생성하는 팩토리 함수
-            reconnectDelay: 5000, //웹 소켓 연결이 끊어졌을 때 다시 연결을 시도하는 시간 간격
-            heartbeatIncoming: 4000, //클라이언트 <- 서버 하트비트 수신
-            heartbeatOutgoing: 4000, // 클라이언트 -> 서버 하트비트 발신 , 하트비트 : 클라이언트와 서버 간 연결이 유효한지 주기적으로 확인해줌
+        const nickname = localStorage.getItem('nickname');
+
+        const stompClient = new Client({
+            brokerURL: SOCKET_URL,
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
             debug: (str) => {
-                console.log(str); //디버그 로그 출력
+                console.log(str);
             },
         });
 
         stompClient.onConnect = () => {
             setConnected(true);
-            const authorization = response.headers.get('Authorization');
-            const refreshToken = response.headers.get('Refresh');
-            localStorage.setItem('accessToken', authorization);
-            localStorage.setItem('refreshToken', refreshToken);
-            stompClient.subscribe(`/app/chat/rooms/${roomId}`, (message) => { //클라이언트가 저 경로를 구독하여 서버로부터 해당 경로로 전송되는 메세지를 수신하는 함수
-            const receivedMessage = JSON.parse(message.body);
-            setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+            stompClient.subscribe(`/topic/rooms/${roomId}`, (message) => {
+                const receivedMessage = JSON.parse(message.body);
+                setMessages((prevMessages) => [...prevMessages, receivedMessage]);
             });
         };
 
-        stompClient.onDisconnect = () => { //STOMP 클라이언트가 서버와의 연결이 끊어졌을 때 호출되는 콜백 함수
+        stompClient.onDisconnect = () => {
             setConnected(false);
         };
 
-        stompClient.activate(); //STOMP 클라이언트 활성화 함수
-        setClient(stompClient); //생성된 STOMP 클라이언트를 상태 변수에 저장
+        stompClient.activate();
+        setClient(stompClient);
 
         return () => {
-            stompClient.deactivate(); //컴포넌트가 언마운트될 때 클라이언트 비활성화 시킴
+            stompClient.deactivate();
         };
     }, [roomId]);
 
-    
     const sendMessage = () => {
-        if (client && connected) {
+        const nickname = localStorage.getItem('nickname');
+        if (client && connected && nickname) {
             const message = {
-                from: username, 
+                from: nickname,
                 text: input,
-                time: new Date().toISOString(),
             };
             client.publish({
-                destination: `/app/chat/rooms/${roomId}/send`,
+                destination: `/app/rooms/${roomId}`,
                 body: JSON.stringify(message),
             });
-            setInput(''); //전송 후 입력 필드 비우기
+            setInput('');
+        }
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            sendMessage();
         }
     };
 
     return (
-        <div>
-            <ul>
-                {messages.map((msg, index) => ( //msg: 배열의 각 요소, index: 배열의 인덱스
-                    <li key={index}>
-                        <strong>{msg.from}</strong>: {msg.text} <em>{msg.time}</em>
+        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <ul style={{ listStyleType: 'none', padding: 0, flex: 1, overflowY: 'auto' }}>
+                {messages.map((msg, index) => (
+                    <li
+                        key={index}
+                        style={{
+                            display: 'flex',
+                            justifyContent: msg.from === localStorage.getItem('nickname') ? 'flex-end' : 'flex-start',
+                            padding: '5px 0'
+                        }}
+                    >
+                        <div
+                            style={{
+                                background: msg.from === localStorage.getItem('nickname') ? '#DCF8C6' : '#FFF',
+                                padding: '10px',
+                                borderRadius: '10px',
+                                maxWidth: '60%',
+                                wordWrap: 'break-word',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                            }}
+                        >
+                            {msg.from !== localStorage.getItem('nickname') && <strong>{msg.from} </strong>}
+                            {msg.text}
+                        </div>
                     </li>
                 ))}
             </ul>
-            <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="메세지를 입력하세요."
-                disabled={!connected}
-            />
-            <button onClick={sendMessage} disabled={!connected}>
-                전송
-            </button>
+            <div style={{ display: 'flex', position: 'fixed', bottom: 0, width: '100%', backgroundColor: '#fff', padding: '10px', boxSizing: 'border-box', borderTop: '1px solid #ccc' }}>
+                <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="메세지를 입력하세요."
+                    disabled={!connected}
+                    style={{ flex: 1, padding: '10px', boxSizing: 'border-box', marginRight: '10px' }}
+                />
+                <button
+                    onClick={sendMessage}
+                    disabled={!connected}
+                    style={{ padding: '10px', boxSizing: 'border-box' }}
+                >
+                    전송
+                </button>
+            </div>
         </div>
     );
 };
 
-export default Chat;
+export default SendChat;
