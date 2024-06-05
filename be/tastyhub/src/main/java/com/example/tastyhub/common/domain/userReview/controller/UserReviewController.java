@@ -1,16 +1,6 @@
 package com.example.tastyhub.common.domain.userReview.controller;
 
-<<<<<<< HEAD
-import com.example.tastyhub.common.domain.userReview.service.UserReviewService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequiredArgsConstructor
-public class UserReviewController {
-
-    private UserReviewService userReviewService;
-=======
 import static com.example.tastyhub.common.config.APIConfig.USERREVIEW_API;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
@@ -73,5 +63,4 @@ public class UserReviewController {
         
     }
     
->>>>>>> 057d123bd3bbe965b8f6eabb8f9f4c7bb40145ed
 }
