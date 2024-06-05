@@ -23,10 +23,14 @@ public interface RecipeService {
     
     Page<PagingRecipeResponse> getAllRecipes(Pageable pageable);
 
+    Page<PagingRecipeResponse> getMyRecipes(Pageable pageable, User user);
+
+
     Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable);
 
     Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable);
 
 
     void deleteRecipe(Long recipeId, User user) throws IOException;
+
 }

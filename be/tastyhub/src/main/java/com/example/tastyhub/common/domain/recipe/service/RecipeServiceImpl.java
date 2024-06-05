@@ -163,6 +163,12 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public Page<PagingRecipeResponse> getMyRecipes(Pageable pageable, User user) {
+        return recipeRepository.findMyRecipes(pageable, user.getId());
+
+    }
+
+    @Override
     @Transactional
     public Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable) {
         return recipeRepository.findPopular(pageable);
@@ -239,4 +245,6 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 레시피는 존재하지 않습니다"));
     }
+
+
 }

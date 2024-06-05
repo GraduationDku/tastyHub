@@ -58,6 +58,13 @@ public class RecipeController {
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
             .body(recipeService.getAllRecipes(pageable));
     }
+    @GetMapping("/mylist")
+    public ResponseEntity<Page<PagingRecipeResponse>> getMyRecipes(
+        @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable, @AuthenticationPrincipal
+        UserDetailsImpl userDetails) {
+        return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
+            .body(recipeService.getMyRecipes(pageable, userDetails.getUser()));
+    }
 
     @GetMapping("/search/{keyword}")
     public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(

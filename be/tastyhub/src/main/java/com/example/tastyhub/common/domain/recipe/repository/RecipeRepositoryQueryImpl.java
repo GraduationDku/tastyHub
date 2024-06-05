@@ -40,6 +40,24 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
     }
 
     @Override
+    public Page<PagingRecipeResponse> findMyRecipes(Pageable pageable, Long userId) {
+        List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
+                .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
+                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving))
+                .from(recipe)
+                .where(recipe.user.id.eq(userId))
+                .leftJoin(recipe.foodInformation, foodInformation)
+                .orderBy(recipe.createdAt.desc())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long totalSize = countQuery().fetch().get(0);
+
+        return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
+    }
+
+
+    @Override
     public Page<PagingRecipeResponse> findPopular(Pageable pageable) {
         List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
                 .select(
