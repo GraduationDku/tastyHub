@@ -8,9 +8,34 @@ const SendChat = ({ roomId }) => {
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-
+    
     useEffect(() => {
         const nickname = localStorage.getItem('nickname');
+
+        const fetchPreviousMessages = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/room/${roomId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': localStorage.getItem('accessToken'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+        
+                const data = await response.json();
+                console.log('Fetched messages:', data);
+                setMessages(data);
+            } catch (error) {
+                console.error('Failed to fetch previous messages:', error);
+                setMessages([]);  // 오류 발생 시 빈 배열로 설정
+            }
+        };
+
+        fetchPreviousMessages();
 
         const stompClient = new Client({
             brokerURL: SOCKET_URL,
@@ -48,7 +73,9 @@ const SendChat = ({ roomId }) => {
             const message = {
                 from: nickname,
                 text: input,
+                time: new Date().toISOString()
             };
+            console.log(message.time);
             client.publish({
                 destination: `/app/rooms/${roomId}`,
                 body: JSON.stringify(message),
@@ -75,6 +102,9 @@ const SendChat = ({ roomId }) => {
                             padding: '5px 0'
                         }}
                     >
+                        <div style={{ fontSize: '0.8em', color: '#888', marginTop: '5px' }}>
+                                {new Date(msg.time).toLocaleString()}
+                        </div>
                         <div
                             style={{
                                 background: msg.from === localStorage.getItem('nickname') ? '#DCF8C6' : '#FFF',
@@ -86,6 +116,7 @@ const SendChat = ({ roomId }) => {
                             }}
                         >
                             {msg.from !== localStorage.getItem('nickname') && <strong>{msg.from} </strong>}
+                            {msg.time}
                             {msg.text}
                         </div>
                     </li>

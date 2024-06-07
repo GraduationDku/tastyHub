@@ -14,6 +14,7 @@ import Post from './components/Post';
 import CreatePost from './components/CreatePost';
 import SendChat from './components/SendChat';
 import './App.css';
+import MainMypage from './components/MainMypage';
 
 function App() {
   const [screen, setScreen] = useState('home');
@@ -52,6 +53,7 @@ function App() {
       {screen === 'mainchat' && <MainChat setScreen={setScreen} onChatroomSelect={handleChatroomSelect} />}
       {screen === 'post' && <Post setScreen={setScreen} />}
       {screen === 'createpost' && <CreatePost setScreen={setScreen}/>}
+      {screen === 'mypage' && <MainMypage setScreen={setScreen}/>}
       {screen === 'sendchat' && selectedRoomId && <SendChat roomId={selectedRoomId} username={username}/>}
       {screen === 'searchResults' && (
         <div className="search-results">
