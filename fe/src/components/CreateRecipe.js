@@ -11,6 +11,7 @@ function CreateRecipe() {
   const [imageFile, setImageFile] = useState(null); // 단일 이미지 파일을 저장할 변수
   const [imagePreview, setImagePreview] = useState(''); // 단일 이미지 미리보기 URL을 저장할 변수
 
+  // 폼 데이터 변경 핸들러
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -18,6 +19,7 @@ function CreateRecipe() {
     });
   };
 
+  // 이미지 파일 변경 핸들러
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImageFile(file); // 단일 이미지 파일 저장
@@ -27,27 +29,35 @@ function CreateRecipe() {
     setImagePreview(preview);
   };
 
+  // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formdata = new FormData();
-      formdata.append('foodName', formData.foodName);
-      formdata.append('foodInformation', formData.foodInformation);
-      formdata.append('ingredients', formData.ingredients);
-      formdata.append('cookSteps', formData.cookSteps);
-
-      if (imageFile) {
-        formdata.append('image', imageFile); // Correctly append the image file
+      // 폼 데이터 객체 생성
+      const data = {
+        foodName: formData.foodName,
+        foodInformation: formData.foodInformation,
+        ingredients: formData.ingredients,
+        cookSteps: formData.cookSteps
+      };
+      console.log(data);
+      const img = {
+        imageFile
       }
+      console.log(img);
+      
 
+
+      // 서버로 요청 전송
       const response = await fetch('http://localhost:8080/recipe/create', {
         method: 'POST',
         headers: {
           'Authorization': localStorage.getItem('accessToken')
         },
-        body: formdata
+        body: data,img,
       });
 
+      // 응답 상태 확인
       if (response.ok) {
         alert('Recipe created successfully!');
       } else {

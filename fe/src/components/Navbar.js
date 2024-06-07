@@ -40,7 +40,7 @@ const Navbar = ({ setScreen, onSearchComplete }) => {
         <button onClick={() => setScreen('recipe')}>레시피</button>
         <button onClick={() => setScreen('post')}>재료 공유</button>
         <button onClick={() => setScreen('mainchat')}>채팅</button>
-        <button onClick={() => setScreen('')}>마이페이지</button>
+        <button onClick={() => setScreen('mypage')}>마이페이지</button>
 
       <form className="search-form" onSubmit={handleSearchSubmit}>
         <input
