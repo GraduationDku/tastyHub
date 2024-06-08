@@ -21,6 +21,7 @@ const SendChat = ({ roomId }) => {
                         'Content-Type': 'application/json'
                     }
                 });
+                console.log(response.data);
                 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
