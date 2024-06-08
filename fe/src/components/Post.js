@@ -31,16 +31,14 @@ function Post({ setScreen, onPostSelect }) {
       <button onClick={() => setScreen('createpost')}>게시글 작성하기</button>
       <ul>
         {posts.map(post => (
-          
-            <li key={post.postId} onClick={() => onPostSelect(post.postId)}>
-              <h3>{post.title}</h3>
-              <div>
-                <p>{post.userImg || '정보 없음'}</p>
-                <p>{post.nickname || '정보 없음'}</p>
-                <p>{post.postState || '정보 없음'}</p>
-              </div>
-            </li>
-          
+          <li key={post.postId} onClick={() => onPostSelect(post.postId)}>
+            <h3>{post.title}</h3>
+            <div>
+              <p>{post.userImg || '정보 없음'}</p>
+              <p>{post.nickname || '정보 없음'}</p>
+              <p>{post.postState || '정보 없음'}</p>
+            </div>
+          </li>
         ))}
       </ul>
     </>
