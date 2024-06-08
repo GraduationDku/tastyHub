@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../css/CreateRecipe.css';
 
 function CreateRecipe() {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     foodName: '',
     foodInformation: '',
     ingredients: '',
@@ -13,8 +13,8 @@ function CreateRecipe() {
 
   // 폼 데이터 변경 핸들러
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setForm({
+      ...form,
       [e.target.name]: e.target.value
     });
   };
@@ -28,23 +28,27 @@ function CreateRecipe() {
     const preview = URL.createObjectURL(file);
     setImagePreview(preview);
   };
-
+  
   // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+
       // 폼 데이터 객체 생성
       const data = {
-        foodName: formData.foodName,
-        foodInformation: formData.foodInformation,
-        ingredients: formData.ingredients,
-        cookSteps: formData.cookSteps
+        foodName: form.foodName,
+        foodInformation: form.foodInformation,
+        ingredients: form.ingredients,
+        cookSteps: form.cookSteps
       };
+     
       console.log(data);
       const img = {
         imageFile
       }
       console.log(img);
+      
+      
       
 
 
@@ -52,10 +56,16 @@ function CreateRecipe() {
       const response = await fetch('http://localhost:8080/recipe/create', {
         method: 'POST',
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': localStorage.getItem('accessToken'),
+          'Content-Type': 'application/json'
         },
-        body: data,img,
+        body:{
+          'data' : data,
+          'img' : imageFile
+        },
       });
+
+      console.log(response);
 
       // 응답 상태 확인
       if (response.ok) {
@@ -76,7 +86,7 @@ function CreateRecipe() {
         <br/>
         <div className='label1'>
           레시피 이름 :
-          <input type="text" name="foodName" value={formData.foodName} onChange={handleChange} />
+          <input type="text" name="foodName" value={form.foodName} onChange={handleChange} />
           <br /><br />
         </div>
         <div className='label2'>
@@ -91,17 +101,17 @@ function CreateRecipe() {
         </div>
         <div className='label3'>
           설명 :
-          <input name="foodInformation" value={formData.foodInformation} onChange={handleChange} />
+          <input name="foodInformation" value={form.foodInformation} onChange={handleChange} />
           <br /><br />
         </div>
         <div className='label4'>
           재료 :
-          <input type="text" name="ingredients" value={formData.ingredients} onChange={handleChange} />
+          <input type="text" name="ingredients" value={form.ingredients} onChange={handleChange} />
           <br /><br />
         </div>
         <div className='label5'>
           순서 :
-          <input name="cookSteps" value={formData.cookSteps} onChange={handleChange} />
+          <input name="cookSteps" value={form.cookSteps} onChange={handleChange} />
           <br /><br />
         </div>
         <button type="submit">Create Recipe</button>
