@@ -74,8 +74,11 @@ const SendChat = ({ roomId }) => {
             const message = {
                 from: nickname,
                 text: input,
-                time: new Date().toISOString()
+                LocalDateTime: {
+                    time : new Date()
+                }
             };
+            console.log(message)
             console.log(message.time);
             client.publish({
                 destination: `/app/rooms/${roomId}`,
