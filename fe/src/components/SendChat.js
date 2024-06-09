@@ -21,6 +21,7 @@ const SendChat = ({ roomId }) => {
                         'Content-Type': 'application/json'
                     }
                 });
+                console.log(response.data);
                 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -73,7 +74,7 @@ const SendChat = ({ roomId }) => {
             const message = {
                 from: nickname,
                 text: input,
-                time: new Date().toISOString()
+                time: new Date()
             };
             console.log(message.time);
             client.publish({
@@ -116,7 +117,6 @@ const SendChat = ({ roomId }) => {
                             }}
                         >
                             {msg.from !== localStorage.getItem('nickname') && <strong>{msg.from} </strong>}
-                            {msg.time}
                             {msg.text}
                         </div>
                     </li>
