@@ -13,12 +13,13 @@ function RecipeDetails({ recipeId }) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken')
+            
           }
         });
         if (response.ok) {
           const data = await response.json();
           setRecipeDetails(data);
+          console.log(data);
         } else {
           throw new Error('Failed to fetch recipe details');
         }
@@ -37,8 +38,8 @@ function RecipeDetails({ recipeId }) {
           }
         });
         if (response.ok) {
-          const data = await response.json();
-          setRecipeReviews(data);
+          const reviewdata = await response.json();
+          setRecipeReviews(reviewdata);
         } else {
           throw new Error('Failed to fetch recipe reviews');
         }
