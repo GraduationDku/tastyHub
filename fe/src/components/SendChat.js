@@ -74,11 +74,9 @@ const SendChat = ({ roomId }) => {
             const message = {
                 from: nickname,
                 text: input,
-                LocalDateTime: {
-                    LocalDateTime : new Date()
-                }
+                time: new Date()
             };
-            console.log(message)
+            console.log(message.time);
             client.publish({
                 destination: `/app/rooms/${roomId}`,
                 body: JSON.stringify(message),
@@ -119,7 +117,6 @@ const SendChat = ({ roomId }) => {
                             }}
                         >
                             {msg.from !== localStorage.getItem('nickname') && <strong>{msg.from} </strong>}
-                            {msg.time}
                             {msg.text}
                         </div>
                     </li>
