@@ -9,7 +9,6 @@ import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import com.example.tastyhub.common.domain.ingredient.entity.Ingredient;
-import com.example.tastyhub.common.domain.ingredient.service.IngredientService;
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
@@ -72,6 +71,8 @@ public class RecipeServiceImpl implements RecipeService {
                     .cookSteps(cookSteps)
                     .build();
 
+            foodInformation.setRecipe(recipe);
+
             ingredients.forEach(ingredient -> ingredient.setRecipe(recipe));
             cookSteps.forEach(cookStep -> cookStep.setRecipe(recipe));
 
@@ -93,8 +94,11 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public RecipeDto getRecipe(Long recipeId) {
+    public RecipeDto getRecipe(Long recipeId, User user) {
         Recipe recipe = recipeFindById(recipeId);
+        boolean isLiked = recipeRepository.isLiked(user.getId(), recipeId);
+        boolean isScraped = recipeRepository.isScraped(user.getId(), recipeId);
+
         FoodInformationDto foodInformationDto = FoodInformationDto.builder()
                 .foodInformationId(recipe.getFoodInformation().getId())
                 .text(recipe.getFoodInformation().getText())
@@ -115,6 +119,8 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeDto recipeDto = RecipeDto.builder()
                 .foodId(recipe.getId())
                 .foodName(recipe.getFoodName())
+                .isLiked(isLiked)
+                .isScraped(isScraped)
                 .foodImgUrl(recipe.getFoodImgUrl())
                 .foodInformation(foodInformationDto)
                 .ingredients(ingredients)
@@ -160,6 +166,12 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public Page<PagingRecipeResponse> getAllRecipes(Pageable pageable) {
         return recipeRepository.findAllandPaging(pageable);
+    }
+
+    @Override
+    public Page<PagingRecipeResponse> getMyRecipes(Pageable pageable, User user) {
+        return recipeRepository.findMyRecipes(pageable, user.getId());
+
     }
 
     @Override
@@ -239,4 +251,6 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 레시피는 존재하지 않습니다"));
     }
+
+
 }

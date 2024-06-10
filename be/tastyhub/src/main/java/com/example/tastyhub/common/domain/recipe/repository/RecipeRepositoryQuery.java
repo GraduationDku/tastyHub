@@ -9,7 +9,14 @@ public interface RecipeRepositoryQuery {
 
     Page<PagingRecipeResponse> findAllandPaging(Pageable pageable);
 
+    Page<PagingRecipeResponse> findMyRecipes(Pageable pageable, Long userId);
+
+
     Page<PagingRecipeResponse> findPopular(Pageable pageable);
 
     Page<PagingRecipeResponse> searchByKeyword(String keyword, Pageable pageable);
+
+    boolean isLiked(Long userId, Long recipeId);
+    
+    boolean isScraped(Long userId, Long recipeId);
 }
