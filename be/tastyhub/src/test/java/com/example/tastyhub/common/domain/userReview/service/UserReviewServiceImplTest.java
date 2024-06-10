@@ -3,6 +3,7 @@ package com.example.tastyhub.common.domain.userReview.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.domain.userReview.repository.UserReviewRepository;
 
 import static org.mockito.BDDMockito.given;
@@ -28,12 +30,16 @@ public class UserReviewServiceImplTest {
     @Mock
     UserReviewRepository userReviewRepository;
 
+    @Mock
+    UserRepository userRepository;
+
     @InjectMocks
     UserReviewServiceImpl userReviewService;
 
     @Test
     @DisplayName("유저 리뷰 생성")
     void createUserReview() {
+        when(userRepository.findById(USER.getId())).thenReturn(Optional.of(USER));
         userReviewService.createUserReview(USER.getId(), USER_REVIEW_CREATE_REQUEST, USER);
         verify(userReviewRepository, times(1)).save(any());
     }
