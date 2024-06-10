@@ -13,12 +13,15 @@ function MainChat({ onChatroomSelect, setScreen }) {
                         'Authorization': localStorage.getItem('accessToken')
                     }
                 });
-                console.log(response);
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);
                     if (Array.isArray(data)) {
-                        setChatRooms(data);
+                        // 중복된 채팅방 제거
+                        const uniqueChatRooms = Array.from(new Set(data.map(room => room.roomId)))
+                            .map(roomId => {
+                                return data.find(room => room.roomId === roomId);
+                            });
+                        setChatRooms(uniqueChatRooms);
                     } else {
                         console.error('Invalid data format:', data);
                     }
@@ -42,13 +45,12 @@ function MainChat({ onChatroomSelect, setScreen }) {
             <ul>
                 {chatRooms.map(chatRoom => (
                     <li key={chatRoom.roomId}>
-                        
                         <div>
                             <p>{chatRoom.from}</p>
                             <p>{chatRoom.time}</p>
                             <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
-                            {chatRoom.chatRoomTitle}
-                        </button>
+                                {chatRoom.chatRoomTitle}
+                            </button>
                         </div>
                     </li>
                 ))}
