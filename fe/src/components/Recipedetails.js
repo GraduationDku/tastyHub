@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../css/RecipeDetails.css';
-import CreateRecipeReview from './CreateRecipeReview'; // CreateRecipeReview 컴포넌트 불러오기
+import CreateRecipeReview from './CreateRecipeReview';
 
 function RecipeDetails({ recipeId }) {
   const [recipeDetails, setRecipeDetails] = useState(null);
+  const [recipeReviews, setRecipeReviews] = useState([]);
 
   useEffect(() => {
     async function fetchRecipeDetails() {
@@ -12,12 +13,13 @@ function RecipeDetails({ recipeId }) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken')
+            
           }
         });
         if (response.ok) {
           const data = await response.json();
           setRecipeDetails(data);
+          console.log(data);
         } else {
           throw new Error('Failed to fetch recipe details');
         }
@@ -26,8 +28,29 @@ function RecipeDetails({ recipeId }) {
       }
     }
 
+    async function fetchRecipeReviews() {
+      try {
+        const response = await fetch(`http://localhost:8080/recipe-review/list/${recipeId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : localStorage.getItem('accessToken')
+          }
+        });
+        if (response.ok) {
+          const reviewdata = await response.json();
+          setRecipeReviews(reviewdata);
+        } else {
+          throw new Error('Failed to fetch recipe reviews');
+        }
+      } catch (error) {
+        console.error('Error fetching recipe reviews:', error);
+      }
+    }
+
     if (recipeId) {
       fetchRecipeDetails();
+      fetchRecipeReviews();
     }
   }, [recipeId]);
 
@@ -68,6 +91,18 @@ function RecipeDetails({ recipeId }) {
               </li>
             ))}
           </ol>
+        </div>
+
+        <div>
+          <h3>Reviews:</h3>
+          <ul>
+            {recipeReviews.map((review, index) => (
+              <li key={index}>
+                <p><strong>{review.nickname}</strong> (Grade: {review.grade})</p>
+                <p>{review.text}</p>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Comment = ({ postId, refreshComments }) => {
+const Comment = ({ postId, refreshComments, comments }) => {
     const [text, setText] = useState('');
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingText, setEditingText] = useState('');
@@ -11,7 +11,7 @@ const Comment = ({ postId, refreshComments }) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : localStorage.getItem('accessToken')
+                    'Authorization': localStorage.getItem('accessToken')
                 },
                 body: JSON.stringify({ text })
             });
@@ -83,7 +83,7 @@ const Comment = ({ postId, refreshComments }) => {
             ></textarea>
             <button onClick={createComment}>Submit</button>
 
-            {postDetails.commentDtos.map(comment => (
+            {comments.map(comment => (
                 <div key={comment.userId}>
                     {editingCommentId === comment.userId ? (
                         <>

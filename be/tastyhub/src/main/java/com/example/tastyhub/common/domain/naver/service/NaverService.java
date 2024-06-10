@@ -29,6 +29,8 @@ public class NaverService {
   public String getAddressFromCoordinates(double latitude, double longitude) {
     String url = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=" + longitude + "," + latitude + "&orders=roadaddr&output=json";
 
+    System.out.println(clientId);
+    System.out.println(clientSecret);
     HttpHeaders headers = new HttpHeaders();
     headers.set("X-NCP-APIGW-API-KEY-ID", clientId);
     headers.set("X-NCP-APIGW-API-KEY", clientSecret);

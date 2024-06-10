@@ -1,6 +1,8 @@
 package com.example.tastyhub.common.domain.chat.dtos;
 
 import com.example.tastyhub.common.domain.chat.entity.Chat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,12 +18,12 @@ public class ChatDto {
 
     private String text;
 
-//    private String time;
+    private LocalDateTime time;
 
 
     public ChatDto(Chat chat) {
         this.from = chat.getSender();
         this.text = chat.getText();
-//        this.time = chat.getLocalDateTime();
+        this.time = chat.getLocalDateTime();
     }
 }
