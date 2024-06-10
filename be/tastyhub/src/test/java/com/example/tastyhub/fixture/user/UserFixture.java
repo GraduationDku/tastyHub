@@ -47,6 +47,7 @@ public class UserFixture {
 
     public static final User USER =
         User.builder()
+            .id(1L)
             .username("username")
             .password("password")
             .userType(userType.COMMON)

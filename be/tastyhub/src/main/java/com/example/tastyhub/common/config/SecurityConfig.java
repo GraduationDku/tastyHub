@@ -44,6 +44,7 @@ public class SecurityConfig {
         "/recipe/popular",
         "/recipe/search/",
         "/recipe/search/{keyword}",
+        "/like/count/{recipeId}",
         "/chat",
         "/chat/**"
 
