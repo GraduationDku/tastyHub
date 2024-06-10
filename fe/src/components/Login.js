@@ -31,8 +31,6 @@ function Login({ setScreen }) {
 
         console.log(nickname);
         console.log(response);
-        console.log(refreshToken);
-        console.log(authorization);
         console.log('로그인 성공');
         setScreen('main');
       } else {
