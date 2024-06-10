@@ -41,7 +41,7 @@ public class FoodInformation extends TimeStamped {
 
     //연관 관계
     @OneToOne
-    @JoinColumn(name = "recipe_id")
+    @JoinColumn(name = "recipe_id",nullable = false)
     private Recipe recipe;
 
 
@@ -49,5 +49,9 @@ public class FoodInformation extends TimeStamped {
         this.text = foodInformationDto.getText();
         this.cookingTime = foodInformationDto.getCookingTime();
         this.serving = foodInformationDto.getServing();
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

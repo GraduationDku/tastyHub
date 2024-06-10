@@ -9,7 +9,6 @@ import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import com.example.tastyhub.common.domain.ingredient.entity.Ingredient;
-import com.example.tastyhub.common.domain.ingredient.service.IngredientService;
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
@@ -71,6 +70,8 @@ public class RecipeServiceImpl implements RecipeService {
                     .ingredients(ingredients)
                     .cookSteps(cookSteps)
                     .build();
+
+            foodInformation.setRecipe(recipe);
 
             ingredients.forEach(ingredient -> ingredient.setRecipe(recipe));
             cookSteps.forEach(cookStep -> cookStep.setRecipe(recipe));
