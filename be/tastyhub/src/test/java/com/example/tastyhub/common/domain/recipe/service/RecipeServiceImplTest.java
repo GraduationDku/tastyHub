@@ -46,7 +46,7 @@ class RecipeServiceImplTest {
     @DisplayName("레시피 조회하기")
     void getRecipe() {
         given(recipeRepository.findById(RECIPE.getId())).willReturn(Optional.of(RECIPE));
-        recipeService.getRecipe(RECIPE.getId(),any());
+        recipeService.getRecipe(RECIPE.getId(),USER);
         verify(recipeRepository, times(1)).findById(any());
     }
 
@@ -55,7 +55,7 @@ class RecipeServiceImplTest {
     void getRecipeFail() {
         given(recipeRepository.findById(any())).willThrow(new IllegalArgumentException("해당 레시피는 존재하지 않습니다"));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            recipeService.getRecipe(anyLong(),any());
+            recipeService.getRecipe(anyLong(),USER);
         });
         assertEquals("해당 레시피는 존재하지 않습니다",exception.getMessage());
     }
