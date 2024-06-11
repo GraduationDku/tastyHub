@@ -37,7 +37,7 @@ public class Chat {
 
     private String text;
 
-//    private String localDateTime;
+    private LocalDateTime localDateTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chat_room_id")

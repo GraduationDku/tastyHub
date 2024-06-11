@@ -2,21 +2,43 @@ import React, { useState } from 'react';
 import '../css/CreateRecipe.css';
 
 function CreateRecipe() {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     foodName: '',
-    foodInformation: '',
-    ingredients: '',
-    cookSteps: ''
+    foodInformation: {
+      text: '',
+      cookingTime: 0,
+      serving: ''
+    },
+    ingredients: [{ ingredientName: '', amount: '' }],
+    cookSteps: [{ stepNumber: 1, text: '' }]
   });
   const [imageFile, setImageFile] = useState(null); // 단일 이미지 파일을 저장할 변수
   const [imagePreview, setImagePreview] = useState(''); // 단일 이미지 미리보기 URL을 저장할 변수
 
   // 폼 데이터 변경 핸들러
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    if (name === 'foodName') {
+      setForm({ ...form, [name]: value });
+    } else if (name === 'text' || name === 'cookingTime' || name === 'serving') {
+      setForm({ ...form, foodInformation: { ...form.foodInformation, [name]: value } });
+    }
+  };
+
+  // 재료와 조리 단계 추가 및 변경 핸들러
+  const handleArrayChange = (e, index, type) => {
+    const { name, value } = e.target;
+    const list = [...form[type]];
+    list[index][name] = value;
+    setForm({ ...form, [type]: list });
+  };
+
+  const handleAddArrayItem = (type) => {
+    if (type === 'ingredients') {
+      setForm({ ...form, ingredients: [...form.ingredients, { ingredientName: '', amount: '' }] });
+    } else if (type === 'cookSteps') {
+      setForm({ ...form, cookSteps: [...form.cookSteps, { stepNumber: form.cookSteps.length + 1, text: '' }] });
+    }
   };
 
   // 이미지 파일 변경 핸들러
@@ -33,29 +55,31 @@ function CreateRecipe() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 폼 데이터 객체 생성
+      // JSON 데이터를 생성
       const data = {
-        foodName: formData.foodName,
-        foodInformation: formData.foodInformation,
-        ingredients: formData.ingredients,
-        cookSteps: formData.cookSteps
+        foodName: form.foodName,
+        foodInformation: form.foodInformation,
+        ingredients: form.ingredients,
+        cookSteps: form.cookSteps
       };
       console.log(data);
-      const img = {
-        imageFile
-      }
-      console.log(img);
-      
+      console.log(imageFile);
 
+      // FormData 객체 생성
+      const formData = new FormData();
+      formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+      formData.append('img', imageFile);
+      console.log(formData);
 
-      // 서버로 요청 전송
       const response = await fetch('http://localhost:8080/recipe/create', {
         method: 'POST',
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': localStorage.getItem('accessToken'),
         },
-        body: data,img,
+        body: formData,
       });
+
+      console.log(response);
 
       // 응답 상태 확인
       if (response.ok) {
@@ -76,7 +100,7 @@ function CreateRecipe() {
         <br/>
         <div className='label1'>
           레시피 이름 :
-          <input type="text" name="foodName" value={formData.foodName} onChange={handleChange} />
+          <input type="text" name="foodName" value={form.foodName} onChange={handleChange} />
           <br /><br />
         </div>
         <div className='label2'>
@@ -91,17 +115,35 @@ function CreateRecipe() {
         </div>
         <div className='label3'>
           설명 :
-          <input name="foodInformation" value={formData.foodInformation} onChange={handleChange} />
+          <input name="text" value={form.foodInformation.text} onChange={handleChange} />
+          <br /><br />
+          조리 시간 :
+          <input type="number" name="cookingTime" value={form.foodInformation.cookingTime} onChange={handleChange} />
+          <br /><br />
+          서빙 :
+          <input name="serving" value={form.foodInformation.serving} onChange={handleChange} />
           <br /><br />
         </div>
         <div className='label4'>
           재료 :
-          <input type="text" name="ingredients" value={formData.ingredients} onChange={handleChange} />
+          {form.ingredients.map((ingredient, index) => (
+            <div key={index}>
+              <input type="text" name="ingredientName" value={ingredient.ingredientName} onChange={(e) => handleArrayChange(e, index, 'ingredients')} placeholder="재료 이름" />
+              <input type="text" name="amount" value={ingredient.amount} onChange={(e) => handleArrayChange(e, index, 'ingredients')} placeholder="양" />
+            </div>
+          ))}
+          <button type="button" onClick={() => handleAddArrayItem('ingredients')}>재료 추가</button>
           <br /><br />
         </div>
         <div className='label5'>
           순서 :
-          <input name="cookSteps" value={formData.cookSteps} onChange={handleChange} />
+          {form.cookSteps.map((step, index) => (
+            <div key={index}>
+              <input type="number" name="stepNumber" value={step.stepNumber} readOnly />
+              <input name="text" value={step.text} onChange={(e) => handleArrayChange(e, index, 'cookSteps')} placeholder="조리 방법" />
+            </div>
+          ))}
+          <button type="button" onClick={() => handleAddArrayItem('cookSteps')}>순서 추가</button>
           <br /><br />
         </div>
         <button type="submit">Create Recipe</button>

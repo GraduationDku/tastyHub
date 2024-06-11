@@ -46,7 +46,7 @@ public class Recipe extends TimeStamped {
 
     private String foodName;
 
-    @Column(name = "food_img")
+    @Column(name = "food_img",length = 1024)
     private String foodImgUrl;
 
 //    private Long numLike;
@@ -56,7 +56,7 @@ public class Recipe extends TimeStamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private FoodInformation foodInformation;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)

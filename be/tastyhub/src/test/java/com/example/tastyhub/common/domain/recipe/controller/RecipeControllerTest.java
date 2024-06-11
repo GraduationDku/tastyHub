@@ -41,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -51,6 +52,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -279,11 +281,10 @@ class RecipeControllerTest {
 
 
   @Test
-  @WithMockUser
+  @WithCustomMockUser
   @DisplayName("레시피 정보 가져오기")
   void getRecipe() throws Exception {
-
-    when(recipeService.getRecipe(any())).thenReturn(RECIPE_DTO);
+    given(recipeService.getRecipe(any(),any())).willReturn(RECIPE_DTO);
 
     ResultActions resultActions = mockMvc.perform(
             get(RECIPE_API + "/detail/{recipeId}", RECIPE.getId())
@@ -297,6 +298,8 @@ class RecipeControllerTest {
                 fieldWithPath("foodName").type(JsonFieldType.STRING).description("음식 이름"),
                 fieldWithPath("foodImgUrl").type(JsonFieldType.STRING).description("음식 이미지 URL"),
                 fieldWithPath("foodInformation").type(JsonFieldType.OBJECT).description("음식 정보 객체"),
+                fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
+                fieldWithPath("scraped").type(JsonFieldType.BOOLEAN).description("스크랩 여부"),
                 fieldWithPath("foodInformation.foodInformationId").type(JsonFieldType.NUMBER)
                     .description("음식 정보 객체 ID"),
                 fieldWithPath("foodInformation.text").type(JsonFieldType.STRING)
