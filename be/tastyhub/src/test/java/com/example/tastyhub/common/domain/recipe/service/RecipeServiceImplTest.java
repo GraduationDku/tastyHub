@@ -13,10 +13,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.user.entity.User;
+import com.example.tastyhub.common.utils.S3.S3Uploader;
+
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,16 +34,20 @@ class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
+    @Mock
+    S3Uploader s3Uploader;
+
     @InjectMocks
     RecipeServiceImpl recipeService;
 
-//    @Test
-//    @DisplayName("레시피 생성 성공")
-//    void createRecipe() throws Exception {
-//        recipeService.createRecipe(RECIPE_CREATE_DTO,any(),USER);
-//        verify(recipeRepository, times(1)).save(any());
-//
-//    }
+   @Test
+   @DisplayName("레시피 생성 성공")
+   void createRecipe() throws Exception {
+        when(s3Uploader.upload(any(), any())).thenReturn(any());
+       recipeService.createRecipe(RECIPE_CREATE_DTO,any(),USER);
+       verify(recipeRepository, times(1)).save(any());
+
+   }
 
     @Test
     @DisplayName("레시피 조회하기")

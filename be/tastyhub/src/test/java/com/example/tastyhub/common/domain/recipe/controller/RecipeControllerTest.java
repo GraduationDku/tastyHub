@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -35,6 +36,7 @@ import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_CREATE_DT
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_DTO;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_UPDATE_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
+import static com.example.tastyhub.fixture.user.UserFixture.USER_UPDATE_REQUEST;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -43,9 +45,14 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -207,46 +214,71 @@ class RecipeControllerTest {
     );
 
   }
-//
-//  @Test
-//  @WithCustomMockUser
-//  @DisplayName("레시피 생성")
-//  void createRecipe() throws Exception {
-//
-//    doNothing().when(recipeService).createRecipe(any(), any(),any());
-//
-//    ResultActions resultActions = mockMvc.perform(post(RECIPE_API + "/create")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(objectMapper.writeValueAsString(RECIPE_CREATE_DTO))
-//            .with(csrf()))
-//        .andExpect(status().isOk());
-//
-//    resultActions.andDo(document("recipeController/create",
-//        getDocumentRequest(),
-//        requestFields(
-//            fieldWithPath("foodName").type(JsonFieldType.STRING)
-//                .description("음식 이름"),
-//            fieldWithPath("foodImg").type(JsonFieldType.STRING)
-//                .description("음식 사진"),
-//            fieldWithPath("foodInformation").type(JsonFieldType.OBJECT)
-//                .description("음식 정보 객체"),
-//            fieldWithPath("foodInformation.text").type(JsonFieldType.STRING)
-//                .description("음식 정보 내용"),
-//            fieldWithPath("foodInformation.cookingTime").type(JsonFieldType.NUMBER)
-//                .description("조리 시간"),
-//            fieldWithPath("foodInformation.serving").type(JsonFieldType.STRING)
-//                .description("조리 기준 식사량"),
-//            fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("재료 리스트"),
-//            fieldWithPath("ingredients[].ingredientName").type(JsonFieldType.STRING)
-//                .description("재료 이름"),
-//            fieldWithPath("ingredients[].amount").type(JsonFieldType.STRING).description("재료 량"),
-//            fieldWithPath("cookSteps").type(JsonFieldType.ARRAY).description("조리 단계"),
-//            fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER).description("조리 순서"),
-//            fieldWithPath("cookSteps[].stepImg").type(JsonFieldType.STRING).description(
-//                "조리 이미지"),
-//            fieldWithPath("cookSteps[].text").type(JsonFieldType.STRING).description("조리 단계 설명"))));
-//  }
-//
+
+  @Test
+  @WithCustomMockUser
+  @DisplayName("레시피 생성")
+  void createRecipe() throws Exception {
+
+    // 이미지 파일 파트
+    MockMultipartFile imgFile = new MockMultipartFile(
+        "img",
+        "test.png",
+        "image/png",
+        "test image content".getBytes()
+    );
+
+    // JSON 데이터 파트
+    MockMultipartFile dataFile = new MockMultipartFile(
+        "data",
+        "",
+        "application/json",
+        objectMapper.writeValueAsString(RECIPE_CREATE_DTO).getBytes()
+    );
+
+    doNothing().when(recipeService).createRecipe(any(), any(), any());
+
+    ResultActions resultActions = mockMvc.perform(multipart(RECIPE_API + "/create")
+            .file(imgFile)
+            .file(dataFile)
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .with(csrf()))
+        .andExpect(status().isOk());
+
+    resultActions.andDo(document("recipeController/create",
+        getDocumentRequest(),
+        getDocumentResponse(),
+        requestParts(
+            partWithName("img").description("프로필 이미지 파일"),
+            partWithName("data").description("회원 가입 데이터 (JSON)")
+        ),
+        requestPartFields("data",
+            fieldWithPath("foodName").type(JsonFieldType.STRING)
+                .description("음식 이름"),
+            fieldWithPath("foodImg").type(JsonFieldType.STRING)
+                .description("음식 사진"),
+            fieldWithPath("foodInformation").type(JsonFieldType.OBJECT)
+                .description("음식 정보 객체"),
+            fieldWithPath("foodInformation.text").type(JsonFieldType.STRING)
+                .description("음식 정보 내용"),
+            fieldWithPath("foodInformation.cookingTime").type(JsonFieldType.NUMBER)
+                .description("조리 시간"),
+            fieldWithPath("foodInformation.serving").type(JsonFieldType.STRING)
+                .description("조리 기준 식사량"),
+            fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("재료 리스트"),
+            fieldWithPath("ingredients[].ingredientName").type(JsonFieldType.STRING)
+                .description("재료 이름"),
+            fieldWithPath("ingredients[].amount").type(JsonFieldType.STRING).description("재료 량"),
+            fieldWithPath("cookSteps").type(JsonFieldType.ARRAY).description("조리 단계"),
+            fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER).description("조리 순서"),
+            fieldWithPath("cookSteps[].stepImg").type(JsonFieldType.STRING).description("조리 이미지"),
+            fieldWithPath("cookSteps[].text").type(JsonFieldType.STRING).description("조리 단계 설명")),
+        responseFields(
+            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+        )));
+  }
+
 
   @Test
   @WithCustomMockUser
@@ -319,58 +351,86 @@ class RecipeControllerTest {
         )
     );
   }
-//
-//  @Test
-//  @WithCustomMockUser
-//  @DisplayName("레시피 업데이트")
-//  void updateRecipe() throws Exception {
-//
-//    doNothing().when(recipeService).updateRecipe(any(), any(), any(),any());
-//
-//    ResultActions resultActions = mockMvc.perform(
-//            patch(RECIPE_API + "/modify/{recipeId}", RECIPE.getId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(RECIPE_UPDATE_DTO))
-//                .with(csrf()))
-//        .andExpect(status().isOk());
-//
-//    resultActions.andDo(document("recipeController/modify",
-//            getDocumentRequest(),
-//            getDocumentResponse(),
-//            requestFields(
-//                fieldWithPath("foodName").type(JsonFieldType.STRING).description(""),
-//                fieldWithPath("foodImg").type(JsonFieldType.STRING).description(""),
-//                fieldWithPath("foodInformation").type(JsonFieldType.OBJECT).description(""),
-//                fieldWithPath("foodInformation.text").type(JsonFieldType.STRING).description(""),
-//                fieldWithPath("foodInformation.cookingTime").type(JsonFieldType.NUMBER).description(""),
-//                fieldWithPath("foodInformation.serving").type(JsonFieldType.STRING).description(""),
-//                fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description(""),
-//                fieldWithPath("ingredients[].ingredientName").type(JsonFieldType.STRING)
-//                    .description(""),
-//                fieldWithPath("ingredients[].amount").type(JsonFieldType.STRING).description(""),
-//                fieldWithPath("cookSteps").type(JsonFieldType.ARRAY).description(""),
-//                fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER).description(""),
-//                fieldWithPath("cookSteps[].stepImg").type(JsonFieldType.STRING).description(""),
-//                fieldWithPath("cookSteps[].text").type(JsonFieldType.STRING).description(""),
-//                fieldWithPath("foodInformation.foodInformationId").type(JsonFieldType.NUMBER)
-//                    .description(""),
-//                fieldWithPath("ingredients[].ingredientId").type(JsonFieldType.NUMBER).description(""),
-//                fieldWithPath("cookSteps[].cookStepId").type(JsonFieldType.NUMBER).description("")
-//            ),
-//            responseFields(
-//                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-//                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-//            )
-//        )
-//    );
-//
-//  }
+
+  @Test
+  @WithCustomMockUser
+  @DisplayName("레시피 업데이트")
+  void updateRecipe() throws Exception {
+
+    // 이미지 파일 파트
+    MockMultipartFile imgFile = new MockMultipartFile(
+        "img",
+        "test.png",
+        "image/png",
+        "test image content".getBytes()
+    );
+
+    // JSON 데이터 파트
+    MockMultipartFile dataFile = new MockMultipartFile(
+        "data",
+        "",
+        "application/json",
+        objectMapper.writeValueAsString(RECIPE_UPDATE_DTO).getBytes()
+    );
+
+
+    doNothing().when(recipeService).updateRecipe(any(), any(), any(), any());
+
+    ResultActions resultActions = mockMvc.perform(
+            multipart(RECIPE_API + "/modify/{recipeId}", RECIPE.getId())
+                .file(dataFile)
+                .file(imgFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .with(csrf())
+                .with(request -> {
+                  request.setMethod("PATCH");
+                  return request;
+                }))
+        .andExpect(status().isOk());
+
+    resultActions.andDo(document("recipeController/modify",
+        requestParts(
+            partWithName("img").description("음식 이미지 파일"),
+            partWithName("data").description("회원 가입 데이터 (JSON)")
+        ),
+        requestPartFields("data",
+            fieldWithPath("foodName").type(JsonFieldType.STRING)
+                .description("음식 이름"),
+//            fieldWithPath("foodImg").type(JsonFieldType.STRING)
+//                .description("음식 사진"),
+            fieldWithPath("foodInformation").type(JsonFieldType.OBJECT)
+                .description("음식 정보 객체"),
+            fieldWithPath("foodInformation.foodInformationId").type(JsonFieldType.NUMBER)
+                .description("음식 정보 객체 ID"),
+            fieldWithPath("foodInformation.text").type(JsonFieldType.STRING)
+                .description("음식 정보 내용"),
+            fieldWithPath("foodInformation.cookingTime").type(JsonFieldType.NUMBER)
+                .description("조리 시간"),
+            fieldWithPath("foodInformation.serving").type(JsonFieldType.STRING)
+                .description("조리 기준 식사량"),
+            fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("재료 리스트"),
+            fieldWithPath("ingredients[].ingredientId").type(JsonFieldType.NUMBER)
+                .description("재료 식별자"),
+            fieldWithPath("ingredients[].ingredientName").type(JsonFieldType.STRING)
+                .description("재료 이름"),
+            fieldWithPath("ingredients[].amount").type(JsonFieldType.STRING).description("재료 량"),
+            fieldWithPath("cookSteps").type(JsonFieldType.ARRAY).description("조리 단계"),
+            fieldWithPath("cookSteps[].cookStepId").type(JsonFieldType.NUMBER)
+                .description("조리과정 식별자"),
+            fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER).description("조리 순서"),
+            fieldWithPath("cookSteps[].stepImg").type(JsonFieldType.STRING).description("조리 이미지"),
+            fieldWithPath("cookSteps[].text").type(JsonFieldType.STRING).description("조리 단계 설명")),
+        responseFields(
+            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+        )));
+
+  }
 
   @Test
   @WithCustomMockUser
   @DisplayName("레시피 삭제하기")
   void deleteRecipe() throws Exception {
-
 
     doNothing().when(recipeService).deleteRecipe(any(), any());
 
