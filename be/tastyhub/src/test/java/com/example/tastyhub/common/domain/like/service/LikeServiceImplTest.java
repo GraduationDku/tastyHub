@@ -56,4 +56,13 @@ public class LikeServiceImplTest {
         verify(likeRepository, times(0)).deleteByRecipeIdAndUserId(any(), any());
         verify(likeRepository, times(1)).save(any());
     }
+
+    @Test
+    @DisplayName("레시피의 좋아요 개수 조회")
+    void countLike(){
+        when(likeRepository.countByRecipeId(RECIPE.getId())).thenReturn(any());
+
+        likeService.count(RECIPE.getId());
+        verify(likeRepository, times(1)).countByRecipeId(RECIPE.getId());
+    }
 }
