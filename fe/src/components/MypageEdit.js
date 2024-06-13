@@ -19,18 +19,16 @@ function MypageEdit() {
 
   const handleUserInfoSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const data = {
         nickname: nickname
       };
-      console.log(data)
-      console.log(userImg)
+  
       const formData = new FormData();
       formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
       formData.append('img', userImg);
-      
-
+  
       const response = await fetch('http://localhost:8080/user/modify/information', {
         method: 'POST',
         headers: {
@@ -39,7 +37,7 @@ function MypageEdit() {
         },
         body: formData,
       });
-
+  
       if (response.ok) {
         console.log('사용자 정보가 성공적으로 수정되었습니다.');
       } else {
@@ -49,6 +47,7 @@ function MypageEdit() {
       console.error('서버 요청 중 오류 발생:', error);
     }
   };
+  
 
   useEffect(() => {
     const script = document.createElement('script');
