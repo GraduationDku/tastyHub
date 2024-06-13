@@ -1,0 +1,84 @@
+version: '3.8'
+
+volumes:
+  tasty-data: {}
+  email-data: {}
+
+
+services:
+  # frontend:
+  #   build:
+  #     context: ./fe
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - app-tier
+  
+  database:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: tastyhub
+    ports:
+      - 3306:3306
+    volumes:
+      - tasty-data:/var/lib/mysql
+    # networks:
+    #   - app-tier
+
+  redis:
+    image: redis
+    restart: always
+    # environment:
+    #   requirepass: 1234
+    ports:
+      - 6379:6379
+    volumes:
+      - email-data:/data
+    # command: redis-server --requirepass 1234
+
+    # networks:
+    #   - app-tier
+    # extra_hosts:
+    #   - host.docker.internal:host-gateway
+
+  backend:
+    container_name: back_spring
+    image : skyriv213/tastyhub
+    platform: linux/x86_64    # 추가된 라인
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tastyhub?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SERVER_PORT: 8080
+      # SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tastyhub?useSSL=false&allowPublicKeyRetrieval=true
+      # SPRING_DATASOURCE_USERNAME: root
+      # SPRING_DATASOURCE_PASSWORD: 1234
+      # SPRING_REDIS_HOST: redis1
+      # SPRING_REDIS_PORT: 6379
+      # SPRING_REDIS_PASSWORD: 1234
+      # SPRING_MAIL_HOST: smtp.gmail.com
+      # SPRING_MAIL_PORT: 587
+      # SPRING_MAIL_USERNAME: tastyhub0123@gmail.com
+      # SPRING_MAIL_PASSWORD: rqgdeshjicxbwfze
+      # SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      # SPRING_MAIL_PROPERTIES_MAIL_SMTP_TIMEOUT: "5000"
+      # SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+      # JWT_SECRET_KEY: "ASDSAIkAak8Sk8Sdi122r1jaEKdAIkAak8SdiIkAak8SSk8Sdi1SSIkAak15ASdsa15ka95sjS"
+
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+      - redis
+    # networks:
+    #   - app-tier
+    # external_links:
+    #   - emredis
+    
+# networks:
+#   app-tier:
+#     driver: bridge

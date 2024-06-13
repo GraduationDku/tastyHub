@@ -1,0 +1,43 @@
+.HomeScreen {
+  background-color: #FAF6C0; /* 원하는 배경색 */
+  min-height: 100vh; /* 전체 뷰포트 높이 */
+  width: 100%; /* 전체 너비 */
+}
+
+.search-results{
+  background-color: #FAF6C0; /* 배경색 지정 */
+  min-height: 100vh; /* 뷰포트 전체 높이만큼 최소 높이 설정 */
+  padding: 20px; /* 내부 여백 추가 */
+  color : #5C5F5C;
+}
+
+
+.search-results h1 {
+  padding: 4px;
+  background-color: #AEC7A1;
+  width: 400px; /* 제목의 너비를 box와 동일하게 조정 */
+  height: 40px;
+  text-align: center;
+  
+  border-radius: 10px 10px 0 0;
+  margin: auto; /* 수평 가운데 정렬 */
+  color: #5C5F5C;
+  font-size: 25px;
+}
+
+.search-results .box {
+  background-color: white; /* Optional: style for the inner box */
+  padding: 20px;
+  border-radius: 10px; /* Optional: rounded corners for the box */
+  max-width: 800px; /* Limit the maximum width */
+  margin: auto; /* Center the box horizontally */
+  width: 800px;
+}
+.search-results img{
+  border-radius:20px;
+  width:50%;
+}
+
+.search-results h2{
+  font-size:20px;
+}
