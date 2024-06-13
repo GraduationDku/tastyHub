@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         String username = signupRequest.getUsername();
         String password = signupRequest.getPassword() + username.substring(0,
             2); // 레인보우 테이블을 취약 -> salt 사용을 통해 해결
-        String imgUrl = "refact"; // 기본 이미지 url
+        String imgUrl = "https://tastyhub-bucket.s3.ap-northeast-2.amazonaws.com/image/recipeImg/free-icon-user-747376.png"; // 기본 이미지 url
         
 
         try {
