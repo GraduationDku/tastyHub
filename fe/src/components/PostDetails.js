@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
+import '../css/PostDetails.css';
 
 function PostDetails({ postId, setScreen }) {
   const [postDetails, setPostDetails] = useState(null);
@@ -48,27 +49,48 @@ function PostDetails({ postId, setScreen }) {
     }
   };
 
-  const enterChatRoom = async () => {
-    if (!roomExists) return;
-
+  const createChatRoom = async () => {
     try {
       const response = await fetch(`http://localhost:8080/room/${postId}`, {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
         }
       });
       if (response.ok) {
-        const data = await response.json();
-        // Process the chat data as needed
-        console.log(data.chatDtoList);
-        setScreen('sendchat'); // Assuming sendchat is the screen for the chat room
+        setRoomExists(true);
+        setScreen('mainchat'); // 채팅방이 생성되면 mainchat 화면으로 이동
       } else {
-        throw new Error('Failed to enter chat room');
+        throw new Error('Failed to create chat room');
       }
     } catch (error) {
-      console.error('Error entering chat room:', error);
+      console.error('Error creating chat room:', error);
+    }
+  };
+
+  const enterChatRoom = async () => {
+    if (!roomExists) {
+      await createChatRoom();
+    } else {
+      try {
+        const response = await fetch(`http://localhost:8080/room/${postId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('accessToken')
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data.chatDtoList);
+          setScreen('sendchat'); // 채팅방에 입장하면 mainchat 화면으로 이동
+        } else {
+          throw new Error('Failed to enter chat room');
+        }
+      } catch (error) {
+        console.error('Error entering chat room:', error);
+      }
     }
   };
 
@@ -88,26 +110,35 @@ function PostDetails({ postId, setScreen }) {
   }
 
   return (
-    <div className="post-details">
-      <h1>{postDetails.title}</h1>
-      <p>{postDetails.text}</p>
-      <p>{postDetails.postState}</p>
-      <p>{postDetails.nickname}</p>
-      <p>{postDetails.latestUpdateTime}</p>
-      
-      <Comment postId={postId} refreshComments={fetchPostDetails} comments={postDetails.commentDtos} />
-      
-      <button onClick={() => setScreen('post')}>목록으로 돌아가기</button>
-      <button
-        onClick={enterChatRoom}
-        disabled={!roomExists}
-        style={{
-          backgroundColor: roomExists ? 'blue' : 'gray',
-          cursor: roomExists ? 'pointer' : 'not-allowed'
-        }}
-      >
-        {roomExists ? '채팅방 입장' : '채팅방 없음'}
-      </button>
+    <div className="postdetails">
+      <div className="box">
+        <div className="box2">
+          <h1>{postDetails.title}</h1>
+          <hr />
+          <p className="nick">{postDetails.nickname}</p>
+          <p>{postDetails.text}</p>
+          <p className="state">{postDetails.postState}</p>
+          <p className="time">{postDetails.latestUpdateTime}</p>
+          <hr />
+          <button className='but' onClick={() => setScreen('post')}>목록으로 돌아가기</button>
+          <button
+            onClick={enterChatRoom}
+            style={{
+              backgroundColor: roomExists ? '#6ca6d6' : 'gray',
+              cursor: roomExists ? 'pointer' : 'not-allowed',
+              border: 'none',
+              borderRadius: '10px'
+            }}
+          >
+            {roomExists ? '채팅방 입장' : '채팅방 생성'}
+          </button>
+          <br /><br />
+        </div>
+        <br />
+        <div className="box3">
+          <Comment postId={postId} refreshComments={fetchPostDetails} comments={postDetails.commentDtos} />
+        </div>
+      </div>
     </div>
   );
 }

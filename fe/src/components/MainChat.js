@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import '../css/MainChat.css';
 
-function MainChat({ onChatroomSelect, setScreen }) {
+function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const [chatRooms, setChatRooms] = useState([]);
+    const [selectedRooms, setSelectedRooms] = useState(new Set());
+    const [deleteMode, setDeleteMode] = useState(false);
 
     useEffect(() => {
+        if (isGuest) {
+            setScreen('signup');
+            return;
+        }
+        
         const fetchChatRooms = async () => {
             try {
                 const response = await fetch('http://localhost:8080/room', {
@@ -32,29 +40,86 @@ function MainChat({ onChatroomSelect, setScreen }) {
         };
 
         fetchChatRooms();
-    }, []);
+    }, [isGuest, setScreen]);
 
     const handleChatroomClick = (roomId) => {
-        onChatroomSelect(roomId);
-        setScreen('sendchat');
+        if (!deleteMode) {
+            onChatroomSelect(roomId);
+            setScreen('sendchat');
+        }
+    };
+
+    const handleDeleteModeToggle = () => {
+        setDeleteMode(!deleteMode);
+        setSelectedRooms(new Set()); // 초기화
+    };
+
+    const handleCheckboxChange = (roomId) => {
+        const updatedSelectedRooms = new Set(selectedRooms);
+        if (updatedSelectedRooms.has(roomId)) {
+            updatedSelectedRooms.delete(roomId);
+        } else {
+            updatedSelectedRooms.add(roomId);
+        }
+        setSelectedRooms(updatedSelectedRooms);
+    };
+
+    const handleDeleteSelected = async () => {
+        for (let roomId of selectedRooms) {
+            try {
+                const response = await fetch(`http://localhost:8080/room/${roomId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem('accessToken')
+                    }
+                });
+                console.log(response)
+                if (!response.ok) {
+                    throw new Error(`Failed to delete room with id ${roomId}`);
+                }
+            } catch (error) {
+                console.error('Error deleting chat room:', error);
+            }
+        }
+        setChatRooms(chatRooms.filter(room => !selectedRooms.has(room.roomId)));
+        setSelectedRooms(new Set());
+        setDeleteMode(false);
     };
 
     return (
-        <div className="main-chat">
-            <h1>Chat Rooms</h1>
-            <ul>
-                {chatRooms.map(chatRoom => (
-                    <li key={chatRoom.roomId}>
-                        <div>
-                            <p>{chatRoom.from}</p>
-                            <p>{chatRoom.time}</p>
-                            <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
-                                {chatRoom.chatRoomTitle}
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+        <div className="mainchat">
+            <h1>채팅방</h1>
+            <button onClick={handleDeleteModeToggle}>
+                {deleteMode ? '취소' : '삭제하기'}
+            </button>
+            {deleteMode && (
+                <button onClick={handleDeleteSelected} disabled={selectedRooms.size === 0}>
+                    선택된 채팅방 삭제
+                </button>
+            )}
+            <div className='box'>
+                <ul>
+                    {chatRooms.map(chatRoom => (
+                        <li key={chatRoom.roomId}>
+                            <div className='seperate'>
+                                {deleteMode && (
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedRooms.has(chatRoom.roomId)}
+                                        onChange={() => handleCheckboxChange(chatRoom.roomId)}
+                                    />
+                                )}
+                                <p>{chatRoom.from}</p>
+                                <p>{chatRoom.time}</p>
+                                <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
+                                    {chatRoom.chatRoomTitle}
+                                </button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 }

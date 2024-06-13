@@ -1,61 +1,42 @@
 import React, { useState, useEffect } from 'react';
-
+import '../css/MypageEdit.css';
 
 function MypageEdit() {
-  // 상태 관리
-  const [userImg, setUserImg] = useState('');
+  const [userImg, setUserImg] = useState(null); // 초기값을 null로 설정
   const [nickname, setNickname] = useState('');
   const [beforePassword, setBeforePassword] = useState('');
   const [resetPassword, setResetPassword] = useState('');
   const [location, setLocation] = useState({ lat: null, lng: null });
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [isPasswordMatch, setIsPasswordMatch] = useState(false);
+  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
+  const [isNicknameEntered, setIsNicknameEntered] = useState(false);
 
-  // 프로필 사진 핸들러
   const handleFileChange = (e) => {
-    setUserImg(e.target.files[0]);
+    const file = e.target.files[0];
+    setUserImg(file);
   };
 
-  const handleProfilePicSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('userImg', userImg);
-
-    try {
-      const response = await fetch('http://localhost:8080/user/modify/profile-pic', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('accessToken')
-      },
-        body: userImg,
-      });
-
-      if (response.ok) {
-        console.log('프로필 사진이 성공적으로 수정되었습니다.');
-      } else {
-        console.error('프로필 사진 수정에 실패했습니다:', response.status, await response.text());
-      }
-    } catch (error) {
-      console.error('서버 요청 중 오류 발생:', error);
-    }
-  };
-
-  // 사용자 정보 수정 핸들러
   const handleUserInfoSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      const data = {
+        nickname: nickname
+      };
+      console.log(data)
+      console.log(userImg)
+      const formData = new FormData();
+      formData.append('data', JSON.stringify(data));
+      formData.append('img', userImg);
+      
+
       const response = await fetch('http://localhost:8080/user/modify/information', {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': localStorage.getItem('accessToken'),
         },
-        body: JSON.stringify({
-          nickname,
-          beforePassword,
-          resetPassword,
-        }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -68,7 +49,6 @@ function MypageEdit() {
     }
   };
 
-  // 위치 정보 가져오기 및 네이버 맵 초기화
   useEffect(() => {
     const script = document.createElement('script');
     script.src = "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tyevkp01u2&submodules=geocoder";
@@ -132,8 +112,7 @@ function MypageEdit() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization' : localStorage.getItem('accessToken')
-          
+          'Authorization': localStorage.getItem('accessToken')
         },
         body: JSON.stringify({
           lat: location.lat,
@@ -151,34 +130,49 @@ function MypageEdit() {
     }
   };
 
+  useEffect(() => {
+    setIsPasswordMatch(beforePassword === resetPassword);
+    setIsPasswordEmpty(!beforePassword && !resetPassword);
+  }, [beforePassword, resetPassword]);
+
+  useEffect(() => {
+    setIsNicknameEntered(!!nickname);
+  }, [nickname]);
+
   return (
-    <div>
-      <h1>마이페이지 수정</h1>
+    <div className='mypageedit'>
+      <div className='box'>
+        <form className='user' onSubmit={handleUserInfoSubmit}>
+          <h2>사용자 정보 수정</h2>
+          <h2>프로필 사진 수정</h2>
+          <input type="file" onChange={handleFileChange} /><br />
+          <input 
+            type="text" 
+            placeholder="새 닉네임" 
+            value={nickname} 
+            onChange={(e) => setNickname(e.target.value)} 
+          /><br />
+          <button 
+            type="submit" 
+            style={{ backgroundColor: isNicknameEntered ? '#AEC7A1' : 'gray' }} 
+            disabled={!isNicknameEntered}
+          >
+            수정하기
+          </button>
+        </form>
       
-      <form onSubmit={handleProfilePicSubmit}>
-        <h2>프로필 사진 수정</h2>
-        <input type="file" onChange={handleFileChange} />
-        <button type="submit">수정</button>
-      </form>
-      
-      <form onSubmit={handleUserInfoSubmit}>
-        <h2>사용자 정보 수정</h2>
-        <input type="text" placeholder="새 닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} /><br/>
-        <input type="password" placeholder="현재 비밀번호" value={beforePassword} onChange={(e) => setBeforePassword(e.target.value)} /><br/>
-        <input type="password" placeholder="새 비밀번호" value={resetPassword} onChange={(e) => setResetPassword(e.target.value)} /><br/>
-        <button type="submit">수정</button>
-      </form>
-      
-      <div className="village">
-        <h2>동네 수정</h2>
-        <button onClick={getLocation}>현재 위치 가져오기</button>
-        {location.lat && location.lng && (
-          <>
-            <p>위도: {location.lat}, 경도: {location.lng}</p>
-            <div className="map" id="map" style={{ width: "100%", height: "400px" }}></div>
-            <button onClick={handleLocationSubmit}>위치 수정</button>
-          </>
-        )}
+        <div className='findlocation'>
+          <h2>동네 수정</h2>
+          <button onClick={getLocation}>현재 위치 가져오기</button>
+          {location.lat && location.lng && (
+            <>
+              <p>위도: {location.lat}, 경도: {location.lng}</p>
+              <div className="map" id="map" style={{ width: "700px", height: "400px", borderRadius:"20px" }}></div>
+              <br />
+              <button onClick={handleLocationSubmit}>위치 수정하기</button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

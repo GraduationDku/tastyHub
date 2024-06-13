@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../css/RecipeDetails.css';
 import CreateRecipeReview from './CreateRecipeReview';
+import LikeButton from './Like'; // Ensure you import the LikeButton component correctly
+import ScrapButton from './Scrap'; // Import the ScrapButton component
 
 function RecipeDetails({ recipeId }) {
   const [recipeDetails, setRecipeDetails] = useState(null);
@@ -13,7 +15,7 @@ function RecipeDetails({ recipeId }) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            
+            'Authorization': localStorage.getItem('accessToken')
           }
         });
         if (response.ok) {
@@ -34,7 +36,7 @@ function RecipeDetails({ recipeId }) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization' : localStorage.getItem('accessToken')
+            'Authorization': localStorage.getItem('accessToken')
           }
         });
         if (response.ok) {
@@ -65,13 +67,13 @@ function RecipeDetails({ recipeId }) {
         <img src={recipeDetails.foodImgUrl} alt={recipeDetails.foodName} />
 
         <div>
-          <p><strong>Description:</strong> {recipeDetails.foodInformation.text}</p>
-          <p><strong>Cooking Time:</strong> {recipeDetails.foodInformation.cookingTime} minutes</p>
-          <p><strong>Serving:</strong> {recipeDetails.foodInformation.serving}</p>
+          <p><strong>레시피 설명</strong> {recipeDetails.foodInformation.text}</p>
+          <p><strong>조리 시간 </strong> {recipeDetails.foodInformation.cookingTime} minutes</p>
+          <p><strong>양 </strong> {recipeDetails.foodInformation.serving}</p>
         </div>
 
         <div>
-          <h3>Ingredients:</h3>
+          <h3>재료</h3>
           <ul>
             {recipeDetails.ingredients.map((ingredient, index) => (
               <li key={ingredient.ingredientId || index}>
@@ -82,11 +84,11 @@ function RecipeDetails({ recipeId }) {
         </div>
 
         <div>
-          <h3>Cooking Steps:</h3>
+          <h3>순서</h3>
           <ol>
             {recipeDetails.cookSteps.map((step, index) => (
               <li key={step.cookStepId || index}>
-                <strong>Step {step.stepNumber}:</strong> {step.text}
+                <strong>Step {step.stepNumber}</strong> {step.text}
                 {step.stepImgUrl && <img src={step.stepImgUrl} alt={`Step ${step.stepNumber}`} style={{ width: '100%', maxHeight: '200px' }} />}
               </li>
             ))}
@@ -94,11 +96,19 @@ function RecipeDetails({ recipeId }) {
         </div>
 
         <div>
-          <h3>Reviews:</h3>
+          <LikeButton recipeId={recipeId} />
+        </div>
+
+        <div>
+          <ScrapButton recipeId={recipeId} />
+        </div>
+
+        <div>
+          <h3>리뷰</h3>
           <ul>
             {recipeReviews.map((review, index) => (
               <li key={index}>
-                <p><strong>{review.nickname}</strong> (Grade: {review.grade})</p>
+                <p><strong>{review.nickname}</strong> (평점 : {review.grade})</p>
                 <p>{review.text}</p>
               </li>
             ))}
@@ -106,7 +116,6 @@ function RecipeDetails({ recipeId }) {
         </div>
 
         <div>
-          <h3>Write a Review:</h3>
           <CreateRecipeReview recipeId={recipeId} />
         </div>
       </div>
