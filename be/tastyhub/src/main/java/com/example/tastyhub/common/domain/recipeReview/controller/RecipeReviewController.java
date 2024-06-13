@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.tastyhub.common.domain.recipeReview.dtos.PagingMyRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
@@ -51,6 +52,12 @@ public class RecipeReviewController {
         return ResponseEntity.ok().body(pagingRecipeReviewResponseList);
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<PagingMyRecipeReviewResponse>> getRecipeReviews(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<PagingMyRecipeReviewResponse> pagingMyRecipeReviewResponseList = recipeReviewService.getMyRecipeReviews(userDetails.getUser());
+        return ResponseEntity.ok().body(pagingMyRecipeReviewResponseList);
+    }
+
     @PatchMapping("/modify/{recipeReviewId}")
     public ResponseEntity<StatusResponse> updateRecipeReview(@PathVariable Long recipeReviewId,
         @RequestBody RecipeReviewUpdateRequest recipeReviewUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -58,6 +65,7 @@ public class RecipeReviewController {
             return RESPONSE_OK;
         
     }
+
     @DeleteMapping("/delete/{recipeReviewId}")
     public ResponseEntity<StatusResponse> deleteRecipeReview(@PathVariable Long recipeReviewId,
          @AuthenticationPrincipal UserDetailsImpl userDetails){

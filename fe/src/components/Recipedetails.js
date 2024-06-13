@@ -65,18 +65,18 @@ function RecipeDetails({ recipeId }) {
       <h1>{recipeDetails.foodName}</h1>
       <div className='box'>
         <img src={recipeDetails.foodImgUrl} alt={recipeDetails.foodName} />
-
+        
         <div>
-          <p><strong>레시피 설명</strong> {recipeDetails.foodInformation.text}</p>
-          <p><strong>조리 시간 </strong> {recipeDetails.foodInformation.cookingTime} minutes</p>
-          <p><strong>양 </strong> {recipeDetails.foodInformation.serving}</p>
+          <p className='dis'><strong>레시피 설명<br/><br/></strong> {recipeDetails.foodInformation.text}</p>
+          <p className='time'><strong>조리 시간 </strong> {recipeDetails.foodInformation.cookingTime}분</p>
+          <p className='amount'><strong>양 </strong> {recipeDetails.foodInformation.serving}</p>
         </div>
 
         <div>
           <h3>재료</h3>
           <ul>
             {recipeDetails.ingredients.map((ingredient, index) => (
-              <li key={ingredient.ingredientId || index}>
+              <li key={ingredient.ingredientId || index} >
                 {ingredient.ingredientName} - {ingredient.amount}
               </li>
             ))}
@@ -88,22 +88,20 @@ function RecipeDetails({ recipeId }) {
           <ol>
             {recipeDetails.cookSteps.map((step, index) => (
               <li key={step.cookStepId || index}>
-                <strong>Step {step.stepNumber}</strong> {step.text}
+                 {step.text}<br/><br/>
                 {step.stepImgUrl && <img src={step.stepImgUrl} alt={`Step ${step.stepNumber}`} style={{ width: '100%', maxHeight: '200px' }} />}
               </li>
             ))}
           </ol>
         </div>
 
-        <div>
-          <LikeButton recipeId={recipeId} />
-        </div>
-
-        <div>
-          <ScrapButton recipeId={recipeId} />
-        </div>
-
-        <div>
+        <p style={{ display: 'flex', gap: '20px' }}>
+  <LikeButton recipeId={recipeId} />
+  <ScrapButton recipeId={recipeId} />
+</p>
+        <br/><br/><br/>
+        <div className='review'>
+          <div>
           <h3>리뷰</h3>
           <ul>
             {recipeReviews.map((review, index) => (
@@ -114,12 +112,12 @@ function RecipeDetails({ recipeId }) {
             ))}
           </ul>
         </div>
-
+        <br/><br/><br/>
         <div>
           <CreateRecipeReview recipeId={recipeId} />
         </div>
       </div>
-    </div>
+    </div></div>
   );
 }
 

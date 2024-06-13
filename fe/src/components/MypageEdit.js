@@ -30,10 +30,10 @@ function MypageEdit() {
       formData.append('img', userImg);
   
       const response = await fetch('http://localhost:8080/user/modify/information', {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
           'Authorization': localStorage.getItem('accessToken'),
-          // 'Content-Type': 'multipart/form-data'  <-- 이 줄을 제거해야 합니다.
+          'Content-Type': 'multipart/form-data'
         },
         body: formData,
       });
@@ -114,10 +114,10 @@ function MypageEdit() {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
         },
-        body: JSON.stringify({
+        body: {
           lat: location.lat,
           lng: location.lng,
-        }),
+        },
       });
 
       if (response.ok) {
@@ -144,7 +144,6 @@ function MypageEdit() {
       <div className='box'>
         <form className='user' onSubmit={handleUserInfoSubmit}>
           <h2>사용자 정보 수정</h2>
-          <h2>프로필 사진 수정</h2>
           <input type="file" onChange={handleFileChange} /><br />
           <input 
             type="text" 

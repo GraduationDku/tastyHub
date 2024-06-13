@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../css/Like.css'
 
 const LikeButton = ({ recipeId }) => {
   const [likeCount, setLikeCount] = useState(0);
@@ -51,8 +52,8 @@ const LikeButton = ({ recipeId }) => {
   }, [recipeId]);
 
   return (
-    <div>
-      <button onClick={toggleLike}>
+    <div >
+      <button className='like' onClick={toggleLike}>
         {liked ? 'Unlike' : 'Like'} ({likeCount})
       </button>
     </div>

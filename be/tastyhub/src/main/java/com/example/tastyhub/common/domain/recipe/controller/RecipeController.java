@@ -58,6 +58,13 @@ public class RecipeController {
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
             .body(recipeService.getAllRecipes(pageable));
     }
+    @GetMapping("/mylist")
+    public ResponseEntity<Page<PagingRecipeResponse>> getMyRecipes(
+        @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable, @AuthenticationPrincipal
+        UserDetailsImpl userDetails) {
+        return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
+            .body(recipeService.getMyRecipes(pageable, userDetails.getUser()));
+    }
 
     @GetMapping("/search/{keyword}")
     public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(
@@ -88,8 +95,8 @@ public class RecipeController {
      * writer : skyriv213 method : 단일레시피 조회하기
      */
     @GetMapping("/detail/{recipeId}")
-    public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long recipeId) {
-        RecipeDto recipeDto = recipeService.getRecipe(recipeId);
+    public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long recipeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        RecipeDto recipeDto = recipeService.getRecipe(recipeId, userDetails.getUser());
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(recipeDto);
     }
 

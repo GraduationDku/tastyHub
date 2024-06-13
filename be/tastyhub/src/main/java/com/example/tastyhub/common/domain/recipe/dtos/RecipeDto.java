@@ -18,6 +18,9 @@ public class RecipeDto {
     private Long foodId;
     private String foodName;
     private String foodImgUrl;
+    
+    private boolean isLiked;
+    private boolean isScraped;
 
     private FoodInformationDto foodInformation;
 

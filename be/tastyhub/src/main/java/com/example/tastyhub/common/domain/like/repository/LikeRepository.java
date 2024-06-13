@@ -11,4 +11,6 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     boolean existsByRecipeIdAndUserId(Long recipeId, Long userId);
 
+    Long countByRecipeId(Long recipId);
+
 }

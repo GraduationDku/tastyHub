@@ -90,6 +90,8 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     return (
         <div className="mainchat">
             <h1>채팅방</h1>
+            
+            <div className='box'>
             <button onClick={handleDeleteModeToggle}>
                 {deleteMode ? '취소' : '삭제하기'}
             </button>
@@ -98,7 +100,6 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                     선택된 채팅방 삭제
                 </button>
             )}
-            <div className='box'>
                 <ul>
                     {chatRooms.map(chatRoom => (
                         <li key={chatRoom.roomId}>
@@ -114,6 +115,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                                 <p>{chatRoom.time}</p>
                                 <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
                                     {chatRoom.chatRoomTitle}
+                                    
                                 </button>
                             </div>
                         </li>

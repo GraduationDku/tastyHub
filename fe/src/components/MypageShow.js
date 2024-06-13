@@ -17,30 +17,11 @@ const MypageShow = ({userId}) => {
         },
       });
       const data = await response.json();
-      console.log(data)
-      setScrapedRecipes(Array.isArray(data) ? data : []);
+      console.log(data.content)
+      setScrapedRecipes(Array.isArray(data.content) ? data.content : []);
     } catch (error) {
       console.error('Failed to fetch scraped recipes:', error);
       setScrapedRecipes([]);
-    }
-  };
-
-  const fetchReceivedReviews = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/user-review/list/${userId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('accessToken')
-        },
-      });
-      console.log(response)
-      const data = await response.json();
-      console.log(data)
-      
-      setReceivedReviews(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error('Failed to fetch received reviews:', error);
-      setReceivedReviews([]);
     }
   };
 
@@ -86,9 +67,6 @@ const MypageShow = ({userId}) => {
       <button onClick={() => { setView('scraped'); fetchScrapedRecipes(); }}>스크랩한 레시피 모아보기</button>
       <br/>
       <br/>
-      <button onClick={() => { setView('received'); fetchReceivedReviews(); }}>내가 받은 리뷰 모아보기</button>
-      <br/>
-      <br/>
       <button onClick={() => { setView('written'); fetchWrittenReviews(); }}>내가 작성한 레시피 리뷰 모아보기</button>
       <br/>
       <br/>
@@ -97,7 +75,6 @@ const MypageShow = ({userId}) => {
       <br/>
       
       {view === 'scraped' && <ScrapedRecipes recipes={scrapedRecipes} />}
-      {view === 'received' && <ReceivedReviews reviews={receivedReviews} />}
       {view === 'written' && <WrittenReviews reviews={writtenReviews} />}
       {view === 'myrecipes' && <MyRecipes recipes={myRecipes} />}
     </div></div>
@@ -122,24 +99,6 @@ const ScrapedRecipes = ({ recipes }) => (
   </div>
 );
 
-const ReceivedReviews = ({ reviews }) => (
-  <div className='show'>
-    <h2>받은 리뷰</h2>
-    <ul>
-      {reviews.length > 0 ? (
-        reviews.map(review => (
-          <li key={review.userId}>
-            <p>{review.username}</p>
-            <p>Grade: {review.grade}</p>
-            <p>{review.text}</p>
-          </li>
-        ))
-      ) : (
-        <p>No reviews received.</p>
-      )}
-    </ul>
-  </div>
-);
 
 const WrittenReviews = ({ reviews }) => (
   <div className='show'>

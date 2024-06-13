@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../css/CreateReview.css';
 
 function CreateRecipeReview({ recipeId }) {
   const [grade, setGrade] = useState(0);
@@ -37,8 +38,11 @@ function CreateRecipeReview({ recipeId }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="grade">평점:</label>
+      
+      <div className='createreview'>
+        <div>
+        <label htmlFor="grade"><strong>평점 </strong> </label>
+        <br/><br/>
         <input
           type="number"
           id="grade"
@@ -49,8 +53,10 @@ function CreateRecipeReview({ recipeId }) {
           required
         />
       </div>
+      <br/>
       <div>
-        <label htmlFor="text">리뷰:</label>
+        <label htmlFor="text"><strong>리뷰 </strong></label>
+        <br/><br/>
         <textarea
           id="text"
           value={text}
@@ -58,11 +64,12 @@ function CreateRecipeReview({ recipeId }) {
           required
         />
       </div>
+      <br/><br/>
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? '제출 중...' : '제출'}
       </button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-    </form>
+    </div></form>
   );
 }
 
