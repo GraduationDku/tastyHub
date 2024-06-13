@@ -55,11 +55,17 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   @Override
   public List<ChatDto> getChatRoom(Long roomId, User user) {
     ChatRoom chatRoom = findChatRoomById(roomId);
-    UserChatRoom userChatRoom = userChatRoomRepository.findByUserAndChatRoom(user, chatRoom)
-        .orElseThrow(() -> new IllegalArgumentException("해당 유저는 접근할 권리가 없습니다."));
 
-    List<Chat> chats = chatRoom.getChats();
-    return chats.stream().map(ChatDto::new).collect(Collectors.toList());
+    if(userChatRoomRepository.existsByChatRoomAndUser(chatRoom,user)){
+      List<Chat> chats = chatRoom.getChats();
+      return chats.stream().map(ChatDto::new).collect(Collectors.toList());
+    }else{
+      UserChatRoom userChatRoom = UserChatRoom.builder().user(user).chatRoom(chatRoom).build();
+      userChatRoomRepository.save(userChatRoom);
+      List<Chat> chats = chatRoom.getChats();
+      return chats.stream().map(ChatDto::new).collect(Collectors.toList());
+    }
+
   }
 
   @Override
