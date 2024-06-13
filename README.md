@@ -16,8 +16,7 @@
 |:---:|:---:|:---:|:---:|
 |학과|소프트웨어학과|소프트웨어학과|소프트웨어학과|
 |학번|32197083|32183786|32207352|
-|역할|**Backend**, 팀 리더, Junit Test(단위), API 문서화, API 설계 및 개발, query 최적화|**Backend**, 서버 환경 구축, 클라우드 서버 관리, CI/CD 구축, API 설계 및 개발|**Frontend**, UI/UX, 성능 최적화 , 크로스 브라우징, 반응형 디자인|
-|사용기술|Java, Spring, JPA, Query DSL, MySQL, Security, Rest Docs, docker, git action, jenkins, nginx|Java, Spring, JPA, MySQL, EC2, S3, RDS, docker, jenkins|React, Typescript, Css, Redux, Sass, vercel, Prettier|
+|역할|**Backend** <br/> - Junit Test(단위 테스트) <br/> - 컨트롤러  + 서비스 <br/> - API 문서화  <br/> - API 설계 및 개발 <br/> - query 최적화(QueryDSL) <br/> - 개발자 로컬 환경 구축 <br/> - Docker, git action 이용  <br/> - 프로젝트 관련 레시피 데이터 생성|**Backend** <br/> -API 문서화 <br/> -Junit Test(서비스 단위 테스트) <br/> - 서버 환경 구축 <br/> - 클라우드 서버 관리 <br/> - CI/CD 구축 <br/> - API 설계 및 개발 <br/> - query 최적화 <br/> - 프로젝트 관련 레시피 데이터 생성|**frontend** - UI/UX <br/> - 성능 최적화 <br/>- API 설계 및 개발 <br/>- API 문서화 <br/>- 팀 프로젝트 문서관리 <br/>- 발표자료 제작 |기여도|34|33|33|
 <br>
 
 ## 프로젝트 목표
