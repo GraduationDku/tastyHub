@@ -4,6 +4,7 @@ import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentRequest
 import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentResponse;
 import static com.example.tastyhub.common.config.APIConfig.POST_API;
 import static com.example.tastyhub.common.config.APIConfig.USER_API;
+import static com.example.tastyhub.common.domain.post.entity.Post.PostState.Start;
 import static com.example.tastyhub.fixture.post.PostFixture.PAGING_POST_RESPONSE;
 import static com.example.tastyhub.fixture.post.PostFixture.PAGING_POST_RESPONSES;
 import static com.example.tastyhub.fixture.post.PostFixture.POST;
@@ -120,7 +121,8 @@ class PostControllerTest {
 
         requestFields(
             fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
-            fieldWithPath("text").type(JsonFieldType.STRING).description("게시글 내용")
+            fieldWithPath("text").type(JsonFieldType.STRING).description("게시글 내용"),
+            fieldWithPath("postState").type(JsonFieldType.STRING).description("게시글 상태")
         ),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),

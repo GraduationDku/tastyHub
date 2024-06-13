@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import '../css/Comment.css';
 
 const Comment = ({ postId, refreshComments, comments }) => {
     const [text, setText] = useState('');
@@ -32,14 +33,12 @@ const Comment = ({ postId, refreshComments, comments }) => {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization' : localStorage.getItem('accessToken')
                 },
-                body: JSON.stringify({ text: editingText })
+                body:  {text: editingText }
             });
             if (response.ok) {
-                const authorization = response.headers.get('Authorization');
-                const refreshToken = response.headers.get('Refresh');
-                localStorage.setItem('accessToken', authorization);
-                localStorage.setItem('refreshToken', refreshToken);
+                
                 setEditingCommentId(null);
                 setEditingText('');
                 refreshComments();
@@ -57,13 +56,10 @@ const Comment = ({ postId, refreshComments, comments }) => {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization' : localStorage.getItem('accessToken')
                 }
             });
             if (response.ok) {
-                const authorization = response.headers.get('Authorization');
-                const refreshToken = response.headers.get('Refresh');
-                localStorage.setItem('accessToken', authorization);
-                localStorage.setItem('refreshToken', refreshToken);
                 refreshComments();
             } else {
                 throw new Error('Failed to delete comment');
@@ -74,14 +70,13 @@ const Comment = ({ postId, refreshComments, comments }) => {
     };
 
     return (
-        <div className="comments-section">
-            <h2>Leave a Comment</h2>
+        <div className="comment">
             <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="Write a comment..."
+                placeholder="댓글을 작성하세요."
             ></textarea>
-            <button onClick={createComment}>Submit</button>
+            <button className="btnsubmit" onClick={createComment}>Submit</button>
 
             {comments.map(comment => (
                 <div key={comment.userId}>
@@ -89,8 +84,7 @@ const Comment = ({ postId, refreshComments, comments }) => {
                         <>
                             <textarea
                                 value={editingText}
-                                onChange={(e) => setEditingText(e.target.value)}
-                            ></textarea>
+                                onChange={(e) => setEditingText(e.target.value)}></textarea>
                             <button onClick={() => editComment(comment.userId)}>Save</button>
                             <button onClick={() => setEditingCommentId(null)}>Cancel</button>
                         </>
@@ -104,6 +98,7 @@ const Comment = ({ postId, refreshComments, comments }) => {
                 </div>
             ))}
         </div>
+
     );
 };
 

@@ -30,6 +30,7 @@ function Login({ setScreen }) {
         localStorage.setItem('nickname', nickname);
         
   
+
         console.log('로그인 성공');
         setScreen('main');
       } else {

@@ -96,36 +96,36 @@ function CreateRecipe() {
   return (
     <div className='createrecipe'>
       <form onSubmit={handleSubmit}>
-        <br/>
-        <br/>
         <div className='label1'>
-          레시피 이름 :
+          레시피 이름 
           <input type="text" name="foodName" value={form.foodName} onChange={handleChange} />
           <br /><br />
         </div>
         <div className='label2'>
-          사진 파일 :
+          사진 파일 
           <input type="file" accept="image/*" onChange={handleImageChange} />
           <div>
             {imagePreview && (
               <img src={imagePreview} alt="Preview" style={{ width: '100px', height: '100px', margin: '5px' }} />
             )}
           </div>
-          <br /><br />
         </div>
         <div className='label3'>
-          설명 :
-          <input name="text" value={form.foodInformation.text} onChange={handleChange} />
-          <br /><br />
-          조리 시간 :
+          <p>레시피 설명</p>
+          <textarea name="text" value={form.foodInformation.text} onChange={handleChange} />
+          </div><br/>
+        <div className='label6'>
+          조리 시간 
           <input type="number" name="cookingTime" value={form.foodInformation.cookingTime} onChange={handleChange} />
           <br /><br />
-          서빙 :
+          </div>
+        <div className='label7'>
+          양 
           <input name="serving" value={form.foodInformation.serving} onChange={handleChange} />
           <br /><br />
         </div>
         <div className='label4'>
-          재료 :
+          재료
           {form.ingredients.map((ingredient, index) => (
             <div key={index}>
               <input type="text" name="ingredientName" value={ingredient.ingredientName} onChange={(e) => handleArrayChange(e, index, 'ingredients')} placeholder="재료 이름" />
@@ -136,17 +136,18 @@ function CreateRecipe() {
           <br /><br />
         </div>
         <div className='label5'>
-          순서 :
+          순서
           {form.cookSteps.map((step, index) => (
             <div key={index}>
-              <input type="number" name="stepNumber" value={step.stepNumber} readOnly />
-              <input name="text" value={step.text} onChange={(e) => handleArrayChange(e, index, 'cookSteps')} placeholder="조리 방법" />
+              <span className='step-number'>{step.stepNumber}  </span><br/>
+              <input  name="text" value={step.text} onChange={(e) => handleArrayChange(e, index, 'cookSteps')} placeholder="조리 방법" />
             </div>
           ))}
+          <br></br>
           <button type="button" onClick={() => handleAddArrayItem('cookSteps')}>순서 추가</button>
           <br /><br />
         </div>
-        <button type="submit">Create Recipe</button>
+        <button className='save' type="submit">레시피 저장하기</button>
       </form>
     </div>
   );

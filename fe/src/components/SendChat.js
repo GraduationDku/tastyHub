@@ -90,9 +90,8 @@ const SendChat = ({ roomId }) => {
             sendMessage();
         }
     };
-
     return (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FAF6C0' }}>
             <ul style={{ listStyleType: 'none', padding: 0, flex: 1, overflowY: 'auto' }}>
                 {messages.map((msg, index) => (
                     <li
@@ -100,41 +99,67 @@ const SendChat = ({ roomId }) => {
                         style={{
                             display: 'flex',
                             justifyContent: msg.from === localStorage.getItem('nickname') ? 'flex-end' : 'flex-start',
-                            padding: '5px 0'
+                            padding: '5px 10px' // Add padding here
                         }}
                     >
-                        <div style={{ fontSize: '0.8em', color: '#888', marginTop: '5px' }}>
-                                {new Date(msg.time).toLocaleString()}
-                        </div>
-                        <div
-                            style={{
-                                background: msg.from === localStorage.getItem('nickname') ? '#DCF8C6' : '#FFF',
-                                padding: '10px',
-                                borderRadius: '10px',
-                                maxWidth: '60%',
-                                wordWrap: 'break-word',
-                                boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                            }}
-                        >
-                            {msg.from !== localStorage.getItem('nickname') && <strong>{msg.from} </strong>}
-                            {msg.text}
-                        </div>
+                        {msg.from !== localStorage.getItem('nickname') && (
+                            <>
+                                <div
+                                    style={{
+                                        background: '#FFF',
+                                        padding: '10px',
+                                        borderRadius: '10px',
+                                        maxWidth: '60%',
+                                        wordWrap: 'break-word',
+                                        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                                        marginLeft: '10px' // Add margin left here
+                                    }}
+                                >
+                                    <strong>{msg.from} </strong>
+                                    {msg.text}
+                                </div>
+                                <div style={{ fontSize: '0.8em', color: '#888', marginTop: '5px', marginLeft: '10px' }}>
+                                    {new Date(msg.time).toLocaleString()}
+                                </div>
+                            </>
+                        )}
+                        {msg.from === localStorage.getItem('nickname') && (
+                            <>
+                                <div style={{ fontSize: '0.8em', color: '#888', marginTop: '5px', marginRight: '10px' }}>
+                                    {new Date(msg.time).toLocaleString()}
+                                </div>
+                                <div
+                                    style={{
+                                        background: 'white',
+                                        padding: '10px',
+                                        borderRadius: '10px',
+                                        maxWidth: '60%',
+                                        wordWrap: 'break-word',
+                                        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                                        marginRight: '10px',
+                                        color : '#5C5F5C'
+                                    }}
+                                >
+                                    {msg.text}
+                                </div>
+                            </>
+                        )}
                     </li>
                 ))}
             </ul>
-            <div style={{ display: 'flex', position: 'fixed', bottom: 0, width: '100%', backgroundColor: '#fff', padding: '10px', boxSizing: 'border-box', borderTop: '1px solid #ccc' }}>
+            <div style={{ display: 'flex', position: 'fixed', bottom: 0, width: '100%', backgroundColor: '#fff', padding: '10px', boxSizing: 'border-box', borderTop: '1px solid #ccc', height:'70px'}}>
                 <input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="메세지를 입력하세요."
                     disabled={!connected}
-                    style={{ flex: 1, padding: '10px', boxSizing: 'border-box', marginRight: '10px' }}
+                    style={{ flex: 1, padding: '10px', boxSizing: 'border-box', marginRight: '10px', borderRadius:'10px' , border:'1px solid #ccc'}}
                 />
                 <button
                     onClick={sendMessage}
                     disabled={!connected}
-                    style={{ padding: '10px', boxSizing: 'border-box' }}
+                    style={{ padding: '15px', boxSizing: 'border-box', border:'none', backgroundColor : '#AEC7A1', borderRadius:'10px'}}
                 >
                     전송
                 </button>
