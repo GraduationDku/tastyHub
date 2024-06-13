@@ -46,6 +46,13 @@ public class UserReviewController {
         List<PagingUserReviewResponse> pagingUserReviewResponseList = userReviewService.getUserReviews(userId);
         return ResponseEntity.ok().body(pagingUserReviewResponseList);
     }
+    
+    @GetMapping("/mylist")
+    public ResponseEntity<List<PagingUserReviewResponse>> getMyUserReviews(
+    @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<PagingUserReviewResponse> pagingUserReviewResponseList = userReviewService.getUserReviews(userDetails.getUser().getId());
+        return ResponseEntity.ok().body(pagingUserReviewResponseList);
+    }
 
     @PatchMapping("/modify/{userReviewId}")
     public ResponseEntity<StatusResponse> updateUserReview(@PathVariable Long userReviewId,
