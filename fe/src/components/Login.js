@@ -22,8 +22,15 @@ function Login({ setScreen }) {
       if (response.ok) {
         const authorization = response.headers.get('Authorization');
         const refreshToken = response.headers.get('Refresh');
-        const data = await response.json();
-        const nickname = data.nickname; 
+        const data = await response.json(); // Extract JSON data
+        const nickname = data.nickname; // Extract nickname from JSON data
+
+        localStorage.setItem('accessToken', authorization);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('nickname', nickname);
+        
+  
+
         console.log('로그인 성공');
         setScreen('main');
       } else {

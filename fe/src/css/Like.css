@@ -1,0 +1,9 @@
+.like {
+  border: none;
+  width : 80px;
+  height : 50px;
+  border-radius:10px;
+  cursor: 'pointer';
+  margin-left : 30px;
+
+}
