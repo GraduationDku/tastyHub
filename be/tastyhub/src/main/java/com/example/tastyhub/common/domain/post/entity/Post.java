@@ -59,6 +59,7 @@ public class Post extends TimeStamped {
     public void update(PostUpdateRequest postUpdateRequest) {
         this.title = postUpdateRequest.getTitle();
         this.text = postUpdateRequest.getTitle();
+        this.postState = postUpdateRequest.getPostState();
     }
 
 }

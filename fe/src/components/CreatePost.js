@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import '../css/CreatePost.css';
 
 function CreatePost() {
   const [formData, setFormData] = useState({
@@ -40,23 +41,32 @@ function CreatePost() {
 
   return (
     <>
+    <div className="createpost">
+      
         <form onSubmit={handleSubmit}>
-        제목 :
+        <br/>
+        <br/>
+        <div className="title">
+        제목 
         <input
           type="text"
           name="title"
           value={formData.title}
           onChange={handleChange}
-        />
-        내용 :
-        <input
+        /></div>
+        <br></br><br/>
+        내용 
+        <br/>
+        <textarea
           type="text"
           name="text"
           value={formData.text}
           onChange={handleChange}
         />
+        <br/><br/>
         <button type="submit">작성하기</button>
       </form>
+      </div>
     </>
   );
 }

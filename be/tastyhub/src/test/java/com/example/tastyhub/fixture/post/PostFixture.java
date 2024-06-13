@@ -43,7 +43,9 @@ public class PostFixture {
     public static final PostUpdateRequest POST_UPDATE_REQUEST = PostUpdateRequest.builder()
         .text("text")
         .title("title")
+        .postState(PostState.Start)
         .build();
+
 
     public static final PagingPostResponse PAGING_POST_RESPONSE = PagingPostResponse.builder()
         .postId(1L)

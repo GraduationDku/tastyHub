@@ -17,9 +17,11 @@ import './App.css';
 import MainMypage from './components/MainMypage';
 import MypageEdit from './components/MypageEdit';
 import PostDetails from './components/PostDetails';
+import MypageShow from './components/MypageShow';
 
 function App() {
   const [screen, setScreen] = useState('home');
+  const [isGuest, setIsGuest] = useState(false);
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [selectedPostId, setSelectedPostId] = useState(null);
@@ -46,25 +48,31 @@ function App() {
     setScreen('postDetails');
   };
 
+  const handleGuestAccess = () => {
+    setIsGuest(true);
+    setScreen('main');
+  };
+
   return (
     <div>
       {screen !== 'home' && <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />}
-      {screen === 'home' && <HomeScreen setScreen={setScreen} />}
+      {screen === 'home' && <HomeScreen setScreen={setScreen} setIsGuest={setIsGuest} handleGuestAccess={handleGuestAccess} />}
       {screen === 'login' && <Login setScreen={setScreen} />}
       {screen === 'signup' && <Signup setScreen={setScreen} />}
       {screen === 'village' && <Village setScreen={setScreen} />}
       {screen === 'main' && <MainScreen onRecipeSelect={handleRecipeSelect} />}
       {screen === 'recipeDetails' && <Recipedetails recipeId={selectedRecipeId} setScreen={setScreen} />}
       {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
-      {screen === 'create' && <CreateRecipe setScreen={setScreen} />}
+      {screen === 'create' && !isGuest && <CreateRecipe setScreen={setScreen} />}
       {screen === 'findUsername' && <FindUsername setScreen={setScreen} />}
-      {screen === 'mainchat' && <MainChat setScreen={setScreen} onChatroomSelect={handleChatroomSelect} />}
-      {screen === 'post' && <Post setScreen={setScreen} onPostSelect={handlePostSelect} />}
-      {screen === 'createpost' && <CreatePost setScreen={setScreen}/>}
-      {screen === 'mypage' && <MainMypage setScreen={setScreen}/>}
-      {screen === 'sendchat' && selectedRoomId && <SendChat roomId={selectedRoomId} username={username}/>}
-      {screen === 'mypageedit' && <MypageEdit setScreen={setScreen}/>}
+      {screen === 'mainchat' && <MainChat setScreen={setScreen} onChatroomSelect={handleChatroomSelect} isGuest={isGuest} />}
+      {screen === 'post' && <Post setScreen={setScreen} onPostSelect={handlePostSelect} isGuest={isGuest} />}
+      {screen === 'createpost' && !isGuest && <CreatePost setScreen={setScreen} />}
+      {screen === 'mypage' && <MainMypage setScreen={setScreen} isGuest={isGuest} />}
+      {screen === 'sendchat' && selectedRoomId && !isGuest && <SendChat roomId={selectedRoomId} username={username} />}
+      {screen === 'mypageedit' && !isGuest && <MypageEdit setScreen={setScreen} />}
       {screen === 'postDetails' && <PostDetails postId={selectedPostId} setScreen={setScreen} />}
+      {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} />}
       {screen === 'searchResults' && (
         <div className="search-results">
           <h1>검색 결과</h1>

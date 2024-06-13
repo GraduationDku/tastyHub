@@ -1,4 +1,4 @@
-.createrecipe {
+.createpost {
   height: 1000vh; /* 전체 뷰포트 높이를 차지 */
   width: 100vw; /* 전체 뷰포트 너비를 차지 */
   background-color: #FAF6C0; /* 원하는 배경색 */
@@ -8,50 +8,46 @@
   
 }
 
-.createrecipe form{
+.createpost form{
   padding: 20px;
   margin-top: 20px;
   background-color: #AEC7A1; /* 박스의 배경색 */
   border-radius: 10px; /* 모서리를 둥글게 */
   width: 800px; /* 박스의 너비 */
-  height : 1800px;
+  height : 500px;
   text-align: center; /* 텍스트 중앙 정렬 */
   color : #5C5F5C;
-  margin : 20px;
+  margin : 80px;
   font-size : 29px;
   font-weight:800;
   text-align:left;
   position :absolute;
 }
 
-
-.createrecipe input{
+.createpost input{
   border : none;
-  width: 200px;
+  width: 600px;
   height : 40px;
   border-radius:10px;
   right : 200px;
+  margin-left:30px;
 }
- .createrecipe button{
+ .createpost button{
   border : none;
   width : 150px;
   height : 40px;
   border-radius : 10px;
   margin: 0 10px;
+  margin-left: 600px;
  }
 
- .createrecipe .label1 input{
-  margin-left : 20px;
- }
- .createrecipe .label2 input{
-  margin-left : 45px;
- }
- .createrecipe .label3 textarea{
+ 
+ .createpost  textarea{
   border : none;
   height: 90px;
   width : 600px;
   border-radius:10px;
-  margin-left : 50px;
+  margin-left : 80px;
  }
  .createrecipe .label4 input{
   margin-left : 100px;
