@@ -14,4 +14,6 @@ public interface UserChatRoomRepository extends JpaRepository<UserChatRoom, Long
     List<UserChatRoom> findByUser(User user);
     Optional<UserChatRoom> findByUserAndChatRoom(User user, ChatRoom chatRoom);
     boolean existsByChatRoomAndUser(ChatRoom chatRoom, User user);
+
+
 }
