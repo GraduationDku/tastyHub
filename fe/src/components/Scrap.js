@@ -44,8 +44,11 @@ const ScrapButton = ({ recipeId }) => {
           color: 'white',
           padding: '10px',
           border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer'
+          borderRadius: '10px',
+          cursor: 'pointer',
+          width : '80px',
+          height : '50px'
+          
         }}
       >
         {isScrapped ? 'Scrapped' : 'Scrap'}

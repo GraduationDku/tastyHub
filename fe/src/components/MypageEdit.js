@@ -27,7 +27,7 @@ function MypageEdit() {
       console.log(data)
       console.log(userImg)
       const formData = new FormData();
-      formData.append('data', JSON.stringify(data));
+      formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
       formData.append('img', userImg);
       
 
@@ -35,6 +35,7 @@ function MypageEdit() {
         method: 'POST',
         headers: {
           'Authorization': localStorage.getItem('accessToken'),
+          'Content-Type': 'multipart/form-data'
         },
         body: formData,
       });
@@ -114,10 +115,10 @@ function MypageEdit() {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
         },
-        body: JSON.stringify({
+        body: {
           lat: location.lat,
           lng: location.lng,
-        }),
+        },
       });
 
       if (response.ok) {
@@ -144,7 +145,6 @@ function MypageEdit() {
       <div className='box'>
         <form className='user' onSubmit={handleUserInfoSubmit}>
           <h2>사용자 정보 수정</h2>
-          <h2>프로필 사진 수정</h2>
           <input type="file" onChange={handleFileChange} /><br />
           <input 
             type="text" 
