@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
+import com.example.tastyhub.common.domain.recipeReview.dtos.PagingMyRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
@@ -52,6 +53,11 @@ public class RecipeReviewServiceImpl implements RecipeReviewService {
     @Override
     public void deleteRecipeReview(Long recipeReviewId, User user) {
         recipeReviewRepository.deleteById(recipeReviewId);
+    }
+
+    @Override
+    public List<PagingMyRecipeReviewResponse> getMyRecipeReviews(User user) {
+        return recipeReviewRepository.findAllMyRecipeReviewResponse(user.getId());
     }
 
 }
