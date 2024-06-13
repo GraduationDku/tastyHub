@@ -28,9 +28,7 @@ function Login({ setScreen }) {
         localStorage.setItem('accessToken', authorization);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('nickname', nickname);
-
-        console.log(nickname);
-        console.log(response);
+  
         console.log('로그인 성공');
         setScreen('main');
       } else {
