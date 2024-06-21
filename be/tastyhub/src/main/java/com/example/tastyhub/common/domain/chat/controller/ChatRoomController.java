@@ -110,9 +110,9 @@ public class ChatRoomController {
         return RESPONSE_OK;
     }
 
-    @GetMapping("/check/{roomId}")
-    public ResponseEntity<CheckDto> checkRoomCondition(@PathVariable Long roomId) {
-        CheckDto checkDto = chatRoomService.checkRoomCondition(roomId);
+    @GetMapping("/check/{postId}")
+    public ResponseEntity<CheckDto> checkRoomCondition(@PathVariable Long postId) {
+        CheckDto checkDto = chatRoomService.checkRoomCondition(postId);
         return ResponseEntity.ok().body(checkDto);
     }
 }
