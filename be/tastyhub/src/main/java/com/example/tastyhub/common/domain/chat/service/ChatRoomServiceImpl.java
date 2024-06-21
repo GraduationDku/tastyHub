@@ -45,6 +45,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
+  @Transactional
   public List<ChatRoomDto> getChatRoomList(User user) {
     List<UserChatRoom> userChatRooms = userChatRoomRepository.findByUser(user);
     return userChatRooms.stream()
@@ -53,6 +54,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
+  @Transactional
   public List<ChatDto> getChatRoom(Long roomId, User user) {
     ChatRoom chatRoom = findChatRoomById(roomId);
 
@@ -87,6 +89,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
+  @Transactional
   public void outChatRoom(Long roomId, User user) {
     ChatRoom chatRoom = findChatRoomById(roomId);
     UserChatRoom userChatRoom = userChatRoomRepository.findByUserAndChatRoom(user, chatRoom)
@@ -95,6 +98,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
+  @Transactional
   public void deleteChatRoom(Long roomId, Long postId, User user) {
     PostResponse post = postService.getPost(postId);
     if (!post.getNickname().equals(user.getNickname())) {
@@ -109,8 +113,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
-  public CheckDto checkRoomCondition(Long roomId) {
-    if (!chatRoomRepository.existsById(roomId)) {
+  @Transactional
+  public CheckDto checkRoomCondition(Long postId) {
+    if (!chatRoomRepository.existsByPostId(postId)) {
       return CheckDto.builder().checkRoom(false).build();
     }
     return CheckDto.builder().checkRoom(true).build();

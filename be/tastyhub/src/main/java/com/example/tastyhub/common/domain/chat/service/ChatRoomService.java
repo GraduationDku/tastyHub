@@ -20,5 +20,5 @@ public interface ChatRoomService {
 
     void deleteChatRoom(Long roomId, Long postId, User user);
 
-    CheckDto checkRoomCondition(Long roomId);
+    CheckDto checkRoomCondition(Long postId);
 }
