@@ -60,11 +60,11 @@ public class ChatRoomController {
      * @param userDetails
      * @return List<ChatDto> chatDtoList
      */
-    @GetMapping("/{postId}")
-    public ResponseEntity<List<ChatDto>> getChatRoom(@PathVariable Long postId,
+    @GetMapping("/{roomId}")
+    public ResponseEntity<List<ChatDto>> getChatRoom(@PathVariable Long roomId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        List<ChatDto> chatDtoList = chatRoomService.getChatRoom(postId, userDetails.getUser());
+        List<ChatDto> chatDtoList = chatRoomService.getChatRoom(roomId, userDetails.getUser());
 
         return ResponseEntity.ok().body(chatDtoList);
 
