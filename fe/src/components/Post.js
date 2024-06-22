@@ -21,6 +21,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
             'Authorization': localStorage.getItem('accessToken')
           }
         });
+        console.log(response)
         if (response.ok) {
           const data = await response.json();
           console.log(data);
@@ -58,6 +59,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
             'Authorization': localStorage.getItem('accessToken')
           }
         });
+        console.log(response)
         if (!response.ok) {
           throw new Error(`Failed to delete post with id ${postId}`);
         }

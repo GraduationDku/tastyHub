@@ -21,8 +21,10 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                         'Authorization': localStorage.getItem('accessToken')
                     }
                 });
+                console.log(response)
                 if (response.ok) {
                     const data = await response.json();
+                    
                     if (Array.isArray(data)) {
                         // 중복된 채팅방 제거
                         const uniqueChatRooms = Array.from(new Set(data.map(room => room.roomId)))
