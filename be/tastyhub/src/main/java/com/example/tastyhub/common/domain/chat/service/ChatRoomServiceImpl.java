@@ -45,6 +45,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
+  @Transactional
   public List<ChatRoomDto> getChatRoomList(User user) {
     List<UserChatRoom> userChatRooms = userChatRoomRepository.findByUser(user);
     return userChatRooms.stream()
@@ -53,13 +54,20 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
+  @Transactional
   public List<ChatDto> getChatRoom(Long roomId, User user) {
     ChatRoom chatRoom = findChatRoomById(roomId);
-    UserChatRoom userChatRoom = userChatRoomRepository.findByUserAndChatRoom(user, chatRoom)
-        .orElseThrow(() -> new IllegalArgumentException("해당 유저는 접근할 권리가 없습니다."));
 
-    List<Chat> chats = chatRoom.getChats();
-    return chats.stream().map(ChatDto::new).collect(Collectors.toList());
+    if(userChatRoomRepository.existsByChatRoomAndUser(chatRoom,user)){
+      List<Chat> chats = chatRoom.getChats();
+      return chats.stream().map(ChatDto::new).collect(Collectors.toList());
+    }else{
+      UserChatRoom userChatRoom = UserChatRoom.builder().user(user).chatRoom(chatRoom).build();
+      userChatRoomRepository.save(userChatRoom);
+      List<Chat> chats = chatRoom.getChats();
+      return chats.stream().map(ChatDto::new).collect(Collectors.toList());
+    }
+
   }
 
   @Override
@@ -81,6 +89,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
+  @Transactional
   public void outChatRoom(Long roomId, User user) {
     ChatRoom chatRoom = findChatRoomById(roomId);
     UserChatRoom userChatRoom = userChatRoomRepository.findByUserAndChatRoom(user, chatRoom)
@@ -89,6 +98,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
+  @Transactional
   public void deleteChatRoom(Long roomId, Long postId, User user) {
     PostResponse post = postService.getPost(postId);
     if (!post.getNickname().equals(user.getNickname())) {
@@ -103,8 +113,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   }
 
   @Override
-  public CheckDto checkRoomCondition(Long roomId) {
-    if (!chatRoomRepository.existsById(roomId)) {
+  @Transactional
+  public CheckDto checkRoomCondition(Long postId) {
+    if (!chatRoomRepository.existsByPostId(postId)) {
       return CheckDto.builder().checkRoom(false).build();
     }
     return CheckDto.builder().checkRoom(true).build();
