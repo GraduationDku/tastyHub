@@ -21,18 +21,16 @@ const SendChat = ({ roomId }) => {
                         'Content-Type': 'application/json'
                     }
                 });
-                console.log(response.data);
                 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
         
                 const data = await response.json();
-                console.log('Fetched messages:', data);
                 setMessages(data);
             } catch (error) {
                 console.error('Failed to fetch previous messages:', error);
-                setMessages([]);  // 오류 발생 시 빈 배열로 설정
+                setMessages([]);
             }
         };
 
@@ -76,7 +74,6 @@ const SendChat = ({ roomId }) => {
                 text: input,
                 time: new Date()
             };
-            console.log(message.time);
             client.publish({
                 destination: `/app/rooms/${roomId}`,
                 body: JSON.stringify(message),
@@ -99,7 +96,7 @@ const SendChat = ({ roomId }) => {
                         style={{
                             display: 'flex',
                             justifyContent: msg.from === localStorage.getItem('nickname') ? 'flex-end' : 'flex-start',
-                            padding: '5px 10px' // Add padding here
+                            padding: '5px 10px'
                         }}
                     >
                         {msg.from !== localStorage.getItem('nickname') && (
@@ -112,7 +109,7 @@ const SendChat = ({ roomId }) => {
                                         maxWidth: '60%',
                                         wordWrap: 'break-word',
                                         boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                                        marginLeft: '10px' // Add margin left here
+                                        marginLeft: '10px'
                                     }}
                                 >
                                     <strong>{msg.from} </strong>
