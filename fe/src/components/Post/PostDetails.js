@@ -6,6 +6,7 @@ function PostDetails({ postId, setScreen }) {
   const [postDetails, setPostDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [roomExists, setRoomExists] = useState(false);
+  const [roomId, setRoomId] = useState(null);
 
   const fetchPostDetails = async () => {
     try {
@@ -41,6 +42,9 @@ function PostDetails({ postId, setScreen }) {
       if (response.ok) {
         const data = await response.json();
         setRoomExists(data.checkRoom);
+        if (data.checkRoom) {
+          setRoomId(data.roomId); // roomId 저장
+        }
       } else {
         throw new Error('Failed to check room existence');
       }
@@ -59,8 +63,10 @@ function PostDetails({ postId, setScreen }) {
         }
       });
       if (response.ok) {
+        const data = await response.json();
         setRoomExists(true);
-        setScreen('mainchat'); // 채팅방이 생성되면 mainchat 화면으로 이동
+        setRoomId(data.roomId); // roomId 저장
+        setScreen('mainchat');
       } else {
         throw new Error('Failed to create chat room');
       }
@@ -73,24 +79,7 @@ function PostDetails({ postId, setScreen }) {
     if (!roomExists) {
       await createChatRoom();
     } else {
-      try {
-        const response = await fetch(`http://localhost:8080/room/${postId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken')
-          }
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data.chatDtoList);
-          setScreen('sendchat'); // 채팅방에 입장하면 mainchat 화면으로 이동
-        } else {
-          throw new Error('Failed to enter chat room');
-        }
-      } catch (error) {
-        console.error('Error entering chat room:', error);
-      }
+      setScreen('sendchat', { roomId }); // roomId 전달
     }
   };
 

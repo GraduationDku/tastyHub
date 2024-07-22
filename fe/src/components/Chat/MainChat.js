@@ -21,12 +21,10 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                         'Authorization': localStorage.getItem('accessToken')
                     }
                 });
-                console.log(response)
                 if (response.ok) {
                     const data = await response.json();
                     
                     if (Array.isArray(data)) {
-                        // 중복된 채팅방 제거
                         const uniqueChatRooms = Array.from(new Set(data.map(room => room.roomId)))
                             .map(roomId => {
                                 return data.find(room => room.roomId === roomId);
@@ -47,13 +45,13 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const handleChatroomClick = (roomId) => {
         if (!deleteMode) {
             onChatroomSelect(roomId);
-            setScreen('sendchat');
+            setScreen('sendchat', { roomId });
         }
     };
 
     const handleDeleteModeToggle = () => {
         setDeleteMode(!deleteMode);
-        setSelectedRooms(new Set()); // 초기화
+        setSelectedRooms(new Set());
     };
 
     const handleCheckboxChange = (roomId) => {
@@ -76,7 +74,6 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                         'Authorization': localStorage.getItem('accessToken')
                     }
                 });
-                console.log(response)
                 if (!response.ok) {
                     throw new Error(`Failed to delete room with id ${roomId}`);
                 }
