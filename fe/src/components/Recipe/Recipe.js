@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../css/Recipe.css';
+import '../../css/Recipe.css';
 
 function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   const [recipes, setRecipes] = useState([]);

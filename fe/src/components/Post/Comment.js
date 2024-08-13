@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../css/Comment.css';
+import '../../css/Comment.css';
 
 const Comment = ({ postId, refreshComments, comments }) => {
     const [text, setText] = useState('');

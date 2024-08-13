@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../css/Like.css'
+import '../../css/Like.css'
 
 const LikeButton = ({ recipeId }) => {
   const [likeCount, setLikeCount] = useState(0);

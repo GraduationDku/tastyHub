@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../css/MainChat.css';
+import '../../css/MainChat.css';
 
 function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const [chatRooms, setChatRooms] = useState([]);

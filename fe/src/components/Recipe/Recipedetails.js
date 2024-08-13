@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../css/RecipeDetails.css';
-import CreateRecipeReview from './CreateRecipeReview';
-import LikeButton from './Like'; // Ensure you import the LikeButton component correctly
-import ScrapButton from './Scrap'; // Import the ScrapButton component
+import '../../css/RecipeDetails.css';
+import CreateRecipeReview from '../Review/CreateRecipeReview';
+import LikeButton from '../Like/Like'; // Ensure you import the LikeButton component correctly
+import ScrapButton from '../Scrap/Scrap'; // Import the ScrapButton component
 
 function RecipeDetails({ recipeId }) {
   const [recipeDetails, setRecipeDetails] = useState(null);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../css/Login.css';
+import '../../css/Login.css';
 
 function Login({ setScreen }) {
   const [username, setUsername] = useState('');

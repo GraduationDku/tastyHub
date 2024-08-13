@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import HomeScreen from './components/HomeScreen';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Village from './components/Village';
+import Login from './components/User/Login';
+import Signup from './components/User/Signup';
+import Village from './components/Village/Village';
 import Navbar from './components/Navbar';
-import Recipedetails from './components/Recipedetails';
+import Recipedetails from './components/Recipe/Recipedetails';
 import MainScreen from './components/MainScreen';
-import Recipe from './components/Recipe';
-import CreateRecipe from './components/CreateRecipe';
-import FindUsername from './components/FindUsername';
-import MainChat from './components/MainChat';
-import Post from './components/Post';
-import CreatePost from './components/CreatePost';
-import SendChat from './components/SendChat';
+import Recipe from './components/Recipe/Recipe';
+import CreateRecipe from './components/Recipe/CreateRecipe';
+import FindUsername from './components/User/FindUsername';
+import MainChat from './components/Chat/MainChat';
+import Post from './components/Post/Post';
+import CreatePost from './components/Post/CreatePost';
+import SendChat from './components/Chat/SendChat';
 import './App.css';
-import MainMypage from './components/MainMypage';
-import MypageEdit from './components/MypageEdit';
-import PostDetails from './components/PostDetails';
-import MypageShow from './components/MypageShow';
+import MainMypage from './components/User/MainMypage';
+import MypageEdit from './components/User/MypageEdit';
+import PostDetails from './components/Post/PostDetails';
+import MypageShow from './components/User/MypageShow';
 
 function App() {
   const [screen, setScreen] = useState('home');

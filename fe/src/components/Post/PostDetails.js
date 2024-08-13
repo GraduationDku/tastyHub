@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
-import '../css/PostDetails.css';
+import '../../css/PostDetails.css';
 
 function PostDetails({ postId, setScreen }) {
   const [postDetails, setPostDetails] = useState(null);
