@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import '../../css/MypageEdit.css';
 
 function MypageEdit() {
   // 상태 관리
