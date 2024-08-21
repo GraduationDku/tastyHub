@@ -29,12 +29,12 @@ import lombok.NoArgsConstructor;
 public class Ingredient extends TimeStamped {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ingredient_id")
-    private Long id;
-    private String ingredientName;
-    private String amount;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ingredient_id")
+  private Long id;
+  private String ingredientName;
+  private String amount;
 
 //    @Enumerated(EnumType.STRING)
 //    private IngredientType ingredientType;
@@ -42,26 +42,30 @@ public class Ingredient extends TimeStamped {
 //        seasoning, Source, Vegetable, Meat, Fish, Etc
 //    }
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Recipe.class)
-    @JoinColumn(name = "recipe_id", nullable = false)
-    private Recipe recipe;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Recipe.class)
+  @JoinColumn(name = "recipe_id", nullable = false)
+  private Recipe recipe;
 
 
+  public static Ingredient makeIngredient(IngredientCreateDto ingredientCreateDto) {
+    return Ingredient.builder()
+        .ingredientName(ingredientCreateDto.getIngredientName())
+        .amount(ingredientCreateDto.getAmount())
+        .build();
+  }
 
-    public static Ingredient makeIngredient(IngredientCreateDto ingredientCreateDto) {
-        return Ingredient.builder()
-            .ingredientName(ingredientCreateDto.getIngredientName())
-            .amount(ingredientCreateDto.getAmount())
-            .build();
-    }
+  public void update(IngredientDto ingredientDto) {
+    this.ingredientName = ingredientDto.getIngredientName();
+    this.amount = ingredientDto.getAmount();
 
-    public void update(IngredientDto ingredientDto) {
-        this.ingredientName = ingredientDto.getIngredientName();
-        this.amount = ingredientDto.getAmount();
+  }
 
-    }
+  public void setRecipe(Recipe recipe) {
+    this.recipe = recipe;
+  }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
+  public void updateRelation(Recipe recipe) {
+
+    this.recipe = recipe;
+  }
 }

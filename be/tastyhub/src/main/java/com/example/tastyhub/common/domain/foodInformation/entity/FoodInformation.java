@@ -26,32 +26,36 @@ import lombok.NoArgsConstructor;
 @Table(name = "food_information")
 public class FoodInformation extends TimeStamped {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "food_information_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "food_information_id")
+  private Long id;
 
-    @Size(max=1024)
-    private String text;
+  @Size(max = 1024)
+  private String text;
 
-    private Long cookingTime;
+  private Long cookingTime;
 
-    // 몇 인분
-    private String serving;
+  // 몇 인분
+  private String serving;
 
-    //연관 관계
-    @OneToOne
-    @JoinColumn(name = "recipe_id",nullable = false)
-    private Recipe recipe;
+  //연관 관계
+  @OneToOne
+  @JoinColumn(name = "recipe_id", nullable = false)
+  private Recipe recipe;
 
 
-    public void update(FoodInformationDto foodInformationDto) {
-        this.text = foodInformationDto.getText();
-        this.cookingTime = foodInformationDto.getCookingTime();
-        this.serving = foodInformationDto.getServing();
-    }
+  public void update(FoodInformationDto foodInformationDto) {
+    this.text = foodInformationDto.getText();
+    this.cookingTime = foodInformationDto.getCookingTime();
+    this.serving = foodInformationDto.getServing();
+  }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
+  public void setRecipe(Recipe recipe) {
+    this.recipe = recipe;
+  }
+
+  public void updateRelation(Recipe recipe) {
+    this.recipe = recipe;
+  }
 }
