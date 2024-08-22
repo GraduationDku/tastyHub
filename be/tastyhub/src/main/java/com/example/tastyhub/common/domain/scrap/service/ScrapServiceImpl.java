@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.scrap.service;
 
+import com.example.tastyhub.common.domain.recipe.service.RecipeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,12 @@ import lombok.RequiredArgsConstructor;
 public class ScrapServiceImpl implements ScrapService{
 
     private final ScrapRepository scrapRepository;
-    private final RecipeRepository recipeRepository;
+    private final RecipeService recipeService;
 
     @Override
     @Transactional
     public boolean scrap(Long recipeId, User user) {
-        Recipe recipe = recipeRepository.findById(recipeId).get();
+        Recipe recipe = recipeService.findById(recipeId);
         Long userId= user.getId();
         if (checkScrap(recipeId, userId)){
             scrapRepository.deleteByRecipeIdAndUserId(recipeId, userId);

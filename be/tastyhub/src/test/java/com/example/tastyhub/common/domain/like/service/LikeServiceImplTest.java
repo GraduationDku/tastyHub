@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.tastyhub.common.domain.recipe.service.RecipeService;
 import java.util.Optional;
 
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
@@ -18,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.tastyhub.common.domain.like.repository.LikeRepository;
-import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class LikeServiceImplTest {
@@ -26,7 +26,7 @@ public class LikeServiceImplTest {
     LikeRepository likeRepository;
 
     @Mock
-    RecipeRepository recipeRepository;
+    RecipeService recipeService;
 
     @InjectMocks
     LikeServiceImpl likeService;
@@ -34,7 +34,7 @@ public class LikeServiceImplTest {
     @Test
     @DisplayName("좋아요가 존재할 때 삭제")
     void likeAlreadyExists() {
-        when(recipeRepository.findById(RECIPE.getId())).thenReturn(Optional.of(RECIPE));
+        when(recipeService.findById(RECIPE.getId())).thenReturn(RECIPE);
         when(likeRepository.existsByRecipeIdAndUserId(RECIPE.getId(),USER.getId())).thenReturn(true);
         likeService.like(RECIPE.getId(),USER);
 
@@ -46,7 +46,7 @@ public class LikeServiceImplTest {
     @Test
     @DisplayName("좋아요가 존재하지 않을 때 생성")
     void likeDoesNotExist() {
-        when(recipeRepository.findById(RECIPE.getId())).thenReturn(Optional.of(RECIPE));
+        when(recipeService.findById(RECIPE.getId())).thenReturn(RECIPE);
         when(likeRepository.existsByRecipeIdAndUserId(RECIPE.getId(),USER.getId())).thenReturn(false);
 
         // when

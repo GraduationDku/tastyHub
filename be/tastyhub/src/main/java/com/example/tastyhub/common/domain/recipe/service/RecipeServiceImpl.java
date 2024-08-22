@@ -177,6 +177,12 @@ public class RecipeServiceImpl implements RecipeService {
     s3Uploader.delete(imgUrl);
   }
 
+  @Override
+  public Recipe findById(Long recipeId) {
+    return recipeRepository.findById(recipeId)
+        .orElseThrow(() -> new IllegalArgumentException("해당 레시피는 존재하지 않습니다."));
+  }
+
   public Recipe checkRecipeAndUser(Long recipeId, User user) {
     Recipe recipe = recipeFindById(recipeId);
     if (!recipe.getUser().equals(user)) {

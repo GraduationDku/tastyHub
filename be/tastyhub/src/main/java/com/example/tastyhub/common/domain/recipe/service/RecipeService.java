@@ -3,6 +3,7 @@ package com.example.tastyhub.common.domain.recipe.service;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
+import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.user.entity.User;
 
 import java.io.IOException;
@@ -33,4 +34,5 @@ public interface RecipeService {
 
     void deleteRecipe(Long recipeId, User user) throws IOException;
 
+  Recipe findById(Long recipeId);
 }
