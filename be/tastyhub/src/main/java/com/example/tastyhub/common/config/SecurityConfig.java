@@ -53,7 +53,8 @@ public class SecurityConfig {
     private final String[] permitOrigin = {
         "http://localhost:8080",
         "https://apic.app",
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "http://13.209.238.65"
     };
 
 

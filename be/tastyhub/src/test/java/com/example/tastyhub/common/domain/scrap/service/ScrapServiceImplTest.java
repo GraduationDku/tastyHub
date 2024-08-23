@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.tastyhub.common.domain.recipe.service.RecipeService;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.scrap.repository.ScrapRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,7 +25,7 @@ public class ScrapServiceImplTest {
     ScrapRepository scrapRepository;
 
     @Mock
-    RecipeRepository recipeRepository;
+    RecipeService recipeService;
 
     @InjectMocks
     ScrapServiceImpl scrapService;
@@ -33,7 +33,7 @@ public class ScrapServiceImplTest {
     @Test
     @DisplayName("스크랩이 존재할 때 삭제")
     void scrapAlreadyExists() {
-        when(recipeRepository.findById(RECIPE.getId())).thenReturn(Optional.of(RECIPE));
+        when(recipeService.findById(RECIPE.getId())).thenReturn(RECIPE);
         when(scrapRepository.existsByRecipeIdAndUserId(RECIPE.getId(),USER.getId())).thenReturn(true);
 
         // when
@@ -47,7 +47,7 @@ public class ScrapServiceImplTest {
     @Test
     @DisplayName("스크랩이 존재하지 않을 때 생성")
     void scrapDoesNotExist() {
-        when(recipeRepository.findById(RECIPE.getId())).thenReturn(Optional.of(RECIPE));
+        when(recipeService.findById(RECIPE.getId())).thenReturn(RECIPE);
 
         when(scrapRepository.existsByRecipeIdAndUserId(USER.getId(), RECIPE.getId())).thenReturn(false);
 

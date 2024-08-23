@@ -13,6 +13,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.tastyhub.common.domain.recipe.service.RecipeService;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.recipeReview.repository.RecipeReviewRepository;
 
 import static org.mockito.BDDMockito.given;
@@ -33,7 +33,7 @@ public class RecipeReviewServiceImplTest {
     RecipeReviewRepository recipeReviewRepository;
 
     @Mock
-    RecipeRepository recipeRepository;
+    RecipeService recipeService;
 
     @InjectMocks
     RecipeReviewServiceImpl recipeReviewService;
@@ -41,7 +41,7 @@ public class RecipeReviewServiceImplTest {
     @Test
     @DisplayName("레시피 리뷰 생성")
     void createRecipeReview() {
-        when(recipeRepository.findById(RECIPE.getId())).thenReturn(Optional.of(RECIPE));
+        when(recipeService.findById(RECIPE.getId())).thenReturn(RECIPE);
         recipeReviewService.createRecipeReview(USER.getId(), RECIPE_REVIEW_CREATE_REQUEST, USER);
         verify(recipeReviewRepository, times(1)).save(any());
     }

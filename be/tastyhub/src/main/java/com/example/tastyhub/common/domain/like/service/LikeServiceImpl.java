@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.like.service;
 
+import com.example.tastyhub.common.domain.recipe.service.RecipeService;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.like.dtos.LikeCountRequest;
@@ -16,19 +17,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
     private final LikeRepository likeRepository;
-    private final RecipeRepository recipeRepository;
+    private final RecipeService recipeService;
+
 
 
     @Override
     @Transactional
     public boolean like(Long recipeId, User user) {
-        Recipe recipe = recipeRepository.findById(recipeId).get();
+        Recipe recipe = recipeService.findById(recipeId);
         Long userId = user.getId();
         if(checkLike(recipeId, userId)){
             likeRepository.deleteByRecipeIdAndUserId(recipeId, userId);
             return true;
         }
-        Like like = Like.builder().user(user).recipe(recipe).build();
+        Like like = Like.getBuild(user, recipe);
         likeRepository.save(like);
         return false;
     }

@@ -15,6 +15,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.tastyhub.common.domain.cookstep.service.CookStepService;
+import com.example.tastyhub.common.domain.foodInformation.service.FoodInformationService;
+import com.example.tastyhub.common.domain.ingredient.service.IngredientService;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.user.entity.User;
@@ -35,6 +38,13 @@ class RecipeServiceImplTest {
     RecipeRepository recipeRepository;
 
     @Mock
+    FoodInformationService foodInformationService;
+    @Mock
+    CookStepService cookStepService;
+    @Mock
+    IngredientService ingredientService;
+
+    @Mock
     S3Uploader s3Uploader;
 
     @InjectMocks
@@ -43,9 +53,9 @@ class RecipeServiceImplTest {
    @Test
    @DisplayName("레시피 생성 성공")
    void createRecipe() throws Exception {
-        when(s3Uploader.upload(any(), any())).thenReturn(any());
-       recipeService.createRecipe(RECIPE_CREATE_DTO,any(),USER);
-       verify(recipeRepository, times(1)).save(any());
+     when(s3Uploader.upload(any(), any())).thenReturn("someUrl");
+     recipeService.createRecipe(RECIPE_CREATE_DTO, any(), USER);
+     verify(recipeRepository, times(1)).save(any());
 
    }
 

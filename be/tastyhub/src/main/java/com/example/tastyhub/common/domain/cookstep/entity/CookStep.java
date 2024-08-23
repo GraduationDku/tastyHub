@@ -77,4 +77,8 @@ public class CookStep extends TimeStamped {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
+
+  public void updateRelation(Recipe recipe) {
+    this.recipe = recipe;
+    }
 }
