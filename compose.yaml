@@ -3,7 +3,7 @@ version: '3.8'
 volumes:
   tasty-data: {}
   email-data: {}
-
+  tasty-logs: {}
 
 services:
   # frontend:
@@ -71,6 +71,8 @@ services:
 
     ports:
       - 8080:8080
+    volumes:
+      - tasty-logs:/app/logs # 로그 파일 저장을 위한 볼륨
     depends_on:
       - database
       - redis
