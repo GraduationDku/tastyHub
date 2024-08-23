@@ -43,15 +43,6 @@ public class Village extends TimeStamped {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id") // 외래 키 설정
     private User user;
 
-    public static Village createVillage(String addressTownName, double lat, double lng, User user) {
-        return Village.builder()
-                .addressTownName(addressTownName)
-                .lat(lat)
-                .lng(lng)
-                .user(user)
-                .build();
-    }
-
     public void update(LocationRequest locationRequest, String addressTownName) {
         this.addressTownName = addressTownName;
         this.lat = locationRequest.getLat();

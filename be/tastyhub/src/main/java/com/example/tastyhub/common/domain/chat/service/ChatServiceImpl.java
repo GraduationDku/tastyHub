@@ -21,7 +21,10 @@ public class ChatServiceImpl implements ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
             .orElseThrow(() -> new IllegalArgumentException("해당 채팅방은 존재하지않습니다"));
 
-        Chat chat = Chat.createChat(chatMessage.getFrom(),chatMessage.getText(),chatMessage.getTime(),chatRoom);
+        Chat chat = Chat.builder().chatRoom(chatRoom).sender(chatMessage.getFrom())
+            .text(chatMessage.getText())
+            .localDateTime(chatMessage.getTime())
+            .build();
         chatRepository.save(chat);
         return chatMessage;
     }

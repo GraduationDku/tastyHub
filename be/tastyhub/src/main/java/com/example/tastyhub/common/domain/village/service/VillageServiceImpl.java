@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class VillageServiceImpl implements VillageService {
 
   private final VillageRepository villageRepository;
+
   private final NaverService naverService;
   @Override
   @Transactional
@@ -27,8 +28,12 @@ public class VillageServiceImpl implements VillageService {
     String addressFromCoordinates;
     addressFromCoordinates = naverService.getAddressFromCoordinates(lat, lng);
 
-    Village village = Village.createVillage(addressFromCoordinates,lat,lng,user);
-
+    Village village = Village.builder()
+        .addressTownName(addressFromCoordinates)
+        .lat(lat)
+        .lng(lng)
+        .user(user)
+        .build();
 
     villageRepository.save(village);
   }

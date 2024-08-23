@@ -46,15 +46,6 @@ public class UserReview extends TimeStamped {
     @JoinColumn(name = "reader_id", nullable = false)
     private User reader;
 
-    public static UserReview createUserReview(long grade, String text, User writer, User reader){
-        return UserReview.builder()
-                .grade(grade)
-                .text(text)
-                .writer(writer)
-                .reader(reader)
-                .build();
-    }
-
     public void update(UserReviewUpdateRequest userReviewUpdateRequest) {
         this.grade = userReviewUpdateRequest.getGrade();
         this.text = userReviewUpdateRequest.getText();

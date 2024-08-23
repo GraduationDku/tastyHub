@@ -37,10 +37,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     if (!post.getNickname().equals(user.getNickname())) {
       throw new IllegalArgumentException("해당 유저는 채팅을 만들 수 없습니다.");
     }
-    ChatRoom chatRoom = ChatRoom.createChatRoom(postId,post.getTitle());
+    ChatRoom chatRoom = ChatRoom.builder().postId(postId).chatRoomTitle(post.getTitle()).build();
     chatRoomRepository.save(chatRoom);
 
-    UserChatRoom userChatRoom = UserChatRoom.createUserChatRoom(user,chatRoom);
+    UserChatRoom userChatRoom = UserChatRoom.builder().user(user).chatRoom(chatRoom).build();
     userChatRoomRepository.save(userChatRoom);
   }
 
@@ -62,7 +62,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
       List<Chat> chats = chatRoom.getChats();
       return chats.stream().map(ChatDto::new).collect(Collectors.toList());
     }else{
-      UserChatRoom userChatRoom = UserChatRoom.createUserChatRoom(user,chatRoom);
+      UserChatRoom userChatRoom = UserChatRoom.builder().user(user).chatRoom(chatRoom).build();
       userChatRoomRepository.save(userChatRoom);
       List<Chat> chats = chatRoom.getChats();
       return chats.stream().map(ChatDto::new).collect(Collectors.toList());
@@ -79,7 +79,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     if (check){
       throw new IllegalArgumentException("해당 유저는 이미 채팅방에 존재합니다.");
     }
-    UserChatRoom userChatRoom = UserChatRoom.createUserChatRoom(user1,chatRoom);
+    UserChatRoom userChatRoom = UserChatRoom.builder().user(user1).chatRoom(chatRoom).build();
     userChatRoomRepository.save(userChatRoom);
   }
 

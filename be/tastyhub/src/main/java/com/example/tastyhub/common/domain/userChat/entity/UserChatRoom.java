@@ -38,11 +38,4 @@ public class UserChatRoom extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
-
-    public static UserChatRoom createUserChatRoom(User user, ChatRoom chatRoom){
-        return UserChatRoom.builder()
-                .user(user)
-                .chatRoom(chatRoom)
-                .build();
-    }
 }

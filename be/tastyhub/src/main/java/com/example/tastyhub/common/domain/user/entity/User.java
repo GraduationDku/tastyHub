@@ -21,10 +21,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,6 +64,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+
     private List<Recipe> recipes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -103,24 +102,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<UserChatRoom> userChatRooms = new ArrayList<>();
-
-    public static User createUser(String username, String encryptedPassword, String imgUrl, String nickname, String email, userType userType, Village village) {
-        return User.builder()
-                .username(username)
-                .password(encryptedPassword)
-                .userImg(imgUrl)
-                .email(email)
-                .nickname(nickname)
-                .village(village)
-                .userType(userType)
-                .build();
-    }
-
     public void updatePassword(String password) {
         this.password = password;
     }
 
-    public void updateUserInfo(UserUpdateRequest userUpdateRequest, String imgUrl) {
+    public void updateUserInfo(UserUpdateRequest userUpdateRequest,String imgUrl){
         this.nickname = userUpdateRequest.getNickname();
         this.userImg = imgUrl;
     }

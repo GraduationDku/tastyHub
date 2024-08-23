@@ -43,13 +43,6 @@ public class Chat {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
-    public static Chat createChat(String sender, String text, LocalDateTime localDateTime, ChatRoom chatRoom){
-        return Chat.builder()
-                .sender(sender)
-                .text(text)
-                .localDateTime(localDateTime)
-                .chatRoom(chatRoom)
-                .build();
-    }
+
 
 }

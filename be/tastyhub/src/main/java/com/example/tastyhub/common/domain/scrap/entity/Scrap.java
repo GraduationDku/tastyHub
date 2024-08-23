@@ -42,10 +42,7 @@ public class Scrap extends TimeStamped {
     private User user;
 
 
-    public static Scrap createScrap(User user, Recipe recipe) {
-        return Scrap.builder()
-                .user(user)
-                .recipe(recipe)
-                .build();
+    public static Scrap getBuild(User user, Recipe recipe) {
+        return Scrap.builder().user(user).recipe(recipe).build();
     }
 }
