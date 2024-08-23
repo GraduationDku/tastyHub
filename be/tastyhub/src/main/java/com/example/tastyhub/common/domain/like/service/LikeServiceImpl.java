@@ -30,7 +30,7 @@ public class LikeServiceImpl implements LikeService {
             likeRepository.deleteByRecipeIdAndUserId(recipeId, userId);
             return true;
         }
-        Like like = Like.getBuild(user, recipe);
+        Like like = Like.createLike(user, recipe);
         likeRepository.save(like);
         return false;
     }

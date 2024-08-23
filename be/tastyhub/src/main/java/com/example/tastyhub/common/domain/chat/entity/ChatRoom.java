@@ -44,6 +44,12 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<UserChatRoom> userChatRooms = new ArrayList<>();
+    public static ChatRoom createChatRoom(Long postId, String chatRoomTitle){
+        return ChatRoom.builder()
+                .postId(postId)
+                .chatRoomTitle(chatRoomTitle)
+                .build();
+    }
 //    public void updateUser(List<User> users) {
 //        this.users = users;
 //

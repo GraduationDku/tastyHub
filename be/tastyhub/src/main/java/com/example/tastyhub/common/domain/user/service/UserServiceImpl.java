@@ -23,6 +23,7 @@ import com.example.tastyhub.common.utils.S3.S3Uploader;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 import lombok.Generated;
@@ -74,36 +75,28 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void signup(SignupRequest signupRequest, MultipartFile img) throws java.io.IOException {
         String username = signupRequest.getUsername();
-        String password = signupRequest.getPassword() + username.substring(0,
-            2); // 레인보우 테이블을 취약 -> salt 사용을 통해 해결
+        String encryptedPassword = passwordEncoder.encode(signupRequest.getPassword() + username.substring(0, 2)); // 레인보우 테이블을 취약 -> salt 사용을 통해 해결
+        String nickname = signupRequest.getNickname();
+        String email = signupRequest.getEmail();
         String imgUrl = "https://tastyhub-bucket.s3.ap-northeast-2.amazonaws.com/image/recipeImg/free-icon-user-747376.png"; // 기본 이미지 url
-        
 
         try {
-            if(!img.isEmpty()){
-                imgUrl = s3Uploader.upload(img,"image/userImg");
+            if (!img.isEmpty()) {
+                imgUrl = s3Uploader.upload(img, "image/userImg");
             }
-            User user = User.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .userImg(imgUrl)
-                .email(signupRequest.getEmail())
-                .nickname(signupRequest.getNickname())
-                .village(null)
-                .userType(userType.COMMON)
-                .build();
+            User user = User.createUser(username, encryptedPassword, imgUrl, nickname, email, userType.COMMON, null);
             userRepository.save(user);
-            } catch (Exception e) {
-                // 레시피 저장에 실패한 경우, S3에서 이미지 삭제
-                if (!imgUrl.isEmpty()) {
-                    try {
-                        s3Uploader.delete(imgUrl);
-                    } catch (IOException ioException) {
-                        log.error("Failed to delete uploaded image from S3", ioException);
-                    }
+        } catch (Exception e) {
+            // 레시피 저장에 실패한 경우, S3에서 이미지 삭제
+            if (!imgUrl.isEmpty()) {
+                try {
+                    s3Uploader.delete(imgUrl);
+                } catch (IOException ioException) {
+                    log.error("Failed to delete uploaded image from S3", ioException);
                 }
-                throw e; // 예외를 다시 던져 트랜잭션 롤백 활성화
             }
+            throw e; // 예외를 다시 던져 트랜잭션 롤백 활성화
+        }
     }
 
 
@@ -117,9 +110,9 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
         }
         String accessToken = jwtUtill.createAccessToken(byUsername.getUsername(),
-            byUsername.getUserType());
+                byUsername.getUserType());
         String refreshToken = jwtUtill.createRefreshToken(byUsername.getUsername(),
-            byUsername.getUserType());
+                byUsername.getUserType());
 
         redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
         response.addHeader(AUTHORIZATION_HEADER, accessToken);
@@ -131,7 +124,7 @@ public class UserServiceImpl implements UserService {
     public UserNameResponse findId(FindIdRequest findIdRequest) {
         User user = findByEmail(findIdRequest);
         String subId = user.getUsername().substring(0, user.getUsername().length() - 4);
-        return new UserNameResponse(subId+"****");
+        return new UserNameResponse(subId + "****");
     }
 
 
@@ -139,7 +132,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void changePassword(ChangePasswordRequest changePasswordRequest, User user) {
         User user1 = findByUsername(user.getUsername());
-        String password = changePasswordRequest.getBeforePassword()+user1.getUsername().substring(0,2);
+        String password = changePasswordRequest.getBeforePassword() + user1.getUsername().substring(0, 2);
         if (!passwordEncoder.matches(password, user1.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
         }
@@ -156,50 +149,58 @@ public class UserServiceImpl implements UserService {
     @Generated
     private User findByUsername(String username) {
         return userRepository.findByUsername(username)
-            .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다."));
     }
 
     @Generated
     private User findByEmail(FindIdRequest findIdRequest) {
         return userRepository.findByEmail(findIdRequest.getEmail())
-            .orElseThrow(() -> new IllegalArgumentException("해당 회원은 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원은 존재하지 않습니다."));
     }
+
     @Override
-    public void delete(UserDeleteRequest deleteRequest, User user) throws java.io.IOException{
+    public void delete(UserDeleteRequest deleteRequest, User user) throws java.io.IOException {
         String username = deleteRequest.getUsername();
-        String password = deleteRequest.getPassword()+username.substring(0,2);
+        String password = deleteRequest.getPassword() + username.substring(0, 2);
         String imgUrl = user.getUserImg();
-        
-        boolean isCorrectedPassword=passwordEncoder.matches(password, user.getPassword());
+
+        boolean isCorrectedPassword = passwordEncoder.matches(password, user.getPassword());
         if (!isCorrectedPassword) {
             throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
         }
         userRepository.delete(user);
         s3Uploader.delete(imgUrl);
     }
-
     @Override
-    public void updateUserInfo(UserUpdateRequest userUpdateRequest,MultipartFile img, User user) throws java.io.IOException {
-        String imgUrl = new String();
-        
+    public void updateUserInfo(UserUpdateRequest userUpdateRequest, MultipartFile img, User user) throws java.io.IOException {
+        String imgUrl = "";
+
+        if (!img.isEmpty()) {
+            imgUrl = s3Uploader.upload(img, "image/userImg");
+        }
         try {
-            if(!img.isEmpty()){
-                imgUrl = s3Uploader.upload(img,"image/userImg");
-            }
-            User find_user = userRepository.findByUsername(user.getUsername()).orElseThrow(()-> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
-            find_user.updateUserInfo(userUpdateRequest,imgUrl);
-            } catch (Exception e) {
-                // 레시피 저장에 실패한 경우, S3에서 이미지 삭제
-                if (!imgUrl.isEmpty()) {
-                    try {
-                        s3Uploader.delete(imgUrl);
-                    } catch (IOException ioException) {
-                        log.error("Failed to delete uploaded image from S3", ioException);
-                    }
-                }
-                throw e; // 예외를 다시 던져 트랜잭션 롤백 활성화
-            }
+            updateUser(userUpdateRequest, imgUrl, user);
+        } catch (Exception e) {
+            handleUpdateFailure(imgUrl, e);
+        }
     }
 
+    private void updateUser(UserUpdateRequest userUpdateRequest, String imgUrl, User user) {
+        User findUser = userRepository.findByUsername(user.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
+        findUser.updateUserInfo(userUpdateRequest, imgUrl);
+    }
+
+    private void handleUpdateFailure(String imgUrl, Exception e) throws java.io.IOException {
+        if (!imgUrl.isEmpty()) {
+            try {
+                s3Uploader.delete(imgUrl);
+            } catch (IOException ioException) {
+                log.error("Failed to delete uploaded image from S3", ioException);
+            }
+        }
+        // 예외를 다시 던져 트랜잭션 롤백 또는 상위 계층에서의 처리를 활성화
+        throw e instanceof IOException ? (IOException) e : new RuntimeException(e);
+    }
 
 }

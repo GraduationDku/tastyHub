@@ -31,7 +31,7 @@ public class ScrapServiceImpl implements ScrapService{
             scrapRepository.deleteByRecipeIdAndUserId(recipeId, userId);
             return true;
         } 
-        Scrap scrap = Scrap.getBuild(user, recipe);
+        Scrap scrap = Scrap.createScrap(user, recipe);
         scrapRepository.save(scrap);
         return false;
     }

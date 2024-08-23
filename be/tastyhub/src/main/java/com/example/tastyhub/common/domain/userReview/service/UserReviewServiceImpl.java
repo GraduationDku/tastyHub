@@ -27,12 +27,7 @@ public class UserReviewServiceImpl implements UserReviewService{
     @Transactional
     public void createUserReview(Long userId, UserReviewCreateRequest userReviewcCreateRequest, User user) {
         User reader = userRepository.findById(userId).get();
-        UserReview userReview = UserReview.builder()
-                .grade(userReviewcCreateRequest
-                .getGrade())
-                .text(userReviewcCreateRequest.getText())
-                .reader(reader)
-                .writer(user).build();
+        UserReview userReview = UserReview.createUserReview(userReviewcCreateRequest.getGrade(),userReviewcCreateRequest.getText(), reader,user);
         userReviewRepository.save(userReview);
     }
 

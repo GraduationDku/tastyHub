@@ -45,7 +45,10 @@ public class Like extends TimeStamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Like getBuild(User user, Recipe recipe) {
-        return Like.builder().user(user).recipe(recipe).build();
+    public static Like createLike(User user, Recipe recipe) {
+        return Like.builder()
+                .user(user)
+                .recipe(recipe)
+                .build();
     }
 }

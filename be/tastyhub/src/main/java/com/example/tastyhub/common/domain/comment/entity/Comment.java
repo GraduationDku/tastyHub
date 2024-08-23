@@ -47,6 +47,14 @@ public class Comment extends TimeStamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public static Comment createComment(String text, Boolean isAlive, Post post, User user){
+        return Comment.builder()
+                .text(text)
+                .isAlive(isAlive)
+                .post(post)
+                .user(user)
+                .build();
+    }
     public void update(CommentRequest commentUpdateRequest) {
         this.text = commentUpdateRequest.getText();
     }

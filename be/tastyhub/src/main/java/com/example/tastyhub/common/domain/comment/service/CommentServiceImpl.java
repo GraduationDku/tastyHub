@@ -21,7 +21,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void createComment(Long postId, CommentRequest commentCreateRequest, User user) {
         Post post = getPost(postId);
-        Comment comment = Comment.builder().post(post).text(commentCreateRequest.getText()).user(user).isAlive(true).build();
+        Comment comment = Comment.createComment(commentCreateRequest.getText(),true,post,user);
         commentRepository.save(comment);
     }
 
