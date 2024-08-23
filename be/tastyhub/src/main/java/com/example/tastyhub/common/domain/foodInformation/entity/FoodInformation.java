@@ -1,6 +1,7 @@
 package com.example.tastyhub.common.domain.foodInformation.entity;
 
 import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
+import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.Column;
@@ -57,5 +58,13 @@ public class FoodInformation extends TimeStamped {
 
   public void updateRelation(Recipe recipe) {
     this.recipe = recipe;
+  }
+
+  public static FoodInformation createFoodInformation(RecipeCreateDto recipeCreateDto) {
+    return FoodInformation.builder()
+        .text(recipeCreateDto.getFoodInformation().getText())
+        .serving(recipeCreateDto.getFoodInformation().getServing())
+        .cookingTime(recipeCreateDto.getFoodInformation().getCookingTime())
+        .build();
   }
 }

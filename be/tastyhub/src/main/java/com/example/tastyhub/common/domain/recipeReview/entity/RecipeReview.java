@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.recipeReview.entity;
 
+import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
@@ -54,4 +55,14 @@ public class RecipeReview extends TimeStamped {
         this.text = recipeReviewUpdateRequest.getText();
     }
 
+
+    public static RecipeReview getBuild(RecipeReviewCreateRequest recipeReviewCreateRequest,
+        User user, Recipe recipe) {
+        return RecipeReview.builder()
+            .user(user)
+            .recipe(recipe)
+            .grade(recipeReviewCreateRequest.getGrade())
+            .text(recipeReviewCreateRequest.getText())
+            .build();
+    }
 }

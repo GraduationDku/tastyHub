@@ -30,12 +30,7 @@ public class RecipeReviewServiceImpl implements RecipeReviewService {
   public void createRecipeReview(Long recipeId, RecipeReviewCreateRequest recipeReviewCreateRequest,
       User user) {
     Recipe recipe = recipeService.findById(recipeId);
-    RecipeReview recipeReview = RecipeReview.builder()
-        .user(user)
-        .recipe(recipe)
-        .grade(recipeReviewCreateRequest.getGrade())
-        .text(recipeReviewCreateRequest.getText())
-        .build();
+    RecipeReview recipeReview = RecipeReview.getBuild(recipeReviewCreateRequest, user, recipe);
     recipeReviewRepository.save(recipeReview);
   }
 

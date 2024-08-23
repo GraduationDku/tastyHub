@@ -68,4 +68,5 @@ public class Ingredient extends TimeStamped {
 
     this.recipe = recipe;
   }
+
 }

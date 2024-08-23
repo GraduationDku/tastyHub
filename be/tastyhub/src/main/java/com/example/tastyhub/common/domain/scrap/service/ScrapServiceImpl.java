@@ -31,10 +31,11 @@ public class ScrapServiceImpl implements ScrapService{
             scrapRepository.deleteByRecipeIdAndUserId(recipeId, userId);
             return true;
         } 
-        Scrap scrap = Scrap.builder().user(user).recipe(recipe).build();
+        Scrap scrap = Scrap.getBuild(user, recipe);
         scrapRepository.save(scrap);
         return false;
     }
+
 
     public boolean checkScrap(Long recipeId, Long userId){
         return scrapRepository.existsByRecipeIdAndUserId(recipeId, userId);

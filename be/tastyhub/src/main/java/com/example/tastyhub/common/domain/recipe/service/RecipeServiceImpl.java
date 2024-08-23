@@ -61,7 +61,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     try {
       imgUrl = s3Uploader.upload(img, "image/recipeImg");
-      Recipe recipe = createRecipe(recipeCreateDto, user, imgUrl, foodInformation, ingredients,
+
+      Recipe recipe = Recipe.createRecipe(recipeCreateDto, user, imgUrl, foodInformation, ingredients,
           cookSteps);
 
       foodInformationService.relationRecipe(foodInformation, recipe);
@@ -88,16 +89,7 @@ public class RecipeServiceImpl implements RecipeService {
     List<IngredientDto> ingredients = ingredientService.getIngredientDtos(recipe.getIngredients());
     List<CookStepResponseDto> cookSteps = cookStepService.getCookStepDtos(recipe.getCookSteps());
 
-    return RecipeDto.builder()
-        .foodId(recipe.getId())
-        .foodName(recipe.getFoodName())
-        .isLiked(isLiked)
-        .isScraped(isScraped)
-        .foodImgUrl(recipe.getFoodImgUrl())
-        .foodInformation(foodInformationDto)
-        .ingredients(ingredients)
-        .cookSteps(cookSteps)
-        .build();
+    return RecipeDto.getBuild(recipe, isLiked, isScraped, foodInformationDto, ingredients, cookSteps);
   }
 
   @Override
@@ -110,7 +102,7 @@ public class RecipeServiceImpl implements RecipeService {
     try {
       imgUrl = s3Uploader.upload(img, "image/recipeImg");
       FoodInformation updateFoodInformation = foodInformationService.updateFoodInformation(
-          recipeUpdateDto, recipe);
+          recipeUpdateDto.getFoodInformation(), recipe.getFoodInformation());
 
       // 기존 Ingredient 리스트 처리
       List<Ingredient> updatedIngredients = ingredientService.updatedIngredients(
@@ -196,18 +188,6 @@ public class RecipeServiceImpl implements RecipeService {
   private Recipe recipeFindById(Long recipeId) {
     return recipeRepository.findById(recipeId)
         .orElseThrow(() -> new IllegalArgumentException("해당 레시피는 존재하지 않습니다"));
-  }
-
-  private static Recipe createRecipe(RecipeCreateDto recipeCreateDto, User user, String imgUrl,
-      FoodInformation foodInformation, List<Ingredient> ingredients, List<CookStep> cookSteps) {
-    return Recipe.builder()
-        .foodName(recipeCreateDto.getFoodName())
-        .foodImgUrl(imgUrl)
-        .user(user)
-        .foodInformation(foodInformation)
-        .ingredients(ingredients)
-        .cookSteps(cookSteps)
-        .build();
   }
 
 

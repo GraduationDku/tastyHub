@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.recipe.entity;
 
+import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
 import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation;
@@ -85,6 +86,18 @@ public class Recipe extends TimeStamped {
         this.cookSteps = cookSteps;
         this.foodName = foodName;
         this.foodImgUrl = imgUrl;
+    }
+
+    public static Recipe createRecipe(RecipeCreateDto recipeCreateDto, User user, String imgUrl,
+        FoodInformation foodInformation, List<Ingredient> ingredients, List<CookStep> cookSteps) {
+        return Recipe.builder()
+            .foodName(recipeCreateDto.getFoodName())
+            .foodImgUrl(imgUrl)
+            .user(user)
+            .foodInformation(foodInformation)
+            .ingredients(ingredients)
+            .cookSteps(cookSteps)
+            .build();
     }
 
 

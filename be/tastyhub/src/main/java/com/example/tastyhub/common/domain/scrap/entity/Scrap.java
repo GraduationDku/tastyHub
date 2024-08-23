@@ -40,4 +40,9 @@ public class Scrap extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+
+    public static Scrap getBuild(User user, Recipe recipe) {
+        return Scrap.builder().user(user).recipe(recipe).build();
+    }
 }
