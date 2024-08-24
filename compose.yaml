@@ -6,14 +6,27 @@ volumes:
   tasty-logs: {}
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./fe
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - app-tier
+  frontend:
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    # networks:
+    #   - app-tier
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx2
+    ports:
+      - "80:80"      # HTTP 포트
+      - "443:443"    # HTTPS 포트
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # Nginx 설정 파일
+      - ./nginx/localhost.crt:/etc/nginx/localhost.crt  # SSL 인증서
+      - ./nginx/localhost-key.pem:/etc/nginx/localhost-key.pem  # SSL 키
+    depends_on:
+      - backend     # 'backend' 서비스가 준비된 후에 Nginx가 시작됨
   
   database:
     image: mysql
