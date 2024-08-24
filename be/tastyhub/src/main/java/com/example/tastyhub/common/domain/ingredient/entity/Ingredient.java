@@ -54,7 +54,7 @@ public class Ingredient extends TimeStamped {
         .build();
   }
 
-  public void update(IngredientDto ingredientDto) {
+  public void updateByUpdateDto(IngredientDto ingredientDto) {
     this.ingredientName = ingredientDto.getIngredientName();
     this.amount = ingredientDto.getAmount();
 

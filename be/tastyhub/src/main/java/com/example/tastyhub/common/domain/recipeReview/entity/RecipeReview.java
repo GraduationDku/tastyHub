@@ -56,7 +56,7 @@ public class RecipeReview extends TimeStamped {
     }
 
 
-    public static RecipeReview getBuild(RecipeReviewCreateRequest recipeReviewCreateRequest,
+    public static RecipeReview createRecipeReview(RecipeReviewCreateRequest recipeReviewCreateRequest,
         User user, Recipe recipe) {
         return RecipeReview.builder()
             .user(user)

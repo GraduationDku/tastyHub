@@ -12,4 +12,8 @@ import lombok.NoArgsConstructor;
 public class LikeCountRequest {
     private Long count;
 
+    public LikeCountRequest createLikeCounetRequest(Long recipeId) {
+        return LikeCountRequest.builder().count(recipeId).build();
+    }
+
 }

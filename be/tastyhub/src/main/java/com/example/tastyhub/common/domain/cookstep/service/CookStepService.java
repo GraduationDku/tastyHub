@@ -14,7 +14,7 @@ public interface CookStepService {
 
   void relationRecipe(List<CookStep> cookSteps, Recipe recipe);
 
-  List<CookStep> updateCookSteps(RecipeUpdateDto recipeUpdateDto, Recipe recipe);
+  List<CookStep> updateCookStepsByRecipeUpdateDto(RecipeUpdateDto recipeUpdateDto, Recipe recipe);
 
   List<CookStepResponseDto> getCookStepDtos(List<CookStep> cookSteps);
 }
