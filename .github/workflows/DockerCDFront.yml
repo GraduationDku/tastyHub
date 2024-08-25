@@ -28,9 +28,6 @@ jobs:
         docker build -t skyriv213/tastyhub-front -f ./fe/Dockerfile ./fe
 
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        tags: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub-front:${{ github.sha }}, ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub-front:latest
-      
+    - name: Push Docker image to DockerHub
+      run: |
+        docker push skyriv213/tastyhub-front
