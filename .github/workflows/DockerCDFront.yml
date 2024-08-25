@@ -28,5 +28,5 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:${{ github.sha }}, ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub:latest
+        tags: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub-front:${{ github.sha }}, ${{ secrets.DOCKER_REPOSITORY_USERNAME }}/tastyhub-front:latest
       
