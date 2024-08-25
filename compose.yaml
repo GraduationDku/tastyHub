@@ -6,12 +6,13 @@ volumes:
   tasty-logs: {}
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./fe
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
+  frontend:
+    build:
+      container_name: front-react
+      image : skyriv213/tastyhub-front
+      # platform: linux/x86_64    # 추가된 라인
+    ports:
+      - "3000:3000"
   #   networks:
   #     - app-tier
   
