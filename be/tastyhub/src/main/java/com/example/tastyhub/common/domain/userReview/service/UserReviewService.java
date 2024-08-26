@@ -9,11 +9,11 @@ import com.example.tastyhub.common.domain.userReview.dtos.UserReviewUpdateReques
 
 public interface UserReviewService {
 
-    void createUserReview(Long userId, UserReviewCreateRequest userReviewcCreateRequest, User user);
+    void createUserReview(Long userId, UserReviewCreateRequest userReviewCreateRequest, User user);
 
     List<PagingUserReviewResponse> getUserReviews(Long userId);
 
-    void updateUserReview(Long userReviewId, UserReviewUpdateRequest userReviewUpdateRequest, User user);
+    void updateUserReviewByUserReviewUpdateRequest(Long userReviewId, UserReviewUpdateRequest userReviewUpdateRequest, User user);
 
     void deleteUserReview(Long userReviewId, User user);
 

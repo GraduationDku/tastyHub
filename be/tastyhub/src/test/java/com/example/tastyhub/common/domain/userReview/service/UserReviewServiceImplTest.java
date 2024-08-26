@@ -48,7 +48,7 @@ public class UserReviewServiceImplTest {
     @DisplayName("유저 리뷰 업데이트")
     void updatePost() {
         given(userReviewRepository.findById(any())).willReturn(Optional.ofNullable(USER_REVIEW));
-        userReviewService.updateUserReview(USER_REVIEW.getId(), USER_REVIEW_UPDATE_REQUEST, USER);
+        userReviewService.updateUserReviewByUserReviewUpdateRequest(USER_REVIEW.getId(), USER_REVIEW_UPDATE_REQUEST, USER);
         verify(userReviewRepository, times(1)).findById(any());
 
     }

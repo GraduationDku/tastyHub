@@ -47,7 +47,7 @@ public class Comment extends TimeStamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public void update(CommentRequest commentUpdateRequest) {
+    public void updateByCommentRequest(CommentRequest commentUpdateRequest) {
         this.text = commentUpdateRequest.getText();
     }
 

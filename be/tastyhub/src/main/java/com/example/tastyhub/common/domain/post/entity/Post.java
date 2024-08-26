@@ -17,8 +17,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,6 +57,15 @@ public class Post extends TimeStamped {
     @OneToMany(mappedBy = "post")
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
+
+    public static Post createPost(String title, String text, PostState postState,User user) {
+        return Post.builder()
+            .title(title)
+            .text(text)
+            .postState(postState)
+            .user(user)
+            .build();
+    }
 
     public void update(PostUpdateRequest postUpdateRequest) {
         this.title = postUpdateRequest.getTitle();

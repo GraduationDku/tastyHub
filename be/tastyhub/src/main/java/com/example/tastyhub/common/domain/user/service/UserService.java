@@ -35,5 +35,5 @@ public interface UserService {
     
     void delete(UserDeleteRequest deleteRequest, User user) throws IOException;
 
-    void updateUserInfo(UserUpdateRequest userUpdateRequest, MultipartFile img, User user) throws IOException;
+    void updateUserInfoByUserUpdateRequest(UserUpdateRequest userUpdateRequest, MultipartFile img, User user) throws IOException;
 }
