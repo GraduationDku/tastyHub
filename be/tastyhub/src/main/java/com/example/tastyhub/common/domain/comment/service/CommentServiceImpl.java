@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void updateComment(Long commentId, CommentRequest commentUpdateRequest, User user) {
         Comment comment = findById(commentId);
-        comment.update(commentUpdateRequest);
+        comment.updateByCommentRequest(commentUpdateRequest);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class FoodInformation extends TimeStamped {
   private Recipe recipe;
 
 
-  public void update(FoodInformationDto foodInformationDto) {
+  public void updateByFoodInformationDto(FoodInformationDto foodInformationDto) {
     this.text = foodInformationDto.getText();
     this.cookingTime = foodInformationDto.getCookingTime();
     this.serving = foodInformationDto.getServing();

@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
-import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingMyRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
@@ -30,7 +29,7 @@ public class RecipeReviewServiceImpl implements RecipeReviewService {
   public void createRecipeReview(Long recipeId, RecipeReviewCreateRequest recipeReviewCreateRequest,
       User user) {
     Recipe recipe = recipeService.findById(recipeId);
-    RecipeReview recipeReview = RecipeReview.getBuild(recipeReviewCreateRequest, user, recipe);
+    RecipeReview recipeReview = RecipeReview.createRecipeReview(recipeReviewCreateRequest, user, recipe);
     recipeReviewRepository.save(recipeReview);
   }
 

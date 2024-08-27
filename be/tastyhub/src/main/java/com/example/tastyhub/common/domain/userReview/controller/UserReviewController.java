@@ -31,35 +31,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping(USERREVIEW_API)
 @RequiredArgsConstructor
 public class UserReviewController {
-    private final UserReviewService userReviewService;
 
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<StatusResponse> createUserReview(@PathVariable Long userId, 
-        @RequestBody UserReviewCreateRequest userReviewcCreateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        userReviewService.createUserReview(userId, userReviewcCreateRequest, userDetails.getUser());
-        return RESPONSE_OK;
-    }
+  private final UserReviewService userReviewService;
 
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<List<PagingUserReviewResponse>> getUserReviews(@PathVariable Long userId, 
-    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PagingUserReviewResponse> pagingUserReviewResponseList = userReviewService.getUserReviews(userId);
-        return ResponseEntity.ok().body(pagingUserReviewResponseList);
-    }
+  @PostMapping("/create/{userId}")
+  public ResponseEntity<StatusResponse> createUserReview(@PathVariable Long userId,
+      @RequestBody UserReviewCreateRequest userReviewCreateRequest,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    userReviewService.createUserReview(userId, userReviewCreateRequest, userDetails.getUser());
+    return RESPONSE_OK;
+  }
 
-    @PatchMapping("/modify/{userReviewId}")
-    public ResponseEntity<StatusResponse> updateUserReview(@PathVariable Long userReviewId,
-        @RequestBody UserReviewUpdateRequest userReviewUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
-            userReviewService.updateUserReview(userReviewId,userReviewUpdateRequest, userDetails.getUser());
-            return RESPONSE_OK;
-        
-    }
-    @DeleteMapping("/delete/{userReviewId}")
-    public ResponseEntity<StatusResponse> deleteUserReview(@PathVariable Long userReviewId,
-         @AuthenticationPrincipal UserDetailsImpl userDetails){
-            userReviewService.deleteUserReview(userReviewId, userDetails.getUser());
-            return RESPONSE_OK;
-        
-    }
-    
+  @GetMapping("/list/{userId}")
+  public ResponseEntity<List<PagingUserReviewResponse>> getUserReviews(@PathVariable Long userId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    List<PagingUserReviewResponse> pagingUserReviewResponseList = userReviewService.getUserReviews(
+        userId);
+    return ResponseEntity.ok().body(pagingUserReviewResponseList);
+  }
+
+  @PatchMapping("/modify/{userReviewId}")
+  public ResponseEntity<StatusResponse> updateUserReview(@PathVariable Long userReviewId,
+      @RequestBody UserReviewUpdateRequest userReviewUpdateRequest,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    userReviewService.updateUserReviewByUserReviewUpdateRequest(userReviewId, userReviewUpdateRequest,
+        userDetails.getUser());
+    return RESPONSE_OK;
+
+  }
+
+  @DeleteMapping("/delete/{userReviewId}")
+  public ResponseEntity<StatusResponse> deleteUserReview(@PathVariable Long userReviewId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    userReviewService.deleteUserReview(userReviewId, userDetails.getUser());
+    return RESPONSE_OK;
+
+  }
+
 }

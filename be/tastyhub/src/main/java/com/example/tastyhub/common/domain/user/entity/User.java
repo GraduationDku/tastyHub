@@ -38,77 +38,91 @@ import lombok.NoArgsConstructor;
 public class User {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_id")
+  private Long id;
 
-    private String username;
+  private String username;
 
-    private String password;
+  private String password;
 
-    private String userImg;
+  private String userImg;
 
-    private String nickname;
+  private String nickname;
 
-    private String email;
+  private String email;
 
-    @Enumerated(EnumType.STRING)
-    private userType userType;
+  @Enumerated(EnumType.STRING)
+  private userType userType;
 
-    public enum userType {
-        ADMIN, COMMON
-    }
+  public enum userType {
+    ADMIN, COMMON
+  }
 
-    // 연관관계 작성
+  // 연관관계 작성
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
 
-    private List<Recipe> recipes = new ArrayList<>();
+  private List<Recipe> recipes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Post> posts = new ArrayList<>();
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<RecipeReview> recipeReviews = new ArrayList<>();
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<RecipeReview> recipeReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Scrap> scraps = new ArrayList<>();
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Scrap> scraps = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Comment> comments = new ArrayList<>();
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Like> likes = new ArrayList<>();
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Like> likes = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<UserReview> userWriterReviews = new ArrayList<>();
+  @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<UserReview> userWriterReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<UserReview> userReaderReviews = new ArrayList<>();
+  @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<UserReview> userReaderReviews = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Village village;
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Village village;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<UserChatRoom> userChatRooms = new ArrayList<>();
-    public void updatePassword(String password) {
-        this.password = password;
-    }
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<UserChatRoom> userChatRooms = new ArrayList<>();
 
-    public void updateUserInfo(UserUpdateRequest userUpdateRequest,String imgUrl){
-        this.nickname = userUpdateRequest.getNickname();
-        this.userImg = imgUrl;
-    }
+  public void updatePassword(String password) {
+    this.password = password;
+  }
+
+  public static User createUser(String username, String encryptedPassword, String imgUrl,
+      String nickname, String email, userType userType, Village village) {
+    return User.builder()
+        .username(username)
+        .password(encryptedPassword)
+        .userImg(imgUrl)
+        .email(email)
+        .nickname(nickname)
+        .village(village)
+        .userType(userType)
+        .build();
+  }
+
+  public void updateUserInfo(UserUpdateRequest userUpdateRequest, String imgUrl) {
+    this.nickname = userUpdateRequest.getNickname();
+    this.userImg = imgUrl;
+  }
 
 }

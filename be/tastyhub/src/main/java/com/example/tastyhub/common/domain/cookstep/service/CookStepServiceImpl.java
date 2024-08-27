@@ -31,7 +31,7 @@ public class CookStepServiceImpl implements CookStepService {
   }
 
   @Override
-  public List<CookStep> updateCookSteps(RecipeUpdateDto recipeUpdateDto, Recipe recipe) {
+  public List<CookStep> updateCookStepsByRecipeUpdateDto(RecipeUpdateDto recipeUpdateDto, Recipe recipe) {
     List<CookStep> existingCookSteps = recipe.getCookSteps();
     Map<Long, CookStep> existingCookStepMap = existingCookSteps.stream()
         .collect(Collectors.toMap(CookStep::getId, cookStep -> cookStep));
@@ -43,7 +43,7 @@ public class CookStepServiceImpl implements CookStepService {
           if (cookStep == null) {
             cookStep = new CookStep(); // 새 객체 생성
           }
-          cookStep.update(dto); // dto 정보로 기존 객체 업데이트
+          cookStep.updateByUpdateDto(dto); // dto 정보로 기존 객체 업데이트
           return cookStep;
         })
         .collect(Collectors.toList());

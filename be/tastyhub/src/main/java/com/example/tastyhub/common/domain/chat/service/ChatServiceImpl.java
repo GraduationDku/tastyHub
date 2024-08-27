@@ -17,14 +17,10 @@ public class ChatServiceImpl implements ChatService {
 
 
     @Override
-    public ChatDto createChat(Long roomId, ChatDto chatMessage) {
+    public ChatDto sendMessage(Long roomId, ChatDto chatMessage) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
             .orElseThrow(() -> new IllegalArgumentException("해당 채팅방은 존재하지않습니다"));
-
-        Chat chat = Chat.builder().chatRoom(chatRoom).sender(chatMessage.getFrom())
-            .text(chatMessage.getText())
-            .localDateTime(chatMessage.getTime())
-            .build();
+        Chat chat = Chat.createChat(chatMessage, chatRoom);
         chatRepository.save(chat);
         return chatMessage;
     }

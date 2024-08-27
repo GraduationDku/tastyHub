@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.chat.entity;
 
+import com.example.tastyhub.common.domain.chat.dtos.ChatDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -43,6 +44,13 @@ public class Chat {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
+
+    public static Chat createChat(ChatDto chatMessage, ChatRoom chatRoom) {
+        return Chat.builder().chatRoom(chatRoom).sender(chatMessage.getFrom())
+            .text(chatMessage.getText())
+            .localDateTime(chatMessage.getTime())
+            .build();
+    }
 
 
 }

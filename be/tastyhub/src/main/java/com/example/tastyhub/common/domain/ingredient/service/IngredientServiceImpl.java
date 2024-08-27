@@ -41,7 +41,7 @@ public class IngredientServiceImpl implements IngredientService {
           if (ingredient == null) {
             ingredient = new Ingredient(); // 새 객체 생성
           }
-          ingredient.update(dto); // dto 정보로 기존 객체 업데이트
+          ingredient.updateByUpdateDto(dto); // dto 정보로 기존 객체 업데이트
           return ingredient;
         })
         .collect(Collectors.toList());
