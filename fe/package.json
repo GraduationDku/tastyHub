@@ -23,10 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "next dev -p 3060",
-    "build": "ANALYZE=true NODE_ENV=production next build",
-    "start": "NODE_ENV=production next start -p 80"
-
+    "start:mac": "HTTPS=true SSL_CRT_FILE=cert/localhost.pem SSL_KEY_FILE=cert/localhost-key.pem npm run start"
   },
   "eslintConfig": {
     "extends": [
