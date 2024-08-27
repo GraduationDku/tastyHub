@@ -1,11 +1,13 @@
 package com.example.tastyhub.common.domain.post.entity;
 
+import com.example.tastyhub.common.domain.village.entity.Village;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.comment.entity.Comment;
 import com.example.tastyhub.common.domain.post.dtos.PostUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -58,12 +60,16 @@ public class Post extends TimeStamped {
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
+    @Embedded
+    private Village village;
+
     public static Post createPost(String title, String text, PostState postState,User user) {
         return Post.builder()
             .title(title)
             .text(text)
             .postState(postState)
             .user(user)
+            .village(user.getVillage())
             .build();
     }
 

@@ -12,6 +12,7 @@ import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 import com.example.tastyhub.common.domain.village.entity.Village;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -96,7 +97,7 @@ public class User {
   @Builder.Default
   private List<UserReview> userReaderReviews = new ArrayList<>();
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Embedded
   private Village village;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

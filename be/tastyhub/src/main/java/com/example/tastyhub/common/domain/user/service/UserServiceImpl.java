@@ -15,6 +15,8 @@ import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
+import com.example.tastyhub.common.domain.village.service.VillageService;
+import com.example.tastyhub.common.domain.village.service.VillageServiceImpl;
 import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import com.example.tastyhub.common.utils.S3.S3Uploader;
@@ -43,6 +45,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     public static final long REFRESH_TOKEN_TIME = 60 * 60 * 60 * 1000L;
+
+    private final VillageService villageService;
 
 
     private final RedisUtil redisUtil;
