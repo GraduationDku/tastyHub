@@ -3,7 +3,6 @@ package com.example.tastyhub.common.domain.like.entity;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.user.entity.User;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -45,7 +44,7 @@ public class Like extends TimeStamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Like getBuild(User user, Recipe recipe) {
+    public static Like createLike(User user, Recipe recipe) {
         return Like.builder().user(user).recipe(recipe).build();
     }
 }

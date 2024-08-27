@@ -4,5 +4,5 @@ import com.example.tastyhub.common.domain.chat.dtos.ChatDto;
 
 public interface ChatService {
 
-    ChatDto createChat(Long roomId, ChatDto chatMessage);
+    ChatDto sendMessage(Long roomId, ChatDto chatMessage);
 }

@@ -21,7 +21,6 @@ import com.example.tastyhub.common.utils.S3.S3Uploader;
 import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -109,7 +108,7 @@ public class RecipeServiceImpl implements RecipeService {
           recipeUpdateDto, recipe);
 
       // 기존 CookStep 리스트 처리
-      List<CookStep> updatedCookSteps = cookStepService.updateCookSteps(
+      List<CookStep> updatedCookSteps = cookStepService.updateCookStepsByRecipeUpdateDto(
           recipeUpdateDto, recipe);
 
       // Recipe 객체에 대한 최종 업데이트 호출
@@ -177,10 +176,14 @@ public class RecipeServiceImpl implements RecipeService {
 
   public Recipe checkRecipeAndUser(Long recipeId, User user) {
     Recipe recipe = recipeFindById(recipeId);
-    if (!recipe.getUser().equals(user)) {
+    if (!checkRecipeOwner(user, recipe)) {
       throw new IllegalArgumentException("해당 유저는 접근권한이 없습니다.");
     }
     return recipe;
+  }
+
+  private static boolean checkRecipeOwner(User user, Recipe recipe) {
+    return recipe.getUser().equals(user);
   }
 
   // 세현

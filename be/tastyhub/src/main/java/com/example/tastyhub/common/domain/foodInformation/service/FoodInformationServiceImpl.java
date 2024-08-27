@@ -31,7 +31,7 @@ public class FoodInformationServiceImpl implements FoodInformationService {
   @Override
   public FoodInformation updateFoodInformation(
       FoodInformationDto foodInformationDto, FoodInformation foodInformation) {
-    foodInformation.update(foodInformationDto);
+    foodInformation.updateByFoodInformationDto(foodInformationDto);
     return foodInformation;
   }
 

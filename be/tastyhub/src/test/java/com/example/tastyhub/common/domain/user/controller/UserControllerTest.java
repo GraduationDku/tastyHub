@@ -7,18 +7,15 @@ import static com.example.tastyhub.fixture.user.UserFixture.CHANGE_PASSWORD_REQU
 import static com.example.tastyhub.fixture.user.UserFixture.FIND_ID_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.LOGIN_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.NICKNAME_RESPONSE_DTO;
-import static com.example.tastyhub.fixture.user.UserFixture.SEARCH_USER_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.SIGNUP_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DELETE_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DTO_LIST;
-import static com.example.tastyhub.fixture.user.UserFixture.USER_IMAGE;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_UPDATE_REQUEST;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
@@ -35,25 +32,19 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.tastyhub.annotation.WithCustomMockUser;
-import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.service.UserService;
 import com.example.tastyhub.common.utils.Jwt.JwtUtil;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -68,7 +59,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
@@ -355,7 +345,7 @@ class UserControllerTest {
 
     // 서비스 메서드의 Mock 설정
     doNothing().when(userService)
-        .updateUserInfo(any(UserUpdateRequest.class), any(MultipartFile.class), any(
+        .updateUserInfoByUserUpdateRequest(any(UserUpdateRequest.class), any(MultipartFile.class), any(
             User.class));
 
     // MockMvc를 사용하여 멀티파트 요청 수행

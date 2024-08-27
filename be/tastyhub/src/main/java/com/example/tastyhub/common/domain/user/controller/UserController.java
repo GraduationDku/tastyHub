@@ -4,12 +4,9 @@ import static com.example.tastyhub.common.config.APIConfig.USER_API;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
-import com.example.tastyhub.common.domain.user.dtos.DuplicatedNickName;
-import com.example.tastyhub.common.domain.user.dtos.DuplicatedUserName;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
 import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
-import com.example.tastyhub.common.domain.user.dtos.SearchUserDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
@@ -18,7 +15,6 @@ import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.service.UserService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
-import com.example.tastyhub.common.utils.SetHttpHeaders;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
@@ -43,8 +39,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final SetHttpHeaders setHttpHeaders;
-
     @GetMapping("/overlap/nickname")
     public ResponseEntity<StatusResponse> checkDuplicatedNickname(
             @RequestParam String nickname) {
@@ -68,7 +62,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<NicknameResponseDto> login(@RequestBody LoginRequest loginRequest,
             HttpServletResponse response) {
-
         NicknameResponseDto nickname = userService.login(loginRequest, response);
         return ResponseEntity.ok().body(nickname);
     }
@@ -113,7 +106,7 @@ public class UserController {
     @PatchMapping("/modify/information")
     public ResponseEntity<StatusResponse> updateUserInfo(@RequestPart("img") MultipartFile img, @RequestPart("data") UserUpdateRequest userUpdateRequest,
         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException{
-            userService.updateUserInfo(userUpdateRequest, img, userDetails.getUser());
+            userService.updateUserInfoByUserUpdateRequest(userUpdateRequest, img, userDetails.getUser());
             return RESPONSE_OK;
         }
 
