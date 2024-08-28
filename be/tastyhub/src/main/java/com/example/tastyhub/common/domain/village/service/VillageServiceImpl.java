@@ -16,12 +16,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VillageServiceImpl implements VillageService {
 
-  private final VillageRepository villageRepository;
+//  private final VillageRepository villageRepository;
 
   private final NaverService naverService;
   @Override
-  @Transactional
-  public void setLocation(LocationRequest locationRequest, User user) {
+  public Village setLocation(LocationRequest locationRequest, User user) {
     double lat = locationRequest.getLat();
     double lng = locationRequest.getLng();
 
@@ -32,16 +31,17 @@ public class VillageServiceImpl implements VillageService {
         .addressTownName(addressFromCoordinates)
         .lat(lat)
         .lng(lng)
-        .user(user)
+//        .user(user)
         .build();
 
-    villageRepository.save(village);
+//    villageRepository.save(village);
+    return village;
   }
 
   @Override
-  public void modifyLocation(LocationRequest locationRequest, User user) {
+  public Village modifyLocation(LocationRequest locationRequest, User user) {
 
-    Village village = findByUserId(user);
+    Village village = user.getVillage();
 
     double lat = locationRequest.getLat();
     double lng = locationRequest.getLng();
@@ -53,14 +53,15 @@ public class VillageServiceImpl implements VillageService {
 
     village.update(locationRequest,addressFromCoordinates);
 
-    villageRepository.save(village);
+//    villageRepository.save(village);
+    return village;
   }
 
-  @Generated
-  private Village findByUserId(User user) {
-    return villageRepository.findByUserId(user.getId())
-        .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다"));
-  }
+//  @Generated
+//  private Village findByUserId(User user) {
+//    return villageRepository.findByUserId(user.getId())
+//        .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지않습니다"));
+//  }
 
 
 }
