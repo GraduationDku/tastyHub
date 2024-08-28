@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/FindUsername.css';
+import '../../css/User/FindUsername.css';
 
 function FindUsername({ setScreen }) {
   const [email, setEmail] = useState('');
@@ -9,7 +9,7 @@ function FindUsername({ setScreen }) {
   const handleFindUsername = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/user/findid', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/findid`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/CreateReview.css';
+import '../../css/Review/CreateReview.css';
 
 function CreateRecipeReview({ recipeId }) {
   const [grade, setGrade] = useState(0);
@@ -13,7 +13,7 @@ function CreateRecipeReview({ recipeId }) {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/recipe-review/create/${recipeId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/create/${recipeId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

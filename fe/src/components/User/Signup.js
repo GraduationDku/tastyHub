@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/Signup.css';
+import '../../css/User/Signup.css';
 
 function Signup({ setScreen }) {
   const [username, setUsername] = useState('');
@@ -31,7 +31,7 @@ function Signup({ setScreen }) {
 
   const checkUsernameAvailability = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/user/overlap/username?username=${username}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/overlap/username?username=${username}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ function Signup({ setScreen }) {
 
   const checkNicknameAvailability = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/user/overlap/nickname?nickname=${nickname}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/overlap/nickname?nickname=${nickname}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ function Signup({ setScreen }) {
 
   const sendVerificationCode = async () => {
     try {
-      const response = await fetch('http://localhost:8080/email', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function Signup({ setScreen }) {
 
   const verifyCode = async () => {
     try {
-      const response = await fetch('http://localhost:8080/email/verified', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/email/verified`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ function Signup({ setScreen }) {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/user/signup', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../../css/CreatePost.css';
+import '../../css/Post/CreatePost.css';
 
 function CreatePost() {
   const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/post/create', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/post/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

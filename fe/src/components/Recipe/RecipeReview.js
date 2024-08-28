@@ -8,7 +8,7 @@ function RecipeReview({ recipeId }) {
   useEffect(() => {
     async function fetchReviews() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe-review/list/${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/list/${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

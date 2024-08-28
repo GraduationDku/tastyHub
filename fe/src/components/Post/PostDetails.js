@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
-import '../../css/PostDetails.css';
+import '../../css/Post/PostDetails.css';
 
 function PostDetails({ postId, setScreen }) {
   const [postDetails, setPostDetails] = useState(null);
@@ -10,7 +10,7 @@ function PostDetails({ postId, setScreen }) {
 
   const fetchPostDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/post/detail/${postId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/post/detail/${postId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ function PostDetails({ postId, setScreen }) {
 
   const checkRoomExists = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/room/check/${postId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/room/check/${postId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ function PostDetails({ postId, setScreen }) {
 
   const createChatRoom = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/room/${postId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/room/${postId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

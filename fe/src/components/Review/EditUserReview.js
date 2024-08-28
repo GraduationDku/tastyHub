@@ -9,7 +9,7 @@ function EditUserReview({ userReviewId }) {
   useEffect(() => {
     async function fetchReviewDetails() {
       try {
-        const response = await fetch(`http://localhost:8080/user-review/${userReviewId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/${userReviewId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ function EditUserReview({ userReviewId }) {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/user-review/modify/${userReviewId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/modify/${userReviewId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

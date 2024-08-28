@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/Like.css'
+import '../../css/Like/Like.css'
 
 const LikeButton = ({ recipeId }) => {
   const [likeCount, setLikeCount] = useState(0);
@@ -8,7 +8,7 @@ const LikeButton = ({ recipeId }) => {
   // Fetch the like count and status
   const fetchLikeCount = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/like/count/${recipeId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/like/count/${recipeId}`, {
         headers: {
           'Authorization': localStorage.getItem('accessToken')
         }
@@ -30,7 +30,7 @@ const LikeButton = ({ recipeId }) => {
   // Toggle like status
   const toggleLike = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/like/${recipeId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/like/${recipeId}`, {
         method: 'POST',
         headers: {
           'Authorization': localStorage.getItem('accessToken'),

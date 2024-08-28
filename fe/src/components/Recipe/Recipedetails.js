@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/RecipeDetails.css';
+import '../../css/Recipe/RecipeDetails.css';
 import CreateRecipeReview from '../Review/CreateRecipeReview';
 import LikeButton from '../Like/Like'; // Ensure you import the LikeButton component correctly
 import ScrapButton from '../Scrap/Scrap'; // Import the ScrapButton component
@@ -11,7 +11,7 @@ function RecipeDetails({ recipeId }) {
   useEffect(() => {
     async function fetchRecipeDetails() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe/detail/${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/detail/${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ function RecipeDetails({ recipeId }) {
 
     async function fetchRecipeReviews() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe-review/list/${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/list/${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

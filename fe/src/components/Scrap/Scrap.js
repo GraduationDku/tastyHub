@@ -13,7 +13,7 @@ const ScrapButton = ({ recipeId }) => {
 
   const toggleScrap = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/scrap/${recipeId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/scrap/${recipeId}`, {
         method: 'POST',
         headers: {
           'Authorization': localStorage.getItem('accessToken'),

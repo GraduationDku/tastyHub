@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/MypageShow.css';
+import '../../css/User/MypageShow.css';
 
 const MypageShow = ({userId}) => {
   const [view, setView] = useState(null);
@@ -10,7 +10,7 @@ const MypageShow = ({userId}) => {
 
   const fetchScrapedRecipes = async () => {
     try {
-      const response = await fetch('http://localhost:8080/scrap/list', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/scrap/list`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
@@ -27,7 +27,7 @@ const MypageShow = ({userId}) => {
 
   const fetchWrittenReviews = async () => {
     try {
-      const response = await fetch('http://localhost:8080/recipe-review/list', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/list`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
@@ -44,7 +44,7 @@ const MypageShow = ({userId}) => {
 
   const fetchMyRecipes = async () => {
     try {
-      const response = await fetch('http://localhost:8080/recipe/mylist', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/mylist`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')

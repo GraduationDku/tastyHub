@@ -9,7 +9,7 @@ function DeleteUserReview({ userReviewId, onDeleteSuccess }) {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/user-review/delete/${userReviewId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/delete/${userReviewId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

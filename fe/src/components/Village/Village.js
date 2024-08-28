@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/Village.css';
+import '../../css/Village/Village.css';
 
 function Village({setScreen}) {
   const [location, setLocation] = useState({ lat: null, lng: null });
@@ -60,7 +60,7 @@ function Village({setScreen}) {
   };
 
   const handleConfirmLocation = async () => {
-    const serverEndpoint = 'http://localhost:8080/village/location';
+    const serverEndpoint = `${process.env.REACT_APP_API_URL}/village/location`;
     try {
       const response = await fetch(serverEndpoint, {
         method: 'POST',
