@@ -27,16 +27,11 @@ public class VillageServiceImpl implements VillageService {
     String addressFromCoordinates;
     addressFromCoordinates = naverService.getAddressFromCoordinates(lat, lng);
 
-    Village village = Village.builder()
-        .addressTownName(addressFromCoordinates)
-        .lat(lat)
-        .lng(lng)
-//        .user(user)
-        .build();
-
-//    villageRepository.save(village);
-    return village;
+    return Village.createVillage(
+        addressFromCoordinates, lat, lng);
   }
+
+
 
   @Override
   public Village modifyLocation(LocationRequest locationRequest, User user) {
@@ -49,11 +44,8 @@ public class VillageServiceImpl implements VillageService {
     String addressFromCoordinates;
     addressFromCoordinates = naverService.getAddressFromCoordinates(lat, lng);
 
-
-
     village.update(locationRequest,addressFromCoordinates);
 
-//    villageRepository.save(village);
     return village;
   }
 

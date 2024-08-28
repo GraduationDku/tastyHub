@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class Village extends TimeStamped {
 
     private long id;
@@ -38,5 +39,14 @@ public class Village extends TimeStamped {
         this.addressTownName = addressTownName;
         this.lat = locationRequest.getLat();
         this.lng = locationRequest.getLng();
+    }
+
+    public static Village createVillage(String addressFromCoordinates, double lat, double lng) {
+        Village village = Village.builder()
+            .addressTownName(addressFromCoordinates)
+            .lat(lat)
+            .lng(lng)
+            .build();
+        return village;
     }
 }
