@@ -23,6 +23,15 @@ jobs:
         username: ${{ secrets.DOCKER_REPOSITORY_USERNAME }}
         password: ${{ secrets.DOCKER_REPOSITORY }}
 
+
+    - name: Create .env file
+      run: |
+        cd ./fe
+        touch ./.env
+        echo "${{secrets.FRONT_ENV}}" >./.env
+      shell: bash
+        
+
     - name: Build frontend Docker image
       run: |
         docker build -t skyriv213/tastyhub-front -f ./fe/Dockerfile ./fe
