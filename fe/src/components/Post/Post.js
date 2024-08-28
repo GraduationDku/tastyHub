@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import '../../css/Post.css';
+import '../../css/Post/Post.css';
 
 function Post({ setScreen, onPostSelect, isGuest }) {
   const [posts, setPosts] = useState([]);

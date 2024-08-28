@@ -5,7 +5,7 @@ function HomeScreen({ setScreen, setIsGuest, handleGuestAccess }) {
   return (
     <div className="homescreen">
       <h1>TastyHub</h1>
-      <img src={require('../css/img/logo.png')} alt="TastyHub Logo" />
+      <img src={require('../assets/img/logo.png')} alt="TastyHub Logo" />
       <button className='top' onClick={handleGuestAccess}>비회원</button>
       <br /><br />
       <button className='bottom' onClick={() => {

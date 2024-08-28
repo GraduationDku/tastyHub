@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/MypageShow.css';
+import '../../css/User/MypageShow.css';
 
 const MypageShow = ({userId}) => {
   const [view, setView] = useState(null);

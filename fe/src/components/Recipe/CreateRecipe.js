@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/CreateRecipe.css';
+import '../../css/Recipe/CreateRecipe.css';
 
 function CreateRecipe() {
   const [form, setForm] = useState({
