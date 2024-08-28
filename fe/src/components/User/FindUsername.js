@@ -9,7 +9,7 @@ function FindUsername({ setScreen }) {
   const handleFindUsername = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/user/findid', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/findid`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

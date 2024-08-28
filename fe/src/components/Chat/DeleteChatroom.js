@@ -3,7 +3,7 @@ import React from "react";
 const DeleteChatroom = ({roomId}) => {
   const deleteChatroom = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/chatroom/${roomId}`,{
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/chatroom/${roomId}`,{
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

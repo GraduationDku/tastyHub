@@ -12,7 +12,7 @@ function EditRecipe({ recipeId }) {
   useEffect(() => {
     async function fetchRecipeDetails() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe/details/${recipeId}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/details/${recipeId}`);
         console.log('Request URL:', response.url); // 요청 URL 로그
         const data = await response.json();
         setFormData({
@@ -40,7 +40,7 @@ function EditRecipe({ recipeId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/recipe/details/${recipeId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/details/${recipeId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

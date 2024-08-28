@@ -7,7 +7,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   useEffect(() => {
     async function fetchAllRecipes() {
       try {
-        const response = await fetch('http://localhost:8080/recipe/list', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/list`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

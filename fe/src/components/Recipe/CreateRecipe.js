@@ -71,7 +71,7 @@ function CreateRecipe() {
       formData.append('img', imageFile);
       console.log(formData);
 
-      const response = await fetch('http://localhost:8080/recipe/create', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/create`, {
         method: 'POST',
         headers: {
           'Authorization': localStorage.getItem('accessToken'),

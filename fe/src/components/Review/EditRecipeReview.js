@@ -9,7 +9,7 @@ function EditRecipeReview({ recipeReviewId }) {
   useEffect(() => {
     async function fetchReviewDetails() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe-review/${recipeReviewId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/${recipeReviewId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ function EditRecipeReview({ recipeReviewId }) {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/recipe-review/modify/${recipeReviewId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/modify/${recipeReviewId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

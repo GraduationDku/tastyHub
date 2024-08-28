@@ -12,7 +12,7 @@ function CreateUserReview({ userId }) {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/user-review/create/${username}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/create/${username}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

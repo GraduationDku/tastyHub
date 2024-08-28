@@ -11,7 +11,7 @@ function RecipeDetails({ recipeId }) {
   useEffect(() => {
     async function fetchRecipeDetails() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe/detail/${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/detail/${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ function RecipeDetails({ recipeId }) {
 
     async function fetchRecipeReviews() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe-review/list/${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/list/${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

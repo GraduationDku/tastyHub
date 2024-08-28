@@ -14,7 +14,7 @@ const SendChat = ({ roomId }) => {
 
         const fetchPreviousMessages = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/room/${roomId}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/${roomId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': localStorage.getItem('accessToken'),

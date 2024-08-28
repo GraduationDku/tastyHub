@@ -8,7 +8,7 @@ function EditPost({ postId }) {
     useEffect(() => {
         async function fetchPost() {
             try {
-                const response = await fetch(`http://localhost:8080/post/modify/${postId}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/post/modify/${postId}`);
                 const data = await response.json();
                 setFormData({
                     postState: data.postState || '공유 전'
@@ -30,7 +30,7 @@ function EditPost({ postId }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8080/post/modify/${postId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/post/modify/${postId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

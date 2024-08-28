@@ -60,7 +60,7 @@ function Village({setScreen}) {
   };
 
   const handleConfirmLocation = async () => {
-    const serverEndpoint = 'http://localhost:8080/village/location';
+    const serverEndpoint = `${process.env.REACT_APP_API_URL}/village/location`;
     try {
       const response = await fetch(serverEndpoint, {
         method: 'POST',

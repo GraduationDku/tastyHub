@@ -8,7 +8,7 @@ const Comment = ({ postId, refreshComments, comments }) => {
 
     const createComment = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/comment/create/${postId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/comment/create/${postId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ const Comment = ({ postId, refreshComments, comments }) => {
 
     const editComment = async (commentId) => {
         try {
-            const response = await fetch(`http://localhost:8080/comment/modify/${commentId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/comment/modify/${commentId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const Comment = ({ postId, refreshComments, comments }) => {
 
     const deleteComment = async (commentId) => {
         try {
-            const response = await fetch(`http://localhost:8080/comment/delete/${commentId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/comment/delete/${commentId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
