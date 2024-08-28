@@ -1,0 +1,41 @@
+.login {
+  height: 100vh; /* 전체 뷰포트 높이를 차지 */
+  width: 100vw; /* 전체 뷰포트 너비를 차지 */
+  background-color: #FAF6C0; /* 원하는 배경색 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login .box {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #AEC7A1; /* 박스의 배경색 */
+  border-radius: 10px; /* 모서리를 둥글게 */
+  width: 700px; /* 박스의 너비 */
+  height : 600px;
+  text-align: center; /* 텍스트 중앙 정렬 */
+  color : #5C5F5C;
+  margin : 20px;
+  font-size : 30px;
+
+}
+
+.login .box input{
+  border:none;
+  height: 50px;
+  width : 200px;
+  border-radius: 13px;
+  
+  
+}
+
+
+.login .box button {
+  border : none;
+  width : 150px;
+  height : 40px;
+  border-radius : 10px;
+  margin: 0 10px;
+}
