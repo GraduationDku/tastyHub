@@ -71,21 +71,9 @@ public class PostServiceImpl implements PostService {
 
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new IllegalArgumentException("해당 게시글은 존재하지 않습니다."));
+        return PostResponse.createPostResponse(post);
 
-        PostResponse postResponse = PostResponse.builder()
-            .title(post.getTitle())
-            .postState(post.getPostState())
-            .userImg(post.getUser().getUserImg())
-            .nickname(post.getUser().getNickname())
-            .commentDtos(
-                post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
-            .postId(post.getId())
-            .text(post.getText())
-            .latestUpdateTime(String.valueOf(post.getModifiedAt()))
-            .build();
-        return postResponse;
-//        return postRepository.findByIdQuery(postId)
-//            .orElseThrow(() -> new IllegalArgumentException("해당 게시물은 존재하지 않습니다."));
     }
+
 
 }

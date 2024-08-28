@@ -43,6 +43,20 @@ public class PostResponse {
         this.commentDtos = comments.stream().map(CommentDto::new).collect(Collectors.toList());
     }
 
+    public static PostResponse createPostResponse(Post post) {
+        return PostResponse.builder()
+            .title(post.getTitle())
+            .postState(post.getPostState())
+            .userImg(post.getUser().getUserImg())
+            .nickname(post.getUser().getNickname())
+            .commentDtos(
+                post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
+            .postId(post.getId())
+            .text(post.getText())
+            .latestUpdateTime(String.valueOf(post.getModifiedAt()))
+            .build();
+    }
+
     // 댓글 기능 업데이트 시 댓글리스트 추가 예정
 //    public PostResponse(Post post) {
 //        this.postId = post.getId();

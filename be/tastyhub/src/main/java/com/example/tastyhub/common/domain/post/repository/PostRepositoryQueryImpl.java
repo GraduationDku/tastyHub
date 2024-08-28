@@ -30,9 +30,10 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
             ))
             .from(post)
             .leftJoin(post.user, user)
-            .leftJoin(post.user.village, village)
-            .where(post.user.village.addressTownName.eq(myVillage.getAddressTownName()))
+//            .leftJoin(post.village, village)
+            .where(post.village.addressTownName.eq(myVillage.getAddressTownName()))
             .fetch();
+//        return List.of();
     }
 
     @Override
@@ -47,11 +48,11 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
             ))
             .from(post)
             .leftJoin(post.user)
-            .leftJoin(post.user.village)
-            .where(post.user.village.addressTownName.eq(village.getAddressTownName()))
+            .where(post.village.addressTownName.eq(village.getAddressTownName()))
             .limit(10)
             .orderBy(post.createdAt.desc())
             .fetch();
+//        return List.of();
     }
 
     @Override
@@ -63,5 +64,6 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
                     post.modifiedAt, post.comments)).from(post)
             .where(post.id.eq(postId))
             .leftJoin(post.user).fetchOne());
+//        return null;
     }
 }
