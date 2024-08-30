@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<StatusResponse> signup(@RequestPart("img") MultipartFile img, @RequestPart("data") SignupRequest signupRequest) throws IOException {
+    public ResponseEntity<StatusResponse> signup(@RequestPart(value = "img", required = false) MultipartFile img, @RequestPart("data") SignupRequest signupRequest) throws IOException {
         userService.signup(signupRequest, img);
         return RESPONSE_OK;
     }

@@ -126,4 +126,8 @@ public class User {
     this.userImg = imgUrl;
   }
 
+  public void updateVillage(Village village) {
+    this.village = village;
+  }
+
 }

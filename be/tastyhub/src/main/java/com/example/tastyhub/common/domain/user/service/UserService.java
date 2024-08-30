@@ -10,6 +10,7 @@ import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
+import com.example.tastyhub.common.domain.village.dtos.LocationRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
@@ -32,8 +33,10 @@ public interface UserService {
     void changePassword(ChangePasswordRequest changePasswordRequest, User user);
 
     List<UserDto> getUserList(String searchUserDto);
-    
+
     void delete(UserDeleteRequest deleteRequest, User user) throws IOException;
 
     void updateUserInfoByUserUpdateRequest(UserUpdateRequest userUpdateRequest, MultipartFile img, User user) throws IOException;
+
+    void setVillage(LocationRequest locationRequest, String username);
 }
