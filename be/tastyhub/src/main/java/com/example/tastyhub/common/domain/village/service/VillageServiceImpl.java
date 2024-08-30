@@ -1,15 +1,12 @@
 package com.example.tastyhub.common.domain.village.service;
 
 import com.example.tastyhub.common.domain.naver.service.NaverService;
-import lombok.Generated;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.village.dtos.LocationRequest;
 import com.example.tastyhub.common.domain.village.entity.Village;
-import com.example.tastyhub.common.domain.village.repository.VillageRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -19,8 +16,9 @@ public class VillageServiceImpl implements VillageService {
 //  private final VillageRepository villageRepository;
 
   private final NaverService naverService;
+
   @Override
-  public Village setLocation(LocationRequest locationRequest, User user) {
+  public Village getVillage(LocationRequest locationRequest) {
     double lat = locationRequest.getLat();
     double lng = locationRequest.getLng();
 
@@ -30,7 +28,6 @@ public class VillageServiceImpl implements VillageService {
     return Village.createVillage(
         addressFromCoordinates, lat, lng);
   }
-
 
 
   @Override
@@ -44,7 +41,7 @@ public class VillageServiceImpl implements VillageService {
     String addressFromCoordinates;
     addressFromCoordinates = naverService.getAddressFromCoordinates(lat, lng);
 
-    village.update(locationRequest,addressFromCoordinates);
+    village.update(locationRequest, addressFromCoordinates);
 
     return village;
   }

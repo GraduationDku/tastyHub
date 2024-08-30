@@ -7,7 +7,7 @@ import com.example.tastyhub.common.domain.village.entity.Village;
 public interface VillageService {
 
 
-    Village setLocation(LocationRequest locationRequest, User user);
+    Village getVillage(LocationRequest locationRequest);
 
     Village modifyLocation(LocationRequest locationRequest, User user);
 

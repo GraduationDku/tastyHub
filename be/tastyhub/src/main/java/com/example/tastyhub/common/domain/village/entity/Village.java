@@ -24,10 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Village extends TimeStamped {
-
-    private long id;
-
+public class Village{
 
     private String addressTownName;
 
