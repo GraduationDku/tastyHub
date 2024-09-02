@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchLikeCount, toggleLike } from '../../redux/likeState';
+import { fetchLikeCount, toggleLike } from '../../redux/Like/likeState';
 import '../../css/Like/Like.css';
 
 const LikeButton = ({ recipeId }) => {
