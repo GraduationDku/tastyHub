@@ -1,7 +1,5 @@
-// src/redux/signupState.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// 초기 상태 정의
 const initialState = {
   username: '',
   password: '',
@@ -22,7 +20,7 @@ const initialState = {
   error: null,
 };
 
-// 비동기 함수들 정의 (Thunk)
+// 비동기 함수
 export const checkUsernameAvailability = createAsyncThunk(
   'signup/checkUsernameAvailability',
   async (username, { rejectWithValue }) => {
@@ -132,7 +130,7 @@ export const signupUser = createAsyncThunk(
   }
 );
 
-// slice 정의
+
 const signupSlice = createSlice({
   name: 'signup',
   initialState,
