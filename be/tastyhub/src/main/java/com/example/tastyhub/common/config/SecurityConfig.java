@@ -54,7 +54,9 @@ public class SecurityConfig {
         "http://localhost:8080",
         "https://apic.app",
         "http://localhost:3000",
+        "https://localhost:3000",
         "http://13.209.238.65"
+
     };
 
 
