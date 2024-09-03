@@ -15,9 +15,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 import java.util.ArrayList;
@@ -34,12 +36,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "posts")
+@Table(name = "posts",indexes = {
+    @Index(name = "idx_address", columnList = "addressTownName")
+})
 public class Post extends TimeStamped {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tasty_hub_sequence")
+    @SequenceGenerator(name = "tasty_hub_sequence", sequenceName = "thesq", allocationSize = 10)
     @Column(name = "post_id")
     private long id;
     private String title;
@@ -52,7 +57,7 @@ public class Post extends TimeStamped {
         Start, Continue, Complete
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
