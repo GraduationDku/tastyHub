@@ -38,7 +38,7 @@ public class UserReview extends TimeStamped {
     //    private
     private long grade;
 
-    private String text;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
     @JoinColumn(name = "writer_id", nullable = false)
@@ -51,13 +51,13 @@ public class UserReview extends TimeStamped {
     public static UserReview createUserReview(long grade, String text, User writer, User reader){
         return UserReview.builder()
             .grade(grade)
-            .text(text)
+            .content(text)
             .writer(writer)
             .reader(reader)
             .build();
     }
     public void updateByUserReviewUpdateRequest(UserReviewUpdateRequest userReviewUpdateRequest) {
         this.grade = userReviewUpdateRequest.getGrade();
-        this.text = userReviewUpdateRequest.getText();
+        this.content = userReviewUpdateRequest.getContent();
     }
 }

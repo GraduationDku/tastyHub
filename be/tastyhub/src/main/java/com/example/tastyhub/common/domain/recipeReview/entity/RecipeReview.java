@@ -38,7 +38,7 @@ public class RecipeReview extends TimeStamped {
 
     private long grade;
 
-    private String text;
+    private String content;
 
     //연관 관계
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Recipe.class)
@@ -53,7 +53,7 @@ public class RecipeReview extends TimeStamped {
 
     public void update(RecipeReviewUpdateRequest recipeReviewUpdateRequest) {
         this.grade = recipeReviewUpdateRequest.getGrade();
-        this.text = recipeReviewUpdateRequest.getText();
+        this.content = recipeReviewUpdateRequest.getContent();
     }
 
 
@@ -63,7 +63,7 @@ public class RecipeReview extends TimeStamped {
             .user(user)
             .recipe(recipe)
             .grade(recipeReviewCreateRequest.getGrade())
-            .text(recipeReviewCreateRequest.getText())
+            .content(recipeReviewCreateRequest.getContent())
             .build();
     }
 }

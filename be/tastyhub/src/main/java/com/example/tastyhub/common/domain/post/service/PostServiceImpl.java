@@ -1,10 +1,8 @@
 package com.example.tastyhub.common.domain.post.service;
 
-import com.example.tastyhub.common.domain.comment.dtos.CommentDto;
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.Generated;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(PostCreateRequest postCreateRequest, User user) {
-        Post post = Post.createPost(postCreateRequest.getTitle(),postCreateRequest.getText(),PostState.Start,user);
+        Post post = Post.createPost(postCreateRequest.getTitle(),postCreateRequest.getContent(),PostState.Start,user);
         postRepository.save(post);
     }
 

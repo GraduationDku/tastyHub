@@ -1,7 +1,7 @@
 package com.example.tastyhub.common.domain.cookstep.entity;
 
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateDto;
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateRequest;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.CascadeType;
@@ -41,7 +41,7 @@ public class CookStep extends TimeStamped {
     
     @Size(max=1024)
     // 조리 시 필요한 내용
-    private String text;
+    private String content;
 
     private String stepImgUrl;
 
@@ -50,10 +50,10 @@ public class CookStep extends TimeStamped {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    public static CookStep makeCookStep(CookStepCreateDto cookStepCreateDto) {
+    public static CookStep makeCookStep(CookStepCreateRequest cookStepCreateRequest) {
         return CookStep.builder()
-            .stepNumber(cookStepCreateDto.getStepNumber())
-            .text(cookStepCreateDto.getText())
+            .stepNumber(cookStepCreateRequest.getStepNumber())
+            .content(cookStepCreateRequest.getContent())
             .stepImgUrl("after S3")
             .build();
     }
@@ -65,13 +65,13 @@ public class CookStep extends TimeStamped {
 //            .build();
 //    }
 
-    public void updateByUpdateDto(CookStepUpdateDto cookStepUpdateDto) {
-        this.text = cookStepUpdateDto.getText();
+    public void updateByUpdateDto(CookStepDto cookStepUpdateDto) {
+        this.content = cookStepUpdateDto.getContent();
         this.stepNumber = cookStepUpdateDto.getStepNumber();
 //        this.stepImgUrl = cookStepUpdateDto.getStepImg();
     }
 
-    public void updateFromDto(CookStepUpdateDto dto) {
+    public void updateFromDto(CookStepDto dto) {
 
     }
 

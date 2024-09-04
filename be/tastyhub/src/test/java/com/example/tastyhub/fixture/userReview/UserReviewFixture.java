@@ -17,23 +17,23 @@ public class UserReviewFixture {
             .reader(USER)
             .writer(USER)
             .grade(0)
-            .text("text")
+            .content("text")
             .build();
     public static final UserReviewCreateRequest USER_REVIEW_CREATE_REQUEST =
         UserReviewCreateRequest.builder()
             .grade(0L)
-            .text("text")
+            .content("text")
             .build();
     public static final UserReviewUpdateRequest USER_REVIEW_UPDATE_REQUEST =
             UserReviewUpdateRequest.builder()
                 .grade(1L)
-                .text("new_text")
+                .content("new_text")
                 .build();
     public static final PagingUserReviewResponse PAGING_USER_REVIEW_RESPONSE = PagingUserReviewResponse.builder()
         .userId(USER.getId())
         .grade(0L)
         .nickname(USER.getNickname())
-        .text("text")
+        .content("text")
         .build();
     public static final List<PagingUserReviewResponse> PAGING_USER_REVIEW_RESPONSES = Collections.singletonList(
         PAGING_USER_REVIEW_RESPONSE);

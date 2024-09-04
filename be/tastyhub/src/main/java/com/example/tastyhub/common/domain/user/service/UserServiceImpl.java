@@ -4,14 +4,12 @@ import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER
 import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
-import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
-import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
+import com.example.tastyhub.common.domain.user.dtos.UserAuthRequest;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
-import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
-import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
@@ -78,7 +76,7 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public void signup(SignupRequest signupRequest, MultipartFile img) throws java.io.IOException {
-    String username = signupRequest.getUsername();
+    String username = signupRequest.getUserName();
     String encryptedPassword = passwordEncoder.encode(
         signupRequest.getPassword() + username.substring(0, 2)); // 레인보우 테이블을 취약 -> salt 사용을 통해 해결
     String nickname = signupRequest.getNickname();
@@ -107,8 +105,8 @@ public class UserServiceImpl implements UserService {
 
 
   @Override
-  public NicknameResponseDto login(LoginRequest loginRequest, HttpServletResponse response) {
-    String username = loginRequest.getUsername();
+  public NicknameDto login(UserAuthRequest loginRequest, HttpServletResponse response) {
+    String username = loginRequest.getUserName();
     String password = loginRequest.getPassword() + username.substring(0, 2);
     User byUsername = findByUsername(username);
     boolean a = passwordEncoder.matches(password, byUsername.getPassword());
@@ -123,7 +121,7 @@ public class UserServiceImpl implements UserService {
     redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
     response.addHeader(AUTHORIZATION_HEADER, accessToken);
     response.addHeader(REFRESH_HEADER, refreshToken);
-    return new NicknameResponseDto(byUsername.getNickname());
+    return new NicknameDto(byUsername.getNickname());
   }
 
   @Override
@@ -166,8 +164,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void delete(UserDeleteRequest deleteRequest, User user) throws java.io.IOException {
-    String username = deleteRequest.getUsername();
+  public void delete(UserAuthRequest deleteRequest, User user) throws java.io.IOException {
+    String username = deleteRequest.getUserName();
     String password = deleteRequest.getPassword() + username.substring(0, 2);
     String imgUrl = user.getUserImg();
 
@@ -180,7 +178,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void updateUserInfoByUserUpdateRequest(UserUpdateRequest userUpdateRequest,
+  public void updateUserInfoByUserUpdateRequest(NicknameDto nicknameDto,
       MultipartFile img, User user) throws java.io.IOException {
     String imgUrl = "";
 
@@ -190,7 +188,7 @@ public class UserServiceImpl implements UserService {
     try {
       User findUser = userRepository.findByUsername(user.getUsername())
           .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
-      findUser.updateUserInfo(userUpdateRequest, imgUrl);
+      findUser.updateUserInfo(nicknameDto, imgUrl);
     } catch (Exception e) {
       handleUpdateFailure(imgUrl, e);
     }

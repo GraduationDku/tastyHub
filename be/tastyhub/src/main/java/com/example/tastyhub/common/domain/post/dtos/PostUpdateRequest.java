@@ -8,6 +8,6 @@ import lombok.Getter;
 @Builder
 public class PostUpdateRequest {
     private String title;
-    private String text;
+    private String content;
     private PostState postState;
 }

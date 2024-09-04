@@ -2,7 +2,7 @@ package com.example.tastyhub.fixture.recipe;
 
 import static com.example.tastyhub.fixture.cookStep.CookStepFixture.COOK_STEP;
 import static com.example.tastyhub.fixture.cookStep.CookStepFixture.COOK_STEP_CREATE_DTO;
-import static com.example.tastyhub.fixture.cookStep.CookStepFixture.COOK_STEP_RESPONSE_DTO;
+import static com.example.tastyhub.fixture.cookStep.CookStepFixture.COOK_STEP_DTO;
 import static com.example.tastyhub.fixture.cookStep.CookStepFixture.COOK_STEP_UPDATE_DTO_LIST;
 import static com.example.tastyhub.fixture.foodInformation.FoodInformationFixture.FOOD_INFORMATION;
 import static com.example.tastyhub.fixture.foodInformation.FoodInformationFixture.FOOD_INFORMATION_CREATE_DTO;
@@ -12,18 +12,14 @@ import static com.example.tastyhub.fixture.ingredient.IngredientFixture.INGREDIE
 import static com.example.tastyhub.fixture.ingredient.IngredientFixture.INGREDIENT_DTO;
 import static com.example.tastyhub.fixture.ingredient.IngredientFixture.INGREDIENT_DTO_LIST;
 
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
-import com.example.tastyhub.common.domain.foodInformation.entity.FoodInformation;
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
-import java.util.Collection;
 import java.util.Collections;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,7 +39,7 @@ public class RecipeFixture {
         .foodName("name")
         .foodImgUrl("url")
         .foodInformation(FOOD_INFORMATION_DTO)
-        .cookSteps(Collections.singletonList(COOK_STEP_RESPONSE_DTO))
+        .cookSteps(Collections.singletonList(COOK_STEP_DTO))
         .ingredients(Collections.singletonList(INGREDIENT_DTO))
         .build();
 

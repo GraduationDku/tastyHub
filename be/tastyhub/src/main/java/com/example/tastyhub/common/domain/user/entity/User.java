@@ -6,7 +6,7 @@ import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import com.example.tastyhub.common.domain.scrap.entity.Scrap;
-import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.userChat.entity.UserChatRoom;
 import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 import com.example.tastyhub.common.domain.village.entity.Village;
@@ -21,7 +21,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
@@ -127,8 +126,8 @@ public class User {
         .build();
   }
 
-  public void updateUserInfo(UserUpdateRequest userUpdateRequest, String imgUrl) {
-    this.nickname = userUpdateRequest.getNickname();
+  public void updateUserInfo(NicknameDto nicknameDto, String imgUrl) {
+    this.nickname = nicknameDto.getNickname();
     this.userImg = imgUrl;
   }
 

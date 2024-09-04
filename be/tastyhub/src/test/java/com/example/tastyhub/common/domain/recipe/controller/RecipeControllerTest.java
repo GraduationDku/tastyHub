@@ -36,7 +36,7 @@ import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_CREATE_DT
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_DTO;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_UPDATE_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
-import static com.example.tastyhub.fixture.user.UserFixture.USER_UPDATE_REQUEST;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -97,7 +97,7 @@ class RecipeControllerTest {
                     .description("레시피 이미지 URL"),
                 fieldWithPath("content[].foodInformationDto.foodInformationId").type(
                     JsonFieldType.NUMBER).description("음식 정보 ID"),
-                fieldWithPath("content[].foodInformationDto.text").type(JsonFieldType.STRING)
+                fieldWithPath("content[].foodInformationDto.content").type(JsonFieldType.STRING)
                     .description("음식 정보 설명"),
                 fieldWithPath("content[].foodInformationDto.cookingTime").type(JsonFieldType.NUMBER)
                     .description("음식 조리 시간"),
@@ -140,7 +140,7 @@ class RecipeControllerTest {
                     .description("레시피 이미지 URL"),
                 fieldWithPath("content[].foodInformationDto.foodInformationId").type(
                     JsonFieldType.NUMBER).description("음식 정보 ID"),
-                fieldWithPath("content[].foodInformationDto.text").type(JsonFieldType.STRING)
+                fieldWithPath("content[].foodInformationDto.content").type(JsonFieldType.STRING)
                     .description("음식 정보 설명"),
                 fieldWithPath("content[].foodInformationDto.cookingTime").type(JsonFieldType.NUMBER)
                     .description("음식 조리 시간"),
@@ -191,7 +191,7 @@ class RecipeControllerTest {
                     .description("레시피 이미지 URL"),
                 fieldWithPath("content[].foodInformationDto.foodInformationId").type(
                     JsonFieldType.NUMBER).description("음식 정보 ID"),
-                fieldWithPath("content[].foodInformationDto.text").type(JsonFieldType.STRING)
+                fieldWithPath("content[].foodInformationDto.content").type(JsonFieldType.STRING)
                     .description("음식 정보 설명"),
                 fieldWithPath("content[].foodInformationDto.cookingTime").type(JsonFieldType.NUMBER)
                     .description("음식 조리 시간"),
@@ -243,7 +243,7 @@ class RecipeControllerTest {
             .file(dataFile)
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .with(csrf()))
-        .andExpect(status().isOk());
+        .andExpect(status().isCreated());
 
     resultActions.andDo(document("recipeController/create",
         getDocumentRequest(),
@@ -259,7 +259,7 @@ class RecipeControllerTest {
                 .description("음식 사진"),
             fieldWithPath("foodInformation").type(JsonFieldType.OBJECT)
                 .description("음식 정보 객체"),
-            fieldWithPath("foodInformation.text").type(JsonFieldType.STRING)
+            fieldWithPath("foodInformation.content").type(JsonFieldType.STRING)
                 .description("음식 정보 내용"),
             fieldWithPath("foodInformation.cookingTime").type(JsonFieldType.NUMBER)
                 .description("조리 시간"),
@@ -272,7 +272,7 @@ class RecipeControllerTest {
             fieldWithPath("cookSteps").type(JsonFieldType.ARRAY).description("조리 단계"),
             fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER).description("조리 순서"),
             fieldWithPath("cookSteps[].stepImg").type(JsonFieldType.STRING).description("조리 이미지"),
-            fieldWithPath("cookSteps[].text").type(JsonFieldType.STRING).description("조리 단계 설명")),
+            fieldWithPath("cookSteps[].content").type(JsonFieldType.STRING).description("조리 단계 설명")),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
             fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
@@ -302,7 +302,7 @@ class RecipeControllerTest {
                 fieldWithPath("scraped").type(JsonFieldType.BOOLEAN).description("스크랩 여부"),
                 fieldWithPath("foodInformation.foodInformationId").type(JsonFieldType.NUMBER)
                     .description("음식 정보 객체 ID"),
-                fieldWithPath("foodInformation.text").type(JsonFieldType.STRING)
+                fieldWithPath("foodInformation.content").type(JsonFieldType.STRING)
                     .description("음식 정보 내용"),
                 fieldWithPath("foodInformation.cookingTime").type(JsonFieldType.NUMBER)
                     .description("음식 정보 시간"),
@@ -321,7 +321,7 @@ class RecipeControllerTest {
                     .description("조리과정 순서"),
                 fieldWithPath("cookSteps[].stepImgUrl").type(JsonFieldType.STRING)
                     .description("조리과정 이미지"),
-                fieldWithPath("cookSteps[].text").type(JsonFieldType.STRING).description("조리과정 설명"),
+                fieldWithPath("cookSteps[].content").type(JsonFieldType.STRING).description("조리과정 설명"),
                 // 페이징 관련 필드 추가
                 fieldWithPath("pageable").type(JsonFieldType.OBJECT).description("Paging information")
                     .optional(),
@@ -402,7 +402,7 @@ class RecipeControllerTest {
                 .description("음식 정보 객체"),
             fieldWithPath("foodInformation.foodInformationId").type(JsonFieldType.NUMBER)
                 .description("음식 정보 객체 ID"),
-            fieldWithPath("foodInformation.text").type(JsonFieldType.STRING)
+            fieldWithPath("foodInformation.content").type(JsonFieldType.STRING)
                 .description("음식 정보 내용"),
             fieldWithPath("foodInformation.cookingTime").type(JsonFieldType.NUMBER)
                 .description("조리 시간"),
@@ -418,8 +418,8 @@ class RecipeControllerTest {
             fieldWithPath("cookSteps[].cookStepId").type(JsonFieldType.NUMBER)
                 .description("조리과정 식별자"),
             fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER).description("조리 순서"),
-            fieldWithPath("cookSteps[].stepImg").type(JsonFieldType.STRING).description("조리 이미지"),
-            fieldWithPath("cookSteps[].text").type(JsonFieldType.STRING).description("조리 단계 설명")),
+            fieldWithPath("cookSteps[].stepImgUrl").type(JsonFieldType.STRING).description("조리 이미지"),
+            fieldWithPath("cookSteps[].content").type(JsonFieldType.STRING).description("조리 단계 설명")),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
             fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
@@ -438,7 +438,7 @@ class RecipeControllerTest {
             delete(RECIPE_API + "/{recipeId}", RECIPE.getId())
 
                 .with(csrf()))
-        .andExpect(status().isOk());
+        .andExpect(status().is2xxSuccessful());
 
     resultActions.andDo(document("recipeController/delete",
             getDocumentResponse(),

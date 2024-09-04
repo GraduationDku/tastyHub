@@ -35,7 +35,7 @@ public class Comment extends TimeStamped {
     @Column(name = "comment_id")
     private long id;
 
-    private String text;
+    private String content;
 
     private Boolean isAlive;
 
@@ -49,7 +49,7 @@ public class Comment extends TimeStamped {
     private User user;
 
     public void updateByCommentRequest(CommentRequest commentUpdateRequest) {
-        this.text = commentUpdateRequest.getText();
+        this.content = commentUpdateRequest.getContent();
     }
 
     public void delete() {

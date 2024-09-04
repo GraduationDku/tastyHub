@@ -29,7 +29,7 @@ public class UserReviewServiceImpl implements UserReviewService {
     User reader = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
     UserReview userReview = UserReview.createUserReview(userReviewCreateRequest.getGrade(),
-        userReviewCreateRequest.getText(), reader, user);
+        userReviewCreateRequest.getContent(), reader, user);
     userReviewRepository.save(userReview);
   }
 

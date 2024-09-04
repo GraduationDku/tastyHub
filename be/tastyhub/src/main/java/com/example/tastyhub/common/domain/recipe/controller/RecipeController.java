@@ -1,6 +1,8 @@
 package com.example.tastyhub.common.domain.recipe.controller;
 
 import static com.example.tastyhub.common.config.APIConfig.RECIPE_API;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCESS;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import java.io.IOException;
@@ -88,7 +90,7 @@ public class RecipeController {
             e.printStackTrace();
         }
         
-        return RESPONSE_OK;
+        return RESPONSE_CREATED;
     }
 
     /**
@@ -117,6 +119,6 @@ public class RecipeController {
     public ResponseEntity<StatusResponse> deleteRecipe(@PathVariable Long recipeId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         recipeService.deleteRecipe(recipeId, userDetails.getUser());
-        return RESPONSE_OK;
+        return DELETE_SUCCESS;
     }
 }

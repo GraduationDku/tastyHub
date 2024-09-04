@@ -2,13 +2,12 @@ package com.example.tastyhub.common.domain.cookstep.dtos;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
-public class CookStepCreateDto {
+public class CookStepCreateRequest {
 
     private Long stepNumber;
     private String stepImg;
-    private String text;
+    private String content;
 }

@@ -1,6 +1,8 @@
 package com.example.tastyhub.common.domain.chat.controller;
 
 import static com.example.tastyhub.common.config.APIConfig.CHATTING_API;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCESS;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.tastyhub.common.domain.chat.dtos.ChatDto;
@@ -39,7 +41,7 @@ public class ChatRoomController {
         @AuthenticationPrincipal
         UserDetailsImpl userDetails) {
         chatRoomService.createChatRoom(postId, userDetails.getUser());
-        return RESPONSE_OK;
+        return RESPONSE_CREATED;
     }
 
     /***
@@ -93,7 +95,7 @@ public class ChatRoomController {
     public ResponseEntity<StatusResponse> outChatRoom(@PathVariable Long roomId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         chatRoomService.outChatRoom(roomId, userDetails.getUser());
-        return RESPONSE_OK;
+        return DELETE_SUCCESS;
     }
 
     /***
@@ -107,7 +109,7 @@ public class ChatRoomController {
     public ResponseEntity<StatusResponse> deleteChatRoom(@PathVariable Long roomId,
         @PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         chatRoomService.deleteChatRoom(roomId, postId, userDetails.getUser());
-        return RESPONSE_OK;
+        return DELETE_SUCCESS;
     }
 
     @GetMapping("/check/{postId}")

@@ -60,7 +60,7 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
 
         return Optional.ofNullable(jpaQueryFactory.select(
                 new QPostResponse(post.id, post.title, post.postState, post.user.nickname,
-                    post.user.userImg, post.text,
+                    post.user.userImg, post.content,
                     post.modifiedAt, post.comments)).from(post)
             .where(post.id.eq(postId))
             .leftJoin(post.user).fetchOne());

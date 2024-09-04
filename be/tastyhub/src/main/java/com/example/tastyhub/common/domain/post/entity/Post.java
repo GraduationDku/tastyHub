@@ -47,8 +47,10 @@ public class Post extends TimeStamped {
     @SequenceGenerator(name = "tasty_hub_sequence", sequenceName = "thesq", allocationSize = 10)
     @Column(name = "post_id")
     private long id;
+
     private String title;
-    private String text;
+
+    private String content;
 
     @Enumerated(EnumType.STRING)
     private PostState postState;
@@ -71,7 +73,7 @@ public class Post extends TimeStamped {
     public static Post createPost(String title, String text, PostState postState,User user) {
         return Post.builder()
             .title(title)
-            .text(text)
+            .content(text)
             .postState(postState)
             .user(user)
             .village(user.getVillage())
@@ -80,7 +82,7 @@ public class Post extends TimeStamped {
 
     public void update(PostUpdateRequest postUpdateRequest) {
         this.title = postUpdateRequest.getTitle();
-        this.text = postUpdateRequest.getTitle();
+        this.content = postUpdateRequest.getTitle();
         this.postState = postUpdateRequest.getPostState();
     }
 

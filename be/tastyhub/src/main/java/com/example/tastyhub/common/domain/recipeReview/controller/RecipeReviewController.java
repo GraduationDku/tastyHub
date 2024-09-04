@@ -1,6 +1,8 @@
 package com.example.tastyhub.common.domain.recipeReview.controller;
 
 import static com.example.tastyhub.common.config.APIConfig.RECIPEREVIEW_API;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCESS;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import java.util.List;
@@ -42,7 +44,7 @@ public class RecipeReviewController {
         @PathVariable Long recipeId, 
         @RequestBody RecipeReviewCreateRequest recipeReviewCreateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         recipeReviewService.createRecipeReview(recipeId, recipeReviewCreateRequest, userDetails.getUser());
-        return RESPONSE_OK;
+        return RESPONSE_CREATED;
     }
 
     @GetMapping("/list/{recipeId}")
@@ -70,7 +72,7 @@ public class RecipeReviewController {
     public ResponseEntity<StatusResponse> deleteRecipeReview(@PathVariable Long recipeReviewId,
          @AuthenticationPrincipal UserDetailsImpl userDetails){
             recipeReviewService.deleteRecipeReview(recipeReviewId, userDetails.getUser());
-            return RESPONSE_OK;
+            return DELETE_SUCCESS;
         
     }
     

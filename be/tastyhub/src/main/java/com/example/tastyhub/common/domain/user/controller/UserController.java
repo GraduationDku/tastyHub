@@ -1,17 +1,17 @@
 package com.example.tastyhub.common.domain.user.controller;
 
 import static com.example.tastyhub.common.config.APIConfig.USER_API;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCESS;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
-import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
-import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
-import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
+import com.example.tastyhub.common.domain.user.dtos.UserAuthRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
-import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.service.UserService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
@@ -56,20 +56,20 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<StatusResponse> signup(@RequestPart(value = "img", required = false) MultipartFile img, @RequestPart("data") SignupRequest signupRequest) throws IOException {
         userService.signup(signupRequest, img);
-        return RESPONSE_OK;
+        return RESPONSE_CREATED;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<NicknameResponseDto> login(@RequestBody LoginRequest loginRequest,
+    public ResponseEntity<NicknameDto> login(@RequestBody UserAuthRequest loginRequest,
             HttpServletResponse response) {
-        NicknameResponseDto nickname = userService.login(loginRequest, response);
+        NicknameDto nickname = userService.login(loginRequest, response);
         return ResponseEntity.ok().body(nickname);
     }
 
     /**
      * 아이디 찾기 - skyriv213
      */
-    @PostMapping("/findid")
+    @PostMapping("/find/id")
     public ResponseEntity<UserNameResponse> findId(@RequestBody FindIdRequest findIdRequest) {
         UserNameResponse username = userService.findId(findIdRequest);
         return ResponseEntity.ok().body(username);
@@ -89,24 +89,24 @@ public class UserController {
      * 사용자 검색하기 - skyriv213
      */
 
-    @GetMapping("/search-list")
+    @GetMapping("/search/list")
     public ResponseEntity<List<UserDto>> getUserList(@RequestParam String nickname) {
         List<UserDto> userDtoList = userService.getUserList(nickname);
         return ResponseEntity.ok().body(userDtoList);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<StatusResponse> delete(@RequestBody UserDeleteRequest deleteRequest,
+    public ResponseEntity<StatusResponse> delete(@RequestBody UserAuthRequest deleteRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         userService.delete(deleteRequest, userDetails.getUser());
-        return RESPONSE_OK;
+        return DELETE_SUCCESS;
 
     }
 
     @PatchMapping("/modify/information")
-    public ResponseEntity<StatusResponse> updateUserInfo(@RequestPart("img") MultipartFile img, @RequestPart("data") UserUpdateRequest userUpdateRequest,
+    public ResponseEntity<StatusResponse> updateUserInfo(@RequestPart("img") MultipartFile img, @RequestPart("data") NicknameDto nicknameDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException{
-            userService.updateUserInfoByUserUpdateRequest(userUpdateRequest, img, userDetails.getUser());
+            userService.updateUserInfoByUserUpdateRequest(nicknameDto, img, userDetails.getUser());
             return RESPONSE_OK;
         }
 

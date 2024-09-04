@@ -1,6 +1,8 @@
 package com.example.tastyhub.common.domain.userReview.controller;
 
 import static com.example.tastyhub.common.config.APIConfig.USERREVIEW_API;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCESS;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class UserReviewController {
       @RequestBody UserReviewCreateRequest userReviewCreateRequest,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     userReviewService.createUserReview(userId, userReviewCreateRequest, userDetails.getUser());
-    return RESPONSE_OK;
+    return RESPONSE_CREATED;
   }
 
   @GetMapping("/list/{userId}")
@@ -64,7 +66,7 @@ public class UserReviewController {
   public ResponseEntity<StatusResponse> deleteUserReview(@PathVariable Long userReviewId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     userReviewService.deleteUserReview(userReviewId, userDetails.getUser());
-    return RESPONSE_OK;
+    return DELETE_SUCCESS;
 
   }
 

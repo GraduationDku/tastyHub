@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.recipe.dtos;
 
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepDto;
 import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import java.util.List;
@@ -18,6 +18,6 @@ public class RecipeUpdateDto {
 
     private List<IngredientDto> ingredients;
 
-    private List<CookStepUpdateDto> cookSteps;
+    private List<CookStepDto> cookSteps;
 
 }

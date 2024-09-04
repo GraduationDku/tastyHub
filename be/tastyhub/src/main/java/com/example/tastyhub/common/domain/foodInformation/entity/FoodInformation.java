@@ -35,7 +35,7 @@ public class FoodInformation extends TimeStamped {
   private Long id;
 
   @Size(max = 1024)
-  private String text;
+  private String content;
 
   private Long cookingTime;
 
@@ -49,7 +49,7 @@ public class FoodInformation extends TimeStamped {
 
 
   public void updateByFoodInformationDto(FoodInformationDto foodInformationDto) {
-    this.text = foodInformationDto.getText();
+    this.content = foodInformationDto.getContent();
     this.cookingTime = foodInformationDto.getCookingTime();
     this.serving = foodInformationDto.getServing();
   }
@@ -64,7 +64,7 @@ public class FoodInformation extends TimeStamped {
 
   public static FoodInformation createFoodInformation(RecipeCreateDto recipeCreateDto) {
     return FoodInformation.builder()
-        .text(recipeCreateDto.getFoodInformation().getText())
+        .content(recipeCreateDto.getFoodInformation().getContent())
         .serving(recipeCreateDto.getFoodInformation().getServing())
         .cookingTime(recipeCreateDto.getFoodInformation().getCookingTime())
         .build();

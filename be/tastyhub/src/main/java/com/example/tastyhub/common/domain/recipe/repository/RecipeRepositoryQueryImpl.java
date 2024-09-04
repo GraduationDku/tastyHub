@@ -29,7 +29,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
     public Page<PagingRecipeResponse> findAllandPaging(Pageable pageable) {
         List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
                 .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
-                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving))
+                        foodInformation.content, foodInformation.cookingTime,foodInformation.serving))
                 .from(recipe)
                 .leftJoin(recipe.foodInformation, foodInformation)
                 .orderBy(recipe.createdAt.desc())
@@ -39,13 +39,14 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
         long totalSize = countQuery().fetch().get(0);
 
         return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
+
     }
 
     @Override
     public Page<PagingRecipeResponse> findMyRecipes(Pageable pageable, Long userId) {
         List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
                 .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
-                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving))
+                        foodInformation.content, foodInformation.cookingTime,foodInformation.serving))
                 .from(recipe)
                 .where(recipe.user.id.eq(userId))
                 .leftJoin(recipe.foodInformation, foodInformation)
@@ -56,6 +57,8 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
         long totalSize = countQuery().fetch().get(0);
 
         return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
+
+
     }
 
 
@@ -64,7 +67,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
         List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
                 .select(
                     new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
-                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving)
+                        foodInformation.content, foodInformation.cookingTime,foodInformation.serving)
                 )
                 .from(recipe)
                 .leftJoin(recipe.foodInformation, foodInformation)
@@ -75,13 +78,15 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
         long totalSize = countQuery().fetch().get(0);
 
         return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
+
+
     }
 
     @Override
     public Page<PagingRecipeResponse> searchByKeyword(String keyword, Pageable pageable) {
         List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
                 .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl, foodInformation.id,
-                        foodInformation.text, foodInformation.cookingTime,foodInformation.serving))
+                        foodInformation.content, foodInformation.cookingTime,foodInformation.serving))
                 .from(recipe)
                 .where(recipe.foodName.contains(keyword))
                 .leftJoin(recipe.foodInformation, foodInformation)
@@ -92,6 +97,8 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
         long totalSize = countQuery().fetch().get(0);
 
         return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
+//        return Page.empty();
+
     }
 
     private JPAQuery<Long> countQuery() {
@@ -111,6 +118,7 @@ public boolean isLiked(Long userId, Long recipeId) {
             .fetchOne();
 
     return count != null && count > 0;
+
 }
 
 @Override
