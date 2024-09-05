@@ -11,12 +11,12 @@ import static com.example.tastyhub.fixture.post.PostFixture.POST;
 import static com.example.tastyhub.fixture.post.PostFixture.POST_CREATE_REQUEST;
 import static com.example.tastyhub.fixture.post.PostFixture.POST_RESPONSE;
 import static com.example.tastyhub.fixture.post.PostFixture.POST_UPDATE_REQUEST;
+import static com.example.tastyhub.fixture.post.PostFixture.pageable;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -25,16 +25,11 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.tastyhub.annotation.WithCustomMockUser;
 import com.example.tastyhub.common.domain.post.service.PostService;
-import com.example.tastyhub.common.domain.user.controller.UserController;
-import com.example.tastyhub.common.domain.user.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -166,7 +161,7 @@ class PostControllerTest {
   @Test
   @WithCustomMockUser
   void getAllPost() throws Exception {
-    given(postService.getAllPost(any())).willReturn(PAGING_POST_RESPONSES);
+    given(postService.getAllPost(any(), pageable)).willReturn(PAGING_POST_RESPONSES);
 
     ResultActions resultActions = mockMvc.perform(get(POST_API + "/list")
             .with(csrf()))
@@ -188,7 +183,7 @@ class PostControllerTest {
   @Test
   @WithCustomMockUser
   void getAllRecentPost() throws Exception {
-    given(postService.getAllRecentPost(any())).willReturn(PAGING_POST_RESPONSES);
+    given(postService.getAllRecentPost(any(),pageable)).willReturn(PAGING_POST_RESPONSES);
 
     ResultActions resultActions = mockMvc.perform(get(POST_API + "/recent/list")
             .with(csrf()))

@@ -7,8 +7,10 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
-import java.util.List;
-import lombok.Getter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +21,6 @@ import com.example.tastyhub.common.domain.post.service.PostService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
 
-import jakarta.persistence.PostUpdate;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -58,22 +59,23 @@ public class PostController {
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.deletePost(postId, userDetails.getUser());
         return DELETE_SUCCESS;
-
     }
 
     // 게시글 전체 조회,실시간 조회, 단건 조회 로직 - skyriv213
     @GetMapping("/list")
-    public ResponseEntity<List<PagingPostResponse>> getAllPost(
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PagingPostResponse> pagingPostResponseList = postService.getAllPost(
-            userDetails.getUser());
+    public ResponseEntity<Page<PagingPostResponse>> getAllPost(
+        @AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
+    ) {
+        Page<PagingPostResponse> pagingPostResponseList = postService.getAllPost(
+            userDetails.getUser(), pageable);
         return ResponseEntity.ok().body(pagingPostResponseList);
     }
 
     @GetMapping("/recent/list")
-    public ResponseEntity getAllRecentPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PagingPostResponse> pagingPostResponseList = postService.getAllRecentPost(
-            userDetails.getUser());
+    public ResponseEntity<Page<PagingPostResponse>> getAllRecentPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
+    ) {
+        Page<PagingPostResponse> pagingPostResponseList = postService.getAllRecentPost(
+            userDetails.getUser(), pageable);
         return ResponseEntity.ok().body(pagingPostResponseList);
     }
 
