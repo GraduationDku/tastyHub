@@ -20,6 +20,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,8 +94,11 @@ public class UserController {
      */
 
     @GetMapping("/search/list")
-    public ResponseEntity<List<UserDto>> getUserList(@RequestParam String nickname) {
-        List<UserDto> userDtoList = userService.getUserList(nickname);
+    public ResponseEntity<Page<UserDto>> getUserList(
+        @RequestParam String nickname,
+        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
+    ) {
+        Page<UserDto> userDtoList = userService.getUserList(nickname, pageable);
         return ResponseEntity.ok().body(userDtoList);
     }
 

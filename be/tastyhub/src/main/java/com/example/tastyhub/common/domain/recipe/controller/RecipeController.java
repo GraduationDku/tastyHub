@@ -49,20 +49,20 @@ public class RecipeController {
 
     @GetMapping("/popular")
     public ResponseEntity<Page<PagingRecipeResponse>> getPopuralRecipes(
-        @PageableDefault(size = 7, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
             .body(recipeService.getPopularRecipes(pageable));
     }
 
     @GetMapping("/list")
     public ResponseEntity<Page<PagingRecipeResponse>> getAllRecipes(
-        @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
             .body(recipeService.getAllRecipes(pageable));
     }
     @GetMapping("/mylist")
     public ResponseEntity<Page<PagingRecipeResponse>> getMyRecipes(
-        @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable, @AuthenticationPrincipal
+        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable, @AuthenticationPrincipal
         UserDetailsImpl userDetails) {
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
             .body(recipeService.getMyRecipes(pageable, userDetails.getUser()));
@@ -71,7 +71,7 @@ public class RecipeController {
     @GetMapping("/search/{keyword}")
     public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(
         @PathVariable String keyword,
-        @PageableDefault(size = 100, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
         log.info("CTL : " + keyword);
         return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(
             recipeService.getSearchedRecipes(keyword, pageable));

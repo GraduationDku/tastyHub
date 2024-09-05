@@ -7,6 +7,7 @@ import static com.example.tastyhub.fixture.user.UserFixture.LOGIN_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_AUTH_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DTO_LIST;
+import static com.example.tastyhub.fixture.user.UserFixture.pageable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +32,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -187,9 +190,9 @@ class UserServiceImplTest {
     @Test
     @DisplayName("사용자 리스트 반환하기")
     void getUserList() {
-        given(userRepository.findAllByNickname(any())).willReturn(USER_DTO_LIST);
-        userService.getUserList(USER.getNickname());
-        verify(userRepository, times(1)).findAllByNickname(any());
+        given(userRepository.findAllByNickname(USER.getNickname(), pageable)).willReturn(USER_DTO_LIST);
+        userService.getUserList(USER.getNickname(), pageable);
+        verify(userRepository, times(1)).findAllByNickname(USER.getNickname(), pageable);
     }
 
     @Test

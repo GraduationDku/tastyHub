@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
@@ -31,7 +33,7 @@ public interface UserService {
 
     void changePassword(ChangePasswordRequest changePasswordRequest, User user);
 
-    List<UserDto> getUserList(String searchUserDto);
+    Page<UserDto> getUserList(String searchUserDto, Pageable pageable);
 
     void delete(UserAuthRequest deleteRequest, User user) throws IOException;
 

@@ -2,8 +2,10 @@ package com.example.tastyhub.common.domain.user.repository;
 
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserRepositoryQuery {
 
-    List<UserDto> findAllByNickname(String nickname);
+    Page<UserDto> findAllByNickname(String nickname, Pageable pageable);
 }

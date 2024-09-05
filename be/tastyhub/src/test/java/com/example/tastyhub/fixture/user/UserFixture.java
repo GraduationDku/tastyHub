@@ -15,6 +15,10 @@ import com.example.tastyhub.common.domain.user.entity.User.userType;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 
 public class UserFixture {
@@ -66,8 +70,11 @@ public class UserFixture {
           .village(VILLAGE)
           .build();
 
-  public static final List<UserDto> USER_DTO_LIST =
-      Collections.singletonList(USER_DTO);
+ public static Pageable pageable = PageRequest.of(0, 1);
+
+
+  public static final Page<UserDto> USER_DTO_LIST =
+      new PageImpl(List.of(USER_DTO),pageable, 1);
 
 
   public static final UserAuthRequest USER_AUTH_REQUEST =
