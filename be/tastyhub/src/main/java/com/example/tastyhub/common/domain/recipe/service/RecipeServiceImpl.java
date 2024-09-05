@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.recipe.service;
 
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepResponseDto;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepDto;
 import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
 import com.example.tastyhub.common.domain.cookstep.service.CookStepService;
 import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
@@ -86,7 +86,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     FoodInformationDto foodInformationDto = foodInformationService.getFoodInformationDto(recipe);
     List<IngredientDto> ingredients = ingredientService.getIngredientDtos(recipe.getIngredients());
-    List<CookStepResponseDto> cookSteps = cookStepService.getCookStepDtos(recipe.getCookSteps());
+    List<CookStepDto> cookSteps = cookStepService.getCookStepDtos(recipe.getCookSteps());
 
     return RecipeDto.getBuild(recipe, isLiked, isScraped, foodInformationDto, ingredients, cookSteps);
   }

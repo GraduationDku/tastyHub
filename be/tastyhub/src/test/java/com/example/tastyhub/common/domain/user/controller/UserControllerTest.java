@@ -6,12 +6,11 @@ import static com.example.tastyhub.common.config.APIConfig.USER_API;
 import static com.example.tastyhub.fixture.user.UserFixture.CHANGE_PASSWORD_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.FIND_ID_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.LOGIN_REQUEST;
-import static com.example.tastyhub.fixture.user.UserFixture.NICKNAME_RESPONSE_DTO;
+import static com.example.tastyhub.fixture.user.UserFixture.NICKNAME_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.SIGNUP_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
-import static com.example.tastyhub.fixture.user.UserFixture.USER_DELETE_REQUEST;
+import static com.example.tastyhub.fixture.user.UserFixture.USER_AUTH_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DTO_LIST;
-import static com.example.tastyhub.fixture.user.UserFixture.USER_UPDATE_REQUEST;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -36,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.tastyhub.annotation.WithCustomMockUser;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
-import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.service.UserService;
 import com.example.tastyhub.common.utils.Jwt.JwtUtil;
@@ -163,7 +162,7 @@ class UserControllerTest {
             .file(dataFile) // JSON 데이터 추가
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .with(csrf()))
-        .andExpect(status().isOk());
+        .andExpect(status().isCreated());
 
     // REST Docs 문서화
     resultActions.andDo(document("userController/signup",
@@ -174,7 +173,7 @@ class UserControllerTest {
             partWithName("data").description("회원 가입 데이터 (JSON)")
         ),
         requestPartFields("data",
-            fieldWithPath("username").type(JsonFieldType.STRING).description("유저 이름"),
+            fieldWithPath("userName").type(JsonFieldType.STRING).description("유저 이름"),
             fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
             fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
@@ -192,11 +191,11 @@ class UserControllerTest {
   @DisplayName("로그인 하기")
   void login() throws Exception {
 
-    given(userService.login(any(), any())).willReturn(NICKNAME_RESPONSE_DTO);
+    given(userService.login(any(), any())).willReturn(NICKNAME_DTO);
 
     ResultActions resultActions = mockMvc.perform(post(USER_API + "/login")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(LOGIN_REQUEST))
+            .content(objectMapper.writeValueAsString(USER_AUTH_REQUEST))
             .with(csrf()))
         .andExpect(status().isOk())
 //        .andExpect((ResultMatcher) jsonPath("$.nickname").value("nickname")); // 응답 데이터 검증
@@ -205,7 +204,7 @@ class UserControllerTest {
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
-            fieldWithPath("username").type(JsonFieldType.STRING).description("유저 이름"),
+            fieldWithPath("userName").type(JsonFieldType.STRING).description("유저 이름"),
             fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
         ),
         responseFields(
@@ -222,13 +221,13 @@ class UserControllerTest {
 //        doNothing().when(userService).findId(FIND_ID_REQUEST);
 //        when(userService.findId(FIND_ID_REQUEST)).thenReturn(USER.getUsername());
 
-    ResultActions resultActions = mockMvc.perform(post(USER_API + "/findid")
+    ResultActions resultActions = mockMvc.perform(post(USER_API + "/find/id")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(FIND_ID_REQUEST))
             .with(csrf()))
         .andExpect(status().isOk());
 
-    resultActions.andDo(document("userController/findid",
+    resultActions.andDo(document("userController/find/id",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
@@ -272,12 +271,12 @@ class UserControllerTest {
     given(userService.getUserList(USER.getNickname())).willReturn(USER_DTO_LIST);
 
 //        doNothing().when(userService).getUserList(USER.getNickname());
-    ResultActions resultActions = mockMvc.perform(get(USER_API + "/search-list")
+    ResultActions resultActions = mockMvc.perform(get(USER_API + "/search/list")
             .param("nickname", USER.getNickname())  // URL 파라미터 추가
             .with(csrf()))
         .andExpect(status().isOk());
 
-    resultActions.andDo(document("userController/search-list",
+    resultActions.andDo(document("userController/search/list",
         getDocumentRequest(),
         getDocumentResponse(),
         queryParameters(  // requestFields 대신 requestParameters 사용
@@ -298,20 +297,20 @@ class UserControllerTest {
   @DisplayName("사용자 삭제하기")
   void delete() throws Exception {
 
-    doNothing().when(userService).delete(eq(USER_DELETE_REQUEST), any());
+    doNothing().when(userService).delete(eq(USER_AUTH_REQUEST), any());
 
     ResultActions resultActions = mockMvc.perform(
             RestDocumentationRequestBuilders.delete(USER_API + "/delete")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(USER_DELETE_REQUEST))
+                .content(objectMapper.writeValueAsString(USER_AUTH_REQUEST))
                 .with(csrf()))
-        .andExpect(status().isOk());
+        .andExpect(status().is2xxSuccessful());
 
     resultActions.andDo(document("userController/delete",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
-            fieldWithPath("username").type(JsonFieldType.STRING).description("사용자 이름"),
+            fieldWithPath("userName").type(JsonFieldType.STRING).description("사용자 이름"),
             fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
         ),
         responseFields(
@@ -340,12 +339,12 @@ class UserControllerTest {
         "data",
         "",
         "application/json",
-        objectMapper.writeValueAsString(USER_UPDATE_REQUEST).getBytes()
+        objectMapper.writeValueAsString(NICKNAME_DTO).getBytes()
     );
 
     // 서비스 메서드의 Mock 설정
     doNothing().when(userService)
-        .updateUserInfoByUserUpdateRequest(any(UserUpdateRequest.class), any(MultipartFile.class), any(
+        .updateUserInfoByUserUpdateRequest(any(NicknameDto.class), any(MultipartFile.class), any(
             User.class));
 
     // MockMvc를 사용하여 멀티파트 요청 수행

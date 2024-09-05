@@ -78,14 +78,14 @@ class PostControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(POST_CREATE_REQUEST))
             .with(csrf()))
-        .andExpect(status().isOk());
+        .andExpect(status().isCreated());
 
     resultActions.andDo(document("postController/create",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
             fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
-            fieldWithPath("text").type(JsonFieldType.STRING).description("게시글 내용")
+            fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용")
         ),
 //            queryParameters(  // requestFields 대신 requestParameters 사용
 //                parameterWithName("nickname").description("닉네임"),
@@ -121,7 +121,7 @@ class PostControllerTest {
 
         requestFields(
             fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
-            fieldWithPath("text").type(JsonFieldType.STRING).description("게시글 내용"),
+            fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
             fieldWithPath("postState").type(JsonFieldType.STRING).description("게시글 상태")
         ),
         responseFields(
@@ -142,7 +142,7 @@ class PostControllerTest {
 //                .param("nickname", USER.getNickname())  // URL 파라미터 추가
 //                .content(objectMapper.writeValueAsString(POST_UPDATE_REQUEST))
                 .with(csrf()))
-        .andExpect(status().isOk());
+        .andExpect(status().is2xxSuccessful());
 
     resultActions.andDo(document("postController/delete",
         getDocumentRequest(),
@@ -226,7 +226,7 @@ class PostControllerTest {
             fieldWithPath("postState").type(JsonFieldType.STRING).description("게시글 상태"),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
             fieldWithPath("userImg").type(JsonFieldType.STRING).description("사용자 이미지"),
-            fieldWithPath("text").type(JsonFieldType.STRING).description("게시글 내용"),
+            fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
             fieldWithPath("latestUpdateTime").type(JsonFieldType.STRING).description("게시글 시간"),
             fieldWithPath("commentDtos").type(JsonFieldType.ARRAY).description("댓글 목록"),
             fieldWithPath("commentDtos[].userId").type(JsonFieldType.NUMBER)
@@ -235,7 +235,7 @@ class PostControllerTest {
                 .description("댓글 작성자 닉네임"),
             fieldWithPath("commentDtos[].userImg").type(JsonFieldType.STRING)
                 .description("댓글 작성자 이미지"),
-            fieldWithPath("commentDtos[].text").type(JsonFieldType.STRING).optional()
+            fieldWithPath("commentDtos[].content").type(JsonFieldType.STRING).optional()
                 .description("댓글 내용"),
             fieldWithPath("commentDtos[].state").type(JsonFieldType.BOOLEAN).description("댓글 상태"),
             fieldWithPath("commentDtos[].latestUpdateTime").type(JsonFieldType.STRING)

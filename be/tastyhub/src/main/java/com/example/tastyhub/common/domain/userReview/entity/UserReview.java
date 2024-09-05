@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,14 +30,15 @@ import lombok.NoArgsConstructor;
 public class UserReview extends TimeStamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tasty_hub_sequence")
+    @SequenceGenerator(name = "tasty_hub_sequence", sequenceName = "thesq", allocationSize = 10)
     @Column(name = "user_review_id")
     private Long id;
 
     //    private
     private long grade;
 
-    private String text;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
     @JoinColumn(name = "writer_id", nullable = false)
@@ -49,13 +51,13 @@ public class UserReview extends TimeStamped {
     public static UserReview createUserReview(long grade, String text, User writer, User reader){
         return UserReview.builder()
             .grade(grade)
-            .text(text)
+            .content(text)
             .writer(writer)
             .reader(reader)
             .build();
     }
     public void updateByUserReviewUpdateRequest(UserReviewUpdateRequest userReviewUpdateRequest) {
         this.grade = userReviewUpdateRequest.getGrade();
-        this.text = userReviewUpdateRequest.getText();
+        this.content = userReviewUpdateRequest.getContent();
     }
 }

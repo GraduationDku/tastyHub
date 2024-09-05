@@ -25,7 +25,7 @@ public class RecipeReviewRepositoryQueryImpl implements RecipeReviewRepositoryQu
                     user.id,
                     user.nickname,
                     recipeReview.grade,
-                    recipeReview.text
+                    recipeReview.content
                     ))
                     .from(recipeReview)
                     .where(recipeReview.recipe.id.eq(recipeId))
@@ -42,7 +42,7 @@ public class RecipeReviewRepositoryQueryImpl implements RecipeReviewRepositoryQu
                     recipe.foodImgUrl,
                     recipe.foodName,
                     recipeReview.grade,
-                    recipeReview.text
+                    recipeReview.content
                     ))
                     .from(recipeReview)
                     .where(recipeReview.user.id.eq(userId))

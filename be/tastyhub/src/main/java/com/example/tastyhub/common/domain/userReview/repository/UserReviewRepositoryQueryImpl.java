@@ -23,7 +23,7 @@ public class UserReviewRepositoryQueryImpl implements UserReviewRepositoryQuery 
                     user.id,
                     user.nickname,
                     userReview.grade,
-                    userReview.text
+                    userReview.content
                     ))
                     .from(userReview)
                     .where(userReview.reader.id.eq(userId))

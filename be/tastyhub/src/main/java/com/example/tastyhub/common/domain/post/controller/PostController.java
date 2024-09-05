@@ -1,6 +1,8 @@
 package com.example.tastyhub.common.domain.post.controller;
 
 import static com.example.tastyhub.common.config.APIConfig.POST_API;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCESS;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
@@ -40,7 +42,7 @@ public class PostController {
         @RequestBody PostCreateRequest postCreateRequest,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.createPost(postCreateRequest, userDetails.getUser());
-        return RESPONSE_OK;
+        return RESPONSE_CREATED;
     }
 
     @PatchMapping("/modify/{postId}")
@@ -55,7 +57,7 @@ public class PostController {
     public ResponseEntity<StatusResponse> deletePost(@PathVariable Long postId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.deletePost(postId, userDetails.getUser());
-        return RESPONSE_OK;
+        return DELETE_SUCCESS;
 
     }
 

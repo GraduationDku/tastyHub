@@ -12,7 +12,6 @@ import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.post.entity.Post.PostState;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.security.core.parameters.P;
 
 public class PostFixture {
 
@@ -21,12 +20,12 @@ public class PostFixture {
         .postState(PostState.Start)
         .title("title")
         .user(USER)
-        .text("Text")
+        .content("Text")
         .build();
 
     public static final PostCreateRequest POST_CREATE_REQUEST = PostCreateRequest.builder()
         .title("title")
-        .text("Text")
+        .content("Text")
         .build();
 
     public static final PostResponse POST_RESPONSE = PostResponse.builder()
@@ -35,13 +34,13 @@ public class PostFixture {
         .title("title")
         .latestUpdateTime("time")
         .nickname("nickname")
-        .text("text")
+        .content("text")
         .userImg("img")
         .commentDtos(COMMENT_DTOS)
         .build();
 
     public static final PostUpdateRequest POST_UPDATE_REQUEST = PostUpdateRequest.builder()
-        .text("text")
+        .content("text")
         .title("title")
         .postState(PostState.Start)
         .build();

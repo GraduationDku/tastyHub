@@ -18,23 +18,23 @@ public class RecipeReviewFixture {
             .user(USER)
             .recipe(RECIPE)
             .grade(0L)
-            .text("text")
+            .content("text")
             .build();
     public static final RecipeReviewCreateRequest RECIPE_REVIEW_CREATE_REQUEST =
         RecipeReviewCreateRequest.builder()
             .grade(0L)
-            .text("text")
+            .content("text")
             .build();
     public static final RecipeReviewUpdateRequest RECIPE_REVIEW_UPDATE_REQUEST =
             RecipeReviewUpdateRequest.builder()
                 .grade(1L)
-                .text("new_text")
+                .content("new_text")
                 .build();
     public static final PagingRecipeReviewResponse PAGING_RECIPE_REVIEW_RESPONSE = PagingRecipeReviewResponse.builder()
         .userId(USER.getId())
         .grade(0L)
         .nickname(USER.getNickname())
-        .text("text")
+        .content("text")
         .build();
     public static final List<PagingRecipeReviewResponse> PAGING_RECIPE_REVIEW_RESPONSES = Collections.singletonList(
         PAGING_RECIPE_REVIEW_RESPONSE);
