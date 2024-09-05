@@ -66,17 +66,15 @@ public class PostController {
     public ResponseEntity<Page<PagingPostResponse>> getAllPost(
         @AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
     ) {
-        Page<PagingPostResponse> pagingPostResponseList = postService.getAllPost(
-            userDetails.getUser(), pageable);
-        return ResponseEntity.ok().body(pagingPostResponseList);
+        return ResponseEntity.ok().body(postService.getAllPost(
+            userDetails.getUser(), pageable));
     }
 
     @GetMapping("/recent/list")
     public ResponseEntity<Page<PagingPostResponse>> getAllRecentPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
     ) {
-        Page<PagingPostResponse> pagingPostResponseList = postService.getAllRecentPost(
-            userDetails.getUser(), pageable);
-        return ResponseEntity.ok().body(pagingPostResponseList);
+        return ResponseEntity.ok().body(postService.getAllRecentPost(
+            userDetails.getUser(), pageable));
     }
 
     @GetMapping("/detail/{postId}")
