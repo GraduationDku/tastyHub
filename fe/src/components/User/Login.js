@@ -1,50 +1,26 @@
-import React, { useState } from 'react';
-import '../../css/Login.css';
+// src/components/User/Login.js
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../redux/User/loginState';
+import '../../css/User/Login.css';
 
 function Login({ setScreen }) {
-  const [username, setUsername] = useState('');
+  const dispatch = useDispatch();
+  const { loading, error, isAuthenticated } = useSelector((state) => state.login);
+
+  const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:8080/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
+    dispatch(loginUser({ userName, password }));
+  };
 
-      if (response.ok) {
-        const authorization = response.headers.get('Authorization');
-        const refreshToken = response.headers.get('Refresh');
-        const data = await response.json(); // Extract JSON data
-        const nickname = data.nickname; // Extract nickname from JSON data
-
-        localStorage.setItem('accessToken', authorization);
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('nickname', nickname);
-        
-  
-
-        console.log('로그인 성공');
-        setScreen('main');
-      } else {
-        console.error('로그인 실패');
-        alert("아이디 및 비밀번호가 일치하지 않습니다.");
-      }
-    } catch (error) {
-      console.error('로그인 중 오류 발생:', error);
+  useEffect(() => {
+    if (isAuthenticated) {
+      setScreen('main');
     }
-  };
-
-  const handleFindUsername = () => {
-    window.open('/findUsername', '_blank');
-  };
+  }, [isAuthenticated, setScreen]);
 
   return (
     <div className='login'>
@@ -54,28 +30,30 @@ function Login({ setScreen }) {
         <input
           type="text"
           placeholder="ID"
-          value={username}
+          value={userName}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <br></br>
-        <br></br>
+        <br/><br/>
         <input
           type="password"
           placeholder="PASSWORD"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <br></br>
-        <br/>
+        <br/><br/>
         <div className='button-container'>
-          <button onClick={handleLogin}>로그인</button><br/>
+          <button onClick={handleLogin} disabled={loading}>
+            {loading ? '로그인 중...' : '로그인'}
+          </button>
           <br/><br/>
           <button onClick={() => setScreen('signup')}>회원가입</button>
           <button onClick={() => setScreen('findUsername')}>아이디 찾기</button>
         </div>
+        
       </div>
     </div>
   );
 }
 
 export default Login;
+

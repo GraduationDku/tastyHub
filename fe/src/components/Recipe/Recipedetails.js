@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/RecipeDetails.css';
+import '../../css/Recipe/RecipeDetails.css';
 import CreateRecipeReview from '../Review/CreateRecipeReview';
 import LikeButton from '../Like/Like'; // Ensure you import the LikeButton component correctly
 import ScrapButton from '../Scrap/Scrap'; // Import the ScrapButton component
@@ -11,7 +11,7 @@ function RecipeDetails({ recipeId }) {
   useEffect(() => {
     async function fetchRecipeDetails() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe/detail/${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/detail/recipeId=${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ function RecipeDetails({ recipeId }) {
 
     async function fetchRecipeReviews() {
       try {
-        const response = await fetch(`http://localhost:8080/recipe-review/list/${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/list/${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ function RecipeDetails({ recipeId }) {
         <img src={recipeDetails.foodImgUrl} alt={recipeDetails.foodName} />
         
         <div>
-          <p className='dis'><strong>레시피 설명<br/><br/></strong> {recipeDetails.foodInformation.text}</p>
+          <p className='dis'><strong>레시피 설명<br/><br/></strong> {recipeDetails.foodInformation.content}</p>
           <p className='time'><strong>조리 시간 </strong> {recipeDetails.foodInformation.cookingTime}분</p>
           <p className='amount'><strong>양 </strong> {recipeDetails.foodInformation.serving}</p>
         </div>
@@ -88,7 +88,7 @@ function RecipeDetails({ recipeId }) {
           <ol>
             {recipeDetails.cookSteps.map((step, index) => (
               <li key={step.cookStepId || index}>
-                 {step.text}<br/><br/>
+                 {step.content}<br/><br/>
                 {step.stepImgUrl && <img src={step.stepImgUrl} alt={`Step ${step.stepNumber}`} style={{ width: '100%', maxHeight: '200px' }} />}
               </li>
             ))}
@@ -107,7 +107,7 @@ function RecipeDetails({ recipeId }) {
             {recipeReviews.map((review, index) => (
               <li key={index}>
                 <p><strong>{review.nickname}</strong> (평점 : {review.grade})</p>
-                <p>{review.text}</p>
+                <p>{review.content}</p>
               </li>
             ))}
           </ul>

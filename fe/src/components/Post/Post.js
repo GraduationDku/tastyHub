@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import '../../css/Post.css';
+import '../../css/Post/Post.css';
 
 function Post({ setScreen, onPostSelect, isGuest }) {
   const [posts, setPosts] = useState([]);
@@ -14,7 +14,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
 
     async function fetchAllPost() {
       try {
-        const response = await fetch('http://localhost:8080/post/list', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
   const handleDeleteSelected = async () => {
     for (let postId of selectedPosts) {
       try {
-        const response = await fetch(`http://localhost:8080/post/delete/${postId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/delete/${postId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

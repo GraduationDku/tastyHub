@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import '../../css/FindUsername.css';
+import '../../css/User/FindUsername.css';
 
 function FindUsername({ setScreen }) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState(null);
+  const [userName, setUsername] = useState(null);
 
   const handleFindUsername = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/user/findid', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/findid`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -19,11 +19,11 @@ function FindUsername({ setScreen }) {
 
       const data = await response.json();
       if (response.ok) {
-        setUsername(data.username);
-        alert('귀하의 아이디는: ' + data.username + ' 입니다.');
+        setUsername(data.userName);
+        alert('귀하의 아이디는: ' + data.userName + ' 입니다.');
       } else {
         alert('id : chell****');
-        console.log(data.username);
+        console.log(data.userName);
       }
     } catch (error) {
       console.error('아이디 찾기 오류:', error);

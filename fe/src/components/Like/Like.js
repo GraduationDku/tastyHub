@@ -1,59 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import '../../css/Like.css'
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchLikeCount, toggleLike } from '../../redux/Like/likeState';
+import '../../css/Like/Like.css';
 
 const LikeButton = ({ recipeId }) => {
-  const [likeCount, setLikeCount] = useState(0);
-  const [liked, setLiked] = useState(false);
-
-  // Fetch the like count and status
-  const fetchLikeCount = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/like/count/${recipeId}`, {
-        headers: {
-          'Authorization': localStorage.getItem('accessToken')
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setLikeCount(data.count);
-        setLiked(data.liked);
-        console.log(data)
-      } else {
-        console.error('Failed to fetch like count');
-      }
-    } catch (error) {
-      console.error('Error fetching like count:', error);
-    }
-  };
-
-  // Toggle like status
-  const toggleLike = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/like/${recipeId}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': localStorage.getItem('accessToken'),
-          'Content-Type': 'application/json'
-        }
-      });
-      if (response.ok) {
-        fetchLikeCount(); // Refresh like count and status
-      } else {
-        console.error('Error toggling like status:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error toggling like status:', error);
-    }
-  };
+  const dispatch = useDispatch();
+  const { likeCount, liked, loading, error } = useSelector((state) => state.like);
 
   useEffect(() => {
-    fetchLikeCount();
-  }, [recipeId]);
+    dispatch(fetchLikeCount(recipeId));
+  }, [dispatch, recipeId]);
+
+  const handleToggleLike = () => {
+    dispatch(toggleLike(recipeId));
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div >
-      <button className='like' onClick={toggleLike}>
+    <div>
+      <button className='like' onClick={handleToggleLike}>
         {liked ? 'Unlike' : 'Like'} ({likeCount})
       </button>
     </div>

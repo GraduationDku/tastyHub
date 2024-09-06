@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import '../../css/CreatePost.css';
+import '../../css/Post/CreatePost.css';
 
 function CreatePost() {
   const [formData, setFormData] = useState({
     title: '',
-    text: ''
+    content: ''
   });
 
   const handleChange = (e) => {
@@ -17,14 +17,14 @@ function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/post/create', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/post/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
         },
         body: JSON.stringify({
-          text: formData.text,
+          content: formData.content,
           title: formData.title
         })
       });
@@ -59,8 +59,8 @@ function CreatePost() {
         <br/>
         <textarea
           type="text"
-          name="text"
-          value={formData.text}
+          name="content"
+          value={formData.content}
           onChange={handleChange}
         />
         <br/><br/>

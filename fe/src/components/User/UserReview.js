@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function UserReview({ username }) {
+function UserReview({ userName }) {
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -8,7 +8,7 @@ function UserReview({ username }) {
   useEffect(() => {
     async function fetchReviews() {
       try {
-        const response = await fetch(`http://localhost:8080/user-review/detail/${username}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/detail/${userName}?page=${page}&size=${size}&sort=${sort}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ function UserReview({ username }) {
     }
 
     fetchReviews();
-  }, [username]);
+  }, [userName]);
 
   if (isLoading) {
     return <p>로딩 중...</p>;
@@ -48,8 +48,8 @@ function UserReview({ username }) {
         <ul>
           {reviews.map((review, index) => (
             <li key={index}>
-              <p><strong>{review.username}</strong> ({review.grade}점)</p>
-              <p>{review.text}</p>
+              <p><strong>{review.userName}</strong> ({review.grade}점)</p>
+              <p>{review.content}</p>
             </li>
           ))}
         </ul>

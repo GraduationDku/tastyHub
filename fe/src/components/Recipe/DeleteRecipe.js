@@ -3,7 +3,7 @@ import React from 'react';
 const DeleteRecipe = ({ recipeId }) => {
     const deleteRecipe = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/recipe/delete/${recipeId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/delete/${recipeId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/MainChat.css';
+import '../../css/Chat/MainChat.css';
 
 function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const [chatRooms, setChatRooms] = useState([]);
@@ -14,7 +14,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
         
         const fetchChatRooms = async () => {
             try {
-                const response = await fetch('http://localhost:8080/room', {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/room??page=${page}&size=${size}&sort=${sort}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const handleDeleteSelected = async () => {
         for (let roomId of selectedRooms) {
             try {
-                const response = await fetch(`http://localhost:8080/room/${roomId}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/room/${roomId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

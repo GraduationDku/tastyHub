@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/MypageShow.css';
+import '../../css/User/MypageShow.css';
 
 const MypageShow = ({userId}) => {
   const [view, setView] = useState(null);
@@ -10,7 +10,7 @@ const MypageShow = ({userId}) => {
 
   const fetchScrapedRecipes = async () => {
     try {
-      const response = await fetch('http://localhost:8080/scrap/list', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/scrap/list/${userName}?page=${page}&size=${size}&sort=${sort}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
@@ -27,7 +27,7 @@ const MypageShow = ({userId}) => {
 
   const fetchWrittenReviews = async () => {
     try {
-      const response = await fetch('http://localhost:8080/recipe-review/list', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/mylist??page=${page}&size=${size}&sort=${sort}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
@@ -44,7 +44,7 @@ const MypageShow = ({userId}) => {
 
   const fetchMyRecipes = async () => {
     try {
-      const response = await fetch('http://localhost:8080/recipe/mylist', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/mylist?page=${page}&size=${size}&sort=${sort}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
@@ -110,7 +110,7 @@ const WrittenReviews = ({ reviews }) => (
             <img src={review.foodImgUrl} alt={review.foodname} />
             <p>{review.foodname}</p>
             <p>평점 : {review.grade}</p>
-            <p>{review.text}</p>
+            <p>{review.content}</p>
           </li>
         ))
       ) : (
@@ -129,7 +129,7 @@ const MyRecipes = ({ recipes }) => (
           <li key={recipe.foodId}>
             <img src={recipe.foodImgUrl} alt={recipe.foodName} />
             <p>{recipe.foodName}</p>
-            <p>{recipe.foodInformationDto.text}</p>
+            <p>{recipe.foodInformationDto.content}</p>
             <p>조리 시간 : {recipe.foodInformationDto.cookingTime} minutes</p>
             <p>양 : {recipe.foodInformationDto.serving}</p>
           </li>
