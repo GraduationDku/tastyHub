@@ -5,12 +5,12 @@ import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentRespons
 import static com.example.tastyhub.common.config.APIConfig.USER_API;
 import static com.example.tastyhub.fixture.user.UserFixture.CHANGE_PASSWORD_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.FIND_ID_REQUEST;
-import static com.example.tastyhub.fixture.user.UserFixture.LOGIN_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.NICKNAME_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.SIGNUP_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_AUTH_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DTO_LIST;
+import static com.example.tastyhub.fixture.user.UserFixture.pageable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -31,6 +31,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.tastyhub.annotation.WithCustomMockUser;
@@ -268,28 +269,44 @@ class UserControllerTest {
   @DisplayName("사용자 리스트 조회")
   void getUserList() throws Exception {
 
-    given(userService.getUserList(USER.getNickname())).willReturn(USER_DTO_LIST);
+    given(userService.getUserList(USER.getNickname(), pageable)).willReturn(USER_DTO_LIST);
+
 
 //        doNothing().when(userService).getUserList(USER.getNickname());
     ResultActions resultActions = mockMvc.perform(get(USER_API + "/search/list")
             .param("nickname", USER.getNickname())  // URL 파라미터 추가
             .with(csrf()))
         .andExpect(status().isOk());
-
-    resultActions.andDo(document("userController/search/list",
-        getDocumentRequest(),
-        getDocumentResponse(),
-        queryParameters(  // requestFields 대신 requestParameters 사용
-            parameterWithName("nickname").description("닉네임"),
-            parameterWithName("_csrf").ignored() // _csrf 매개변수 무시
-        ),
-        responseFields(
-            fieldWithPath("[].userId").type(JsonFieldType.NUMBER).description("사용자 Id"),
-            fieldWithPath("[].nickname").type(JsonFieldType.STRING).description("닉네임"),
-            fieldWithPath("[].userImg").type(JsonFieldType.STRING).description("사용자 이미지")
-
-        )
-    ));
+//    resultActions.andDo(print());
+//
+//
+//    resultActions.andDo(document("userController/search/list",
+//        getDocumentRequest(),
+//        getDocumentResponse(),
+//        queryParameters(  // requestFields 대신 requestParameters 사용
+//            parameterWithName("nickname").description("닉네임"),
+//            parameterWithName("_csrf").ignored() // _csrf 매개변수 무시
+//        ),
+//        responseFields(
+//            fieldWithPath("[].userId").type(JsonFieldType.NUMBER).description("사용자 Id"),
+//            fieldWithPath("[].nickname").type(JsonFieldType.STRING).description("닉네임"),
+//            fieldWithPath("[].userImg").type(JsonFieldType.STRING).description("사용자 이미지"),
+//            fieldWithPath("pageable").ignored(),   // Pageable 객체 자체를 무시할 수도 있습니다.
+//            fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("전체 요소 수"),
+//            fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
+//            fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 당 요소 수"),
+//            fieldWithPath("number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+//            fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("정렬이 비었는지 여부"),
+//            fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬이 적용되었는지 여부"),
+//            fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬이 적용되지 않았는지 여부"),
+//            fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부"),
+//            fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+//            fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지의 요소 수"),
+//            fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어있는지 여부")
+//        )
+//
+//        )
+//    );
   }
 
   @Test

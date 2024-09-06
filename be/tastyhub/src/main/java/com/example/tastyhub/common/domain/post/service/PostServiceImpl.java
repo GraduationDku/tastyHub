@@ -2,8 +2,9 @@ package com.example.tastyhub.common.domain.post.service;
 
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
-import java.util.List;
 import lombok.Generated;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.post.dtos.PostCreateRequest;
@@ -44,24 +45,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PagingPostResponse> getAllPost(User user) {
-        List<PagingPostResponse> postResponses = postRepository.findAllPostResponse(
-            user.getVillage());
-        return postResponses;
+    public Page<PagingPostResponse> getAllPost(User user, Pageable pageable) {
+        return postRepository.findAllPostResponse(
+            user.getVillage(),pageable);
     }
 
     @Override
-    public List<PagingPostResponse> getAllRecentPost(User user) {
-        List<PagingPostResponse> postResponses = postRepository.findAllRecentPostResponse(
-            user.getVillage());
-        return postResponses;
+    public Page<PagingPostResponse> getAllRecentPost(User user, Pageable pageable) {
+        return postRepository.findAllRecentPostResponse(
+            user.getVillage(), pageable);
     }
 
     @Override
     public PostResponse getPost(Long postId) {
-
-        PostResponse postResponse = getPostFindByPostId(postId);
-        return postResponse;
+        return getPostFindByPostId(postId);
     }
 
     @Generated

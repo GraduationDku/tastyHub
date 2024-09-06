@@ -30,6 +30,8 @@ import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -146,8 +148,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public List<UserDto> getUserList(String nickname) {
-    List<UserDto> userDtoList = userRepository.findAllByNickname(nickname);
+  public Page<UserDto> getUserList(String nickname, Pageable pageable) {
+    Page<UserDto> userDtoList = userRepository.findAllByNickname(nickname,pageable);
     return userDtoList;
   }
 
