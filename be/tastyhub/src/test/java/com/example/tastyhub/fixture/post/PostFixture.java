@@ -58,8 +58,5 @@ public class PostFixture {
         .build();
     public static Pageable pageable = PageRequest.of(0, 1);
 
-
-
-
     public static final Page<PagingPostResponse> PAGING_POST_RESPONSES = new PageImpl(List.of(PAGING_POST_RESPONSE),pageable, 1);
 }
