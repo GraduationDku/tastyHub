@@ -48,3 +48,18 @@
   border: none;
   border-radius: 10px;
 }
+
+.navbar .search-form {
+  display: flex;
+  align-items: center; /* 수직 정렬 */
+}
+
+.navbar .search-input {
+  flex: 1; /* 입력 필드가 가능한 모든 공간을 차지하도록 설정 */
+  margin-right: 10px; /* 입력 필드와 버튼 사이의 간격 */
+}
+
+.navbar .search-toggle-btn,
+.navbar button[type="submit"] {
+  margin-left: 5px; /* 버튼 사이의 간격 */
+}
