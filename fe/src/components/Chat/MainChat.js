@@ -110,7 +110,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                                         onChange={() => handleCheckboxChange(chatRoom.roomId)}
                                     />
                                 )}
-                                <p>{chatRoom.from}</p>
+                                <p>{chatRoom.sender}</p>
                                 <p>{chatRoom.time}</p>
                                 <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
                                     {chatRoom.chatRoomTitle}

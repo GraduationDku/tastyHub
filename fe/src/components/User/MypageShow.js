@@ -110,7 +110,7 @@ const WrittenReviews = ({ reviews }) => (
             <img src={review.foodImgUrl} alt={review.foodname} />
             <p>{review.foodname}</p>
             <p>평점 : {review.grade}</p>
-            <p>{review.text}</p>
+            <p>{review.content}</p>
           </li>
         ))
       ) : (
@@ -129,7 +129,7 @@ const MyRecipes = ({ recipes }) => (
           <li key={recipe.foodId}>
             <img src={recipe.foodImgUrl} alt={recipe.foodName} />
             <p>{recipe.foodName}</p>
-            <p>{recipe.foodInformationDto.text}</p>
+            <p>{recipe.foodInformationDto.content}</p>
             <p>조리 시간 : {recipe.foodInformationDto.cookingTime} minutes</p>
             <p>양 : {recipe.foodInformationDto.serving}</p>
           </li>

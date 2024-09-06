@@ -4,14 +4,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // 비동기 로그인 액션 생성
 export const loginUser = createAsyncThunk(
   'login/loginUser',
-  async ({ username, password }, { rejectWithValue }) => {
+  async ({ userName, password }, { rejectWithValue }) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ userName, password }),
       });
 
       if (!response.ok) {

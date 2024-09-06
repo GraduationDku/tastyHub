@@ -15,7 +15,7 @@ import {
 function Signup({ setScreen }) {
   const dispatch = useDispatch();
   const {
-    username, password, confirmPassword, nickname, email, verifiedCode,
+    userName, password, confirmPassword, nickname, email, verifiedCode,
     usernameAvailable, nicknameAvailable, emailAvailable, passwordsMatch,
     usernameButtonText, nicknameButtonText, emailButtonText, verifyButtonText
   } = useSelector((state) => state.signup);
@@ -30,7 +30,7 @@ function Signup({ setScreen }) {
       alert('모든 필드의 유효성을 확인하세요.');
       return;
     }
-    dispatch(signupUser({ username, password, nickname, email }))
+    dispatch(signupUser({ userName, password, nickname, email }))
       .then(() => setScreen('village'));
   };
 
@@ -43,10 +43,10 @@ function Signup({ setScreen }) {
           <input
             type="text"
             placeholder="ID"
-            value={username}
-            onChange={(e) => handleChange('username', e.target.value)}
+            value={userName}
+            onChange={(e) => handleChange('userName', e.target.value)}
           />
-          <button onClick={() => dispatch(checkUsernameAvailability(username))}>
+          <button onClick={() => dispatch(checkUsernameAvailability(userName))}>
             {usernameButtonText}
           </button>
           <br /><br />

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
-  username: '',
+  userName: '',
   password: '',
   confirmPassword: '',
   nickname: '',
@@ -23,9 +23,9 @@ const initialState = {
 // 비동기 함수
 export const checkUsernameAvailability = createAsyncThunk(
   'signup/checkUsernameAvailability',
-  async (username, { rejectWithValue }) => {
+  async (userName, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/overlap/username?username=${username}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/overlap/userName?userName=${userName}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export const checkUsernameAvailability = createAsyncThunk(
       if (!response.ok) {
         return rejectWithValue(await response.text());
       }
-      return { username, available: true };
+      return { userName, available: true };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -106,7 +106,7 @@ export const verifyCode = createAsyncThunk(
 
 export const signupUser = createAsyncThunk(
   'signup/signupUser',
-  async ({ username, password, nickname, email }, { rejectWithValue }) => {
+  async ({ userName, password, nickname, email }, { rejectWithValue }) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/user/signup`, {
         method: 'POST',
@@ -114,7 +114,7 @@ export const signupUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username,
+          userName,
           password,
           nickname,
           email,

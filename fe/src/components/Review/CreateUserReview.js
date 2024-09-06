@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 function CreateUserReview({ userId }) {
   const [grade, setGrade] = useState(0);
-  const [text, setText] = useState('');
+  const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -12,12 +12,12 @@ function CreateUserReview({ userId }) {
     setError(null);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/create/${username}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/create/${userName}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ grade, text }),
+        body: JSON.stringify({ grade, content }),
       });
 
       if (!response.ok) {
@@ -26,7 +26,7 @@ function CreateUserReview({ userId }) {
 
       // 성공 시, 리뷰 제출 후 초기화
       setGrade(0);
-      setText('');
+      setContent('');
     } catch (error) {
       setError(error.message);
     } finally {
@@ -52,8 +52,8 @@ function CreateUserReview({ userId }) {
         <label htmlFor="text">리뷰:</label>
         <textarea
           id="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           required
         />
       </div>
