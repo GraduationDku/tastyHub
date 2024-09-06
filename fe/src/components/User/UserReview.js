@@ -8,7 +8,7 @@ function UserReview({ userName }) {
   useEffect(() => {
     async function fetchReviews() {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/detail/${userName}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/user-review/detail/${userName}?page=${page}&size=${size}&sort=${sort}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

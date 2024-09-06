@@ -14,7 +14,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
 
     async function fetchAllPost() {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/list`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

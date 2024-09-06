@@ -11,7 +11,7 @@ function RecipeDetails({ recipeId }) {
   useEffect(() => {
     async function fetchRecipeDetails() {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/detail/${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/detail/recipeId=${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

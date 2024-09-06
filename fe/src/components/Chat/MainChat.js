@@ -14,7 +14,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
         
         const fetchChatRooms = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/room`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/room??page=${page}&size=${size}&sort=${sort}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                                         onChange={() => handleCheckboxChange(chatRoom.roomId)}
                                     />
                                 )}
-                                <p>{chatRoom.sender}</p>
+                                <p>{chatRoom.from}</p>
                                 <p>{chatRoom.time}</p>
                                 <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
                                     {chatRoom.chatRoomTitle}

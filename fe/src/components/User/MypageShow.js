@@ -10,7 +10,7 @@ const MypageShow = ({userId}) => {
 
   const fetchScrapedRecipes = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/scrap/list`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/scrap/list/${userName}?page=${page}&size=${size}&sort=${sort}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
@@ -27,7 +27,7 @@ const MypageShow = ({userId}) => {
 
   const fetchWrittenReviews = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/list`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/mylist??page=${page}&size=${size}&sort=${sort}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
@@ -44,7 +44,7 @@ const MypageShow = ({userId}) => {
 
   const fetchMyRecipes = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/mylist`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/mylist?page=${page}&size=${size}&sort=${sort}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
