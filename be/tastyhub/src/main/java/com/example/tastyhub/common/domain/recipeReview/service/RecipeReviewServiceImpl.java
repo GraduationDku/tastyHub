@@ -1,8 +1,12 @@
 package com.example.tastyhub.common.domain.recipeReview.service;
 
 import com.example.tastyhub.common.domain.recipe.service.RecipeService;
+import com.example.tastyhub.common.utils.OrderSpecifierUtil;
+import com.querydsl.core.types.OrderSpecifier;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
@@ -34,8 +38,9 @@ public class RecipeReviewServiceImpl implements RecipeReviewService {
   }
 
   @Override
-  public List<PagingRecipeReviewResponse> getRecipeReviews(Long recipeId) {
-    return recipeReviewRepository.findAllRecipeReviewResponse(recipeId);
+  public Page<PagingRecipeReviewResponse> getRecipeReviews(Long recipeId, Pageable pageable) {
+    OrderSpecifier<?>[] orderSpecifiers = OrderSpecifierUtil.getOrderSpecifiers(pageable, RecipeReview.class, "recipeReview");
+    return recipeReviewRepository.findAllRecipeReviewResponse(recipeId, pageable,orderSpecifiers);
   }
 
   @Override
@@ -54,8 +59,9 @@ public class RecipeReviewServiceImpl implements RecipeReviewService {
   }
 
   @Override
-  public List<PagingMyRecipeReviewResponse> getMyRecipeReviews(User user) {
-    return recipeReviewRepository.findAllMyRecipeReviewResponse(user.getId());
+  public Page<PagingMyRecipeReviewResponse> getMyRecipeReviews(User user, Pageable pageable) {
+    OrderSpecifier<?>[] orderSpecifiers = OrderSpecifierUtil.getOrderSpecifiers(pageable, RecipeReview.class, "recipeReview");
+    return recipeReviewRepository.findAllMyRecipeReviewResponse(user.getId(),pageable,orderSpecifiers);
   }
 
 }

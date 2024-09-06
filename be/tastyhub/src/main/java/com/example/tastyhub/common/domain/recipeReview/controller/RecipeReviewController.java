@@ -7,6 +7,10 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,15 +52,15 @@ public class RecipeReviewController {
     }
 
     @GetMapping("/list/{recipeId}")
-    public ResponseEntity<List<PagingRecipeReviewResponse>> getRecipeReviews(@PathVariable Long recipeId, 
-    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PagingRecipeReviewResponse> pagingRecipeReviewResponseList = recipeReviewService.getRecipeReviews(recipeId);
+    public ResponseEntity<Page<PagingRecipeReviewResponse>> getRecipeReviews(@PathVariable Long recipeId,
+    @AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        Page<PagingRecipeReviewResponse> pagingRecipeReviewResponseList = recipeReviewService.getRecipeReviews(recipeId, pageable);
         return ResponseEntity.ok().body(pagingRecipeReviewResponseList);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<PagingMyRecipeReviewResponse>> getRecipeReviews(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PagingMyRecipeReviewResponse> pagingMyRecipeReviewResponseList = recipeReviewService.getMyRecipeReviews(userDetails.getUser());
+    @GetMapping("/my-list")
+    public ResponseEntity<Page<PagingMyRecipeReviewResponse>> getMyRecipeReviews(@AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        Page<PagingMyRecipeReviewResponse> pagingMyRecipeReviewResponseList = recipeReviewService.getMyRecipeReviews(userDetails.getUser(),pageable);
         return ResponseEntity.ok().body(pagingMyRecipeReviewResponseList);
     }
 
