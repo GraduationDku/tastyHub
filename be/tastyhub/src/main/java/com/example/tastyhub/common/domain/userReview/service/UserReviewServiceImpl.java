@@ -1,7 +1,11 @@
 package com.example.tastyhub.common.domain.userReview.service;
 
+import com.example.tastyhub.common.utils.OrderSpecifierUtil;
+import com.querydsl.core.types.OrderSpecifier;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.user.entity.User;
@@ -34,8 +38,9 @@ public class UserReviewServiceImpl implements UserReviewService {
   }
 
   @Override
-  public List<PagingUserReviewResponse> getUserReviews(Long userId) {
-    return userReviewRepository.findAllUserReviewResponse(userId);
+  public Page<PagingUserReviewResponse> getUserReviews(Long userId, Pageable pageable) {
+    OrderSpecifier<?>[] orderSpecifiers = OrderSpecifierUtil.getOrderSpecifiers(pageable, UserReview.class, "userReview");
+    return userReviewRepository.findAllUserReviewResponse(userId,pageable,orderSpecifiers);
   }
 
   @Override

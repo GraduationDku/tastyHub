@@ -7,6 +7,10 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,10 +49,10 @@ public class UserReviewController {
   }
 
   @GetMapping("/list/{userId}")
-  public ResponseEntity<List<PagingUserReviewResponse>> getUserReviews(@PathVariable Long userId,
-      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    List<PagingUserReviewResponse> pagingUserReviewResponseList = userReviewService.getUserReviews(
-        userId);
+  public ResponseEntity<Page<PagingUserReviewResponse>> getUserReviews(@PathVariable Long userId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+    Page<PagingUserReviewResponse> pagingUserReviewResponseList = userReviewService.getUserReviews(
+        userId, pageable);
     return ResponseEntity.ok().body(pagingUserReviewResponseList);
   }
 
