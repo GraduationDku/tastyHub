@@ -12,7 +12,6 @@ import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
 import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.domain.Page;

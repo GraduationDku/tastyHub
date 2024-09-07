@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.comment.service;
 
+import jakarta.transaction.Transactional;
 import lombok.Generated;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,14 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void updateComment(Long commentId, CommentRequest commentUpdateRequest, User user) {
         Comment comment = findById(commentId);
         comment.updateByCommentRequest(commentUpdateRequest);
     }
 
     @Override
+    @Transactional
     public void deleteComment(Long commentId, User user) {
         Comment comment = findById(commentId);
         comment.delete();

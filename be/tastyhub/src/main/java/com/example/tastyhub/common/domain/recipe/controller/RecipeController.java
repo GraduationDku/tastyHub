@@ -106,7 +106,7 @@ public class RecipeController {
      * writer : skyriv213 method : 레시피 수정하기
      * @throws IOException 
      */
-    @PatchMapping("/modify/{recipeId}")
+    @PatchMapping(value = "/modify/{recipeId}")
     public ResponseEntity<StatusResponse> updateRecipe(@PathVariable Long recipeId, @RequestPart("img") MultipartFile img,
         @RequestPart("data") RecipeUpdateDto recipeUpdateDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {

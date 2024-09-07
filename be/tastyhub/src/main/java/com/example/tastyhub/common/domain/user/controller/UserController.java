@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -73,7 +74,7 @@ public class UserController {
     /**
      * 아이디 찾기 - skyriv213
      */
-    @PostMapping("/find/id")
+    @GetMapping("/find/id")
     public ResponseEntity<UserNameResponse> findId(@RequestBody FindIdRequest findIdRequest) {
         UserNameResponse username = userService.findId(findIdRequest);
         return ResponseEntity.ok().body(username);
@@ -110,7 +111,7 @@ public class UserController {
 
     }
 
-    @PatchMapping("/modify/information")
+    @PatchMapping(value = "/modify/information",consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE )
     public ResponseEntity<StatusResponse> updateUserInfo(@RequestPart("img") MultipartFile img, @RequestPart("data") NicknameDto nicknameDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException{
             userService.updateUserInfoByUserUpdateRequest(nicknameDto, img, userDetails.getUser());

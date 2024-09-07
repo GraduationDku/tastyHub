@@ -24,8 +24,6 @@ import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 
-import java.util.List;
-
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -180,6 +178,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public void updateUserInfoByUserUpdateRequest(NicknameDto nicknameDto,
       MultipartFile img, User user) throws java.io.IOException {
     String imgUrl = "";
@@ -197,11 +196,13 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public void setVillage(LocationRequest locationRequest, String username) {
     Village village = villageService.getVillage(locationRequest);
     User findUser = userRepository.findByUsername(username)
         .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
     findUser.updateVillage(village);
+    System.out.println(findUser.getVillage().getAddressTownName());
 
   }
 

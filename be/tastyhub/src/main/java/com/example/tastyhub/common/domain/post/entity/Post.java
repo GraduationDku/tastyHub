@@ -29,6 +29,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Builder
@@ -39,6 +40,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "posts",indexes = {
     @Index(name = "idx_address", columnList = "addressTownName")
 })
+@DynamicUpdate
 public class Post extends TimeStamped {
 
 
@@ -82,7 +84,7 @@ public class Post extends TimeStamped {
 
     public void update(PostUpdateRequest postUpdateRequest) {
         this.title = postUpdateRequest.getTitle();
-        this.content = postUpdateRequest.getTitle();
+        this.content = postUpdateRequest.getContent();
         this.postState = postUpdateRequest.getPostState();
     }
 

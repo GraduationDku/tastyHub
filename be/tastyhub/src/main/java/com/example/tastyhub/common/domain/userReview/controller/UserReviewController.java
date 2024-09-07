@@ -50,7 +50,8 @@ public class UserReviewController {
 
   @GetMapping("/list/{userId}")
   public ResponseEntity<Page<PagingUserReviewResponse>> getUserReviews(@PathVariable Long userId,
-      @AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
     Page<PagingUserReviewResponse> pagingUserReviewResponseList = userReviewService.getUserReviews(
         userId, pageable);
     return ResponseEntity.ok().body(pagingUserReviewResponseList);
@@ -60,7 +61,8 @@ public class UserReviewController {
   public ResponseEntity<StatusResponse> updateUserReview(@PathVariable Long userReviewId,
       @RequestBody UserReviewUpdateRequest userReviewUpdateRequest,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    userReviewService.updateUserReviewByUserReviewUpdateRequest(userReviewId, userReviewUpdateRequest,
+    userReviewService.updateUserReviewByUserReviewUpdateRequest(userReviewId,
+        userReviewUpdateRequest,
         userDetails.getUser());
     return RESPONSE_OK;
 

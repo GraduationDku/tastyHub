@@ -2,6 +2,7 @@ package com.example.tastyhub.common.domain.post.service;
 
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
+import jakarta.transaction.Transactional;
 import lombok.Generated;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void updatePost(Long postId, PostUpdateRequest postUpdateRequest, User user) {
         Post post = findById(postId);
         post.update(postUpdateRequest);

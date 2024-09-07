@@ -36,50 +36,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class PostController {
 
-    private final PostService postService;
+  private final PostService postService;
 
-    @PostMapping("/create")
-    public ResponseEntity<StatusResponse> createPost(
-        @RequestBody PostCreateRequest postCreateRequest,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.createPost(postCreateRequest, userDetails.getUser());
-        return RESPONSE_CREATED;
-    }
+  @PostMapping("/create")
+  public ResponseEntity<StatusResponse> createPost(
+      @RequestBody PostCreateRequest postCreateRequest,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    postService.createPost(postCreateRequest, userDetails.getUser());
+    return RESPONSE_CREATED;
+  }
 
-    @PatchMapping("/modify/{postId}")
-    public ResponseEntity<StatusResponse> updatePost(@PathVariable Long postId,
-        @RequestBody PostUpdateRequest postUpdateRequest,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.updatePost(postId, postUpdateRequest, userDetails.getUser());
-        return RESPONSE_OK;
-    }
+  @PatchMapping("/modify/{postId}")
+  public ResponseEntity<StatusResponse> updatePost(@PathVariable Long postId,
+      @RequestBody PostUpdateRequest postUpdateRequest,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    postService.updatePost(postId, postUpdateRequest, userDetails.getUser());
+    return RESPONSE_OK;
+  }
 
-    @DeleteMapping("/delete/{postId}")
-    public ResponseEntity<StatusResponse> deletePost(@PathVariable Long postId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.deletePost(postId, userDetails.getUser());
-        return DELETE_SUCCESS;
-    }
+  @DeleteMapping("/delete/{postId}")
+  public ResponseEntity<StatusResponse> deletePost(@PathVariable Long postId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    postService.deletePost(postId, userDetails.getUser());
+    return DELETE_SUCCESS;
+  }
 
-    // 게시글 전체 조회,실시간 조회, 단건 조회 로직 - skyriv213
-    @GetMapping("/list")
-    public ResponseEntity<Page<PagingPostResponse>> getAllPost(
-        @AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
-    ) {
-        return ResponseEntity.ok().body(postService.getAllPost(
-            userDetails.getUser(), pageable));
-    }
+  // 게시글 전체 조회,실시간 조회, 단건 조회 로직 - skyriv213
+  @GetMapping("/list")
+  public ResponseEntity<Page<PagingPostResponse>> getAllPost(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
+  ) {
+    return ResponseEntity.ok().body(postService.getAllPost(
+        userDetails.getUser(), pageable));
+  }
 
-    @GetMapping("/recent/list")
-    public ResponseEntity<Page<PagingPostResponse>> getAllRecentPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
-    ) {
-        return ResponseEntity.ok().body(postService.getAllRecentPost(
-            userDetails.getUser(), pageable));
-    }
+  @GetMapping("/recent/list")
+  public ResponseEntity<Page<PagingPostResponse>> getAllRecentPost(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
+  ) {
+    return ResponseEntity.ok().body(postService.getAllRecentPost(
+        userDetails.getUser(), pageable));
+  }
 
-    @GetMapping("/detail/{postId}")
-    public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
-        PostResponse postResponse = postService.getPost(postId);
-        return ResponseEntity.ok().body(postResponse);
-    }
+  @GetMapping("/detail/{postId}")
+  public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
+    PostResponse postResponse = postService.getPost(postId);
+    return ResponseEntity.ok().body(postResponse);
+  }
 }

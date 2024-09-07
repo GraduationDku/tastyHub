@@ -183,7 +183,7 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   private static boolean checkRecipeOwner(User user, Recipe recipe) {
-    return recipe.getUser().equals(user);
+    return recipe.getUser().getUsername().equals(user.getUsername());
   }
 
   // 세현

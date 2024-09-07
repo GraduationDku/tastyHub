@@ -10,6 +10,7 @@ import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.userChat.entity.UserChatRoom;
 import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 import com.example.tastyhub.common.domain.village.entity.Village;
+import com.example.tastyhub.common.utils.TimeStamped;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -29,18 +30,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@DynamicUpdate
 @Table(name = "users",indexes = {
     @Index(name = "idx_username", columnList = "username")
 })
 @Entity
 
-public class User {
+public class User extends TimeStamped {
 
 
   @Id
@@ -49,6 +51,7 @@ public class User {
   @Column(name = "user_id")
   private Long id;
 
+  @Column(name = "username")
   private String username;
 
   private String password;
