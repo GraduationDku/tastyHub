@@ -51,6 +51,12 @@ const Navbar = ({ setScreen, onSearchComplete }) => {
       if (response.ok) {
         const data = await response.json();
         onSearchComplete(data.userDtoList);
+        
+        const authorization = response.headers.get('Authorization');
+        const refreshToken = response.headers.get('Refresh');
+
+        localStorage.setItem('accessToken', authorization);
+      localStorage.setItem('refreshToken', refreshToken);
       } else {
         throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
       }
