@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentDto {
 
-    private Long userId;
     private String nickname;
     private String userImg;
     private String content;
@@ -21,7 +20,6 @@ public class CommentDto {
     private String latestUpdateTime;
 
     public CommentDto (Comment comment){
-        this.userId = comment.getUser().getId();
         this.nickname = comment.getUser().getNickname();
         this.userImg = comment.getUser().getUserImg();
         this.content = comment.getContent();
