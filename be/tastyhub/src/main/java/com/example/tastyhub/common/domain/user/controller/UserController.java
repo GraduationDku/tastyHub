@@ -111,7 +111,7 @@ public class UserController {
 
     }
 
-    @PatchMapping(value = "/modify/information",consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE )
+    @PatchMapping(value = "/modify/information")
     public ResponseEntity<StatusResponse> updateUserInfo(@RequestPart("img") MultipartFile img, @RequestPart("data") NicknameDto nicknameDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException{
             userService.updateUserInfoByUserUpdateRequest(nicknameDto, img, userDetails.getUser());
