@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+// src/components/Post/Post.js
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPosts, deletePosts } from '../../redux/postState';
 import '../../css/Post/Post.css';
 
 function Post({ setScreen, onPostSelect, isGuest }) {
-  const [posts, setPosts] = useState([]);
+  const dispatch = useDispatch();
+  const { posts, loading, error } = useSelector((state) => state.post);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedPosts, setSelectedPosts] = useState(new Set());
 
@@ -12,27 +16,9 @@ function Post({ setScreen, onPostSelect, isGuest }) {
       return;
     }
 
-    async function fetchAllPost() {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/list`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken')
-          }
-        });
-        console.log(response)
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data);
-          setPosts(data);
-        }
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
-    }
-    fetchAllPost();
-  }, [isGuest, setScreen]);
+    // 게시글 가져오기
+    dispatch(fetchPosts());
+  }, [dispatch, isGuest, setScreen]);
 
   const handleDeleteModeToggle = () => {
     setDeleteMode(!deleteMode);
@@ -49,69 +35,53 @@ function Post({ setScreen, onPostSelect, isGuest }) {
     setSelectedPosts(updatedSelectedPosts);
   };
 
-  const handleDeleteSelected = async () => {
-    for (let postId of selectedPosts) {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/delete/${postId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken')
-          }
-        });
-        console.log(response)
-        if (!response.ok) {
-          throw new Error(`Failed to delete post with id ${postId}`);
-        }
-      } catch (error) {
-        console.error('Error deleting post:', error);
-      }
-    }
-    setPosts(posts.filter(post => !selectedPosts.has(post.postId)));
+  const handleDeleteSelected = () => {
+    dispatch(deletePosts(Array.from(selectedPosts)));
     setSelectedPosts(new Set());
     setDeleteMode(false);
   };
 
+  if (loading) return <p>Loading posts...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
-    <>
-      <div className="post">
-        <h1>재료 공유 게시글 조회</h1>
-        <div className="box">
-          <button onClick={() => setScreen('createpost')}>게시글 작성하기</button>
-          <button onClick={handleDeleteModeToggle}>
-            {deleteMode ? '취소' : '삭제하기'}
+    <div className="post">
+      <h1>재료 공유 게시글 조회</h1>
+      <div className="box">
+        <button onClick={() => setScreen('createpost')}>게시글 작성하기</button>
+        <button onClick={handleDeleteModeToggle}>
+          {deleteMode ? '취소' : '삭제하기'}
+        </button>
+        {deleteMode && (
+          <button onClick={handleDeleteSelected} disabled={selectedPosts.size === 0}>
+            선택된 게시글 삭제
           </button>
-          {deleteMode && (
-            <button onClick={handleDeleteSelected} disabled={selectedPosts.size === 0}>
-              선택된 게시글 삭제
-            </button>
-          )}
-          <ul>
-            {posts.map(post => (
-              <li key={post.postId}>
+        )}
+        <ul>
+          {posts.map(post => (
+            <li key={post.postId}>
+              <div className="seperate">
+                {deleteMode && (
+                  <input
+                    type="checkbox"
+                    checked={selectedPosts.has(post.postId)}
+                    onChange={() => handleCheckboxChange(post.postId)}
+                  />
+                )}
+                <h3 onClick={() => !deleteMode && onPostSelect(post.postId)}>
+                  {post.title}
+                </h3>
                 <div className="seperate">
-                  {deleteMode && (
-                    <input
-                      type="checkbox"
-                      checked={selectedPosts.has(post.postId)}
-                      onChange={() => handleCheckboxChange(post.postId)}
-                    />
-                  )}
-                  <h3 onClick={() => !deleteMode && onPostSelect(post.postId)}>
-                    {post.title}
-                  </h3>
-                  <div className="seperate">
-                    <p>{post.userImg || '정보 없음'}</p>
-                    <p>{post.nickname || '정보 없음'}</p>
-                    <p>{post.postState || '정보 없음'}</p>
-                  </div>
+                  <p>{post.userImg || '정보 없음'}</p>
+                  <p>{post.nickname || '정보 없음'}</p>
+                  <p>{post.postState || '정보 없음'}</p>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
-    </>
+    </div>
   );
 }
 
