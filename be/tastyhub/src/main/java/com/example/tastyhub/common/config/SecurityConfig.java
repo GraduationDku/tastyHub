@@ -1,9 +1,5 @@
 package com.example.tastyhub.common.config;
 
-import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER;
-import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
