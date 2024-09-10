@@ -40,15 +40,13 @@ public class SecurityConfig {
         "/user/overlap/username",
         "/user/login",
         "/user/signup",
-        "/user/find/id",
-        "/user/search/list/**",
         "/recipe/list",
         "/recipe/popular",
         "/recipe/search/",
         "/recipe/search/{keyword}",
         "/like/count/{recipeId}",
-        "/chat",
-        "/chat/**"
+        "/ws/chat",
+        "/ws/chat/**"
 
     };
 
@@ -56,9 +54,8 @@ public class SecurityConfig {
         "http://localhost:8080",
         "https://apic.app",
         "http://localhost:3000",
-        "https://localhost:3000",
-        "http://13.209.238.65"
-
+        "http://13.209.238.65",
+        "https://localhost:3000"
     };
 
 
