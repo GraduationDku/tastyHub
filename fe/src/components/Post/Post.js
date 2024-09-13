@@ -1,7 +1,7 @@
 // src/components/Post/Post.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts, deletePosts } from '../../redux/postState';
+import { fetchPosts, deletePosts } from '../../redux/Post/postState';
 import '../../css/Post/Post.css';
 
 function Post({ setScreen, onPostSelect, isGuest }) {
