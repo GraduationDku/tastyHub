@@ -8,12 +8,12 @@ const initialState = {
   error: null,
 };
 
-// 게시글 목록을 가져오는 비동기 작업 
+// 게시글 목록을 가져오는 비동기 작업
 export const fetchPosts = createAsyncThunk(
   'post/fetchPosts',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`https://localhost:443/post/list`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/post/list`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

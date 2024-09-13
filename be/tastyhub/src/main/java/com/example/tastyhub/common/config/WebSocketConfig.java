@@ -24,10 +24,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //    private final WebSocketInterceptor webSocketInterceptor;
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat")
+        registry.addEndpoint("/ws/chat")
 //            .withSockJS()// socket 연결 url
             // 주소 : ws://localhost:8788/chat 으로 연결
-            .setAllowedOriginPatterns("*");
+            .setAllowedOriginPatterns("*")
+            .setAllowedOrigins("*");
 //            .withSockJS(); //
     }
 

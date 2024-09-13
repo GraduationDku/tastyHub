@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 
-const SOCKET_URL = `ws://localhost:8080/chat`;
+const SOCKET_URL = `wss://localhost:8080/chat`;
 
 const SendChat = ({ roomId }) => {
     const [client, setClient] = useState(null);
