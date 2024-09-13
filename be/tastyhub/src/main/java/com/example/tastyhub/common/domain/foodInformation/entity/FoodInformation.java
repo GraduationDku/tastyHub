@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -28,12 +29,13 @@ import lombok.NoArgsConstructor;
 public class FoodInformation extends TimeStamped {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tasty_hub_sequence")
+  @SequenceGenerator(name = "tasty_hub_sequence", sequenceName = "thesq", allocationSize = 10)
   @Column(name = "food_information_id")
   private Long id;
 
   @Size(max = 1024)
-  private String text;
+  private String content;
 
   private Long cookingTime;
 
@@ -47,7 +49,7 @@ public class FoodInformation extends TimeStamped {
 
 
   public void updateByFoodInformationDto(FoodInformationDto foodInformationDto) {
-    this.text = foodInformationDto.getText();
+    this.content = foodInformationDto.getContent();
     this.cookingTime = foodInformationDto.getCookingTime();
     this.serving = foodInformationDto.getServing();
   }
@@ -62,7 +64,7 @@ public class FoodInformation extends TimeStamped {
 
   public static FoodInformation createFoodInformation(RecipeCreateDto recipeCreateDto) {
     return FoodInformation.builder()
-        .text(recipeCreateDto.getFoodInformation().getText())
+        .content(recipeCreateDto.getFoodInformation().getContent())
         .serving(recipeCreateDto.getFoodInformation().getServing())
         .cookingTime(recipeCreateDto.getFoodInformation().getCookingTime())
         .build();

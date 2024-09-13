@@ -3,7 +3,7 @@ import '../../css/Review/CreateReview.css';
 
 function CreateRecipeReview({ recipeId }) {
   const [grade, setGrade] = useState(0);
-  const [text, setText] = useState('');
+  const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -19,7 +19,7 @@ function CreateRecipeReview({ recipeId }) {
           'Content-Type': 'application/json',
           'Authorization' : localStorage.getItem('accessToken')
         },
-        body: JSON.stringify({ grade, text }),
+        body: JSON.stringify({ grade, content }),
       });
 
       if (!response.ok) {
@@ -28,7 +28,7 @@ function CreateRecipeReview({ recipeId }) {
 
       // 성공 시, 리뷰 제출 후 초기화
       setGrade(0);
-      setText('');
+      setContent('');
     } catch (error) {
       setError(error.message);
     } finally {
@@ -59,8 +59,8 @@ function CreateRecipeReview({ recipeId }) {
         <br/><br/>
         <textarea
           id="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           required
         />
       </div>

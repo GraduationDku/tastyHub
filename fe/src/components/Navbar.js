@@ -20,7 +20,7 @@ const Navbar = ({ setScreen, onSearchComplete }) => {
   };
 
   const fetchRecipes = async () => {
-    const url = `${process.env.REACT_APP_API_URL}/recipe/search/${searchTerm}`;
+    const url = `${process.env.REACT_APP_API_URL}/recipe/search/${searchTerm}&page=${page}&size=${size}&sort=${sort}`;
     try {
       const response = await fetch(url, {
         method: 'GET',

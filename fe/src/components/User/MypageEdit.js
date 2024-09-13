@@ -21,7 +21,7 @@ function MypageEdit() {
     formData.append('userImg', userImg);
 
     try {
-      const response = await fetch('http://localhost:8080/user/modify/profile-pic', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/modify/profile-pic`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ function MypageEdit() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/user/modify/information', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/modify/information`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ function MypageEdit() {
   const handleLocationSubmit = async () => {
     console.log(location.lat);
     console.log(location.lng);
-    const serverEndpoint = 'http://localhost:8080/village/modify/location';
+    const serverEndpoint = `${process.env.REACT_APP_API_URL}/village/modify/location`;
     try {
       const response = await fetch(serverEndpoint, {
         method: 'PATCH',

@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class DuplicatedUserName {
+public class UserAuthRequest {
 
-    private String username;
+    private String userName;
+    private String password;
 
 }

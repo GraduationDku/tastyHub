@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserReviewUpdateRequest {
     private Long grade;
-    private String text;
+    private String content;
 }

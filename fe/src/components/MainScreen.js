@@ -12,7 +12,7 @@ function MainScreen() {
   useEffect(() => {
     async function fetchWeeklyRecipes() {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/popular`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/popular?page=${page}&size=${size}&sort=${sort}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

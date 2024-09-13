@@ -14,5 +14,5 @@ public class PagingMyRecipeReviewResponse {
     private String foodImgUrl;
     private String foodName;
     private Long grade;
-    private String text;
+    private String content;
 }

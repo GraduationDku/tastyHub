@@ -16,7 +16,7 @@ public class CommentFixture {
         .isAlive(Boolean.TRUE)
         .post(POST)
         .user(USER)
-        .text("text")
+        .content("text")
         .build();
 
     public static final CommentDto COMMENT_DTO =
@@ -24,12 +24,12 @@ public class CommentFixture {
             .userId(1L)
             .nickname("nickname")
             .userImg("ImgUrl")
-            .text("comment text")
+            .content("comment text")
             .state(true)
             .latestUpdateTime("time")
             .build();
     public static final CommentRequest COMMENT_REQUEST = CommentRequest.builder()
-        .text("text").build();
+        .content("text").build();
 
     public static final List<CommentDto> COMMENT_DTOS = Collections.singletonList(COMMENT_DTO);
 }

@@ -4,7 +4,7 @@ import '../../css/User/FindUsername.css';
 function FindUsername({ setScreen }) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState(null);
+  const [userName, setUsername] = useState(null);
 
   const handleFindUsername = async () => {
     setLoading(true);
@@ -19,11 +19,11 @@ function FindUsername({ setScreen }) {
 
       const data = await response.json();
       if (response.ok) {
-        setUsername(data.username);
-        alert('귀하의 아이디는: ' + data.username + ' 입니다.');
+        setUsername(data.userName);
+        alert('귀하의 아이디는: ' + data.userName + ' 입니다.');
       } else {
         alert('id : chell****');
-        console.log(data.username);
+        console.log(data.userName);
       }
     } catch (error) {
       console.error('아이디 찾기 오류:', error);

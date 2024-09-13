@@ -2,7 +2,6 @@ package com.example.tastyhub.common.domain.post.dtos;
 
 import com.example.tastyhub.common.domain.comment.dtos.CommentDto;
 import com.example.tastyhub.common.domain.comment.entity.Comment;
-import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
 import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.post.entity.Post.PostState;
 import com.querydsl.core.annotations.QueryProjection;
@@ -25,22 +24,36 @@ public class PostResponse {
     private PostState postState;
     private String nickname;
     private String userImg;
-    private String text;
+    private String content;
     private String latestUpdateTime;
 
     private List<CommentDto> commentDtos;
 
     @QueryProjection
-    public PostResponse(Long postId, String title, PostState postState, String nickname, String userImg, String text,
+    public PostResponse(Long postId, String title, PostState postState, String nickname, String userImg, String content,
         LocalDateTime latestUpdateTime, List<Comment> comments) {
         this.postId = postId;
         this.title = title;
         this.postState = postState;
         this.nickname = nickname;
         this.userImg = userImg;
-        this.text = text;
+        this.content = content;
         this.latestUpdateTime = String.valueOf(latestUpdateTime);
         this.commentDtos = comments.stream().map(CommentDto::new).collect(Collectors.toList());
+    }
+
+    public static PostResponse createPostResponse(Post post) {
+        return PostResponse.builder()
+            .title(post.getTitle())
+            .postState(post.getPostState())
+            .userImg(post.getUser().getUserImg())
+            .nickname(post.getUser().getNickname())
+            .commentDtos(
+                post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
+            .postId(post.getId())
+            .content(post.getContent())
+            .latestUpdateTime(String.valueOf(post.getModifiedAt()))
+            .build();
     }
 
     // 댓글 기능 업데이트 시 댓글리스트 추가 예정

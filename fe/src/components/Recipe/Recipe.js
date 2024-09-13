@@ -7,7 +7,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   useEffect(() => {
     async function fetchAllRecipes() {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/list`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/list?page=${page}&size=${size}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
               <img src={recipe.foodImgUrl} alt={recipe.foodName} style={{ width: '50%'}} />
               <div>
                 <p>요리 시간: {recipe.foodInformationDto ? recipe.foodInformationDto.cookingTime + '분' : '정보 없음'} | {recipe.foodInformationDto ? recipe.foodInformationDto.serving : '정보 없음'}인분</p>
-                <p>설명: {recipe.foodInformationDto ? recipe.foodInformationDto.text : '정보 없음'}</p>
+                <p>설명: {recipe.foodInformationDto ? recipe.foodInformationDto.content : '정보 없음'}</p>
                 
               </div>
               

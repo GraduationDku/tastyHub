@@ -13,5 +13,5 @@ public class PagingRecipeReviewResponse {
     private Long userId;
     private String nickname;
     private Long grade;
-    private String text;
+    private String content;
 }

@@ -1,7 +1,7 @@
 package com.example.tastyhub.common.domain.cookstep.entity;
 
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateDto;
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateRequest;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepDto;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import jakarta.persistence.CascadeType;
@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -29,9 +30,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "cook_steps")
 public class CookStep extends TimeStamped {
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tasty_hub_sequence")
+    @SequenceGenerator(name = "tasty_hub_sequence", sequenceName = "thesq", allocationSize = 10)
     @Column(name = "cookstep_id")
     private Long id;
 
@@ -40,7 +41,7 @@ public class CookStep extends TimeStamped {
     
     @Size(max=1024)
     // 조리 시 필요한 내용
-    private String text;
+    private String content;
 
     private String stepImgUrl;
 
@@ -49,10 +50,10 @@ public class CookStep extends TimeStamped {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    public static CookStep makeCookStep(CookStepCreateDto cookStepCreateDto) {
+    public static CookStep makeCookStep(CookStepCreateRequest cookStepCreateRequest) {
         return CookStep.builder()
-            .stepNumber(cookStepCreateDto.getStepNumber())
-            .text(cookStepCreateDto.getText())
+            .stepNumber(cookStepCreateRequest.getStepNumber())
+            .content(cookStepCreateRequest.getContent())
             .stepImgUrl("after S3")
             .build();
     }
@@ -64,13 +65,13 @@ public class CookStep extends TimeStamped {
 //            .build();
 //    }
 
-    public void updateByUpdateDto(CookStepUpdateDto cookStepUpdateDto) {
-        this.text = cookStepUpdateDto.getText();
+    public void updateByUpdateDto(CookStepDto cookStepUpdateDto) {
+        this.content = cookStepUpdateDto.getContent();
         this.stepNumber = cookStepUpdateDto.getStepNumber();
 //        this.stepImgUrl = cookStepUpdateDto.getStepImg();
     }
 
-    public void updateFromDto(CookStepUpdateDto dto) {
+    public void updateFromDto(CookStepDto dto) {
 
     }
 

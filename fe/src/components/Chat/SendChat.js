@@ -70,8 +70,8 @@ const SendChat = ({ roomId }) => {
         const nickname = localStorage.getItem('nickname');
         if (client && connected && nickname) {
             const message = {
-                from: nickname,
-                text: input,
+                sender: nickname,
+                content: input,
                 time: new Date()
             };
             client.publish({
@@ -95,11 +95,11 @@ const SendChat = ({ roomId }) => {
                         key={index}
                         style={{
                             display: 'flex',
-                            justifyContent: msg.from === localStorage.getItem('nickname') ? 'flex-end' : 'flex-start',
+                            justifyContent: msg.sender === localStorage.getItem('nickname') ? 'flex-end' : 'flex-start',
                             padding: '5px 10px'
                         }}
                     >
-                        {msg.from !== localStorage.getItem('nickname') && (
+                        {msg.sender !== localStorage.getItem('nickname') && (
                             <>
                                 <div
                                     style={{
@@ -112,15 +112,15 @@ const SendChat = ({ roomId }) => {
                                         marginLeft: '10px'
                                     }}
                                 >
-                                    <strong>{msg.from} </strong>
-                                    {msg.text}
+                                    <strong>{msg.sender} </strong>
+                                    {msg.content}
                                 </div>
                                 <div style={{ fontSize: '0.8em', color: '#888', marginTop: '5px', marginLeft: '10px' }}>
                                     {new Date(msg.time).toLocaleString()}
                                 </div>
                             </>
                         )}
-                        {msg.from === localStorage.getItem('nickname') && (
+                        {msg.sender === localStorage.getItem('nickname') && (
                             <>
                                 <div style={{ fontSize: '0.8em', color: '#888', marginTop: '5px', marginRight: '10px' }}>
                                     {new Date(msg.time).toLocaleString()}
@@ -137,7 +137,7 @@ const SendChat = ({ roomId }) => {
                                         color : '#5C5F5C'
                                     }}
                                 >
-                                    {msg.text}
+                                    {msg.content}
                                 </div>
                             </>
                         )}

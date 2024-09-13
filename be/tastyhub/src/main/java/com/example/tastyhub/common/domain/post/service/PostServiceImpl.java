@@ -1,11 +1,11 @@
 package com.example.tastyhub.common.domain.post.service;
 
-import com.example.tastyhub.common.domain.comment.dtos.CommentDto;
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
-import java.util.List;
-import java.util.stream.Collectors;
+import jakarta.transaction.Transactional;
 import lombok.Generated;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.tastyhub.common.domain.post.dtos.PostCreateRequest;
@@ -25,11 +25,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(PostCreateRequest postCreateRequest, User user) {
-        Post post = Post.createPost(postCreateRequest.getTitle(),postCreateRequest.getText(),PostState.Start,user);
+        Post post = Post.createPost(postCreateRequest.getTitle(),postCreateRequest.getContent(),PostState.Start,user);
         postRepository.save(post);
     }
 
     @Override
+    @Transactional
     public void updatePost(Long postId, PostUpdateRequest postUpdateRequest, User user) {
         Post post = findById(postId);
         post.update(postUpdateRequest);
@@ -46,24 +47,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PagingPostResponse> getAllPost(User user) {
-        List<PagingPostResponse> postResponses = postRepository.findAllPostResponse(
-            user.getVillage());
-        return postResponses;
+    public Page<PagingPostResponse> getAllPost(User user, Pageable pageable) {
+        return postRepository.findAllPostResponse(
+            user.getVillage(),pageable);
     }
 
     @Override
-    public List<PagingPostResponse> getAllRecentPost(User user) {
-        List<PagingPostResponse> postResponses = postRepository.findAllRecentPostResponse(
-            user.getVillage());
-        return postResponses;
+    public Page<PagingPostResponse> getAllRecentPost(User user, Pageable pageable) {
+        return postRepository.findAllRecentPostResponse(
+            user.getVillage(), pageable);
     }
 
     @Override
     public PostResponse getPost(Long postId) {
-
-        PostResponse postResponse = getPostFindByPostId(postId);
-        return postResponse;
+        return getPostFindByPostId(postId);
     }
 
     @Generated
@@ -71,21 +68,9 @@ public class PostServiceImpl implements PostService {
 
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new IllegalArgumentException("해당 게시글은 존재하지 않습니다."));
+        return PostResponse.createPostResponse(post);
 
-        PostResponse postResponse = PostResponse.builder()
-            .title(post.getTitle())
-            .postState(post.getPostState())
-            .userImg(post.getUser().getUserImg())
-            .nickname(post.getUser().getNickname())
-            .commentDtos(
-                post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
-            .postId(post.getId())
-            .text(post.getText())
-            .latestUpdateTime(String.valueOf(post.getModifiedAt()))
-            .build();
-        return postResponse;
-//        return postRepository.findByIdQuery(postId)
-//            .orElseThrow(() -> new IllegalArgumentException("해당 게시물은 존재하지 않습니다."));
     }
+
 
 }

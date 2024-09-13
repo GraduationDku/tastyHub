@@ -10,9 +10,11 @@ import com.example.tastyhub.common.domain.post.dtos.PostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostUpdateRequest;
 import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.post.entity.Post.PostState;
-import java.util.Collections;
 import java.util.List;
-import org.springframework.security.core.parameters.P;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 public class PostFixture {
 
@@ -21,12 +23,12 @@ public class PostFixture {
         .postState(PostState.Start)
         .title("title")
         .user(USER)
-        .text("Text")
+        .content("Text")
         .build();
 
     public static final PostCreateRequest POST_CREATE_REQUEST = PostCreateRequest.builder()
         .title("title")
-        .text("Text")
+        .content("Text")
         .build();
 
     public static final PostResponse POST_RESPONSE = PostResponse.builder()
@@ -35,13 +37,13 @@ public class PostFixture {
         .title("title")
         .latestUpdateTime("time")
         .nickname("nickname")
-        .text("text")
+        .content("text")
         .userImg("img")
         .commentDtos(COMMENT_DTOS)
         .build();
 
     public static final PostUpdateRequest POST_UPDATE_REQUEST = PostUpdateRequest.builder()
-        .text("text")
+        .content("text")
         .title("title")
         .postState(PostState.Start)
         .build();
@@ -54,8 +56,7 @@ public class PostFixture {
         .userImg("userImg")
         .title("title")
         .build();
+    public static Pageable pageable = PageRequest.of(0, 1);
 
-
-    public static final List<PagingPostResponse> PAGING_POST_RESPONSES = Collections.singletonList(
-        PAGING_POST_RESPONSE);
+    public static final Page<PagingPostResponse> PAGING_POST_RESPONSES = new PageImpl(List.of(PAGING_POST_RESPONSE),pageable, 1);
 }

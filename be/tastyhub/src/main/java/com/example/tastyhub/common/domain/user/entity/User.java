@@ -6,20 +6,23 @@ import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import com.example.tastyhub.common.domain.scrap.entity.Scrap;
-import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.userChat.entity.UserChatRoom;
 import com.example.tastyhub.common.domain.userReview.entity.UserReview;
 import com.example.tastyhub.common.domain.village.entity.Village;
+import com.example.tastyhub.common.utils.TimeStamped;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,22 +30,28 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
-@Table(name = "users")
+@DynamicUpdate
+@Table(name = "users",indexes = {
+    @Index(name = "idx_username", columnList = "username")
+})
 @Entity
-public class User {
+
+public class User extends TimeStamped {
 
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tasty_hub_sequence")
+  @SequenceGenerator(name = "tasty_hub_sequence", sequenceName = "thesq", allocationSize = 10)
   @Column(name = "user_id")
   private Long id;
 
+  @Column(name = "username")
   private String username;
 
   private String password;
@@ -96,7 +105,7 @@ public class User {
   @Builder.Default
   private List<UserReview> userReaderReviews = new ArrayList<>();
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Embedded
   private Village village;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -120,9 +129,13 @@ public class User {
         .build();
   }
 
-  public void updateUserInfo(UserUpdateRequest userUpdateRequest, String imgUrl) {
-    this.nickname = userUpdateRequest.getNickname();
+  public void updateUserInfo(NicknameDto nicknameDto, String imgUrl) {
+    this.nickname = nicknameDto.getNickname();
     this.userImg = imgUrl;
+  }
+
+  public void updateVillage(Village village) {
+    this.village = village;
   }
 
 }

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import '../../css/Post/Comment.css';
 
 const Comment = ({ postId, refreshComments, comments }) => {
-    const [text, setText] = useState('');
+    const [content, setContent] = useState('');
     const [editingCommentId, setEditingCommentId] = useState(null);
-    const [editingText, setEditingText] = useState('');
+    const [editingContent, setEditingContent] = useState('');
 
     const createComment = async () => {
         try {
@@ -14,10 +14,10 @@ const Comment = ({ postId, refreshComments, comments }) => {
                     'Content-Type': 'application/json',
                     'Authorization': localStorage.getItem('accessToken')
                 },
-                body: JSON.stringify({ text })
+                body: JSON.stringify({ content })
             });
             if (response.ok) {
-                setText('');
+                setContent('');
                 refreshComments();
             } else {
                 throw new Error('Failed to create comment');
@@ -35,12 +35,12 @@ const Comment = ({ postId, refreshComments, comments }) => {
                     'Content-Type': 'application/json',
                     'Authorization' : localStorage.getItem('accessToken')
                 },
-                body:  {text: editingText }
+                body:  {content: editingContent }
             });
             if (response.ok) {
                 
                 setEditingCommentId(null);
-                setEditingText('');
+                setEditingContent('');
                 refreshComments();
             } else {
                 throw new Error('Failed to edit comment');
@@ -72,8 +72,8 @@ const Comment = ({ postId, refreshComments, comments }) => {
     return (
         <div className="comment">
             <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
                 placeholder="댓글을 작성하세요."
             ></textarea>
             <button className="btnsubmit" onClick={createComment}>Submit</button>
@@ -84,13 +84,13 @@ const Comment = ({ postId, refreshComments, comments }) => {
                         <>
                             <textarea
                                 value={editingText}
-                                onChange={(e) => setEditingText(e.target.value)}></textarea>
+                                onChange={(e) => setEditingContent(e.target.value)}></textarea>
                             <button onClick={() => editComment(comment.userId)}>Save</button>
                             <button onClick={() => setEditingCommentId(null)}>Cancel</button>
                         </>
                     ) : (
                         <>
-                            <p>{comment.text}</p>
+                            <p>{comment.content}</p>
                             <button onClick={() => setEditingCommentId(comment.userId)}>Edit</button>
                             <button onClick={() => deleteComment(comment.userId)}>Delete</button>
                         </>

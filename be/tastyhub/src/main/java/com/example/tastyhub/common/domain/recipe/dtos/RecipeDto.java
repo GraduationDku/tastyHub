@@ -1,6 +1,6 @@
 package com.example.tastyhub.common.domain.recipe.dtos;
 
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepResponseDto;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepDto;
 import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationDto;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
@@ -27,12 +27,12 @@ public class RecipeDto {
 
     private List<IngredientDto> ingredients;
 
-    private List<CookStepResponseDto> cookSteps;
+    private List<CookStepDto> cookSteps;
 
 
     public static RecipeDto getBuild(Recipe recipe, boolean isLiked, boolean isScraped,
         FoodInformationDto foodInformationDto, List<IngredientDto> ingredients,
-        List<CookStepResponseDto> cookSteps) {
+        List<CookStepDto> cookSteps) {
         return RecipeDto.builder()
             .foodId(recipe.getId())
             .foodName(recipe.getFoodName())

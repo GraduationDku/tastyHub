@@ -8,12 +8,12 @@ function Login({ setScreen }) {
   const dispatch = useDispatch();
   const { loading, error, isAuthenticated } = useSelector((state) => state.login);
 
-  const [username, setUsername] = useState('');
+  const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(loginUser({ username, password }));
+    dispatch(loginUser({ userName, password }));
   };
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function Login({ setScreen }) {
         <input
           type="text"
           placeholder="ID"
-          value={username}
+          value={userName}
           onChange={(e) => setUsername(e.target.value)}
         />
         <br/><br/>

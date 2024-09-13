@@ -105,7 +105,7 @@ function PostDetails({ postId, setScreen }) {
           <h1>{postDetails.title}</h1>
           <hr />
           <p className="nick">{postDetails.nickname}</p>
-          <p>{postDetails.text}</p>
+          <p>{postDetails.content}</p>
           <p className="state">{postDetails.postState}</p>
           <p className="time">{postDetails.latestUpdateTime}</p>
           <hr />

@@ -49,7 +49,7 @@ function RecipeReview({ recipeId }) {
           {reviews.map((review, index) => (
             <li key={index}>
               <p><strong>{review.nickname}</strong> ({review.grade}점)</p>
-              <p>{review.text}</p>
+              <p>{review.content}</p>
             </li>
           ))}
         </ul>
