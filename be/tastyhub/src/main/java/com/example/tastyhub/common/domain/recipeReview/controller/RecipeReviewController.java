@@ -5,8 +5,7 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCES
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
-import java.util.List;
-
+import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingMyRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
-import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
-import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
 import com.example.tastyhub.common.domain.recipeReview.service.RecipeReviewService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
@@ -46,7 +43,7 @@ public class RecipeReviewController {
     @PostMapping("/create/{recipeId}")
     public ResponseEntity<StatusResponse> createRecipeReview(
         @PathVariable Long recipeId, 
-        @RequestBody RecipeReviewCreateRequest recipeReviewCreateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @RequestBody RecipeReviewRequest recipeReviewCreateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         recipeReviewService.createRecipeReview(recipeId, recipeReviewCreateRequest, userDetails.getUser());
         return RESPONSE_CREATED;
     }
@@ -66,7 +63,7 @@ public class RecipeReviewController {
 
     @PatchMapping("/modify/{recipeReviewId}")
     public ResponseEntity<StatusResponse> updateRecipeReview(@PathVariable Long recipeReviewId,
-        @RequestBody RecipeReviewUpdateRequest recipeReviewUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        @RequestBody RecipeReviewRequest recipeReviewUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
             recipeReviewService.updateRecipeReview(recipeReviewId,recipeReviewUpdateRequest, userDetails.getUser());
             return RESPONSE_OK;
         

@@ -1,8 +1,8 @@
 package com.example.tastyhub.common.domain.userReview.entity;
 
+import com.example.tastyhub.common.domain.userReview.dtos.UserReviewRequest;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.user.entity.User;
-import com.example.tastyhub.common.domain.userReview.dtos.UserReviewUpdateRequest;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -56,7 +56,7 @@ public class UserReview extends TimeStamped {
             .reader(reader)
             .build();
     }
-    public void updateByUserReviewUpdateRequest(UserReviewUpdateRequest userReviewUpdateRequest) {
+    public void updateByUserReviewUpdateRequest(UserReviewRequest userReviewUpdateRequest) {
         this.grade = userReviewUpdateRequest.getGrade();
         this.content = userReviewUpdateRequest.getContent();
     }
