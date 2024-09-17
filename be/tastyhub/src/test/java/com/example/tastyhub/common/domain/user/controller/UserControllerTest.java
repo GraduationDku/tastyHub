@@ -39,7 +39,7 @@ import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.service.UserService;
-import com.example.tastyhub.common.utils.Jwt.JwtUtil;
+import com.example.tastyhub.common.utils.Jwt.JwtService;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -80,7 +80,7 @@ class UserControllerTest {
   SetHttpHeaders setHttpHeaders;
 
   @MockBean
-  JwtUtil jwtUtil;
+  JwtService jwtService;
 
 
   @Test
