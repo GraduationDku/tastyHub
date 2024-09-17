@@ -41,6 +41,7 @@ public class CookStepServiceImpl implements CookStepService {
           CookStep cookStep = existingCookStepMap.get(dto.getCookStepId());
           if (cookStep == null) {
             cookStep = new CookStep(); // 새 객체 생성
+            cookStep.setRecipe(recipe);
           }
           cookStep.updateByUpdateDto(dto); // dto 정보로 기존 객체 업데이트
           return cookStep;
