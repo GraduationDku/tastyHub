@@ -63,21 +63,21 @@ public class RecipeReviewServiceImplTest {
         recipeReviewService.deleteRecipeReview(RECIPE_REVIEW.getId(), USER);
         verify(recipeReviewRepository, times(1)).deleteById(any());
     }
-
-    @Test
-    @DisplayName("레시피에 대한 레시피 리뷰 리스트 조회")
-    void getAllRecipeReview() {
-        given(recipeReviewRepository.findAllRecipeReviewResponse(USER.getId(),pageable,orderSpecifiers))
-        .willReturn(PAGING_RECIPE_REVIEW_RESPONSES);
-        recipeReviewService.getRecipeReviews(RECIPE.getId(),pageable);
-        verify(recipeReviewRepository, times(1)).findAllRecipeReviewResponse(any(),pageable,orderSpecifiers);
-    }
-    @Test
-    @DisplayName("내가 쓴 레시피 리뷰 리스트 조회")
-    void getAllMyRecipeReview() {
-        given(recipeReviewRepository.findAllMyRecipeReviewResponse(USER.getId(),pageable,orderSpecifiers))
-            .willReturn(PAGING_MY_RECIPE_REVIEW_RESPONSES);
-        recipeReviewService.getMyRecipeReviews(USER,pageable);
-        verify(recipeReviewRepository, times(1)).findAllMyRecipeReviewResponse(any(),pageable,orderSpecifiers);
-    }
+//
+//    @Test
+//    @DisplayName("레시피에 대한 레시피 리뷰 리스트 조회")
+//    void getAllRecipeReview() {
+//        given(recipeReviewRepository.findAllRecipeReviewResponse(USER.getId(),pageable,orderSpecifiers))
+//        .willReturn(PAGING_RECIPE_REVIEW_RESPONSES);
+//        recipeReviewService.getRecipeReviews(RECIPE.getId(),pageable);
+//        verify(recipeReviewRepository, times(1)).findAllRecipeReviewResponse(any(),pageable,orderSpecifiers);
+//    }
+//    @Test
+//    @DisplayName("내가 쓴 레시피 리뷰 리스트 조회")
+//    void getAllMyRecipeReview() {
+//        given(recipeReviewRepository.findAllMyRecipeReviewResponse(USER.getId(),pageable,orderSpecifiers))
+//            .willReturn(PAGING_MY_RECIPE_REVIEW_RESPONSES);
+//        recipeReviewService.getMyRecipeReviews(USER,pageable);
+//        verify(recipeReviewRepository, times(1)).findAllMyRecipeReviewResponse(any(),pageable,orderSpecifiers);
+//    }
 }

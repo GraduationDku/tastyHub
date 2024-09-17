@@ -5,6 +5,7 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCES
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
+import com.example.tastyhub.common.domain.userReview.dtos.UserReviewRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.tastyhub.common.domain.userReview.dtos.PagingUserReviewResponse;
-import com.example.tastyhub.common.domain.userReview.dtos.UserReviewRequest;
+
 import com.example.tastyhub.common.domain.userReview.service.UserReviewService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;

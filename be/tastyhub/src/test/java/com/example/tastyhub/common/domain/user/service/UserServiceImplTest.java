@@ -1,11 +1,13 @@
 package com.example.tastyhub.common.domain.user.service;
 
 import static com.example.tastyhub.fixture.user.UserFixture.CHANGE_PASSWORD_REQUEST;
+
 import static com.example.tastyhub.fixture.user.UserFixture.FIND_ID_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.LOGIN_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
-import static com.example.tastyhub.fixture.user.UserFixture.USER_DELETE_REQUEST;
+import static com.example.tastyhub.fixture.user.UserFixture.USER_AUTH_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER_DTO_LIST;
+import static com.example.tastyhub.fixture.user.UserFixture.pageable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +47,7 @@ class UserServiceImplTest {
     RedisUtil redisUtil;
 
     @Mock
-    JwtService jwtUtill;
+    JwtService jwtService;
 
     @Mock
     User user;
@@ -111,10 +113,10 @@ class UserServiceImplTest {
         given(passwordEncoder.matches(any(), any())).willReturn(true);
         given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
         userService.login(LOGIN_REQUEST, response);
-        verify(userRepository, times(1)).findByUsername(LOGIN_REQUEST.getUsername());
-        verify(jwtUtill, times(1)).createAccessToken(any(), any());
+        verify(userRepository, times(1)).findByUsername(USER_AUTH_REQUEST.getUserName());
+        verify(jwtService, times(1)).createAccessToken(any(), any());
         verify(redisUtil, times(1)).setDataExpire(any(), any(), anyLong());
-        verify(jwtUtill, times(1)).createRefreshToken(any(), any());
+        verify(jwtService, times(1)).createRefreshToken(any(), any());
 
     }
 
@@ -186,9 +188,9 @@ class UserServiceImplTest {
     @Test
     @DisplayName("사용자 리스트 반환하기")
     void getUserList() {
-        given(userRepository.findAllByNickname(any())).willReturn(USER_DTO_LIST);
-        userService.getUserList(USER.getNickname());
-        verify(userRepository, times(1)).findAllByNickname(any());
+        given(userRepository.findAllByNickname(USER.getNickname(), pageable)).willReturn(USER_DTO_LIST);
+        userService.getUserList(USER.getNickname(), pageable);
+        verify(userRepository, times(1)).findAllByNickname(USER.getNickname(), pageable);
     }
 
     @Test
@@ -216,7 +218,7 @@ class UserServiceImplTest {
             new IllegalArgumentException("비밀번호가 일치하지않습니다."));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userService.delete(USER_DELETE_REQUEST, USER);
+            userService.delete(USER_AUTH_REQUEST, USER);
         });
 
         assertEquals("비밀번호가 일치하지않습니다.", exception.getMessage());
