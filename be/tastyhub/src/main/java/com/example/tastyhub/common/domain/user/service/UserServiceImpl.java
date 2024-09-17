@@ -1,7 +1,7 @@
 package com.example.tastyhub.common.domain.user.service;
 
-import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER;
-import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.JwtService.AUTHORIZATION_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.JwtService.REFRESH_HEADER;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
@@ -15,7 +15,7 @@ import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
-import com.example.tastyhub.common.utils.Jwt.JwtUtil;
+import com.example.tastyhub.common.utils.Jwt.JwtService;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import com.example.tastyhub.common.utils.S3.S3Uploader;
 
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     private final RedisUtil redisUtil;
 
-    private final JwtUtil jwtUtill;
+    private final JwtService jwtUtill;
 
     private final S3Uploader s3Uploader;
 
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public NicknameResponseDto login(LoginRequest loginRequest, HttpServletResponse response) {
-        String username = loginRequest.getUsername();
+        String username = loginRequest.getUserName();
         String password = loginRequest.getPassword() + username.substring(0, 2);
         User byUsername = findByUsername(username);
         boolean a = passwordEncoder.matches(password, byUsername.getPassword());

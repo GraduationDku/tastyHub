@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.tastyhub.common.dto.StatusResponse;
@@ -27,93 +28,47 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
-    private final UserDetailsServiceImpl userDetailsService;
-    private static final List<String> EXCLUDE_URLS = Arrays.asList(
-        "/email",
-        "/email/verified",
-        "/user/overlap/nickname",
-        "/user/overlap/username",
-        "/user/login",
-        "/user/signup",
-        "/recipe/list",
-        "/recipe/popular",
-        "/recipe/search",
-        "/like/count",
-        "/chat/**",
-        "/chat"
-    );
+  private final JwtService jwtService;
+  private final UserDetailsServiceImpl userDetailsService;
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+      FilterChain filterChain)
+      throws ServletException, IOException {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain filterChain)
-        throws ServletException, IOException {
-
-        String token = jwtUtil.resolveAccessToken(request);
-        if (!shouldExclude(request)) {
-            // 토큰이 유효하지 않는 경우
-            if (!jwtUtil.validateToken(token)) {
-                jwtExceptionHandler(response, "Token error", HttpStatus.UNAUTHORIZED.value());
-                return;
-            }
-
-            Claims info = jwtUtil.getUserInfoFromToken(token);
-            String name = info.getSubject();
-            // Admin인 경우
-            if (jwtUtil.isAdminToken(token)) {
-                setAdminAuthentication(name);
-                return;
-            }
-
-            setAuthentication(name);
-        }
-
-        filterChain.doFilter(request, response);
-
+    try {
+      String accessToken = jwtService.resolveAccessToken(request);
+      if (!jwtService.validateToken(accessToken)) {
+        throw new JwtAuthException("JWT Authentication error!");
+      }
+      Claims info = jwtService.getUserInfoFromToken(accessToken);
+      String name = info.getSubject();
+      String role = info.get("auth").toString();
+      setAuthentication(name, role);
+    } catch (JwtAuthException | UsernameNotFoundException exception) {
+      log.error("JwtAuthentication Authentication Exception Occurs! - {}", exception.getClass());
     }
 
-    private boolean shouldExclude(HttpServletRequest request) {
-        return EXCLUDE_URLS.stream().anyMatch(url -> request.getRequestURI().contains(url));
-    }
+    filterChain.doFilter(request, response);
 
-    public Authentication createAuthentication(String username) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, null,
-            userDetails.getAuthorities());
-    }
+  }
 
-    public void setAuthentication(String username) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = this.createAuthentication(username);
-        context.setAuthentication(authentication);
+  public Authentication createAuthentication(String username) {
+    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    return new UsernamePasswordAuthenticationToken(userDetails, null,
+        userDetails.getAuthorities());
+  }
 
-        SecurityContextHolder.setContext(context);
-    }
+  public void setAuthentication(String username, String role) {
+    SecurityContext context = SecurityContextHolder.createEmptyContext();
+    Authentication authentication = this.createAuthentication(username);
+//    if (role.equals("Admin")) {
+//      authentication = this.createAdminAuthentication(username);
+//    } else {
+//      authentication = this.createAuthentication(username);
+//    }
+    context.setAuthentication(authentication);
+    SecurityContextHolder.setContext(context);
+  }
 
-    public Authentication createAdminAuthentication(String username) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, null,
-            userDetails.getAuthorities());
-    }
-
-    public void setAdminAuthentication(String username) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = this.createAdminAuthentication(username);
-        context.setAuthentication(authentication);
-
-        SecurityContextHolder.setContext(context);
-    }
-
-    public void jwtExceptionHandler(HttpServletResponse response, String msg, int statusCode) {
-        response.setStatus(statusCode);
-        response.setContentType("application/json");
-        try {
-            String json = new ObjectMapper().writeValueAsString(
-                new StatusResponse(statusCode, msg));
-            response.getWriter().write(json);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
 
 }
