@@ -19,7 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.example.tastyhub.common.utils.Jwt.JwtAuthFilter;
-import com.example.tastyhub.common.utils.Jwt.JwtUtil;
+import com.example.tastyhub.common.utils.Jwt.JwtService;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -29,70 +29,82 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final String[] permitAllArray = {
-        "/email",
-        "/email/verified",
-        "/user/overlap/nickname",
-        "/user/overlap/username",
-        "/user/login",
-        "/user/signup",
-        "/recipe/list",
-        "/recipe/popular",
-        "/recipe/search/",
-        "/recipe/search/{keyword}",
-        "/like/count/{recipeId}",
-        "/ws/chat",
-        "/ws/chat/**",
-        "/post/**"
+  private final JwtService jwtService;
+  private final UserDetailsServiceImpl userDetailsService;
+  private final String[] permitAllArray = {
+      "/email",
+      "/email/verified",
+      "/user/overlap/nickname",
+      "/user/overlap/username",
+      "/user/login",
+      "/user/signup",
+      "/recipe/list",
+      "/recipe/popular",
+      "/recipe/search/",
+      "/recipe/search/{keyword}",
+      "/like/count/{recipeId}",
+      "/chat",
+      "/chat/**"
+  };
+//private final String[] permitAllArray = {
+//    "/email",
+//    "/email/**",
+//    "/user/overlap/**",
+//    "/user/login",
+//    "/user/signup",
+//    "/recipe/list",
+//    "/recipe/popular",
+//    "/recipe/search/**",
+//    "/recipe/search/{keyword}",
+//    "/like/count/{recipeId}",
+//    "/chat",
+//    "/chat/**"
+//};
+  private final String[] permitOrigin = {
+      "http://localhost:8080",
+      "https://apic.app",
+      "http://localhost:3000",
+      "http://13.209.238.65",
+      "https://localhost:3000"
+  };
 
+  CorsConfigurationSource corsConfigurationSource() {
+    return request -> {
+      CorsConfiguration config = new CorsConfiguration();
+      config.setAllowedHeaders(Collections.singletonList("*"));
+      config.setAllowedMethods(Collections.singletonList("*"));
+      config.setAllowedOrigins(List.of(permitOrigin));
+      config.setAllowedOriginPatterns(List.of(permitAllArray));
+      config.setAllowCredentials(true);
+      config.setExposedHeaders(Arrays.asList("Authorization", "Refresh"));
+      return config;
     };
+  }
 
-    private final String[] permitOrigin = {
-        "http://localhost:8080",
-        "https://apic.app",
-        "http://localhost:3000",
-        "http://13.209.238.65",
-        "https://localhost:3000"
-    };
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+    http.csrf(AbstractHttpConfigurer::disable)
+        .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
+        .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+            SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers(permitAllArray).permitAll()
+            .anyRequest().authenticated())
+        .addFilterBefore(jwtAuthFilter(),
+            UsernamePasswordAuthenticationFilter.class);
 
-    private final JwtUtil jwtUtil;
-    private final UserDetailsServiceImpl userDetailsService;
+    return http.build();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean // Jwt 유효성 검증 필터
+  public JwtAuthFilter jwtAuthFilter() {
+    return new JwtAuthFilter(jwtService, userDetailsService);
+  }
 
-    CorsConfigurationSource corsConfigurationSource() {
-        return request -> {
-            CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedHeaders(Collections.singletonList("*"));
-            config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOrigins(List.of(permitOrigin));
-            config.setAllowedOriginPatterns(List.of(permitAllArray));
-            config.setAllowCredentials(true);
-            config.setExposedHeaders(Arrays.asList("Authorization", "Refresh"));
-            return config;
-        };
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http.csrf(AbstractHttpConfigurer::disable)
-            .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
-            .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
-                SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(permitAllArray).permitAll()
-                .anyRequest().authenticated())
-            .addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService),
-                UsernamePasswordAuthenticationFilter.class);
-
-//    http.formLogin().loginPage("/users/login");
-
-        return http.build();
-    }
+  @Bean  // Password Encryption
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }

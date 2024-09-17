@@ -6,9 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class NicknameDto {
-    private String nickname;
+public class LoginRequest {
+
+    private String userName;
+    private String password;
+
 }
