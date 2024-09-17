@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeReviewUpdateRequest {
+public class RecipeReviewRequest {
     private Long grade;
     private String content;
 }

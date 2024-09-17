@@ -1,9 +1,8 @@
 package com.example.tastyhub.common.domain.recipeReview.entity;
 
-import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
+import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewRequest;
 import com.example.tastyhub.common.utils.TimeStamped;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
-import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,13 +50,13 @@ public class RecipeReview extends TimeStamped {
     private User user;
 
 
-    public void update(RecipeReviewUpdateRequest recipeReviewUpdateRequest) {
+    public void update(RecipeReviewRequest recipeReviewUpdateRequest) {
         this.grade = recipeReviewUpdateRequest.getGrade();
         this.content = recipeReviewUpdateRequest.getContent();
     }
 
 
-    public static RecipeReview createRecipeReview(RecipeReviewCreateRequest recipeReviewCreateRequest,
+    public static RecipeReview createRecipeReview(RecipeReviewRequest recipeReviewCreateRequest,
         User user, Recipe recipe) {
         return RecipeReview.builder()
             .user(user)
