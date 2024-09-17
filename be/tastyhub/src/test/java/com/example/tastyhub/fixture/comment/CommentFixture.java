@@ -21,7 +21,6 @@ public class CommentFixture {
 
     public static final CommentDto COMMENT_DTO =
         CommentDto.builder()
-            .userId(1L)
             .nickname("nickname")
             .userImg("ImgUrl")
             .content("comment text")
