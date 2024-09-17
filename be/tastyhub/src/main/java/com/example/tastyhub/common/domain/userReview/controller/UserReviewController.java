@@ -5,8 +5,6 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCES
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -15,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.tastyhub.common.domain.userReview.dtos.PagingUserReviewResponse;
-import com.example.tastyhub.common.domain.userReview.dtos.UserReviewCreateRequest;
-import com.example.tastyhub.common.domain.userReview.dtos.UserReviewUpdateRequest;
+import com.example.tastyhub.common.domain.userReview.dtos.UserReviewRequest;
 import com.example.tastyhub.common.domain.userReview.service.UserReviewService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
@@ -42,9 +39,9 @@ public class UserReviewController {
 
   @PostMapping("/create/{userId}")
   public ResponseEntity<StatusResponse> createUserReview(@PathVariable Long userId,
-      @RequestBody UserReviewCreateRequest userReviewCreateRequest,
+      @RequestBody UserReviewRequest userReviewRequest,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    userReviewService.createUserReview(userId, userReviewCreateRequest, userDetails.getUser());
+    userReviewService.createUserReview(userId, userReviewRequest, userDetails.getUser());
     return RESPONSE_CREATED;
   }
 
@@ -59,7 +56,7 @@ public class UserReviewController {
 
   @PatchMapping("/modify/{userReviewId}")
   public ResponseEntity<StatusResponse> updateUserReview(@PathVariable Long userReviewId,
-      @RequestBody UserReviewUpdateRequest userReviewUpdateRequest,
+      @RequestBody UserReviewRequest userReviewUpdateRequest,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     userReviewService.updateUserReviewByUserReviewUpdateRequest(userReviewId,
         userReviewUpdateRequest,
