@@ -1,7 +1,8 @@
 package com.example.tastyhub.common.domain.user.service;
 
-import static com.example.tastyhub.common.utils.Jwt.JwtUtil.AUTHORIZATION_HEADER;
-import static com.example.tastyhub.common.utils.Jwt.JwtUtil.REFRESH_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.JwtService.AUTHORIZATION_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.JwtService.REFRESH_HEADER;
+
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserAuthRequest;
@@ -16,7 +17,8 @@ import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.domain.village.dtos.LocationRequest;
 import com.example.tastyhub.common.domain.village.entity.Village;
 import com.example.tastyhub.common.domain.village.service.VillageService;
-import com.example.tastyhub.common.utils.Jwt.JwtUtil;
+import com.example.tastyhub.common.utils.Jwt.JwtService;
+
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import com.example.tastyhub.common.utils.S3.S3Uploader;
 
@@ -50,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
   private final RedisUtil redisUtil;
 
-  private final JwtUtil jwtUtill;
+  private final JwtService jwtService;
 
   private final S3Uploader s3Uploader;
 
@@ -113,9 +115,9 @@ public class UserServiceImpl implements UserService {
     if (!passwordEncoder.matches(password, byUsername.getPassword())) {
       throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
     }
-    String accessToken = jwtUtill.createAccessToken(byUsername.getUsername(),
+    String accessToken = jwtService.createAccessToken(byUsername.getUsername(),
         byUsername.getUserType());
-    String refreshToken = jwtUtill.createRefreshToken(byUsername.getUsername(),
+    String refreshToken = jwtService.createRefreshToken(byUsername.getUsername(),
         byUsername.getUserType());
 
     redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);

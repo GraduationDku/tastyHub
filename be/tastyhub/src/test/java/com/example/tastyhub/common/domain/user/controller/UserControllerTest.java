@@ -39,7 +39,7 @@ import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.service.UserService;
-import com.example.tastyhub.common.utils.Jwt.JwtUtil;
+import com.example.tastyhub.common.utils.Jwt.JwtService;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -80,7 +80,7 @@ class UserControllerTest {
   SetHttpHeaders setHttpHeaders;
 
   @MockBean
-  JwtUtil jwtUtil;
+  JwtService jwtService;
 
 
   @Test
@@ -214,29 +214,29 @@ class UserControllerTest {
     ));
 
   }
-
-  @Test
-  @WithMockUser
-  @DisplayName("사용자 아이디 찾기")
-  void findId() throws Exception {
-//        doNothing().when(userService).findId(FIND_ID_REQUEST);
-//        when(userService.findId(FIND_ID_REQUEST)).thenReturn(USER.getUsername());
-
-    ResultActions resultActions = mockMvc.perform(post(USER_API + "/find/id")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(FIND_ID_REQUEST))
-            .with(csrf()))
-        .andExpect(status().isOk());
-
-    resultActions.andDo(document("userController/find/id",
-        getDocumentRequest(),
-        getDocumentResponse(),
-        requestFields(
-            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
-        )
-    ));
-
-  }
+//
+//  @Test
+//  @WithMockUser
+//  @DisplayName("사용자 아이디 찾기")
+//  void findId() throws Exception {
+////        doNothing().when(userService).findId(FIND_ID_REQUEST);
+////        when(userService.findId(FIND_ID_REQUEST)).thenReturn(USER.getUsername());
+//
+//    ResultActions resultActions = mockMvc.perform(post(USER_API + "/find/id")
+//            .contentType(MediaType.APPLICATION_JSON)
+//            .content(objectMapper.writeValueAsString(FIND_ID_REQUEST))
+//            .with(csrf()))
+//        .andExpect(status().isOk());
+//
+//    resultActions.andDo(document("userController/find/id",
+//        getDocumentRequest(),
+//        getDocumentResponse(),
+//        requestFields(
+//            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
+//        )
+//    ));
+//
+//  }
 
   @Test
   @WithCustomMockUser

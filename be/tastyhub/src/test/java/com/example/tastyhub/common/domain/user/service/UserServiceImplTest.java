@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
-import com.example.tastyhub.common.utils.Jwt.JwtUtil;
+import com.example.tastyhub.common.utils.Jwt.JwtService;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -32,8 +32,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -49,7 +47,7 @@ class UserServiceImplTest {
     RedisUtil redisUtil;
 
     @Mock
-    JwtUtil jwtUtill;
+    JwtService jwtService;
 
     @Mock
     User user;
@@ -116,9 +114,9 @@ class UserServiceImplTest {
         given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
         userService.login(LOGIN_REQUEST, response);
         verify(userRepository, times(1)).findByUsername(USER_AUTH_REQUEST.getUserName());
-        verify(jwtUtill, times(1)).createAccessToken(any(), any());
+        verify(jwtService, times(1)).createAccessToken(any(), any());
         verify(redisUtil, times(1)).setDataExpire(any(), any(), anyLong());
-        verify(jwtUtill, times(1)).createRefreshToken(any(), any());
+        verify(jwtService, times(1)).createRefreshToken(any(), any());
 
     }
 
