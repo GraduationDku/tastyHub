@@ -4,13 +4,12 @@ import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
 
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingMyRecipeReviewResponse;
+import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewRequest;
 import com.example.tastyhub.common.utils.OrderSpecifierUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import java.util.List;
 
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
-import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
-import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
 import com.example.tastyhub.common.domain.recipeReview.entity.RecipeReview;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,18 +25,17 @@ public class RecipeReviewFixture {
             .grade(0L)
             .content("text")
             .build();
-    public static final RecipeReviewCreateRequest RECIPE_REVIEW_CREATE_REQUEST =
-        RecipeReviewCreateRequest.builder()
+    public static final RecipeReviewRequest RECIPE_REVIEW_CREATE_REQUEST =
+        RecipeReviewRequest.builder()
             .grade(0L)
             .content("text")
             .build();
-    public static final RecipeReviewUpdateRequest RECIPE_REVIEW_UPDATE_REQUEST =
-            RecipeReviewUpdateRequest.builder()
+    public static final RecipeReviewRequest RECIPE_REVIEW_UPDATE_REQUEST =
+            RecipeReviewRequest.builder()
                 .grade(1L)
                 .content("new_text")
                 .build();
     public static final PagingRecipeReviewResponse PAGING_RECIPE_REVIEW_RESPONSE = PagingRecipeReviewResponse.builder()
-        .userId(USER.getId())
         .grade(0L)
         .nickname(USER.getNickname())
         .content("text")

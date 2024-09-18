@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PagingUserReviewResponse {
-    private Long userId;
     private String nickname;
     private Long grade;
     private String content;
