@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import '../../css/Post/Post.css';
+import PageButton from '../../../src/components/PageButton.js'; // PageButton 컴포넌트 임포트
 
 function Post({ setScreen, onPostSelect, isGuest }) {
   const [posts, setPosts] = useState([]);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedPosts, setSelectedPosts] = useState(new Set());
-  const [page, setPage] = useState(1); // 숫자로 초기화
-  const [size, setSize] = useState('');
-  const [sort, setSort] = useState('');
-  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1); // 현재 페이지
+  const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
+  const [sort, setSort] = useState('date'); // 정렬 방식 기본값
+  const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
 
   useEffect(() => {
     if (isGuest) {
@@ -18,17 +20,22 @@ function Post({ setScreen, onPostSelect, isGuest }) {
 
     async function fetchAllPost() {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken')
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`, 
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': localStorage.getItem('accessToken')
+            }
           }
-        });
+        );
+
         if (response.ok) {
           const data = await response.json();
-          setPosts(data.content);
-          setTotalPages(data.totalPages); // 전체 페이지 수 설정
+          setPosts(data.content); // 받아온 게시글 설정
+          setTotalItems(data.content.length); // 전체 게시글 수 계산 (posts 배열의 길이)
+          setTotalPages(Math.ceil(data.content.length / size)); // 전체 페이지 수 계산
         }
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -56,13 +63,16 @@ function Post({ setScreen, onPostSelect, isGuest }) {
   const handleDeleteSelected = async () => {
     for (let postId of selectedPosts) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/post/delete/${postId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken')
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/post/delete/${postId}`, 
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': localStorage.getItem('accessToken')
+            }
           }
-        });
+        );
         if (!response.ok) {
           throw new Error(`Failed to delete post with id ${postId}`);
         }
@@ -76,12 +86,12 @@ function Post({ setScreen, onPostSelect, isGuest }) {
   };
 
   const handleSizeChange = (e) => {
-    setSize(e.target.value || '');
+    setSize(parseInt(e.target.value, 10) || 5);
     setPage(1); // 페이지를 1로 초기화
   };
 
   const handleSortChange = (e) => {
-    setSort(e.target.value || '');
+    setSort(e.target.value || 'date');
     setPage(1); // 페이지를 1로 초기화
   };
 
@@ -108,16 +118,13 @@ function Post({ setScreen, onPostSelect, isGuest }) {
           <div>
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
-              <option value="">기본 정렬</option>
               <option value="date">날짜</option>
               <option value="title">제목</option>
               <option value="nickname">작성자</option>
             </select>
-          </div>
-          <div>
+        
             <label>게시글 수: </label>
             <select value={size} onChange={handleSizeChange}>
-              <option value="">기본</option>
               <option value={5}>5개</option>
               <option value={10}>10개</option>
               <option value={20}>20개</option>
@@ -146,15 +153,12 @@ function Post({ setScreen, onPostSelect, isGuest }) {
               </li>
             ))}
           </ul>
-          <div className="pagination">
-            <button onClick={() => handlePageChange(page - 1)} disabled={page <= 1}>
-              이전 페이지
-            </button>
-            <span>{page} / {totalPages}</span>
-            <button onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
-              다음 페이지
-            </button>
-          </div>
+          {/* PageButton 컴포넌트 추가 */}
+          <PageButton
+            totalItems={totalItems} // 전체 게시글 수
+            itemsPerPage={size} // 페이지당 게시글 수
+            onPageChange={handlePageChange} // 페이지 변경 시 호출될 함수
+          />
         </div>
       </div>
     </>
