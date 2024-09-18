@@ -124,7 +124,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                 </button>
             )}
 
-<div>
+        <div>
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
               <option value="date">날짜</option>
