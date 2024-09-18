@@ -41,16 +41,16 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
 
   const handleSizeChange = (e) => {
     setSize(parseInt(e.target.value, 10) || 5);
-    setPage(1); // 페이지를 1로 초기화
+    setPage(0); // 페이지를 1로 초기화
   };
 
   const handleSortChange = (e) => {
     setSort(e.target.value || 'date');
-    setPage(1); // 페이지를 1로 초기화
+    setPage(0); // 페이지를 1로 초기화
   };
 
   const handlePageChange = (newPage) => {
-    if (newPage < 1) newPage = 1; // 페이지 번호를 1보다 작지 않도록 설정
+    if (newPage < 0) newPage = 0; // 페이지 번호를 1보다 작지 않도록 설정
     if (newPage > totalPages) newPage = totalPages; // 페이지 번호를 전체 페이지 수보다 크지 않도록 설정
     setPage(newPage);
   };

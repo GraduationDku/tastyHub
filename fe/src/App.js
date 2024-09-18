@@ -1,3 +1,4 @@
+// App.js
 import React, { useState } from 'react';
 import HomeScreen from './components/HomeScreen';
 import Login from './components/User/Login';
@@ -18,6 +19,7 @@ import MainMypage from './components/User/MainMypage';
 import MypageEdit from './components/User/MypageEdit';
 import PostDetails from './components/Post/PostDetails';
 import MypageShow from './components/User/MypageShow';
+import PageButton from './components/PageButton';
 
 function App() {
   const [screen, setScreen] = useState('home');
@@ -27,6 +29,11 @@ function App() {
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [username, setUsername] = useState('');
+  const [page, setPage] = useState(1); // 현재 페이지
+  const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
+  const [sort, setSort] = useState('date'); // 정렬 방식 기본값
+  const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
 
   const handleRecipeSelect = (id) => {
     setSelectedRecipeId(id);
@@ -34,9 +41,10 @@ function App() {
   };
 
   const handleSearchComplete = (results) => {
-    setSearchResults(results);
+    setSearchResults(results || []);
     setScreen('searchResults');
   };
+  
 
   const handleChatroomSelect = (roomId) => {
     setSelectedRoomId(roomId);
@@ -51,6 +59,26 @@ function App() {
   const handleGuestAccess = () => {
     setIsGuest(true);
     setScreen('main');
+  };
+
+  const handleUserSelect = (e) => {
+
+  }
+
+  const handleSizeChange = (e) => {
+    setSize(parseInt(e.target.value, 10) || 5);
+    setPage(1); // 페이지를 1로 초기화
+  };
+
+  const handleSortChange = (e) => {
+    setSort(e.target.value || 'date');
+    setPage(1); // 페이지를 1로 초기화
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1) newPage = 1; // 페이지 번호를 1보다 작지 않도록 설정
+    if (newPage > totalPages) newPage = totalPages; // 페이지 번호를 전체 페이지 수보다 크지 않도록 설정
+    setPage(newPage);
   };
 
   return (
@@ -77,6 +105,21 @@ function App() {
         <div className="search-results">
           <h1>검색 결과</h1>
           <div className='box'>
+          <div>
+              <label>정렬 기준: </label>
+              <select value={sort} onChange={handleSortChange}>
+                <option value="date">날짜</option>
+                <option value="title">제목</option>
+                <option value="nickname">작성자</option>
+              </select>
+
+              <label>게시글 수: </label>
+              <select value={size} onChange={handleSizeChange}>
+                <option value={5}>5개</option>
+                <option value={10}>10개</option>
+                <option value={20}>20개</option>
+              </select>
+        </div>
             {searchResults.length > 0 ? (
               <ul>
                 {searchResults.map((recipe) => (
@@ -94,7 +137,26 @@ function App() {
             ) : (
               <p>No recipes found</p>
             )}
+            {searchResults.length > 0 ? (
+              <ul>
+                {searchResults.map((user) => (
+                  <li key={user.userId} onClick={() => handleUserSelect(user.userId)}>
+                    <h2>{user.nickname}</h2>
+                    <img src={user.userImg} alt={user.nickname} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No users found</p>
+            )}
+            
             <button onClick={() => setScreen('main')}>Go Back</button>
+            <br /><br />
+            <PageButton
+                totalItems={totalItems}
+                itemsPerPage={size}
+                onPageChange={handlePageChange}
+              />
           </div>
         </div>
       )}
