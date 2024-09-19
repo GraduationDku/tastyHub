@@ -85,6 +85,7 @@ public class SecurityConfig {
     };
   }
 
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -106,6 +107,7 @@ public class SecurityConfig {
 
     http.addFilterBefore(jwtAuthFilter(),
         UsernamePasswordAuthenticationFilter.class);
+
 
     return http.build();
   }
