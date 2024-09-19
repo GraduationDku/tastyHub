@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -46,7 +50,7 @@ public class SecurityConfig {
       "/chat",
       "/chat/**"
   };
-//private final String[] permitAllArray = {
+  //private final String[] permitAllArray = {
 //    "/email",
 //    "/email/**",
 //    "/user/overlap/**",
@@ -81,15 +85,7 @@ public class SecurityConfig {
     };
   }
 
-<<<<<<< HEAD
-    private final String[] permitOrigin = {
-        "http://localhost:8080",
-        "https://apic.app",
-        "http://localhost:3000",
-        "https://localhost:3000",
-        "http://13.209.238.65"
-    };
-=======
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -99,13 +95,30 @@ public class SecurityConfig {
             SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/", "/login").permitAll()
             .requestMatchers(permitAllArray).permitAll()
-            .anyRequest().authenticated())
-        .addFilterBefore(jwtAuthFilter(),
-            UsernamePasswordAuthenticationFilter.class);
->>>>>>> 1412833cd914c07115a6d30c7cd98818bb7e0145
+            .anyRequest().authenticated()
+        )
+        .oauth2Login(oauth2 ->
+            oauth2.defaultSuccessUrl("/home", true)
+                .failureUrl("/login?=error=true")
+                .userInfoEndpoint(user ->
+                    user.userService(oAuth2UserService())));
+
+    http.addFilterBefore(jwtAuthFilter(),
+        UsernamePasswordAuthenticationFilter.class);
+
 
     return http.build();
+  }
+
+  @Bean
+  public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+    DefaultOAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
+    return request -> {
+      OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(request);
+      return oAuth2User;
+    };
   }
 
   @Bean // Jwt 유효성 검증 필터
