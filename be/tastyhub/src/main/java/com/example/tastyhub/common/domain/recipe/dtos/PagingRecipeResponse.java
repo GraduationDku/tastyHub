@@ -22,11 +22,11 @@ public class PagingRecipeResponse {
 
     @QueryProjection
     public PagingRecipeResponse(Long foodId, String foodName, String foodImgUrl, Long foodInfoId, String foodInfoText,
-            Long foodInfoCookongtime, String foodInfoServing) {
+            Long foodInfoCookingTime, String foodInfoServing) {
         this.foodId = foodId;
         this.foodName = foodName;
         this.foodImgUrl = foodImgUrl;
-        this.foodInformationDto = FoodInformationDto.builder().foodInformationId(foodInfoId).text(foodInfoText)
-                .cookingTime(foodInfoCookongtime).serving(foodInfoServing).build();
+        this.foodInformationDto = FoodInformationDto.builder().foodInformationId(foodInfoId).content(foodInfoText)
+                .cookingTime(foodInfoCookingTime).serving(foodInfoServing).build();
     }
 }

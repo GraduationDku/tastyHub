@@ -1,20 +1,22 @@
 package com.example.tastyhub.common.domain.user.service;
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
-import com.example.tastyhub.common.domain.user.dtos.NicknameResponseDto;
-import com.example.tastyhub.common.domain.user.dtos.UserDeleteRequest;
+import com.example.tastyhub.common.domain.user.dtos.UserAuthRequest;
+
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
-import com.example.tastyhub.common.domain.user.dtos.LoginRequest;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
 import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
-import com.example.tastyhub.common.domain.user.dtos.UserUpdateRequest;
+import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.entity.User;
+import com.example.tastyhub.common.domain.village.dtos.LocationRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
@@ -23,7 +25,7 @@ public interface UserService {
 
     void checkDuplicatedNickname(String duplicatedNickName);
 
-    NicknameResponseDto login(LoginRequest loginRequest, HttpServletResponse response);
+    NicknameDto login(UserAuthRequest loginRequest, HttpServletResponse response);
 
     void checkDuplicatedUsername(String duplicatedName);
 
@@ -31,9 +33,11 @@ public interface UserService {
 
     void changePassword(ChangePasswordRequest changePasswordRequest, User user);
 
-    List<UserDto> getUserList(String searchUserDto);
-    
-    void delete(UserDeleteRequest deleteRequest, User user) throws IOException;
+    Page<UserDto> getUserList(String searchUserDto, Pageable pageable);
 
-    void updateUserInfoByUserUpdateRequest(UserUpdateRequest userUpdateRequest, MultipartFile img, User user) throws IOException;
+    void delete(UserAuthRequest deleteRequest, User user) throws IOException;
+
+    void updateUserInfoByUserUpdateRequest(NicknameDto nicknameDto, MultipartFile img, User user) throws IOException;
+
+    void setVillage(LocationRequest locationRequest, String username);
 }

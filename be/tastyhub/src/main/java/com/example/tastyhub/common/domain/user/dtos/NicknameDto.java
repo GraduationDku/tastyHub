@@ -1,4 +1,4 @@
-package com.example.tastyhub.common.domain.recipeReview.dtos;
+package com.example.tastyhub.common.domain.user.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class RecipeReviewUpdateRequest {
-    private Long grade;
-    private String text;
+public class NicknameDto {
+    private String nickname;
 }

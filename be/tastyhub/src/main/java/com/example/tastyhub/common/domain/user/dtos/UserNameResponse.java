@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserNameResponse {
 
-  private String username;
+  private String userName;
 }

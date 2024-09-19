@@ -1,8 +1,7 @@
 package com.example.tastyhub.common.domain.cookstep.service;
 
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateDto;
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepResponseDto;
-import com.example.tastyhub.common.domain.cookstep.dtos.CookStepUpdateDto;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateRequest;
+import com.example.tastyhub.common.domain.cookstep.dtos.CookStepDto;
 import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
 import com.example.tastyhub.common.domain.cookstep.repository.CookStepRepository;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
@@ -20,7 +19,7 @@ public class CookStepServiceImpl implements CookStepService {
   private final CookStepRepository cookStepRepository;
 
   @Override
-  public List<CookStep> createCookSteps(List<CookStepCreateDto> cookSteps) {
+  public List<CookStep> createCookSteps(List<CookStepCreateRequest> cookSteps) {
     return cookSteps.stream().map(CookStep::makeCookStep)
         .collect(Collectors.toList());
   }
@@ -36,12 +35,13 @@ public class CookStepServiceImpl implements CookStepService {
     Map<Long, CookStep> existingCookStepMap = existingCookSteps.stream()
         .collect(Collectors.toMap(CookStep::getId, cookStep -> cookStep));
 
-    List<CookStepUpdateDto> cookStepUpdateDtos = recipeUpdateDto.getCookSteps();
+    List<CookStepDto> cookStepUpdateDtos = recipeUpdateDto.getCookSteps();
     return cookStepUpdateDtos.stream()
         .map(dto -> {
           CookStep cookStep = existingCookStepMap.get(dto.getCookStepId());
           if (cookStep == null) {
             cookStep = new CookStep(); // 새 객체 생성
+            cookStep.setRecipe(recipe);
           }
           cookStep.updateByUpdateDto(dto); // dto 정보로 기존 객체 업데이트
           return cookStep;
@@ -50,8 +50,8 @@ public class CookStepServiceImpl implements CookStepService {
   }
 
   @Override
-  public List<CookStepResponseDto> getCookStepDtos(List<CookStep> cookSteps) {
-    return cookSteps.stream().map(CookStepResponseDto::new)
+  public List<CookStepDto> getCookStepDtos(List<CookStep> cookSteps) {
+    return cookSteps.stream().map(CookStepDto::new)
         .collect(Collectors.toList());
   }
 }

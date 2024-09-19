@@ -5,7 +5,8 @@ import com.example.tastyhub.common.domain.post.dtos.PostCreateRequest;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostUpdateRequest;
 import com.example.tastyhub.common.domain.user.entity.User;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PostService {
 
@@ -15,9 +16,9 @@ public interface PostService {
 
     void deletePost(Long postId, User user);
 
-    List<PagingPostResponse> getAllPost(User user);
+    Page<PagingPostResponse> getAllPost(User user, Pageable pageable);
 
-    List<PagingPostResponse> getAllRecentPost(User user);
+    Page<PagingPostResponse> getAllRecentPost(User user, Pageable pageable);
 
     PostResponse getPost(Long postId);
 }

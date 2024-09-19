@@ -17,7 +17,7 @@ public class VillageFixture {
 
     public static Village VILLAGE = Village.builder()
         .addressTownName("동네이름")
-        .user(USER)
+//        .user(USER)
         .lng(1L)
         .lat(1L)
         .build();

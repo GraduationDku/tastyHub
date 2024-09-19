@@ -6,10 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserReviewUpdateRequest {
-    private Long grade;
-    private String text;
+@Builder
+
+public class UserReviewRequest {
+  private Long grade;
+  private String content;
 }

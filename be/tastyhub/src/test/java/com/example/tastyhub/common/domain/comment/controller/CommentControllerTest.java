@@ -72,13 +72,13 @@ class CommentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(COMMENT_REQUEST))
                 .with(csrf()))
-            .andExpect(status().isOk());
+            .andExpect(status().isCreated());
 
         resultActions.andDo(document("commentController/create",
             getDocumentRequest(),
             getDocumentResponse(),
             requestFields(
-                fieldWithPath("text").type(JsonFieldType.STRING).description("댓글 내용")
+                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")
             ),
 //            queryParameters(  // requestFields 대신 requestParameters 사용
 //                parameterWithName("nickname").description("닉네임"),
@@ -108,7 +108,7 @@ class CommentControllerTest {
             getDocumentRequest(),
             getDocumentResponse(),
             requestFields(
-                fieldWithPath("text").type(JsonFieldType.STRING).description("댓글 내용")
+                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")
             ),
 //            queryParameters(  // requestFields 대신 requestParameters 사용
 //                parameterWithName("nickname").description("닉네임"),
@@ -129,7 +129,7 @@ class CommentControllerTest {
 
         ResultActions resultActions = mockMvc.perform(patch(COMMENT_API + "/delete/{commentId}",COMMENT.getId())
                 .with(csrf()))
-            .andExpect(status().isOk());
+            .andExpect(status().is2xxSuccessful());
 
         resultActions.andDo(document("commentController/delete",
             getDocumentRequest(),

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 public class FoodInformationCreateDto {
 
-    private String text;
+    private String content;
 
     private Long cookingTime;
 

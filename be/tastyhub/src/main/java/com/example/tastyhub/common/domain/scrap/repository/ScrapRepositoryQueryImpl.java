@@ -40,6 +40,7 @@ public class ScrapRepositoryQueryImpl implements ScrapRepositoryQuery {
 
         return PageableExecutionUtils.getPage(pagingScrapResponses, pageable, () -> totalSize);
 
+
     }
     private JPAQuery<Long> countQuery() {
         return jpaQueryFactory.select(Wildcard.count)

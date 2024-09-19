@@ -81,6 +81,15 @@ public class SecurityConfig {
     };
   }
 
+<<<<<<< HEAD
+    private final String[] permitOrigin = {
+        "http://localhost:8080",
+        "https://apic.app",
+        "http://localhost:3000",
+        "https://localhost:3000",
+        "http://13.209.238.65"
+    };
+=======
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -94,6 +103,7 @@ public class SecurityConfig {
             .anyRequest().authenticated())
         .addFilterBefore(jwtAuthFilter(),
             UsernamePasswordAuthenticationFilter.class);
+>>>>>>> 1412833cd914c07115a6d30c7cd98818bb7e0145
 
     return http.build();
   }

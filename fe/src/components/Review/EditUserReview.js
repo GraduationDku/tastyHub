@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 function EditUserReview({ userReviewId }) {
   const [grade, setGrade] = useState(0);
-  const [text, setText] = useState('');
+  const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -19,7 +19,7 @@ function EditUserReview({ userReviewId }) {
         if (response.ok) {
           const data = await response.json();
           setGrade(data.grade);
-          setText(data.text);
+          setContent(data.content);
         } else {
           throw new Error('Failed to fetch review details');
         }
@@ -44,7 +44,7 @@ function EditUserReview({ userReviewId }) {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
         },
-        body: JSON.stringify({ grade, text }),
+        body: JSON.stringify({ grade, content }),
       });
 
       if (!response.ok) {
@@ -77,8 +77,8 @@ function EditUserReview({ userReviewId }) {
         <label htmlFor="text">리뷰:</label>
         <textarea
           id="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           required
         />
       </div>

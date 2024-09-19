@@ -1,4 +1,4 @@
-package com.example.tastyhub.common.domain.userReview.dtos;
+package com.example.tastyhub.common.domain.recipeReview.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserReviewCreateRequest {
+public class RecipeReviewRequest {
     private Long grade;
-    private String text;
+    private String content;
 }

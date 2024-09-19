@@ -1,17 +1,20 @@
 package com.example.tastyhub.common.domain.recipeReview.controller;
 
 import static com.example.tastyhub.common.config.APIConfig.RECIPEREVIEW_API;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCESS;
+import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
-import java.util.List;
-
+import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingMyRecipeReviewResponse;
 import com.example.tastyhub.common.domain.recipeReview.dtos.PagingRecipeReviewResponse;
-import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewCreateRequest;
-import com.example.tastyhub.common.domain.recipeReview.dtos.RecipeReviewUpdateRequest;
 import com.example.tastyhub.common.domain.recipeReview.service.RecipeReviewService;
 import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
@@ -40,27 +43,27 @@ public class RecipeReviewController {
     @PostMapping("/create/{recipeId}")
     public ResponseEntity<StatusResponse> createRecipeReview(
         @PathVariable Long recipeId, 
-        @RequestBody RecipeReviewCreateRequest recipeReviewCreateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @RequestBody RecipeReviewRequest recipeReviewCreateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         recipeReviewService.createRecipeReview(recipeId, recipeReviewCreateRequest, userDetails.getUser());
-        return RESPONSE_OK;
+        return RESPONSE_CREATED;
     }
 
     @GetMapping("/list/{recipeId}")
-    public ResponseEntity<List<PagingRecipeReviewResponse>> getRecipeReviews(@PathVariable Long recipeId, 
-    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PagingRecipeReviewResponse> pagingRecipeReviewResponseList = recipeReviewService.getRecipeReviews(recipeId);
+    public ResponseEntity<Page<PagingRecipeReviewResponse>> getRecipeReviews(@PathVariable Long recipeId,
+    @AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        Page<PagingRecipeReviewResponse> pagingRecipeReviewResponseList = recipeReviewService.getRecipeReviews(recipeId, pageable);
         return ResponseEntity.ok().body(pagingRecipeReviewResponseList);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<PagingMyRecipeReviewResponse>> getRecipeReviews(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PagingMyRecipeReviewResponse> pagingMyRecipeReviewResponseList = recipeReviewService.getMyRecipeReviews(userDetails.getUser());
+    @GetMapping("/my-list")
+    public ResponseEntity<Page<PagingMyRecipeReviewResponse>> getMyRecipeReviews(@AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        Page<PagingMyRecipeReviewResponse> pagingMyRecipeReviewResponseList = recipeReviewService.getMyRecipeReviews(userDetails.getUser(),pageable);
         return ResponseEntity.ok().body(pagingMyRecipeReviewResponseList);
     }
 
     @PatchMapping("/modify/{recipeReviewId}")
     public ResponseEntity<StatusResponse> updateRecipeReview(@PathVariable Long recipeReviewId,
-        @RequestBody RecipeReviewUpdateRequest recipeReviewUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        @RequestBody RecipeReviewRequest recipeReviewUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
             recipeReviewService.updateRecipeReview(recipeReviewId,recipeReviewUpdateRequest, userDetails.getUser());
             return RESPONSE_OK;
         
@@ -70,7 +73,7 @@ public class RecipeReviewController {
     public ResponseEntity<StatusResponse> deleteRecipeReview(@PathVariable Long recipeReviewId,
          @AuthenticationPrincipal UserDetailsImpl userDetails){
             recipeReviewService.deleteRecipeReview(recipeReviewId, userDetails.getUser());
-            return RESPONSE_OK;
+            return DELETE_SUCCESS;
         
     }
     
