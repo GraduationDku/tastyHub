@@ -1,51 +1,11 @@
-.homescreen {
-  height: 100vh;
-  width: 100vw;
-  background-color: #FAF6C0;
+button.top{
+  margin-top : 200px;
+}
+
+img.icon {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.homescreen h1 {
-  color: #AEC7A1;
-  font-weight: 800;
-  font-size: 6vw; /* 가로 크기의 6% */
-  padding: 1vw;
-  position: absolute;
-  top: 3vw; /* 가로 크기의 3% */
-  right: 8vw; /* 가로 크기의 5% */
-}
-
-.homescreen img {
-  width: 50vw; /* 창 너비의 50% */
-  height: auto;
-  position: absolute;
-  left: 30%;
-  top : 25%;
-  transform: translateX(-50%);
-  border-radius: 2vw; /* 가로 크기의 2% */
-}
-
-.homescreen .top, .homescreen .bottom {
-  background-color: #AEC7A1;
-  color: #5C5F5C;
-  border: none;
-  width: 13vw; /* 창 너비의 10% */
-  height: 4vw; /* 창 너비의 3% */
-  font-size: 1.5vw; /* 창 너비의 1% */
-  font-weight: 1000;
-  border-radius: 0.65vw; /* 창 너비의 0.65% */
-  position: absolute;
-}
-
-.homescreen .top {
-  right: 17.5vw;
-  top: 35vw;
-}
-
-.homescreen .bottom {
-  right: 17.5vw;
-  top: 40vw;
+  justify-items: center;
+  margin-left: 150px;
+  margin-top : 200px;
+  width : 40px;
 }
