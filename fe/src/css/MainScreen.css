@@ -1,75 +1,17 @@
-.mainscreen {
-  height: 100vh;
-  width: 100vw;
-  background-color: #FAF6C0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 0; /* 상하 패딩 추가로 전체적인 여백 관리 */
+div.box{
+  background-color : #DEF3E4;
+  border-radius : 20px;
+  margin : 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
 }
 
-.mainscreen h1 {
-  padding:4px;
-  background-color: #AEC7A1;
-  width: 400px; /* 제목의 너비를 box와 동일하게 조정 */
-  height: 40px;
-  text-align: center;
-  font-size: 25px;
-  border-radius: 10px 10px 0 0;
-  margin: 0; /* 제목의 마진을 0으로 설정 */
-  color: #5C5F5C;
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  border-radius : 10px;
 }
 
-.mainscreen .box {
-  padding: 30px;
-  background-color: white;
-  width: 800px;
-  height: 300px;
-  color: #5C5F5C;
-  margin: 0; /* 상하 마진 제거 */
-  border-radius: 20px 20px 0px 0px;; /* 하단에만 둥근 모서리 적용 */
-}
-
-.mainscreen .box2 {
-  background-color: white;
-  width: 800px;
-  padding: 30px;
-  margin-top: 0px;
-  border-radius: 0px 0px 20px 20px;
-
-}
-.mainscreen ul {
-  list-style-type: none; /* 기본 목록 스타일 제거 */
-  padding: 0; /* 내부 여백 제거 */
-  margin: 0; /* 외부 여백 제거 */
-  width: 100%; /* 전체 너비 사용 */
-}
-
-.mainscreen li {
-  font-size: 18px; /* 글자 크기 증가 */
-  margin-bottom: 15px; /* 항목 간의 간격 조절 */
-  margin-top : 20px;
-  cursor: pointer; /* 클릭 가능한 항목임을 나타내는 커서 스타일 */
-  transition: background-color 0.3s ease; /* 배경색 변경 애니메이션 효과 */
-}
-
-.mainscreen li:hover {
-  background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 */
-}
-
-.mainscreen li:not(:last-child) {
-  border-bottom: 1px solid #ddd; /* 항목 간 구분선 추가, 마지막 항목 제외 */
-}
-
-.mainscreen .box2{
-  color: #5C5F5C
-}
-
-.mainscreen .box2 .info{
-  font-weight:bold;
-}
-
-.mainscreen img{
-  border-radius:15px;
-}
