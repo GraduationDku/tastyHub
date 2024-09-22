@@ -1,65 +1,38 @@
-/* Navbar.css */
-
-.navbar {
-  background-color: #AEC7A1;
-  padding: 1rem;
+div.nav {
+  background-color: #3EAB5C;
+  position: fixed;
+  bottom: 0; /* Positions the nav at the bottom */
+  width: 100vw; /* Make the nav bar span the full width of the page */
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 40px;
-  overflow: hidden; /* 추가된 속성 */
-  white-space: nowrap; /* 추가된 속성 */
+  justify-content: space-around; /* Distribute buttons evenly */
+  padding: 10px 0; /* Add padding for spacing */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); /* Optional: Add a shadow for a raised effect */
+  border-radius: 10px 20px 0px 0px;
 }
 
-.navbar button {
-  padding: 0.5rem 1rem;
-  margin-right: 1rem;
+button {
+  color: white;
   border: none;
-  background-color: #AEC7A1;
-  color: #5C5F5C;
-  font-size: 20px;
-  font-weight: 1000;
-  border-radius: 0.25rem;
+  font-size: 14px;
   cursor: pointer;
-  display: flex;
 }
 
-.navbar .main {
-  padding: 0.5rem 1rem;
-  margin-right: 1rem;
-  border: none;
-  background-color: #AEC7A1;
-  color: #5C5F5C;
-  font-size: 35px;
-  font-weight: 2000;
-  border-radius: 0.25rem;
-  cursor: pointer;
-  display: flex;
+button:hover {
+  text-decoration: underline; /* Optional: Add underline on hover */
 }
 
-.navbar button:last-child {
-  margin-right: 0;
-  display: flex;
+form.search-form{
+  background-color: #3EAB5C;
+  width : 100vw;
+}
+button.search-toggle-btn{
+  width : 60px;
+}
+input.search-input{
+  width : 130px;
+  height : 40px;
+  margin-left : 180px;
+  border : none;
+  border-radius : 10px;
 }
 
-.navbar input {
-  width: 200px;
-  height: 30px;
-  border: none;
-  border-radius: 10px;
-}
-
-.navbar .search-form {
-  display: flex;
-  align-items: center; /* 수직 정렬 */
-}
-
-.navbar .search-input {
-  flex: 1; /* 입력 필드가 가능한 모든 공간을 차지하도록 설정 */
-  margin-right: 10px; /* 입력 필드와 버튼 사이의 간격 */
-}
-
-.navbar .search-toggle-btn,
-.navbar button[type="submit"] {
-  margin-left: 5px; /* 버튼 사이의 간격 */
-}
