@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import '../../css/Post/Post.css';
 import PageButton from '../../../src/components/PageButton.js'; // PageButton 컴포넌트 임포트
 
 function Post({ setScreen, onPostSelect, isGuest }) {
@@ -87,16 +86,16 @@ function Post({ setScreen, onPostSelect, isGuest }) {
 
   const handleSizeChange = (e) => {
     setSize(parseInt(e.target.value, 10) || 5);
-    setPage(1); // 페이지를 1로 초기화
+    setPage(0); // 페이지를 1로 초기화
   };
 
   const handleSortChange = (e) => {
     setSort(e.target.value || 'date');
-    setPage(1); // 페이지를 1로 초기화
+    setPage(0); // 페이지를 1로 초기화
   };
 
   const handlePageChange = (newPage) => {
-    if (newPage < 1) newPage = 1; // 페이지 번호를 1보다 작지 않도록 설정
+    if (newPage < 1) newPage = 0; // 페이지 번호를 1보다 작지 않도록 설정
     if (newPage > totalPages) newPage = totalPages; // 페이지 번호를 전체 페이지 수보다 크지 않도록 설정
     setPage(newPage);
   };
@@ -118,9 +117,9 @@ function Post({ setScreen, onPostSelect, isGuest }) {
           <div>
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
-              <option value="date">날짜</option>
+              <option value="created_at">날짜</option>
               <option value="title">제목</option>
-              <option value="nickname">작성자</option>
+              <option value="user_id">작성자</option>
             </select>
         
             <label>게시글 수: </label>

@@ -69,7 +69,7 @@ function MainScreen() {
   };
 
   return (
-    <div className='mainscreen'>
+    <body>
       <h1>주간 인기 레시피</h1>
       <div className='box'>
         <ul>
@@ -79,8 +79,7 @@ function MainScreen() {
             </li>
           ))}
         </ul>
-      </div>
-      <div className='box2'>
+      
         {selectedRecipe && (
           <div>
             <h2>{selectedRecipe.title}</h2>
@@ -98,7 +97,7 @@ function MainScreen() {
         )}
       </div>
       <div className='posts'>
-        <h2>실시간 게시글</h2>
+        <h1>실시간 게시글</h1>
         <ul>
           {posts.map((post) => (
             <li key={post.postId}>
@@ -110,7 +109,7 @@ function MainScreen() {
           ))}
         </ul>
       </div>
-    </div>
+    </body>
   );
 }
 

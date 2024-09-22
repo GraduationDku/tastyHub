@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/User/loginState';
-import '../../css/User/Login.css';
 
 function Login({ setScreen }) {
   const dispatch = useDispatch();

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/Village/Village.css';
 
 function Village({setScreen}) {
   const [location, setLocation] = useState({ lat: null, lng: null });

@@ -1,7 +1,7 @@
 // src/components/User/Signup.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import '../../css/User/Signup.css';
+
 import {
   updateField,
   checkPasswordsMatch,

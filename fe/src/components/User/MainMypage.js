@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import '../../css/User/MainMypage.css'
 
 function MainMypage({ setScreen, isGuest }) {
   const nickname = localStorage.getItem('nickname');
@@ -15,6 +14,8 @@ function MainMypage({ setScreen, isGuest }) {
   return (
     <div className='mainmypage'>
       <div className='box'>
+        <br/>
+        
         <h1>{nickname}의 마이페이지</h1>
         <br /><br />
         <button onClick={() => setScreen('mypageedit')}>내 정보 수정하기</button>

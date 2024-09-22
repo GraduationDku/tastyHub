@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../css/User/MypageShow.css';
 import PageButton from '../../../src/components/PageButton';
 
 const MypageShow = ({ userName }) => {

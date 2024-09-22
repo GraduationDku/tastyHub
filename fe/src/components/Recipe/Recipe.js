@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/Recipe/Recipe.css';
 import PageButton from '../../../src/components/PageButton';
 
 function Recipe({ onRecipeSelect, setScreen, onEdit }) {
@@ -58,14 +57,17 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   return (
     <div className='recipe'>
         <h1>전체 레시피 조회</h1>
-        <div className='box'>
         <button onClick={() => setScreen('create')}>레시피 작성하기</button>
+        <br /><br />
+        <div className='box'>
+        
         <div>
+        <br />
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
-              <option value="date">날짜</option>
-              <option value="title">제목</option>
-              <option value="nickname">작성자</option>
+              <option value="create_at">날짜</option>
+              <option value="food_name">제목</option>
+              <option value="user_id">작성자</option>
             </select>
         
             <label>게시글 수: </label>

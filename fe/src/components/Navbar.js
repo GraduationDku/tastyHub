@@ -65,13 +65,7 @@ const Navbar = ({ setScreen, onSearchComplete }) => {
   
 
   return (
-    <div className="navbar">
-      <button className='main' onClick={() => setScreen('main')}>TastyHub</button>
-      <button onClick={() => setScreen('recipe')}>레시피</button>
-      <button onClick={() => setScreen('post')}>재료 공유</button>
-      <button onClick={() => setScreen('mainchat')}>채팅</button>
-      <button onClick={() => setScreen('mypage')}>마이페이지</button>
-
+    <div>
       <form className="search-form" onSubmit={handleSearchSubmit}>
         <input
           type="text"
@@ -85,10 +79,16 @@ const Navbar = ({ setScreen, onSearchComplete }) => {
           onClick={() => setIsUserSearch(!isUserSearch)} // 검색 모드 토글
           className="search-toggle-btn"
         >
-          {isUserSearch ? "레시피 검색" : "사용자 검색"}
+          {isUserSearch ? "사용자" : "레시피"}
         </button>
-        <button type="submit">검색</button>
       </form>
+      <div className='nav'>
+        <button className='main' onClick={() => setScreen('main')}>TastyHub</button>
+        <button onClick={() => setScreen('recipe')}>레시피</button>
+        <button onClick={() => setScreen('post')}>재료 공유</button>
+        <button onClick={() => setScreen('mainchat')}>채팅</button>
+        <button onClick={() => setScreen('mypage')}>마이페이지</button>
+      </div>
     </div>
   );
 };

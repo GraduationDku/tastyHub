@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/Chat/MainChat.css';
 import PageButton from '../../../src/components/PageButton.js';
 
 function MainChat({ onChatroomSelect, setScreen, isGuest }) {
@@ -127,9 +126,9 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
         <div>
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
-              <option value="date">날짜</option>
+              <option value="created_at">날짜</option>
               <option value="title">제목</option>
-              <option value="nickname">작성자</option>
+              <option value="user_id">작성자</option>
             </select>
         
             <label>게시글 수: </label>
