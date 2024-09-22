@@ -13,6 +13,10 @@ import com.example.tastyhub.common.dto.StatusResponse;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,9 +54,11 @@ public class ChatRoomController {
      * @return List<ChatRoomDto>
      */
     @GetMapping
-    public ResponseEntity<List<ChatRoomDto>> getChatRoomList(
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<ChatRoomDto> chatRoomDtoList = chatRoomService.getChatRoomList(userDetails.getUser());
+    public ResponseEntity<Page<ChatRoomDto>> getChatRoomList(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
+        ){
+        Page<ChatRoomDto> chatRoomDtoList = chatRoomService.getChatRoomList(userDetails.getUser(),pageable);
         return ResponseEntity.ok().body(chatRoomDtoList);
     }
 

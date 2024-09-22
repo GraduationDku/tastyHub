@@ -18,7 +18,11 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,11 +50,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
   @Override
   @Transactional
-  public List<ChatRoomDto> getChatRoomList(User user) {
+  public Page<ChatRoomDto> getChatRoomList(User user, Pageable pageable) {
     List<UserChatRoom> userChatRooms = userChatRoomRepository.findByUser(user);
-    return userChatRooms.stream()
+    List<ChatRoomDto> collect = userChatRooms.stream()
         .map(ChatRoomDto::new)
         .collect(Collectors.toList());
+    return convertListToPage(collect, pageable);
   }
 
   @Override
@@ -125,5 +130,29 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     return chatRoomRepository.findById(roomId)
         .orElseThrow(() -> new IllegalArgumentException("현재 채팅방은 존재하지 않습니다."));
   }
+
+
+  // 기존 리스트를 페이지로 변환하는 메서드
+  public static <T> Page<T> convertListToPage(List<T> list, Pageable pageable) {
+    int start = (int) pageable.getOffset();
+    int end = Math.min(start + pageable.getPageSize(), list.size());
+
+    // start가 리스트 크기를 초과하는 경우 빈 리스트 반환
+    if (start > list.size()) {
+      return new PageImpl<>(List.of(), pageable, list.size());
+    }
+
+    List<T> pageContent = list.subList(start, end);
+
+    return new PageImpl<>(pageContent, pageable, list.size());
+  }
+
+  // 임의의 ChatRoomDto 리스트 생성 메서드
+  private static List<ChatRoomDto> generateChatRoomList() {
+    return IntStream.range(1, 51)
+        .mapToObj(i -> new ChatRoomDto((long) i, "ChatRoom " + i))
+        .collect(Collectors.toList());
+  }
 }
+
 

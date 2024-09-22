@@ -6,9 +6,9 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const [chatRooms, setChatRooms] = useState([]);
     const [selectedRooms, setSelectedRooms] = useState(new Set());
     const [deleteMode, setDeleteMode] = useState(false);
-    const [page, setPage] = useState(1); // 현재 페이지
+    const [page, setPage] = useState(0); // 현재 페이지
     const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
-    const [sort, setSort] = useState('date'); // 정렬 방식 기본값
+    const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
     const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
     const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
 
@@ -20,7 +20,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
         
         const fetchChatRooms = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/room??page=${page}&size=${size}&sort=${sort}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/room?page=${page}&size=${size}&sort=${sort}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -29,6 +29,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                 });
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(response);
                     setTotalItems(data.content.length); // 전체 게시글 수 계산 (posts 배열의 길이)
                     setTotalPages(Math.ceil(data.content.length / size)); // 전체 페이지 수 계산
                     
@@ -100,7 +101,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
       };
     
       const handleSortChange = (e) => {
-        setSort(e.target.value || 'date');
+        setSort(e.target.value || 'createdAt');
         setPage(1); // 페이지를 1로 초기화
       };
     
@@ -127,9 +128,9 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
         <div>
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
-              <option value="date">날짜</option>
-              <option value="title">제목</option>
-              <option value="nickname">작성자</option>
+              <option value="createdAt">날짜</option>
+              <option value="chatRoomTitle">제목</option>
+              {/*<option value="nickname">작성자</option>*/}
             </select>
         
             <label>게시글 수: </label>
