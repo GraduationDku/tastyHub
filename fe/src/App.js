@@ -1,4 +1,5 @@
 // App.js
+import '../src/css/global.css';
 import React, { useState } from 'react';
 import HomeScreen from './components/HomeScreen';
 import Login from './components/User/Login';
@@ -102,9 +103,9 @@ function App() {
       {screen === 'postDetails' && <PostDetails postId={selectedPostId} setScreen={setScreen} />}
       {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} />}
       {screen === 'searchResults' && (
-        <div className="search-results">
+        <div>
           <h1>검색 결과</h1>
-          <div className='box'>
+          <div>
           <div>
               <label>정렬 기준: </label>
               <select value={sort} onChange={handleSortChange}>
