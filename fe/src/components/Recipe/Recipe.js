@@ -65,9 +65,15 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
         <br />
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
+<<<<<<< HEAD
               <option value="create_at">날짜</option>
               <option value="food_name">제목</option>
               <option value="user_id">작성자</option>
+=======
+              <option value="createAt">날짜</option>
+              <option value="foodName">제목</option>
+              {/*<option value="nickname">작성자</option>*/}
+>>>>>>> 60a1397adce662f338ecaf0c51e14aed585bf168
             </select>
         
             <label>게시글 수: </label>

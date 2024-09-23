@@ -78,7 +78,24 @@ function PostDetails({ postId, setScreen }) {
     if (!roomExists) {
       await createChatRoom();
     } else {
-      setScreen('sendchat', { roomId }); // roomId 전달
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/room/${roomId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('accessToken')
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data.chatDtoList);
+          setScreen('sendchat'); // 채팅방에 입장하면 mainchat 화면으로 이동
+        } else {
+          throw new Error('Failed to enter chat room');
+        }
+      } catch (error) {
+        console.error('Error entering chat room:', error);
+      }
     }
   };
 

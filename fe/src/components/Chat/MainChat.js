@@ -5,11 +5,11 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const [chatRooms, setChatRooms] = useState([]);
     const [selectedRooms, setSelectedRooms] = useState(new Set());
     const [deleteMode, setDeleteMode] = useState(false);
-    const [page, setPage] = useState(1); // 현재 페이지
+    const [page, setPage] = useState(0); // 현재 페이지
     const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
-    const [sort, setSort] = useState('date'); // 정렬 방식 기본값
+    const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
     const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
-    const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+    // const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
 
     useEffect(() => {
         if (isGuest) {
@@ -19,7 +19,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
         
         const fetchChatRooms = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/room??page=${page}&size=${size}&sort=${sort}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/room?page=${page}&size=${size}&sort=${sort}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -28,10 +28,11 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    setTotalItems(data.content.length); // 전체 게시글 수 계산 (posts 배열의 길이)
-                    setTotalPages(Math.ceil(data.content.length / size)); // 전체 페이지 수 계산
-                    
-                    if (Array.isArray(data)) {
+                    console.log(response);
+                    setTotalItems(data.content.length);
+                    // setTotalPages(Math.ceil(data.content.length / size)); // 전체 페이지 수 계산
+                    setChatRooms(data.content)
+                    if (Array.isArray(data.content)) {
                         const uniqueChatRooms = Array.from(new Set(data.map(room => room.roomId)))
                             .map(roomId => {
                                 return data.find(room => room.roomId === roomId);
@@ -99,13 +100,12 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
       };
     
       const handleSortChange = (e) => {
-        setSort(e.target.value || 'date');
-        setPage(1); // 페이지를 1로 초기화
+        setSort(e.target.value || 'createdAt');
+        setPage(0); // 페이지를 1로 초기화
       };
     
       const handlePageChange = (newPage) => {
-        if (newPage < 1) newPage = 1; // 페이지 번호를 1보다 작지 않도록 설정
-        if (newPage > totalPages) newPage = totalPages; // 페이지 번호를 전체 페이지 수보다 크지 않도록 설정
+
         setPage(newPage);
       };
 
@@ -126,9 +126,15 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
         <div>
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
+<<<<<<< HEAD
               <option value="created_at">날짜</option>
               <option value="title">제목</option>
               <option value="user_id">작성자</option>
+=======
+              <option value="createdAt">날짜</option>
+              <option value="chatRoomTitle">제목</option>
+              {/*<option value="nickname">작성자</option>*/}
+>>>>>>> 60a1397adce662f338ecaf0c51e14aed585bf168
             </select>
         
             <label>게시글 수: </label>
@@ -150,11 +156,11 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                                         onChange={() => handleCheckboxChange(chatRoom.roomId)}
                                     />
                                 )}
-                                <p>{chatRoom.from}</p>
-                                <p>{chatRoom.time}</p>
+                                <p>{chatRoom.roomId}</p>
+                                <p>{chatRoom.chatRoomTitle}</p>
                                 <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
                                     {chatRoom.chatRoomTitle}
-                                    
+
                                 </button>
                             </div>
                         </li>
