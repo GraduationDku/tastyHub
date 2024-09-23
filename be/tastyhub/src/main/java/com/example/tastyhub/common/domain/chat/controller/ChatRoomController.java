@@ -90,7 +90,7 @@ public class ChatRoomController {
         chatRoomService.enterNewChatRoom(roomId, userDetails.getUser());
         return RESPONSE_OK;
     }
-
+//https://localhost/room/{roomId} ->Patch/
     /***
      * 채팅방 나가기
      * @param roomId

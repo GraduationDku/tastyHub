@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CheckDto {
 
+  private Long roomId;
   private boolean checkRoom;
 }

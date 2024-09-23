@@ -90,7 +90,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
   private static boolean isCheck(User user1, ChatRoom chatRoom) {
     return chatRoom.getUserChatRooms().stream().map(UserChatRoom::getUser)
-        .noneMatch(user -> user.equals(user1));
+        .anyMatch(user -> user.equals(user1));
   }
 
   @Override
@@ -123,7 +123,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     if (!chatRoomRepository.existsByPostId(postId)) {
       return CheckDto.builder().checkRoom(false).build();
     }
-    return CheckDto.builder().checkRoom(true).build();
+    ChatRoom byPostId = chatRoomRepository.findByPostId(postId);
+    return CheckDto.builder().roomId(byPostId.getId()).checkRoom(true).build();
   }
 
   private ChatRoom findChatRoomById(Long roomId) {

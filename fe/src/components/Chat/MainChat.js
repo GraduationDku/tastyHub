@@ -10,7 +10,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
     const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
     const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
-    const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+    // const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
 
     useEffect(() => {
         if (isGuest) {
@@ -30,10 +30,10 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                 if (response.ok) {
                     const data = await response.json();
                     console.log(response);
-                    setTotalItems(data.content.length); // 전체 게시글 수 계산 (posts 배열의 길이)
-                    setTotalPages(Math.ceil(data.content.length / size)); // 전체 페이지 수 계산
-                    
-                    if (Array.isArray(data)) {
+                    setTotalItems(data.content.length);
+                    // setTotalPages(Math.ceil(data.content.length / size)); // 전체 페이지 수 계산
+                    setChatRooms(data.content)
+                    if (Array.isArray(data.content)) {
                         const uniqueChatRooms = Array.from(new Set(data.map(room => room.roomId)))
                             .map(roomId => {
                                 return data.find(room => room.roomId === roomId);
@@ -102,12 +102,11 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     
       const handleSortChange = (e) => {
         setSort(e.target.value || 'createdAt');
-        setPage(1); // 페이지를 1로 초기화
+        setPage(0); // 페이지를 1로 초기화
       };
     
       const handlePageChange = (newPage) => {
-        if (newPage < 1) newPage = 1; // 페이지 번호를 1보다 작지 않도록 설정
-        if (newPage > totalPages) newPage = totalPages; // 페이지 번호를 전체 페이지 수보다 크지 않도록 설정
+
         setPage(newPage);
       };
 
@@ -152,11 +151,11 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                                         onChange={() => handleCheckboxChange(chatRoom.roomId)}
                                     />
                                 )}
-                                <p>{chatRoom.from}</p>
-                                <p>{chatRoom.time}</p>
+                                <p>{chatRoom.roomId}</p>
+                                <p>{chatRoom.chatRoomTitle}</p>
                                 <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
                                     {chatRoom.chatRoomTitle}
-                                    
+
                                 </button>
                             </div>
                         </li>

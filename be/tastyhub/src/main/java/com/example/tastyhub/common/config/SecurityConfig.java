@@ -47,8 +47,8 @@ public class SecurityConfig {
       "/recipe/search/",
       "/recipe/search/{keyword}",
       "/like/count/{recipeId}",
-      "/chat",
-      "/chat/**"
+      "/ws/chat",
+      "/ws/chat/**"
   };
   //private final String[] permitAllArray = {
 //    "/email",
