@@ -8,7 +8,7 @@ import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserAuthRequest;
 
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
-import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
+import com.example.tastyhub.common.domain.user.dtos.UserNameDto;
 import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
@@ -95,7 +95,7 @@ public class UserFixture {
 
 
 
-  public static final UserNameResponse USER_NAME_RESPONSE = UserNameResponse.builder()
+  public static final UserNameDto USER_NAME_RESPONSE = UserNameDto.builder()
       .userName(USER.getUsername()).build();
 
 }

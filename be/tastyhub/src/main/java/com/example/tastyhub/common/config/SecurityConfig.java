@@ -23,7 +23,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.example.tastyhub.common.utils.Jwt.JwtAuthFilter;
-import com.example.tastyhub.common.utils.Jwt.JwtService;
+import com.example.tastyhub.common.utils.Jwt.AccessTokenService;
 import com.example.tastyhub.common.utils.Jwt.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final JwtService jwtService;
+  private final AccessTokenService accessTokenService;
   private final UserDetailsServiceImpl userDetailsService;
   private final String[] permitAllArray = {
       "/email",
@@ -41,6 +41,7 @@ public class SecurityConfig {
       "/user/overlap/nickname",
       "/user/overlap/username",
       "/user/login",
+      "/user/refresh",
       "/user/signup",
       "/recipe/list",
       "/recipe/popular",
@@ -123,7 +124,7 @@ public class SecurityConfig {
 
   @Bean // Jwt 유효성 검증 필터
   public JwtAuthFilter jwtAuthFilter() {
-    return new JwtAuthFilter(jwtService, userDetailsService);
+    return new JwtAuthFilter(accessTokenService, userDetailsService);
   }
 
   @Bean  // Password Encryption

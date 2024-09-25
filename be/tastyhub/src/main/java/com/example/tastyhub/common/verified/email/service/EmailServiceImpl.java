@@ -50,7 +50,7 @@ public class EmailServiceImpl implements EmailService {
             body += "</div><br>";
             body += "<h3>" + "감사합니다." + "</h3>";
             message.setText(body,"UTF-8", "html");
-            redisUtil.setDataExpire(mail, String.valueOf(authNumber), 60*30L);
+            redisUtil.saveData(mail, String.valueOf(authNumber), 60*30L);
         } catch (Exception e) {
             e.printStackTrace();
         }

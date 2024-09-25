@@ -1,10 +1,7 @@
 package com.example.tastyhub.common.utils.Jwt;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -12,9 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.example.tastyhub.common.dto.StatusResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -28,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-  private final JwtService jwtService;
+  private final AccessTokenService accessTokenService;
   private final UserDetailsServiceImpl userDetailsService;
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -36,11 +30,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
 
     try {
-      String accessToken = jwtService.resolveAccessToken(request);
-      if (!jwtService.validateToken(accessToken)) {
+      String accessToken = accessTokenService.resolveAccessToken(request);
+      if (!accessTokenService.validateAccessToken(accessToken)) {
         throw new JwtAuthException("JWT Authentication error!");
       }
-      Claims info = jwtService.getUserInfoFromToken(accessToken);
+      Claims info = accessTokenService.getUserInfoFromToken(accessToken);
       String name = info.getSubject();
       String role = info.get("auth").toString();
       setAuthentication(name, role);
