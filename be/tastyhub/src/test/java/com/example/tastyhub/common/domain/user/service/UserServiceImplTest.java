@@ -44,8 +44,6 @@ class UserServiceImplTest {
     @Mock
     PasswordEncoder passwordEncoder;
 
-    @Mock
-    RedisUtil redisUtil;
 
     @Mock
     AccessTokenService accessTokenService;
@@ -118,7 +116,6 @@ class UserServiceImplTest {
         userService.login(LOGIN_REQUEST, response);
         verify(userRepository, times(1)).findByUsername(USER_AUTH_REQUEST.getUserName());
         verify(accessTokenService, times(1)).createAccessToken(any(), any());
-        verify(redisUtil, times(1)).saveData(any(), any(), anyLong());
         verify(refreshTokenService, times(1)).createRefreshToken(any());
 
     }
