@@ -1,7 +1,6 @@
 package com.example.tastyhub.common.domain.user.service;
 
-import static com.example.tastyhub.common.utils.Jwt.JwtService.AUTHORIZATION_HEADER;
-import static com.example.tastyhub.common.utils.Jwt.JwtService.REFRESH_HEADER;
+import static com.example.tastyhub.common.utils.Jwt.AccessTokenService.AUTHORIZATION_HEADER;
 
 
 import com.example.tastyhub.common.domain.user.dtos.ChangePasswordRequest;
@@ -9,20 +8,22 @@ import com.example.tastyhub.common.domain.user.dtos.UserAuthRequest;
 import com.example.tastyhub.common.domain.user.dtos.FindIdRequest;
 import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.UserDto;
-import com.example.tastyhub.common.domain.user.dtos.UserNameResponse;
+import com.example.tastyhub.common.domain.user.dtos.UserNameDto;
 import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.entity.User.userType;
+import com.example.tastyhub.common.domain.user.exception.InvalidTokenException;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
 import com.example.tastyhub.common.domain.village.dtos.LocationRequest;
 import com.example.tastyhub.common.domain.village.entity.Village;
 import com.example.tastyhub.common.domain.village.service.VillageService;
-import com.example.tastyhub.common.utils.Jwt.JwtService;
+import com.example.tastyhub.common.utils.Jwt.AccessTokenService;
 
-import com.example.tastyhub.common.utils.Redis.RedisUtil;
+import com.example.tastyhub.common.utils.Jwt.RefreshTokenService;
 import com.example.tastyhub.common.utils.S3.S3Uploader;
 
 import io.jsonwebtoken.io.IOException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 
@@ -45,14 +46,11 @@ public class UserServiceImpl implements UserService {
 
   private final PasswordEncoder passwordEncoder;
 
-  public static final long REFRESH_TOKEN_TIME = 60 * 60 * 60 * 1000L;
-
   private final VillageService villageService;
 
+  private final AccessTokenService accessTokenService;
 
-  private final RedisUtil redisUtil;
-
-  private final JwtService jwtService;
+  private final RefreshTokenService refreshTokenService;
 
   private final S3Uploader s3Uploader;
 
@@ -115,22 +113,51 @@ public class UserServiceImpl implements UserService {
     if (!passwordEncoder.matches(password, byUsername.getPassword())) {
       throw new IllegalArgumentException("비밀번호가 일치하지않습니다.");
     }
-    String accessToken = jwtService.createAccessToken(byUsername.getUsername(),
-        byUsername.getUserType());
-    String refreshToken = jwtService.createRefreshToken(byUsername.getUsername(),
+    // AccessToken 생성
+    String accessToken = accessTokenService.createAccessToken(byUsername.getUsername(),
         byUsername.getUserType());
 
-    redisUtil.setDataExpire(REFRESH_HEADER, refreshToken, REFRESH_TOKEN_TIME);
+    // RefreshToken 생성 및 Redis에 저장
+    String refreshToken = refreshTokenService.createRefreshToken(username);
+
+    // AccessToken 응답 헤더에 저장
     response.addHeader(AUTHORIZATION_HEADER, accessToken);
-    response.addHeader(REFRESH_HEADER, refreshToken);
+
+    // Refresh Token 쿠키에 저장
+    Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+    refreshCookie.setHttpOnly(true); // JavaScript를 통한 접근 방지
+    refreshCookie.setSecure(true); // HTTPS를 통해서만 쿠키 전송
+    refreshCookie.setPath("/"); // 사이트 전체에서 쿠키 사용
+    refreshCookie.setMaxAge(14 * 24 * 60 * 60); // 2주
+    response.addCookie(refreshCookie);
+
     return new NicknameDto(byUsername.getNickname());
   }
 
   @Override
-  public UserNameResponse findId(FindIdRequest findIdRequest) {
+  public void refreshAccessToken(String refreshToken, UserNameDto userNameDto,
+      HttpServletResponse response) {
+    String username = userNameDto.getUserName();
+    User byUsername = findByUsername(username);
+    log.info("refreshToken : "+refreshToken);
+    if (refreshTokenService.validateRefreshToken(username, refreshToken)) {
+      // newAccessToken 생성
+      String newAccessToken = accessTokenService.createAccessToken(username,
+          byUsername.getUserType());
+      // newAccessToken 응답 헤더에 저장
+      response.addHeader(AUTHORIZATION_HEADER, newAccessToken);
+    }
+    else{
+      log.error("Invalid refresh token for user: " + username);
+      throw new InvalidTokenException("유효하지 않은 RefreshToken");
+    }
+  }
+
+  @Override
+  public UserNameDto findId(FindIdRequest findIdRequest) {
     User user = findByEmail(findIdRequest);
     String subId = user.getUsername().substring(0, user.getUsername().length() - 4);
-    return new UserNameResponse(subId + "****");
+    return new UserNameDto(subId + "****");
   }
 
 
@@ -149,7 +176,7 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public Page<UserDto> getUserList(String nickname, Pageable pageable) {
-    Page<UserDto> userDtoList = userRepository.findAllByNickname(nickname,pageable);
+    Page<UserDto> userDtoList = userRepository.findAllByNickname(nickname, pageable);
     return userDtoList;
   }
 
@@ -207,6 +234,7 @@ public class UserServiceImpl implements UserService {
     System.out.println(findUser.getVillage().getAddressTownName());
 
   }
+
 
   private void handleUpdateFailure(String imgUrl, Exception e) throws java.io.IOException {
     if (!imgUrl.isEmpty()) {

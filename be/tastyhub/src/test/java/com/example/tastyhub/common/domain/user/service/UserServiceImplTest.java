@@ -22,7 +22,8 @@ import static org.mockito.Mockito.when;
 
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.repository.UserRepository;
-import com.example.tastyhub.common.utils.Jwt.JwtService;
+import com.example.tastyhub.common.utils.Jwt.AccessTokenService;
+import com.example.tastyhub.common.utils.Jwt.RefreshTokenService;
 import com.example.tastyhub.common.utils.Redis.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -43,11 +44,11 @@ class UserServiceImplTest {
     @Mock
     PasswordEncoder passwordEncoder;
 
-    @Mock
-    RedisUtil redisUtil;
 
     @Mock
-    JwtService jwtService;
+    AccessTokenService accessTokenService;
+    @Mock
+    RefreshTokenService refreshTokenService;
 
     @Mock
     User user;
@@ -114,9 +115,8 @@ class UserServiceImplTest {
         given(userRepository.findByUsername(any())).willReturn(Optional.ofNullable(USER));
         userService.login(LOGIN_REQUEST, response);
         verify(userRepository, times(1)).findByUsername(USER_AUTH_REQUEST.getUserName());
-        verify(jwtService, times(1)).createAccessToken(any(), any());
-        verify(redisUtil, times(1)).setDataExpire(any(), any(), anyLong());
-        verify(jwtService, times(1)).createRefreshToken(any(), any());
+        verify(accessTokenService, times(1)).createAccessToken(any(), any());
+        verify(refreshTokenService, times(1)).createRefreshToken(any());
 
     }
 

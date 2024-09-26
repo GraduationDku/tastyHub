@@ -50,6 +50,9 @@ public class HttpResponseEntity {
     public static final ResponseEntity<StatusResponse> UNAUTHORIZED =
         ResponseEntity.status(ResponseMessages.UNAUTHORIZED.getStatusCode())
             .body(StatusResponse.valueOf(ResponseMessages.UNAUTHORIZED));
+    public static final ResponseEntity<StatusResponse> INVALID_TOKEN =
+        ResponseEntity.status(ResponseMessages.UNAUTHORIZED.getStatusCode())
+            .body(StatusResponse.valueOf(ResponseMessages.UNAUTHORIZED));
     public static final ResponseEntity<StatusResponse> FORBIDDEN =
         ResponseEntity.status(ResponseMessages.FORBIDDEN.getStatusCode())
             .body(StatusResponse.valueOf(ResponseMessages.FORBIDDEN));
