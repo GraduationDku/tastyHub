@@ -8,7 +8,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
   const [selectedPosts, setSelectedPosts] = useState(new Set());
   const [page, setPage] = useState(1); // 현재 페이지
   const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
-  const [sort, setSort] = useState('date'); // 정렬 방식 기본값
+  const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
   const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
   const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
 
@@ -21,7 +21,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
     async function fetchAllPost() {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`, 
+          `${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`,
           {
             method: 'GET',
             headers: {
@@ -35,15 +35,14 @@ function Post({ setScreen, onPostSelect, isGuest }) {
           const data = await response.json();
           setPosts(data.content); // 받아온 게시글 설정
           setTotalItems(data.content.length); // 전체 게시글 수 계산 (posts 배열의 길이)
-          setTotalPages(Math.ceil(data.content.length / size)); // 전체 페이지 수 계산
+
         }
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
     }
-
     fetchAllPost();
-  }, [page, size, sort, isGuest, setScreen]);
+  }, [page, size, sort]);
 
   const handleDeleteModeToggle = () => {
     setDeleteMode(!deleteMode);
@@ -64,7 +63,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
     for (let postId of selectedPosts) {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/post/delete/${postId}`, 
+          `${process.env.REACT_APP_API_URL}/post/delete/${postId}`,
           {
             method: 'DELETE',
             headers: {
@@ -87,13 +86,14 @@ function Post({ setScreen, onPostSelect, isGuest }) {
 
   const handleSizeChange = (e) => {
     setSize(parseInt(e.target.value, 10) || 5);
-    setPage(1); // 페이지를 1로 초기화
+    setPage(0); // 페이지를 1로 초기화
   };
 
   const handleSortChange = (e) => {
-    setSort(e.target.value || 'date');
-    setPage(1); // 페이지를 1로 초기화
+    setSort(e.target.value || 'createdAt');
+    setPage(0); // 페이지를 1로 초기화
   };
+
 
   const handlePageChange = (newPage) => {
     if (newPage < 1) newPage = 1; // 페이지 번호를 1보다 작지 않도록 설정
@@ -118,11 +118,11 @@ function Post({ setScreen, onPostSelect, isGuest }) {
           <div>
             <label>정렬 기준: </label>
             <select value={sort} onChange={handleSortChange}>
-              <option value="date">날짜</option>
+              <option value="createdAt">날짜</option>
               <option value="title">제목</option>
-              <option value="nickname">작성자</option>
+              {/*<opticon value="nickname">작성자</option>*/}
             </select>
-        
+
             <label>게시글 수: </label>
             <select value={size} onChange={handleSizeChange}>
               <option value={5}>5개</option>

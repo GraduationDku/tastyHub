@@ -13,10 +13,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+//import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+//import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+//import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+//import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -48,8 +48,8 @@ public class SecurityConfig {
       "/recipe/search/",
       "/recipe/search/{keyword}",
       "/like/count/{recipeId}",
-      "/chat",
-      "/chat/**"
+      "/ws/chat",
+      "/ws/chat/**"
   };
   //private final String[] permitAllArray = {
 //    "/email",
@@ -99,12 +99,12 @@ public class SecurityConfig {
             .requestMatchers("/", "/login").permitAll()
             .requestMatchers(permitAllArray).permitAll()
             .anyRequest().authenticated()
-        )
-        .oauth2Login(oauth2 ->
-            oauth2.defaultSuccessUrl("/home", true)
-                .failureUrl("/login?=error=true")
-                .userInfoEndpoint(user ->
-                    user.userService(oAuth2UserService())));
+        );
+//        .oauth2Login(oauth2 ->
+//            oauth2.defaultSuccessUrl("/home", true)
+//                .failureUrl("/login?=error=true")
+//                .userInfoEndpoint(user ->
+//                    user.userService(oAuth2UserService())));
 
     http.addFilterBefore(jwtAuthFilter(),
         UsernamePasswordAuthenticationFilter.class);
@@ -113,14 +113,14 @@ public class SecurityConfig {
     return http.build();
   }
 
-  @Bean
-  public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
-    DefaultOAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
-    return request -> {
-      OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(request);
-      return oAuth2User;
-    };
-  }
+//  @Bean
+//  public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+//    DefaultOAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
+//    return request -> {
+//      OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(request);
+//      return oAuth2User;
+//    };
+//  }
 
   @Bean // Jwt 유효성 검증 필터
   public JwtAuthFilter jwtAuthFilter() {
