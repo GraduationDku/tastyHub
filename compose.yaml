@@ -2,7 +2,8 @@ version: '3.8'
 
 volumes:
   tasty-data: {}
-  email-data: {}
+  tasty-cache: {}
+  refresh-email-data: {}
   tasty-logs: {}
 
 services:
@@ -44,13 +45,26 @@ services:
 
   redis:
     image: redis
+    container_name: storage_redis
     restart: always
     # environment:
     #   requirepass: 1234
     ports:
       - 6379:6379
     volumes:
-      - email-data:/data
+      - refresh-email-data:/data
+    # command: redis-server --requirepass 1234
+
+  redis2:
+    image: redis
+    container_name: cache_redis
+    restart: always
+    # environment:
+    #   requirepass: 1234
+    ports:
+      - 6380:6380
+    volumes:
+      - tasty-cache:/data
     # command: redis-server --requirepass 1234
 
     # networks:
