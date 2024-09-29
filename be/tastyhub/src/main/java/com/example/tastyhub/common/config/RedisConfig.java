@@ -1,6 +1,7 @@
 package com.example.tastyhub.common.config;
 
 import java.time.Duration;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -12,6 +13,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
@@ -50,8 +52,10 @@ public class RedisConfig {
 
   @Bean
   public RedisTemplate<?, ?> redisTemplateForVerified() {
-    RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(redisConnectionFactoryForVerified());
+    redisTemplate.setKeySerializer(new StringRedisSerializer()); // 키 직렬화
+    redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer()); // 값 직렬화
     return redisTemplate;
   }
 
@@ -66,15 +70,17 @@ public class RedisConfig {
     return lettuceConnectionFactory;
   }
 
-  @Bean
+  @Bean(name ="redisTemplate")
   public RedisTemplate<?, ?> redisTemplateForCache() {
-    RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(redisConnectionFactoryForCache());
+    redisTemplate.setKeySerializer(new StringRedisSerializer()); // 키 직렬화
+    redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer()); // 값 직렬화
     return redisTemplate;
   }
 
   @Bean
-  public CacheManager contentCacheManager(RedisConnectionFactory redisConnectionFactory) {
+  public CacheManager contentCacheManager(@Qualifier("redisConnectionFactoryForCache") RedisConnectionFactory redisConnectionFactory) {
     RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
         .serializeKeysWith(
             RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
@@ -85,5 +91,22 @@ public class RedisConfig {
     return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory)
         .cacheDefaults(redisCacheConfiguration).build();
   }
+
+  // 검증 및 토큰용 StringRedisTemplate
+  @Bean
+  public StringRedisTemplate verifiedRedisTemplate() {
+    StringRedisTemplate template = new StringRedisTemplate();
+    template.setConnectionFactory(redisConnectionFactoryForVerified());  // 포트 6379에 연결됨
+    return template;
+  }
+
+  // 캐시용 StringRedisTemplate
+  @Bean
+  public StringRedisTemplate cacheRedisTemplate() {
+    StringRedisTemplate template = new StringRedisTemplate();
+    template.setConnectionFactory(redisConnectionFactoryForCache());  // 포트 6380에 연결됨
+    return template;
+  }
+
 
 }
