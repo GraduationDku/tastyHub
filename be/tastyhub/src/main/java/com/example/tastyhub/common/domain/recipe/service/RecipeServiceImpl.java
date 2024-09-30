@@ -25,6 +25,8 @@ import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -61,7 +63,8 @@ public class RecipeServiceImpl implements RecipeService {
     try {
       imgUrl = s3Uploader.upload(img, "image/recipeImg");
 
-      Recipe recipe = Recipe.createRecipe(recipeCreateDto, user, imgUrl, foodInformation, ingredients,
+      Recipe recipe = Recipe.createRecipe(recipeCreateDto, user, imgUrl, foodInformation,
+          ingredients,
           cookSteps);
 
       foodInformationService.relationRecipe(foodInformation, recipe);
@@ -88,11 +91,13 @@ public class RecipeServiceImpl implements RecipeService {
     List<IngredientDto> ingredients = ingredientService.getIngredientDtos(recipe.getIngredients());
     List<CookStepDto> cookSteps = cookStepService.getCookStepDtos(recipe.getCookSteps());
 
-    return RecipeDto.getBuild(recipe, isLiked, isScraped, foodInformationDto, ingredients, cookSteps);
+    return RecipeDto.getBuild(recipe, isLiked, isScraped, foodInformationDto, ingredients,
+        cookSteps);
   }
 
   @Override
   @Transactional
+  @CacheEvict(value = "popularRecipes", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
   public void updateRecipe(Long recipeId, MultipartFile img, User user,
       RecipeUpdateDto recipeUpdateDto) throws java.io.IOException {
     Recipe recipe = checkRecipeAndUser(recipeId, user);
@@ -149,6 +154,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   @Transactional
+  @Cacheable(value = "popularRecipes", key = "#pageable.pageNumber + '-' + #pageable.pageSize", unless = "#result == null || #result.isEmpty()")
   public Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable) {
     return recipeRepository.findPopular(pageable);
   }
@@ -161,6 +167,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   @Transactional
+  @CacheEvict(value = "popularRecipes", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
   public void deleteRecipe(Long recipeId, User user) throws java.io.IOException {
     Recipe recipe = checkRecipeAndUser(recipeId, user);
     String imgUrl = recipe.getFoodImgUrl();
