@@ -4,6 +4,8 @@ import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
 import jakarta.transaction.Transactional;
 import lombok.Generated;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
+    @Transactional
+    @CacheEvict(value="recentPosts", key = "#user.village.addressTownName")
     public void createPost(PostCreateRequest postCreateRequest, User user) {
         Post post = Post.createPost(postCreateRequest.getTitle(),postCreateRequest.getContent(),PostState.Start,user);
         postRepository.save(post);
@@ -31,6 +35,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    @CacheEvict(value="recentPosts", key = "#user.village.addressTownName")
     public void updatePost(Long postId, PostUpdateRequest postUpdateRequest, User user) {
         Post post = findById(postId);
         post.update(postUpdateRequest);
@@ -42,17 +47,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
+    @CacheEvict(value="recentPosts", key = "#user.village.addressTownName")
     public void deletePost(Long postId, User user) {
         postRepository.deleteById(postId);
     }
 
     @Override
+    @Transactional
+    @Cacheable(value = "posts", key = "#user.village.addressTownName + '-' + #pageable.pageNumber + '-' + #pageable.pageSize", unless = "#result == null || #result.isEmpty()")
     public Page<PagingPostResponse> getAllPost(User user, Pageable pageable) {
         return postRepository.findAllPostResponse(
             user.getVillage(),pageable);
     }
 
     @Override
+    @Transactional
+    @Cacheable(value = "recentPosts", key = "#user.village.addressTownName", unless = "#result == null || #result.isEmpty()")
     public Page<PagingPostResponse> getAllRecentPost(User user, Pageable pageable) {
         return postRepository.findAllRecentPostResponse(
             user.getVillage(), pageable);
