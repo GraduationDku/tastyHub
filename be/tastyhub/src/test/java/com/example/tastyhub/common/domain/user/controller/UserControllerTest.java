@@ -4,7 +4,6 @@ import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentRequest
 import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentResponse;
 import static com.example.tastyhub.common.config.APIConfig.USER_API;
 import static com.example.tastyhub.fixture.user.UserFixture.CHANGE_PASSWORD_REQUEST;
-import static com.example.tastyhub.fixture.user.UserFixture.FIND_ID_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.NICKNAME_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.SIGNUP_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
@@ -39,7 +38,7 @@ import com.example.tastyhub.common.domain.user.dtos.SignupRequest;
 import com.example.tastyhub.common.domain.user.dtos.NicknameDto;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.domain.user.service.UserService;
-import com.example.tastyhub.common.utils.Jwt.JwtService;
+import com.example.tastyhub.common.utils.Jwt.AccessTokenService;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -80,7 +79,7 @@ class UserControllerTest {
   SetHttpHeaders setHttpHeaders;
 
   @MockBean
-  JwtService jwtService;
+  AccessTokenService accessTokenService;
 
 
   @Test

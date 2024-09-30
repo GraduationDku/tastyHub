@@ -14,6 +14,7 @@ public enum ResponseMessages {
     // 클라이언트 에러
     BAD_REQUEST(400, "잘못된 요청"),
     UNAUTHORIZED(401, "인증 실패"),
+    INVALID_TOKEN(401, "유효하지 않은 Token"),
     FORBIDDEN(403, "권한 없음"),
     NOT_FOUND(404, "요청된 리소스를 찾을 수 없음"),
     METHOD_NOT_ALLOWED(405, "허용되지 않는 메서드"),
