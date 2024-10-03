@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostRepositoryQuery {
 
-    Page<PagingPostResponse> findAllPostResponse(Village village, Pageable pageable);
+    RestPage<PagingPostResponse> findAllPostResponse(Village village, Pageable pageable);
     RestPage<PagingPostResponse> findAllRecentPostResponse(Village village, Pageable pageable);
 
     Optional<PostResponse> findByIdQuery(Long postId);

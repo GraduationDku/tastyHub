@@ -64,7 +64,7 @@ public class PostController {
 
   // 게시글 전체 조회,실시간 조회, 단건 조회 로직 - skyriv213
   @GetMapping("/list")
-  public ResponseEntity<Page<PagingPostResponse>> getAllPost(
+  public ResponseEntity<RestPage<PagingPostResponse>> getAllPost(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
   ) {

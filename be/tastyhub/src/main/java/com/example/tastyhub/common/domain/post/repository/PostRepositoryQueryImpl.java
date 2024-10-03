@@ -29,7 +29,7 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
   private final JPAQueryFactory jpaQueryFactory;
 
   @Override
-  public Page<PagingPostResponse> findAllPostResponse(Village myVillage, Pageable pageable) {
+  public RestPage<PagingPostResponse> findAllPostResponse(Village myVillage, Pageable pageable) {
     List<PagingPostResponse> pagingPostResponse = jpaQueryFactory.select(
             Projections.constructor(PagingPostResponse.class,
                 post.id,
@@ -46,8 +46,8 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
         .offset(pageable.getOffset()) // Set offset for paging
         .limit(pageable.getPageSize()) // Set page size
         .fetch();
-    long totalSize = pagingPostResponse.size();
-    return PageableExecutionUtils.getPage(pagingPostResponse, pageable, () -> totalSize);
+    long totalSize = countQuery().fetchOne();
+    return new RestPage<>(pagingPostResponse, pageable, totalSize); // 직접 RestPage 반환
   }
 
   @Override

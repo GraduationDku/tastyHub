@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     @Cacheable(value = "posts", key = "#user.village.addressTownName + '-' + #pageable.pageNumber + '-' + #pageable.pageSize", unless = "#result == null || #result.isEmpty()")
-    public Page<PagingPostResponse> getAllPost(User user, Pageable pageable) {
+    public RestPage<PagingPostResponse> getAllPost(User user, Pageable pageable) {
         return postRepository.findAllPostResponse(
             user.getVillage(),pageable);
     }
@@ -71,6 +71,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    
     public PostResponse getPost(Long postId) {
         return getPostFindByPostId(postId);
     }
