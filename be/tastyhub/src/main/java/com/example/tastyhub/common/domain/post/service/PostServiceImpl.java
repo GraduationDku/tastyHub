@@ -2,6 +2,7 @@ package com.example.tastyhub.common.domain.post.service;
 
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
+import com.example.tastyhub.common.utils.page.RestPage;
 import jakarta.transaction.Transactional;
 import lombok.Generated;
 import org.springframework.cache.annotation.CacheEvict;
@@ -64,7 +65,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     @Cacheable(value = "recentPosts", key = "#user.village.addressTownName", unless = "#result == null || #result.isEmpty()")
-    public Page<PagingPostResponse> getAllRecentPost(User user, Pageable pageable) {
+    public RestPage<PagingPostResponse> getAllRecentPost(User user, Pageable pageable) {
         return postRepository.findAllRecentPostResponse(
             user.getVillage(), pageable);
     }

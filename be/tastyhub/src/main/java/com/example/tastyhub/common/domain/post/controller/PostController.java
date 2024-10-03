@@ -7,6 +7,7 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
+import com.example.tastyhub.common.utils.page.RestPage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -72,11 +73,11 @@ public class PostController {
   }
 
   @GetMapping("/recent/list")
-  public ResponseEntity<Page<PagingPostResponse>> getAllRecentPost(
+  public ResponseEntity<RestPage<PagingPostResponse>> getAllRecentPost(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable
   ) {
-    return ResponseEntity.ok().body(postService.getAllRecentPost(
+    return ResponseEntity.ok().body((RestPage<PagingPostResponse>) postService.getAllRecentPost(
         userDetails.getUser(), pageable));
   }
 
