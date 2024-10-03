@@ -1,0 +1,12 @@
+div.mypageedit {
+  background-color: #DEF3E4;
+  border-radius: 20px;
+  margin: 30px;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding: 10px;
+  width: 92%;   /* 창 크기에 맞게 넓이 설정 */
+  height: 100%;  /* 창 크기에 맞게 높이 설정 */
+  box-sizing: border-box; /* padding과 border를 포함한 크기 설정 */
+}
