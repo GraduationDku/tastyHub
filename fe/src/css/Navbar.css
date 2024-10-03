@@ -24,15 +24,23 @@ button:hover {
 form.search-form{
   background-color: #3EAB5C;
   width : 100vw;
+  
 }
 button.search-toggle-btn{
   width : 60px;
+  margin-right : 20px;
 }
 input.search-input{
-  width : 130px;
+  width : 150px;
   height : 40px;
   margin-left : 180px;
   border : none;
   border-radius : 10px;
+  text-align : center;
+  margin-right : 20px;
+}
+
+div.search{
+  padding-right : 20px;
 }
 
