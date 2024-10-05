@@ -18,6 +18,7 @@ import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
 import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.utils.S3.S3Uploader;
 
+import com.example.tastyhub.common.utils.page.RestPage;
 import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -155,7 +156,7 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   @Transactional
   @Cacheable(value = "popularRecipes", key = "#pageable.pageNumber + '-' + #pageable.pageSize", unless = "#result == null || #result.isEmpty()")
-  public Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable) {
+  public RestPage<PagingRecipeResponse> getPopularRecipes(Pageable pageable) {
     return recipeRepository.findPopular(pageable);
   }
 

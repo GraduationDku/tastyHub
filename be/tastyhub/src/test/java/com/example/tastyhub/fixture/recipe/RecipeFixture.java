@@ -17,6 +17,7 @@ import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
+import com.example.tastyhub.common.utils.page.RestPage;
 import java.util.Collections;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -67,7 +68,7 @@ public class RecipeFixture {
         .foodId(1L)
         .build();
 
-    public static final Page<PagingRecipeResponse> PAGING_RECIPE_RESPONSE_PAGE = new PageImpl<>(
+    public static final RestPage<PagingRecipeResponse> PAGING_RECIPE_RESPONSE_PAGE = new RestPage<>(
         Collections.singletonList(PAGING_RECIPE_RESPONSE));
 
     public static final MultipartFile RECIPE_IMAGE = new MockMultipartFile(
