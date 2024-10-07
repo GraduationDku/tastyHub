@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PageButton from '../../../src/components/PageButton.js';
 import '../../css/MainChat.css';
 
 function MainChat({ onChatroomSelect, setScreen, isGuest }) {
@@ -9,15 +8,14 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const [page, setPage] = useState(0); // 현재 페이지
     const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
     const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
-    const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
-    // const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+    const [totalItems, setTotalItems] = useState(0); // 전체 채팅방 수
 
     useEffect(() => {
         if (isGuest) {
             setScreen('signup');
             return;
         }
-        
+
         const fetchChatRooms = async () => {
             try {
                 const response = await fetch(`${process.env.REACT_APP_API_URL}/room?page=${page}&size=${size}&sort=${sort}`, {
@@ -29,19 +27,8 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(response);
-                    setTotalItems(data.content.length);
-                    // setTotalPages(Math.ceil(data.content.length / size)); // 전체 페이지 수 계산
-                    setChatRooms(data.content)
-                    if (Array.isArray(data.content)) {
-                        const uniqueChatRooms = Array.from(new Set(data.map(room => room.roomId)))
-                            .map(roomId => {
-                                return data.find(room => room.roomId === roomId);
-                            });
-                        setChatRooms(uniqueChatRooms);
-                    } else {
-                        console.error('Invalid data format:', data);
-                    }
+                    setTotalItems(data.totalItems); // 전체 채팅방 수 설정
+                    setChatRooms(data.content);
                 }
             } catch (error) {
                 console.error('Error fetching chat rooms:', error);
@@ -97,18 +84,42 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
 
     const handleSizeChange = (e) => {
         setSize(parseInt(e.target.value, 10) || 5);
-        setPage(1); // 페이지를 1로 초기화
-      };
-    
-      const handleSortChange = (e) => {
-        setSort(e.target.value || 'createdAt');
-        setPage(0); // 페이지를 1로 초기화
-      };
-    
-      const handlePageChange = (newPage) => {
+        setPage(0); // 페이지를 0으로 초기화
+    };
 
+    const handleSortChange = (e) => {
+        setSort(e.target.value || 'createdAt');
+        setPage(0); // 페이지를 0으로 초기화
+    };
+
+    const handlePageChange = (newPage) => {
         setPage(newPage);
-      };
+    };
+
+    const PageButton = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
+        const totalPages = Math.ceil(totalItems / itemsPerPage); // 전체 페이지 수 계산
+        const pages = Array.from({ length: totalPages }, (_, i) => i); // 페이지 목록 생성
+
+        return (
+            <div>
+                <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 0}>
+                    이전
+                </button>
+                {pages.map((pageNum) => (
+                    <button
+                        key={pageNum}
+                        onClick={() => onPageChange(pageNum)}
+                        disabled={currentPage === pageNum}
+                    >
+                        {pageNum + 1} {/* 1부터 시작하도록 페이지 표시 */}
+                    </button>
+                ))}
+                <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+                    다음
+                </button>
+            </div>
+        );
+    };
 
     return (
         <body>
@@ -116,30 +127,26 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
             <button onClick={handleDeleteModeToggle}>
                 {deleteMode ? '취소' : '삭제하기'}
             </button>
-            <br/>
-            <br/>
+            <br />
+            <br />
             <div className='chatbox'>
-            
-            {deleteMode && (
-                <button onClick={handleDeleteSelected} disabled={selectedRooms.size === 0}>
-                    선택된 채팅방 삭제
-                </button>
-            )}
+                {deleteMode && (
+                    <button onClick={handleDeleteSelected} disabled={selectedRooms.size === 0}>
+                        선택된 채팅방 삭제
+                    </button>
+                )}
 
-        <div className='select-container'>
-            <select value={sort} onChange={handleSortChange}>
-
-              <option value="createdAt">날짜</option>
-              <option value="chatRoomTitle">제목</option>
-              {/*<option value="nickname">작성자</option>*/}
-              
-            </select>
-            <select value={size} onChange={handleSizeChange}>
-              <option value={5}>5개</option>
-              <option value={10}>10개</option>
-              <option value={20}>20개</option>
-            </select>
-          </div>
+                <div className='select-container'>
+                    <select value={sort} onChange={handleSortChange}>
+                        <option value="createdAt">날짜</option>
+                        <option value="chatRoomTitle">제목</option>
+                    </select>
+                    <select value={size} onChange={handleSizeChange}>
+                        <option value={5}>5개</option>
+                        <option value={10}>10개</option>
+                        <option value={20}>20개</option>
+                    </select>
+                </div>
 
                 <ul>
                     {chatRooms.map(chatRoom => (
@@ -152,22 +159,21 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                                         onChange={() => handleCheckboxChange(chatRoom.roomId)}
                                     />
                                 )}
-                                <p>{chatRoom.roomId}</p>
-                                <p>{chatRoom.chatRoomTitle}</p>
-                                <button onClick={() => handleChatroomClick(chatRoom.roomId)}>
+                                <h3 onClick={() => handleChatroomClick(chatRoom.roomId)}>
                                     {chatRoom.chatRoomTitle}
-
-                                </button>
+                                </h3>
+                                <p>{chatRoom.roomId || '정보 없음'}</p>
                             </div>
                         </li>
                     ))}
                 </ul>
 
                 <PageButton
-                totalItems={totalItems} // 전체 게시글 수
-                itemsPerPage={size} // 페이지당 게시글 수
-                onPageChange={handlePageChange} // 페이지 변경 시 호출될 함수
-                 />
+                    totalItems={totalItems} // 전체 채팅방 수
+                    itemsPerPage={size} // 페이지당 채팅방 수
+                    currentPage={page} // 현재 페이지
+                    onPageChange={handlePageChange} // 페이지 변경 시 호출될 함수
+                />
             </div>
         </body>
     );

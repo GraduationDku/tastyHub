@@ -55,6 +55,31 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
     setPage(newPage);
   };
 
+  const PageButton = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage); // 전체 페이지 수 계산
+    const pages = Array.from({ length: totalPages }, (_, i) => i); // 페이지 목록 생성
+
+    return (
+      <div>
+        <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 0}>
+          이전
+        </button>
+        {pages.map((pageNum) => (
+          <button
+            key={pageNum}
+            onClick={() => onPageChange(pageNum)}
+            disabled={currentPage === pageNum}
+          >
+            {pageNum + 1} {/* 1부터 시작하도록 페이지 표시 */}
+          </button>
+        ))}
+        <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+          다음
+        </button>
+      </div>
+    );
+  };
+
   return (
     <body>
         <h1>전체 레시피 조회</h1>
