@@ -71,7 +71,7 @@ function MainScreen() {
   return (
     <body>
       <h1>주간 인기 레시피</h1>
-      <div className='box'>
+      <div className='mainbox'>
         <ul>
           {recipes.map((recipe) => (
             <li key={recipe.foodId} onClick={() => handleRecipeClick(recipe)}>
@@ -96,8 +96,9 @@ function MainScreen() {
           </div>
         )}
       </div>
+      <h1>실시간 게시글</h1>
       <div className='posts'>
-        <h1>실시간 게시글</h1>
+        
         <ul>
           {posts.map((post) => (
             <li key={post.postId}>

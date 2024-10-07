@@ -88,7 +88,7 @@ const SendChat = ({ roomId }) => {
         }
     };
     return (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FAF6C0' }}>
+        <div>
             <ul style={{ listStyleType: 'none', padding: 0, flex: 1, overflowY: 'auto' }}>
                 {messages.map((msg, index) => (
                     <li
@@ -101,42 +101,21 @@ const SendChat = ({ roomId }) => {
                     >
                         {msg.sender !== localStorage.getItem('nickname') && (
                             <>
-                                <div
-                                    style={{
-                                        background: '#FFF',
-                                        padding: '10px',
-                                        borderRadius: '10px',
-                                        maxWidth: '60%',
-                                        wordWrap: 'break-word',
-                                        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                                        marginLeft: '10px'
-                                    }}
-                                >
+                                <div>
                                     <strong>{msg.sender} </strong>
                                     {msg.content}
                                 </div>
-                                <div style={{ fontSize: '0.8em', color: '#888', marginTop: '5px', marginLeft: '10px' }}>
+                                <div>
                                     {new Date(msg.time).toLocaleString()}
                                 </div>
                             </>
                         )}
                         {msg.sender === localStorage.getItem('nickname') && (
                             <>
-                                <div style={{ fontSize: '0.8em', color: '#888', marginTop: '5px', marginRight: '10px' }}>
+                                <div>
                                     {new Date(msg.time).toLocaleString()}
                                 </div>
-                                <div
-                                    style={{
-                                        background: 'white',
-                                        padding: '10px',
-                                        borderRadius: '10px',
-                                        maxWidth: '60%',
-                                        wordWrap: 'break-word',
-                                        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                                        marginRight: '10px',
-                                        color : '#5C5F5C'
-                                    }}
-                                >
+                                <div>
                                     {msg.content}
                                 </div>
                             </>
@@ -150,14 +129,10 @@ const SendChat = ({ roomId }) => {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="메세지를 입력하세요."
-                    disabled={!connected}
-                    style={{ flex: 1, padding: '10px', boxSizing: 'border-box', marginRight: '10px', borderRadius:'10px' , border:'1px solid #ccc'}}
-                />
+                    disabled={!connected}/>
                 <button
                     onClick={sendMessage}
-                    disabled={!connected}
-                    style={{ padding: '15px', boxSizing: 'border-box', border:'none', backgroundColor : '#AEC7A1', borderRadius:'10px'}}
-                >
+                    disabled={!connected}>
                     전송
                 </button>
             </div>

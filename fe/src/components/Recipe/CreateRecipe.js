@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../css/CreateRecipe.css';
 
 function CreateRecipe() {
   const [form, setForm] = useState({
@@ -118,12 +117,13 @@ function CreateRecipe() {
             <br/>
             <h2>대표 사진을 등록해주세요 !</h2>
             <br/>
-            <input className='label2in' type="file" accept="image/*" onChange={handleImageChange} />
+            <div className='label2in'>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
             <div>
               {imagePreview && (
-                <img src={imagePreview} alt="Preview" style={{ width: '100px', height: '100px', margin: '5px' }} />
+                <img src={imagePreview} alt="Preview" style={{ width: '100%', height: '50%'}} />
               )}
-            </div>
+            </div></div>
             <br/><br/>
             <button type="button" onClick={prevStep}>이전</button>
             <button type="button" onClick={nextStep}>다음</button>
@@ -150,11 +150,18 @@ function CreateRecipe() {
             <br/>
             <h2>조리 시간과 양은 얼마나 되나요 ?</h2>
             <br/>
-            조리 시간
-            <input className='label4in' type="number" name="cookingTime" value={form.foodInformation.cookingTime} onChange={handleChange} />
-            <br /><br />
-            양
-            <input className='label4in' name="serving" value={form.foodInformation.serving} onChange={handleChange} />
+            <div className='input-container'>
+              <input
+                className='label4in'
+                type='number'
+                name='cookingTime'
+                value={form.foodInformation.cookingTime}
+                onChange={handleChange}
+                placeholder='조리 시간은 얼마나 되나요?'
+              />
+  <span>시간</span>
+</div>
+            <br /><br /><input className='label4in' name="serving" value={form.foodInformation.serving} onChange={handleChange} placeholder='양'/>
             <br /><br />
             <br/>
             <button type="button" onClick={prevStep}>이전</button>

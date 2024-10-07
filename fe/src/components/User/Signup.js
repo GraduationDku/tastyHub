@@ -1,6 +1,7 @@
 // src/components/User/Signup.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import '../../css/Signup.css';
 
 import {
   updateField,
@@ -35,14 +36,14 @@ function Signup({ setScreen }) {
   };
 
   return (
-    <div className='signup'>
-      <div className='box'>
+    <body className='signup'>
+      <div className='signupbox'>
         <h2>회원가입</h2>
         <div className='inbox'>
-          <span className="label1">ID :</span>
+          <span className="label1"></span>
           <input
             type="text"
-            placeholder="ID"
+            placeholder="아이디를 입력하세요"
             value={userName}
             onChange={(e) => handleChange('userName', e.target.value)}
           />
@@ -50,10 +51,10 @@ function Signup({ setScreen }) {
             {usernameButtonText}
           </button>
           <br /><br />
-          <span className="label2">PW :</span>
+          <span className="label2"></span>
           <input
             type="password"
-            placeholder="Password"
+            placeholder="비밀번호를 입력하세요"
             value={password}
             onChange={(e) => handleChange('password', e.target.value)}
           />
@@ -61,13 +62,13 @@ function Signup({ setScreen }) {
           <span className="label6"></span>
           <input
             type="password"
-            placeholder="Confirm Password"
+            placeholder="비밀번호를 다시 입력하세요"
             value={confirmPassword}
             onChange={(e) => handleChange('confirmPassword', e.target.value)}
           />
           <button onClick={() => dispatch(checkPasswordsMatch())}>비밀번호 일치 확인</button>
           <br /><br />
-          <span className="label3">닉네임 :</span>
+          <span className="label3"></span>
           <input 
             type="text"
             placeholder="닉네임을 입력하세요"
@@ -78,10 +79,10 @@ function Signup({ setScreen }) {
             {nicknameButtonText}
           </button>
           <br /><br />
-          <span className="label4">E-Mail :</span>
+          <span className="label4"></span>
           <input
             type="text"
-            placeholder="Email"
+            placeholder="이메일을 입력하세요"
             value={email}
             onChange={(e) => handleChange('email', e.target.value)}
           />
@@ -89,10 +90,10 @@ function Signup({ setScreen }) {
             {emailButtonText}
           </button>
           <br /><br />
-          <span className="label5">PIN :</span>
+          <span className="label5"></span>
           <input
             type="text"
-            placeholder="Enter verification code"
+            placeholder="인증번호를 입력하세요"
             value={verifiedCode}
             onChange={(e) => handleChange('verifiedCode', e.target.value)}
           />
@@ -104,7 +105,7 @@ function Signup({ setScreen }) {
           <button onClick={handleSignup}>회원가입하기</button>
         </div>
       </div>
-    </div>
+    </body>
   );
 }
 

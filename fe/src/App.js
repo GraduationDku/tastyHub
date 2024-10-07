@@ -1,5 +1,4 @@
 // App.js
-import '../src/css/global.css';
 import React, { useState } from 'react';
 import HomeScreen from './components/HomeScreen';
 import Login from './components/User/Login';
@@ -84,7 +83,7 @@ function App() {
 
   return (
     <div>
-      {screen !== 'home' && screen !== 'sendchat' && <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />}
+      {screen !== 'home' && screen !== 'sendchat' && screen !=='login' && screen !=='signup' && <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />}
       {screen === 'home' && <HomeScreen setScreen={setScreen} setIsGuest={setIsGuest} handleGuestAccess={handleGuestAccess} />}
       {screen === 'login' && <Login setScreen={setScreen} />}
       {screen === 'signup' && <Signup setScreen={setScreen} />}

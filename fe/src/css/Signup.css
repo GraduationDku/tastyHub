@@ -1,0 +1,72 @@
+body.signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f2f2f2;
+  margin: 0;
+  width : 220px;
+}
+
+.signupbox {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 150%;
+  height : 80vh;
+  overflow-y: auto;
+}
+
+h2 {
+  color: #3EAB5C; /* 제목 색상 */
+  margin-bottom: 20px;
+}
+
+.inbox input {
+  width: 94%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.inbox button {
+  width: 100%;
+  padding: 12px;
+  background-color: #f2f2f2; /* 버튼 색상 */
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.inbox button:hover {
+  background-color: #368e50; /* 호버 시 색상 */
+}
+
+.inbox .label1,
+.inbox .label2,
+.inbox .label3,
+.inbox .label4,
+.inbox .label5,
+.inbox .label6 {
+  display: block;
+  text-align: left;
+  color: #3EAB5C;
+  margin-bottom: 3px;
+
+}
+
+.inbox button:disabled {
+  background-color: #ccc; /* 로딩 중 비활성화 상태 */
+}
+
+.inbox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

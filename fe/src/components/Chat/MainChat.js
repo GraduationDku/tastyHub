@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageButton from '../../../src/components/PageButton.js';
+import '../../css/MainChat.css';
 
 function MainChat({ onChatroomSelect, setScreen, isGuest }) {
     const [chatRooms, setChatRooms] = useState([]);
@@ -110,34 +111,29 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
       };
 
     return (
-        <div className="mainchat">
+        <body>
             <h1>채팅방</h1>
-            
-            <div className='box'>
             <button onClick={handleDeleteModeToggle}>
                 {deleteMode ? '취소' : '삭제하기'}
             </button>
+            <br/>
+            <br/>
+            <div className='chatbox'>
+            
             {deleteMode && (
                 <button onClick={handleDeleteSelected} disabled={selectedRooms.size === 0}>
                     선택된 채팅방 삭제
                 </button>
             )}
 
-        <div>
-            <label>정렬 기준: </label>
+        <div className='select-container'>
             <select value={sort} onChange={handleSortChange}>
-<<<<<<< HEAD
-              <option value="created_at">날짜</option>
-              <option value="title">제목</option>
-              <option value="user_id">작성자</option>
-=======
+
               <option value="createdAt">날짜</option>
               <option value="chatRoomTitle">제목</option>
               {/*<option value="nickname">작성자</option>*/}
->>>>>>> 60a1397adce662f338ecaf0c51e14aed585bf168
+              
             </select>
-        
-            <label>게시글 수: </label>
             <select value={size} onChange={handleSizeChange}>
               <option value={5}>5개</option>
               <option value={10}>10개</option>
@@ -173,7 +169,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                 onPageChange={handlePageChange} // 페이지 변경 시 호출될 함수
                  />
             </div>
-        </div>
+        </body>
     );
 }
 

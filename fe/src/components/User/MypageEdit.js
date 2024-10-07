@@ -87,7 +87,8 @@ function MypageEdit() {
   };
 
   return (
-    <body>
+    <body className='mypageedit'>
+      <div className='mypageedit'>
       <h1>마이페이지 수정</h1>
       
       {/* 1단계: 프로필 사진 수정 */}
@@ -132,6 +133,7 @@ function MypageEdit() {
           <button type="button" onClick={prevStep}>이전</button>
         </div>
       )}
+     </div> 
     </body>
   );
 }

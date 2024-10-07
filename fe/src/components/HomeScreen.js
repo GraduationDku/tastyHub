@@ -1,6 +1,6 @@
 import React from 'react';
-import '../css/HomeScreen.css';
 import icon from '../assets/icon.png'; // 이미지 경로 설정
+import '../css/HomeScreen.css';
 
 function HomeScreen({ setScreen, setIsGuest, handleGuestAccess }) {
   return (

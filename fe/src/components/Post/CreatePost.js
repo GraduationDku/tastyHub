@@ -45,22 +45,26 @@ function CreatePost() {
         <form onSubmit={handleSubmit}>
         <br/>
         <br/>
-        <div className="title">
-        제목 
+        <div>
+        
         <input
           type="text"
           name="title"
+          className="title"
           value={formData.title}
           onChange={handleChange}
+          placeholder="제목을 입력하세요"
         /></div>
         <br></br><br/>
-        내용 
+        
         <br/>
         <textarea
           type="text"
           name="content"
+          className="postcontent"
           value={formData.content}
           onChange={handleChange}
+          placeholder="내용을 입력하세요"
         />
         <br/><br/>
         <button type="submit">작성하기</button>

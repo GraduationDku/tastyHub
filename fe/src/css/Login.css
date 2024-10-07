@@ -1,3 +1,71 @@
-button.loginbtn{
-  margin-left : 110px;
+body.login{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f2f2f2;
+  margin: 0;
+  width : 400px;
+}
+
+.box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 320px;
+}
+
+h2 {
+  color: #3EAB5C; /* 제목 색상 */
+  margin-bottom: 20px;
+}
+
+input {
+  width: 92.5%;
+  padding: 10px;
+  height :30px;
+  margin-bottom: 5%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button.loginbtn {
+  width: 100%;
+  height : 40px;
+  padding: 12px;
+  background-color: #3EAB5C; /* 버튼 색상 */
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+
+  margin-top : 20px;
+}
+
+button:hover {
+  background-color: #368e50; /* 호버 시 색상 */
+}
+
+button:disabled {
+  background-color: #ccc; /* 로딩 중 비활성화 상태 */
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.signupbtn{
+  display: flex;
+  justify-content: space-between;
+  flex-direction : row;
+}
+
+.signupbtn button {
+  width: 48%; /* 버튼의 너비를 48%로 설정하여 두 버튼 사이의 간격 조절 */
+  
 }
