@@ -2,7 +2,8 @@ version: '3.8'
 
 volumes:
   tasty-data: {}
-  email-data: {}
+  tasty-cache: {}
+  refresh-email-data: {}
   tasty-logs: {}
 
 services:
@@ -42,15 +43,32 @@ services:
     # networks:
     #   - app-tier
 
-  redis:
+  redis1:
     image: redis
+    container_name: storage_redis
     restart: always
     # environment:
     #   requirepass: 1234
     ports:
       - 6379:6379
     volumes:
-      - email-data:/data
+      - refresh-email-data:/data
+    # command: redis-server --requirepass 1234
+
+  redis2:
+    image: redis
+    container_name: cache_redis
+    restart: always
+    # environment:
+    #   requirepass: 1234
+    ports:
+      - 6380:6380
+    volumes:
+      - tasty-cache:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf # Redis 설정 파일 마운트
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+
+
     # command: redis-server --requirepass 1234
 
     # networks:
@@ -89,7 +107,7 @@ services:
       - tasty-logs:/app/logs # 로그 파일 저장을 위한 볼륨
     depends_on:
       - database
-      - redis
+
     # networks:
     #   - app-tier
     # external_links:

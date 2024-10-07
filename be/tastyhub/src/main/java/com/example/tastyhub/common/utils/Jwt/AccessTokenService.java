@@ -32,11 +32,10 @@ public class AccessTokenService {
   private static final String BEARER_PREFIX = "Bearer ";
   private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L;
 
-  //    @Value("${jwt.secret.key}")
-
   private static SecretKey makeKey() {
     return Keys.secretKeyFor(SignatureAlgorithm.HS512);
   }
+  //    @Value("${jwt.secret.key}")
 
   private String secretKey = Encoders.BASE64.encode(makeKey().getEncoded());
 

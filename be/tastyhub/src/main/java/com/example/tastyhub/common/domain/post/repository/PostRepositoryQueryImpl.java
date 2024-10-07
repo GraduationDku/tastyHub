@@ -1,16 +1,20 @@
 package com.example.tastyhub.common.domain.post.repository;
 
 import static com.example.tastyhub.common.domain.post.entity.QPost.post;
+import static com.example.tastyhub.common.domain.recipe.entity.QRecipe.recipe;
 import static com.example.tastyhub.common.domain.user.entity.QUser.user;
 
 import com.example.tastyhub.common.domain.post.dtos.PagingPostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostResponse;
 import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.village.entity.Village;
+import com.example.tastyhub.common.utils.page.RestPage;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.Wildcard;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +29,7 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
   private final JPAQueryFactory jpaQueryFactory;
 
   @Override
-  public Page<PagingPostResponse> findAllPostResponse(Village myVillage, Pageable pageable) {
+  public RestPage<PagingPostResponse> findAllPostResponse(Village myVillage, Pageable pageable) {
     List<PagingPostResponse> pagingPostResponse = jpaQueryFactory.select(
             Projections.constructor(PagingPostResponse.class,
                 post.id,
@@ -42,12 +46,12 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
         .offset(pageable.getOffset()) // Set offset for paging
         .limit(pageable.getPageSize()) // Set page size
         .fetch();
-    long totalSize = pagingPostResponse.size();
-    return PageableExecutionUtils.getPage(pagingPostResponse, pageable, () -> totalSize);
+    long totalSize = countQuery().fetchOne();
+    return new RestPage<>(pagingPostResponse, pageable, totalSize); // 직접 RestPage 반환
   }
 
   @Override
-  public Page<PagingPostResponse> findAllRecentPostResponse(Village village, Pageable pageable) {
+  public RestPage<PagingPostResponse> findAllRecentPostResponse(Village village, Pageable pageable) {
 
     List<PagingPostResponse> pagingPostResponse = jpaQueryFactory.select(
             Projections.constructor(PagingPostResponse.class,
@@ -63,8 +67,8 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
         .limit(10)
         .orderBy(post.createdAt.desc())
         .fetch();
-    long totalSize = pagingPostResponse.size();
-    return PageableExecutionUtils.getPage(pagingPostResponse, pageable, () -> totalSize);
+    long totalSize = countQuery().fetchOne();
+    return new RestPage<>(pagingPostResponse, pageable, totalSize); // 직접 RestPage 반환
   }
 
   @Override
@@ -90,5 +94,10 @@ public class PostRepositoryQueryImpl implements PostRepositoryQuery {
               pathBuilder.get(order.getProperty())); // Use the property name for sorting
         })
         .toArray(OrderSpecifier[]::new);
+  }
+
+  private JPAQuery<Long> countQuery() {
+    return jpaQueryFactory.select(Wildcard.count)
+        .from(recipe);
   }
 }
