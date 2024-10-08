@@ -20,13 +20,12 @@ export const loginUser = createAsyncThunk(
       }
 
       const authorization = response.headers.get('Authorization');
-      const refreshToken = response.headers.get('Refresh');
+
       const data = await response.json();
       const nickname = data.nickname;
 
       // 로컬 스토리지에 토큰과 닉네임 저장
       localStorage.setItem('accessToken', authorization);
-      localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('nickname', nickname);
 
       return { authorization, refreshToken, nickname };
