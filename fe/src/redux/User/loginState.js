@@ -28,7 +28,7 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('accessToken', authorization);
       localStorage.setItem('nickname', nickname);
 
-      return { authorization, refreshToken, nickname };
+      return { authorization, nickname };
     } catch (error) {
       return rejectWithValue(error.message || '서버 오류');
     }
@@ -50,7 +50,6 @@ const loginSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
       localStorage.removeItem('nickname');
       state.user = null;
       state.isAuthenticated = false;
