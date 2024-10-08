@@ -1,0 +1,123 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #3EAB5C; /* 제목 색상 */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #3EAB5C;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #368e50;
+}
+
+div.recipebox {
+  background-color: white;
+  width: 370px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.seperate ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.seperate li {
+  background-color: #DEF3E4;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.seperate li:hover {
+  transform: scale(1.02); /* 호버 시 약간 확대 효과 */
+}
+
+.seperate li img {
+  width: 100%; /* 이미지 너비를 100%로 설정하여 가로폭에 맞춤 */
+  height: auto;
+  border-radius: 8px;
+}
+
+.seperate h3 {
+  color: #3EAB5C; /* 제목 색상 */
+  margin-top: 0;
+}
+
+.seperate p {
+  color: #333;
+}
+
+/* Custom select box styling */
+select {
+  appearance: none; /* 기본 브라우저 스타일 제거 */
+  background-color: white;
+  border: 1px solid #3EAB5C; /* 테두리 색상 */
+  color: #3EAB5C;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+/* select box hover effect */
+select:hover {
+  border-color: #368e50;
+}
+
+/* select box arrow customization */
+select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%233EAB5C" d="M2 0L0 2h4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  width : 100px;
+}
+
+/* Label and select container */
+.select-container {
+  display: flex;
+  align-items: center;
+  flex-direction : row;
+}
+
+.select-container label {
+  font-weight: bold;
+  color: #3EAB5C;
+}
+
+
+.page-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-buttons button {
+  margin: 0 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+}

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../css/Review/CreateReview.css';
 
 function CreateRecipeReview({ recipeId }) {
   const [grade, setGrade] = useState(0);

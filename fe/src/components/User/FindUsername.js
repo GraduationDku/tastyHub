@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../css/User/FindUsername.css';
 
 function FindUsername({ setScreen }) {
   const [email, setEmail] = useState('');

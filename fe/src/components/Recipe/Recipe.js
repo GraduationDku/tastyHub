@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/Recipe/Recipe.css';
 import PageButton from '../../../src/components/PageButton';
+import '../../css/Recipe.css';
 
 function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   const [recipes, setRecipes] = useState([]);
@@ -55,26 +55,53 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
     setPage(newPage);
   };
 
+  const PageButton = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage); // 전체 페이지 수 계산
+    const pages = Array.from({ length: totalPages }, (_, i) => i); // 페이지 목록 생성
+
+    return (
+      <div>
+        <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 0}>
+          이전
+        </button>
+        {pages.map((pageNum) => (
+          <button
+            key={pageNum}
+            onClick={() => onPageChange(pageNum)}
+            disabled={currentPage === pageNum}
+          >
+            {pageNum + 1} {/* 1부터 시작하도록 페이지 표시 */}
+          </button>
+        ))}
+        <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+          다음
+        </button>
+      </div>
+    );
+  };
+
   return (
-    <div className='recipe'>
+    <body>
         <h1>전체 레시피 조회</h1>
-        <div className='box'>
         <button onClick={() => setScreen('create')}>레시피 작성하기</button>
-        <div>
-            <label>정렬 기준: </label>
+        <br /><br />
+        <div className='recipebox'>
+        
+        <div className='select-container'>
+        <br />
             <select value={sort} onChange={handleSortChange}>
               <option value="createAt">날짜</option>
               <option value="foodName">제목</option>
               {/*<option value="nickname">작성자</option>*/}
             </select>
-        
-            <label>게시글 수: </label>
             <select value={size} onChange={handleSizeChange}>
               <option value={5}>5개</option>
               <option value={10}>10개</option>
               <option value={20}>20개</option>
             </select>
           </div>
+          <br/>
+          <br/>
         <div className='seperate'>
         <ul>
           {recipes.map(recipe => (
@@ -91,12 +118,11 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
           ))}
         </ul>
         </div><PageButton
-            totalItems={totalItems} // 전체 게시글 수
             itemsPerPage={size} // 페이지당 게시글 수
             onPageChange={handlePageChange} // 페이지 변경 시 호출될 함수
           />
       </div>
-    </div>
+    </body>
   );
 }
 

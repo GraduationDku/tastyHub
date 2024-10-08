@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import '../../css/Post/Comment.css';
 
 const Comment = ({ postId, refreshComments, comments }) => {
     const [content, setContent] = useState('');
@@ -83,7 +82,7 @@ const Comment = ({ postId, refreshComments, comments }) => {
                     {editingCommentId === comment.userId ? (
                         <>
                             <textarea
-                                value={editingText}
+                                value={editingContent}
                                 onChange={(e) => setEditingContent(e.target.value)}></textarea>
                             <button onClick={() => editComment(comment.userId)}>Save</button>
                             <button onClick={() => setEditingCommentId(null)}>Cancel</button>

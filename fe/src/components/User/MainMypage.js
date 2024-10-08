@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '../../css/User/MainMypage.css'
+import '../../css/MainMypage.css';
 
 function MainMypage({ setScreen, isGuest }) {
   const nickname = localStorage.getItem('nickname');
@@ -13,15 +13,19 @@ function MainMypage({ setScreen, isGuest }) {
   }, [isGuest, setScreen]);
 
   return (
-    <div className='mainmypage'>
-      <div className='box'>
-        <h1>{nickname}의 마이페이지</h1>
-        <br /><br />
+    <body>
+      
+        <br/>
+        
+        <h1>{nickname}님, 환영합니다 !</h1>
+        <br/><br/>
+       <div className='mainbox'> 
+        
         <button onClick={() => setScreen('mypageedit')}>내 정보 수정하기</button>
         <br />
         <button onClick={() => setScreen('mypageshow')}> 조회하기 </button>
       </div>
-    </div>
+    </body>
   );
 }
 

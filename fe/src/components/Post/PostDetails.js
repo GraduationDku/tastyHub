@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
-import '../../css/Post/PostDetails.css';
 
 function PostDetails({ postId, setScreen }) {
   const [postDetails, setPostDetails] = useState(null);
@@ -133,7 +132,7 @@ function PostDetails({ postId, setScreen }) {
               backgroundColor: roomExists ? '#6ca6d6' : 'gray',
               cursor: roomExists ? 'pointer' : 'not-allowed',
               border: 'none',
-              borderRadius: '10px'
+              borderRadius: '20px'
             }}
           >
             {roomExists ? '채팅방 입장' : '채팅방 생성'}

@@ -1,13 +1,15 @@
 import React from 'react';
+import icon from '../assets/icon.png'; // 이미지 경로 설정
 import '../css/HomeScreen.css';
 
 function HomeScreen({ setScreen, setIsGuest, handleGuestAccess }) {
   return (
-    <div className="homescreen">
-      <h1>TastyHub</h1>
-      <button className='top' onClick={handleGuestAccess}>비회원</button>
+    <div className='parent'>
+      <img src={icon} alt='Icon' className='icon' />
+      <h1 className='title'>TastyHub</h1>
+      <button className="top" onClick={handleGuestAccess}>비회원</button>
       <br /><br />
-      <button className='bottom' onClick={() => {
+      <button className="bottom" onClick={() => {
         setIsGuest(false);
         setScreen('login');
       }}>회원</button>

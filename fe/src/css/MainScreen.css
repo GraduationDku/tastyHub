@@ -1,75 +1,95 @@
-.mainscreen {
-  height: 100vh;
-  width: 100vw;
-  background-color: #FAF6C0;
+body {
+  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px 0; /* 상하 패딩 추가로 전체적인 여백 관리 */
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+  color: #333;
 }
 
-.mainscreen h1 {
-  padding:4px;
-  background-color: #AEC7A1;
-  width: 400px; /* 제목의 너비를 box와 동일하게 조정 */
-  height: 40px;
+h1 {
+  color: #3EAB5C; /* 제목 색상 */
   text-align: center;
-  font-size: 25px;
-  border-radius: 10px 10px 0 0;
-  margin: 0; /* 제목의 마진을 0으로 설정 */
-  color: #5C5F5C;
+  margin-bottom: 20px;
 }
 
-.mainscreen .box {
-  padding: 30px;
+h2 {
+  color: #3EAB5C; /* 하위 제목 색상 */
+}
+
+div.mainbox {
   background-color: white;
-  width: 800px;
-  height: 300px;
-  color: #5C5F5C;
-  margin: 0; /* 상하 마진 제거 */
-  border-radius: 20px 20px 0px 0px;; /* 하단에만 둥근 모서리 적용 */
+  width: 370px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
 }
 
-.mainscreen .box2 {
+div.posts{
   background-color: white;
-  width: 800px;
-  padding: 30px;
-  margin-top: 0px;
-  border-radius: 0px 0px 20px 20px;
-
-}
-.mainscreen ul {
-  list-style-type: none; /* 기본 목록 스타일 제거 */
-  padding: 0; /* 내부 여백 제거 */
-  margin: 0; /* 외부 여백 제거 */
-  width: 100%; /* 전체 너비 사용 */
+  width: 370px;;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
 }
 
-.mainscreen li {
-  font-size: 18px; /* 글자 크기 증가 */
-  margin-bottom: 15px; /* 항목 간의 간격 조절 */
-  margin-top : 20px;
-  cursor: pointer; /* 클릭 가능한 항목임을 나타내는 커서 스타일 */
-  transition: background-color 0.3s ease; /* 배경색 변경 애니메이션 효과 */
+ul {
+  list-style-type: none;
+  padding: 0;
 }
 
-.mainscreen li:hover {
-  background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 */
+li {
+  background-color: #DEF3E4;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.mainscreen li:not(:last-child) {
-  border-bottom: 1px solid #ddd; /* 항목 간 구분선 추가, 마지막 항목 제외 */
+li:hover {
+  background-color: #f9f9f9;
+  transform: scale(1.02); /* 호버 시 약간 확대 효과 */  
 }
 
-.mainscreen .box2{
-  color: #5C5F5C
+.posts {
+  background-color: white;
+  width: 80%;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.mainscreen .box2 .info{
-  font-weight:bold;
+.info {
+  color: #333;
 }
 
-.mainscreen img{
-  border-radius:15px;
+img {
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+p {
+  margin: 10px 0;
+}
+
+button {
+  background-color: #3EAB5C; /* 버튼 색상 */
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #368e50; /* 호버 시 색상 */
 }

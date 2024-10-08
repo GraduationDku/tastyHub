@@ -83,7 +83,7 @@ function App() {
 
   return (
     <div>
-      {screen !== 'home' && <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />}
+      {screen !== 'home' && screen !== 'sendchat' && screen !=='login' && screen !=='signup' && screen!== 'create' && <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />}
       {screen === 'home' && <HomeScreen setScreen={setScreen} setIsGuest={setIsGuest} handleGuestAccess={handleGuestAccess} />}
       {screen === 'login' && <Login setScreen={setScreen} />}
       {screen === 'signup' && <Signup setScreen={setScreen} />}
@@ -102,9 +102,9 @@ function App() {
       {screen === 'postDetails' && <PostDetails postId={selectedPostId} setScreen={setScreen} />}
       {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} />}
       {screen === 'searchResults' && (
-        <div className="search-results">
+        <div>
           <h1>검색 결과</h1>
-          <div className='box'>
+          <div>
           <div>
               <label>정렬 기준: </label>
               <select value={sort} onChange={handleSortChange}>

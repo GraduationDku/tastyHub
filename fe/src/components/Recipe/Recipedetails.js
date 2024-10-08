@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/Recipe/RecipeDetails.css';
 import CreateRecipeReview from '../Review/CreateRecipeReview';
 import LikeButton from '../Like/Like'; // Ensure you import the LikeButton component correctly
 import ScrapButton from '../Scrap/Scrap'; // Import the ScrapButton component

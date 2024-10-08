@@ -1,51 +1,49 @@
-.homescreen {
-  height: 100vh;
-  width: 100vw;
-  background-color: #FAF6C0;
+.parent {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.homescreen h1 {
-  color: #AEC7A1;
-  font-weight: 800;
-  font-size: 6vw; /* 가로 크기의 6% */
-  padding: 1vw;
-  position: absolute;
-  top: 3vw; /* 가로 크기의 3% */
-  right: 8vw; /* 가로 크기의 5% */
+.icon {
+  width: 50px; /* 아이콘 크기를 원하는 대로 조정하세요 */
+  margin-bottom: 30px;
 }
 
-.homescreen img {
-  width: 50vw; /* 창 너비의 50% */
-  height: auto;
-  position: absolute;
-  left: 30%;
-  top : 25%;
-  transform: translateX(-50%);
-  border-radius: 2vw; /* 가로 크기의 2% */
+.title {
+  color: #3EAB5C; /* 제목 색상 설정 */
+  font-size: 45px;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.homescreen .top, .homescreen .bottom {
-  background-color: #AEC7A1;
-  color: #5C5F5C;
+button:hover {
+  background-color: #368e50; /* 버튼 호버 시 색상 */
+}
+
+.top {
+  margin-bottom: 20px;
+  width: 200px;
+  height: 50px;
+  background-color: #3EAB5C; /* 버튼 색상 설정 */
   border: none;
-  width: 13vw; /* 창 너비의 10% */
-  height: 4vw; /* 창 너비의 3% */
-  font-size: 1.5vw; /* 창 너비의 1% */
-  font-weight: 1000;
-  border-radius: 0.65vw; /* 창 너비의 0.65% */
-  position: absolute;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 40px 0;
 }
 
-.homescreen .top {
-  right: 17.5vw;
-  top: 35vw;
-}
-
-.homescreen .bottom {
-  right: 17.5vw;
-  top: 40vw;
+.bottom {
+  margin-top: 20px;
+  width: 200px;
+  height: 50px;
+  background-color: #3EAB5C; /* 버튼 색상 설정 */
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  margin: -20px 0;
 }
