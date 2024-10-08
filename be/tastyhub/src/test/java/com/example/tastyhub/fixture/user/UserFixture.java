@@ -63,7 +63,7 @@ public class UserFixture {
           .username("username")
           .password("password")
           .userType(userType.COMMON)
-          .userImg(null)
+          .userImg("uri")
           .email("email@gmail.com")
           .nickname("nickname")
           .village(VILLAGE)

@@ -10,6 +10,9 @@ import com.example.tastyhub.common.domain.post.dtos.PostResponse;
 import com.example.tastyhub.common.domain.post.dtos.PostUpdateRequest;
 import com.example.tastyhub.common.domain.post.entity.Post;
 import com.example.tastyhub.common.domain.post.entity.Post.PostState;
+import com.example.tastyhub.common.utils.page.RestPage;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -58,5 +61,11 @@ public class PostFixture {
         .build();
     public static Pageable pageable = PageRequest.of(0, 1);
 
-    public static final Page<PagingPostResponse> PAGING_POST_RESPONSES = new PageImpl(List.of(PAGING_POST_RESPONSE),pageable, 1);
+
+    public static final List<PagingPostResponse> LIST_PAGE_POST = Collections.singletonList(
+        PAGING_POST_RESPONSE);
+
+    public static final RestPage<PagingPostResponse> PAGING_POST_RESPONSES = new RestPage<>(LIST_PAGE_POST
+
+        , pageable, 1);
 }

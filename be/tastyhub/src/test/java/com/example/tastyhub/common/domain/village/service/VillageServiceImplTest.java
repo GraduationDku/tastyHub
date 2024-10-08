@@ -9,6 +9,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.example.tastyhub.common.domain.naver.service.NaverService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,23 +22,30 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class VillageServiceImplTest {
 
 
+  @Mock
+  NaverService naverService;
 
-    @InjectMocks
-    VillageServiceImpl villageService;
+  @InjectMocks
+  VillageServiceImpl villageService;
 
-//    @Test
-//    @DisplayName("지역정보 저장 성공")
-//    void location() {
-//        villageService.setLocation(LOCATION_REQUEST, USER);
-//        verify(villageRepository, times(1)).save(any());
-//    }
-//
-//    @Test
-//    @DisplayName("지역정보 수정 성공")
-//    void modifyLocation() {
-//        given(villageRepository.findByUserId(any())).willReturn(Optional.ofNullable(VILLAGE));
-//        villageService.modifyLocation(LOCATION_REQUEST, USER);
-//        verify(villageRepository, times(1)).findByUserId(any());
-//
-//    }
+  @Test
+  @DisplayName("지역정보 저장 성공")
+  void getVillage() {
+    given(naverService.getAddressFromCoordinates(LOCATION_REQUEST.getLat(),
+        LOCATION_REQUEST.getLng())).willReturn(VILLAGE.getAddressTownName());
+    villageService.getVillage(LOCATION_REQUEST);
+    verify(naverService, times(1)).getAddressFromCoordinates(LOCATION_REQUEST.getLat(),
+        LOCATION_REQUEST.getLng());
+  }
+
+  @Test
+  @DisplayName("지역정보 수정 성공")
+  void modifyLocation() {
+    given(naverService.getAddressFromCoordinates(LOCATION_REQUEST.getLat(),
+        LOCATION_REQUEST.getLng())).willReturn(VILLAGE.getAddressTownName());
+    villageService.modifyLocation(LOCATION_REQUEST, USER);
+    verify(naverService, times(1)).getAddressFromCoordinates(LOCATION_REQUEST.getLat(),
+        LOCATION_REQUEST.getLng());
+
+  }
 }
