@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import '../../css/CreateRecipe.css';
 
-function CreateRecipe() {
+function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
   const [form, setForm] = useState({
     foodName: '',
     foodInformation: {
@@ -99,6 +100,9 @@ function CreateRecipe() {
 
   return (
     <div className='createrecipe'>
+      {/* 상단에 되돌아가기 버튼 추가 */}
+      <button className='back-button' onClick={() => setScreen('recipe')}> 돌아가기 </button>
+
       <form onSubmit={handleSubmit}>
         {currentStep === 1 && (
           <div className='label1'>
@@ -145,33 +149,46 @@ function CreateRecipe() {
           </div>
         )}
 
-        {currentStep === 4 && (
-          <div className='label6'>
-            <br/>
-            <h2>조리 시간과 양은 얼마나 되나요 ?</h2>
-            <br/>
-            <div className='input-container'>
-              <input
-                className='label4in'
-                type='number'
-                name='cookingTime'
-                value={form.foodInformation.cookingTime}
-                onChange={handleChange}
-                placeholder='조리 시간은 얼마나 되나요?'
-              />
-  <span>시간</span>
-</div>
-            <br /><br /><input className='label4in' name="serving" value={form.foodInformation.serving} onChange={handleChange} placeholder='양'/>
-            <br /><br />
-            <br/>
-            <button type="button" onClick={prevStep}>이전</button>
-            <button type="button" onClick={nextStep}>다음</button>
-            <br/><br/><br/>
-          </div>
-        )}
+{currentStep === 4 && (
+  <div className='label6'>
+    <br/>
+    <h2>조리 시간과 양은 얼마나 되나요 ?</h2>
+    <br/>
+    <div className='input-wrapper'>
+      <div className='input-container'>
+        <input
+          className='label4in'
+          type='number'
+          name='cookingTime'
+          value={form.foodInformation.cookingTime}
+          onChange={handleChange}
+          placeholder='조리 시간'
+        />
+        <span>시간</span>
+      </div>
+      <div className='input-container'>
+        <input
+          className='label4in'
+          type='text'
+          name='serving'
+          value={form.foodInformation.serving}
+          onChange={handleChange}
+          placeholder='양'
+        />
+        <span>인분</span>
+      </div>
+    </div>
+    <br/>
+    <button type="button" onClick={prevStep}>이전</button>
+    <button type="button" onClick={nextStep}>다음</button>
+    <br/><br/><br/>
+  </div>
+)}
+
+
 
         {currentStep === 5 && (
-          <div className='label4'>
+          <div className='label5'>
             <br/>
             <h2>재료는 어떤 것이 필요한가요 ?</h2>
             <br/>
@@ -194,11 +211,11 @@ function CreateRecipe() {
                   placeholder="양"
                   className='label5in'
                 /><br/><br/>
-                <button type="button" onClick={() => handleRemoveArrayItem(index, 'ingredients')}>삭제</button>
+                <button className="plus" type="button" onClick={() => handleRemoveArrayItem(index, 'ingredients')}>삭제</button>
               </div>
             ))}
             <br/>
-            <button type="button" onClick={() => handleAddArrayItem('ingredients')}>재료 추가</button>
+            <button className="plus" type="button" onClick={() => handleAddArrayItem('ingredients')}>+</button>
             <br /><br /><br/>
             <button type="button" onClick={prevStep}>이전</button>
             <button type="button" onClick={nextStep}>다음</button>
@@ -222,15 +239,14 @@ function CreateRecipe() {
                   className='label6in'
                 />
                 <br/><br/>
-                <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}>삭제</button>
-                <br/><br/>
+                <button className="plus" type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}>삭제</button>
               </div>
             ))}
             <br/>
-            <button type="button" onClick={() => handleAddArrayItem('cookSteps')}>순서 추가</button>
-            <br /><br />
+            <button className="plus" type="button" onClick={() => handleAddArrayItem('cookSteps')}>+</button>
+            <br/><br/><br/>
             <button type="button" onClick={prevStep}>이전</button>
-            <button type="submit" className='save'>레시피 저장하기</button>
+            <button type="submit">제출</button>
             <br/><br/><br/>
           </div>
         )}

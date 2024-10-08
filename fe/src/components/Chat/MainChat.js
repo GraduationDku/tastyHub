@@ -29,6 +29,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                     const data = await response.json();
                     setTotalItems(data.totalItems); // 전체 채팅방 수 설정
                     setChatRooms(data.content);
+                    console.log(data);
                 }
             } catch (error) {
                 console.error('Error fetching chat rooms:', error);
