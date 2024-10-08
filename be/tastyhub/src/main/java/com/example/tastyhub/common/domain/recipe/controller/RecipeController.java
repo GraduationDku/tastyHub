@@ -5,6 +5,7 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.DELETE_SUCCES
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 
+import com.example.tastyhub.common.utils.page.RestPage;
 import java.io.IOException;
 
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -8,6 +8,7 @@ import static com.example.tastyhub.common.domain.scrap.entity.QScrap.scrap;
 
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.user.entity.User;
+import com.example.tastyhub.common.utils.page.RestPage;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -74,7 +75,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
 
 
   @Override
-  public Page<PagingRecipeResponse> findPopular(Pageable pageable) {
+  public RestPage<PagingRecipeResponse> findPopular(Pageable pageable) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
         .select(
             new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl,
@@ -91,8 +92,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
     // Count total number of users matching the query
     long totalSize = countQuery().fetchOne();
 
-    return PageableExecutionUtils.getPage(pagingRecipeResponses, pageable, () -> totalSize);
-
+    return new RestPage<>(pagingRecipeResponses, pageable, totalSize); // 직접 RestPage 반환
 
   }
 

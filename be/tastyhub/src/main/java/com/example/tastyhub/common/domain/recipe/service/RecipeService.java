@@ -6,6 +6,7 @@ import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.user.entity.User;
 
+import com.example.tastyhub.common.utils.page.RestPage;
 import java.io.IOException;
 
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ public interface RecipeService {
     Page<PagingRecipeResponse> getMyRecipes(Pageable pageable, User user);
 
 
-    Page<PagingRecipeResponse> getPopularRecipes(Pageable pageable);
+    RestPage<PagingRecipeResponse> getPopularRecipes(Pageable pageable);
 
     Page<PagingRecipeResponse> getSearchedRecipes(String foodName, Pageable pageable);
 

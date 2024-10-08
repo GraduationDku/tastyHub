@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.recipe.repository;
 
+import com.example.tastyhub.common.utils.page.RestPage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,7 +13,7 @@ public interface RecipeRepositoryQuery {
     Page<PagingRecipeResponse> findMyRecipes(Pageable pageable, Long userId);
 
 
-    Page<PagingRecipeResponse> findPopular(Pageable pageable);
+    RestPage<PagingRecipeResponse> findPopular(Pageable pageable);
 
     Page<PagingRecipeResponse> searchByKeyword(String keyword, Pageable pageable);
 
