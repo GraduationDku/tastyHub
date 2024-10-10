@@ -131,6 +131,11 @@ public class UserServiceImpl implements UserService {
     refreshCookie.setMaxAge(14 * 24 * 60 * 60); // 2주
     response.addCookie(refreshCookie);
 
+    // SameSite 속성 수동으로 설정
+    response.setHeader("Set-Cookie",
+        "refreshToken=" + refreshToken + "; HttpOnly; Secure; SameSite=None; Max-Age="
+            + refreshCookie.getMaxAge());
+
     return new NicknameDto(byUsername.getNickname());
   }
 
@@ -139,15 +144,14 @@ public class UserServiceImpl implements UserService {
       HttpServletResponse response) {
     String username = userNameDto.getUserName();
     User byUsername = findByUsername(username);
-    log.info("refreshToken : "+refreshToken);
+    log.info("refreshToken : " + refreshToken);
     if (refreshTokenService.validateRefreshToken(username, refreshToken)) {
       // newAccessToken 생성
       String newAccessToken = accessTokenService.createAccessToken(username,
           byUsername.getUserType());
       // newAccessToken 응답 헤더에 저장
       response.addHeader(AUTHORIZATION_HEADER, newAccessToken);
-    }
-    else{
+    } else {
       log.error("Invalid refresh token for user: " + username);
       throw new InvalidTokenException("유효하지 않은 RefreshToken");
     }
