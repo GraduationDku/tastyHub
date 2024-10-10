@@ -20,16 +20,15 @@ export const loginUser = createAsyncThunk(
       }
 
       const authorization = response.headers.get('Authorization');
-      const refreshToken = response.headers.get('Refresh');
+
       const data = await response.json();
       const nickname = data.nickname;
 
       // 로컬 스토리지에 토큰과 닉네임 저장
       localStorage.setItem('accessToken', authorization);
-      localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('nickname', nickname);
 
-      return { authorization, refreshToken, nickname };
+      return { authorization, nickname };
     } catch (error) {
       return rejectWithValue(error.message || '서버 오류');
     }
@@ -51,7 +50,6 @@ const loginSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
       localStorage.removeItem('nickname');
       state.user = null;
       state.isAuthenticated = false;

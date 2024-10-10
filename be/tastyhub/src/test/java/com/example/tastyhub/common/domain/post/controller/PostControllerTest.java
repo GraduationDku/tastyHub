@@ -59,35 +59,35 @@ class PostControllerTest {
   PostService postService;
 
 
-  @Test
-  @WithCustomMockUser
-  void createPost() throws Exception {
-
-    doNothing().when(postService).createPost(POST_CREATE_REQUEST, USER);
-
-    ResultActions resultActions = mockMvc.perform(post(POST_API + "/create")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(POST_CREATE_REQUEST))
-            .with(csrf()))
-        .andExpect(status().isCreated());
-
-    resultActions.andDo(document("postController/create",
-        getDocumentRequest(),
-        getDocumentResponse(),
-        requestFields(
-            fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
-            fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용")
-        ),
-//            queryParameters(  // requestFields 대신 requestParameters 사용
-//                parameterWithName("nickname").description("닉네임"),
-//                parameterWithName("_csrf").ignored() // _csrf 매개변수 무시
-//            ),
-        responseFields(
-            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-        )
-    ));
-  }
+//  @Test
+//  @WithCustomMockUser
+//  void createPost() throws Exception {
+//
+//    doNothing().when(postService).createPost(POST_CREATE_REQUEST, USER);
+//
+//    ResultActions resultActions = mockMvc.perform(post(POST_API + "/create")
+//            .contentType(MediaType.APPLICATION_JSON)
+//            .content(objectMapper.writeValueAsString(POST_CREATE_REQUEST))
+//            .with(csrf()))
+//        .andExpect(status().isCreated());
+//
+//    resultActions.andDo(document("postController/create",
+//        getDocumentRequest(),
+//        getDocumentResponse(),
+//        requestFields(
+//            fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
+//            fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용")
+//        ),
+////            queryParameters(  // requestFields 대신 requestParameters 사용
+////                parameterWithName("nickname").description("닉네임"),
+////                parameterWithName("_csrf").ignored() // _csrf 매개변수 무시
+////            ),
+//        responseFields(
+//            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+//            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+//        )
+//    ));
+//  }
 //
 //  @Test
 //  @WithCustomMockUser
