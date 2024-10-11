@@ -129,12 +129,8 @@ public class UserServiceImpl implements UserService {
     refreshCookie.setSecure(true); // HTTPS를 통해서만 쿠키 전송
     refreshCookie.setPath("/"); // 사이트 전체에서 쿠키 사용
     refreshCookie.setMaxAge(14 * 24 * 60 * 60); // 2주
+    refreshCookie.setAttribute("SameSite", "None");
     response.addCookie(refreshCookie);
-
-    // SameSite 속성 수동으로 설정
-    response.setHeader("Set-Cookie",
-        "refreshToken=" + refreshToken + "; HttpOnly; Secure; SameSite=None; Max-Age="
-            + refreshCookie.getMaxAge());
 
     return new NicknameDto(byUsername.getNickname());
   }
