@@ -73,15 +73,6 @@ class PostServiceImplTest {
         verify(postRepository, times(1)).findAllRecentPostResponse(USER.getVillage(),pageable);
     }
 
-    @Test
-    @DisplayName("게시글 단건 조회")
-    void getPost() {
-        given(postRepository.findById(POST.getId())).willReturn(Optional.of(POST));
-
-        postService.getPost(POST.getId());
-        verify(postRepository, times(1)).findById(POST.getId());
-    }
-
 
     @Test
     @DisplayName("게시글 업데이트 실패")
@@ -91,6 +82,15 @@ class PostServiceImplTest {
             postService.updatePost(POST.getId(), POST_UPDATE_REQUEST, USER));
         assertEquals("해당 게시글은 존재하지 않습니다.",exception.getMessage());
 
+    }
+
+    @Test
+    @DisplayName("게시글 단건 조회")
+    void getPost() {
+        given(postRepository.findById(POST.getId())).willReturn(Optional.of(POST));
+
+        postService.getPost(POST.getId());
+        verify(postRepository, times(1)).findById(POST.getId());
     }
 
     @Test
