@@ -59,7 +59,7 @@ public class PostFixture {
         .userImg("userImg")
         .title("title")
         .build();
-    public static Pageable pageable = PageRequest.of(0, 1);
+    public static Pageable pageable = PageRequest.of(0, 10);
 
 
     public static final List<PagingPostResponse> LIST_PAGE_POST = Collections.singletonList(

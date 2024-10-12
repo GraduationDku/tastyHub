@@ -20,6 +20,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,86 +64,74 @@ class CommentControllerTest {
     CommentService commentService;
 
 
-//    @Test
-//    @WithCustomMockUser
-//    void createComment() throws Exception {
-//
-//        doNothing().when(commentService).createComment(eq(POST.getId()), eq(COMMENT_REQUEST), any());
-//
-//        ResultActions resultActions = mockMvc.perform(post(COMMENT_API + "/create/{postId}",POST.getId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(COMMENT_REQUEST))
-//                .with(csrf()))
-//            .andExpect(status().isCreated());
-//
-//        resultActions.andDo(document("commentController/create",
-//            getDocumentRequest(),
-//            getDocumentResponse(),
-//            requestFields(
-//                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")
-//            ),
-////            queryParameters(  // requestFields 대신 requestParameters 사용
-////                parameterWithName("nickname").description("닉네임"),
-////                parameterWithName("_csrf").ignored() // _csrf 매개변수 무시
-////            ),
-//            responseFields(
-//                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-//                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-//            )
-//        ));
-//
-//    }
-//
-//    @Test
-//    @WithCustomMockUser
-//    void updateComment() throws Exception {
-//
-//        doNothing().when(commentService).updateComment(eq(COMMENT.getId()), eq(COMMENT_REQUEST), any());
-//
-//        ResultActions resultActions = mockMvc.perform(patch(COMMENT_API + "/modify/{commentId}",COMMENT.getId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(COMMENT_REQUEST))
-//                .with(csrf()))
-//            .andExpect(status().isOk());
-//
-//        resultActions.andDo(document("commentController/modify",
-//            getDocumentRequest(),
-//            getDocumentResponse(),
-//            requestFields(
-//                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")
-//            ),
-////            queryParameters(  // requestFields 대신 requestParameters 사용
-////                parameterWithName("nickname").description("닉네임"),
-////                parameterWithName("_csrf").ignored() // _csrf 매개변수 무시
-////            ),
-//            responseFields(
-//                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-//                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-//            )
-//        ));
-//    }
-//
-//    @Test
-//    @WithCustomMockUser
-//    void deleteComment() throws Exception {
-//
-//        doNothing().when(commentService).deleteComment(eq(COMMENT.getId()),  any());
-//
-//        ResultActions resultActions = mockMvc.perform(patch(COMMENT_API + "/delete/{commentId}",COMMENT.getId())
-//                .with(csrf()))
-//            .andExpect(status().is2xxSuccessful());
-//
-//        resultActions.andDo(document("commentController/delete",
-//            getDocumentRequest(),
-//            getDocumentResponse(),
-////            queryParameters(  // requestFields 대신 requestParameters 사용
-////                parameterWithName("nickname").description("닉네임"),
-////                parameterWithName("_csrf").ignored() // _csrf 매개변수 무시
-////            ),
-//            responseFields(
-//                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-//                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-//            )
-//        ));
-//    }
+    @Test
+    @WithCustomMockUser
+    void createComment() throws Exception {
+
+        doNothing().when(commentService).createComment(eq(POST.getId()), eq(COMMENT_REQUEST), any());
+
+        ResultActions resultActions = mockMvc.perform(post(COMMENT_API + "/create/{postId}",POST.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(COMMENT_REQUEST))
+                .with(csrf()))
+            .andExpect(status().isCreated());
+
+        resultActions.andDo(document("commentController/create",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            requestFields(
+                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")
+            ),
+            responseFields(
+                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+            )
+        ));
+
+    }
+
+    @Test
+    @WithCustomMockUser
+    void updateComment() throws Exception {
+
+        doNothing().when(commentService).updateComment(eq(COMMENT.getId()), eq(COMMENT_REQUEST), any());
+
+        ResultActions resultActions = mockMvc.perform(patch(COMMENT_API + "/modify/{commentId}",COMMENT.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(COMMENT_REQUEST))
+                .with(csrf()))
+            .andExpect(status().isOk());
+
+        resultActions.andDo(document("commentController/modify",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            requestFields(
+                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")
+            ),
+            responseFields(
+                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+            )
+        ));
+    }
+
+    @Test
+    @WithCustomMockUser
+    void deleteComment() throws Exception {
+
+        doNothing().when(commentService).deleteComment(eq(COMMENT.getId()),  any());
+
+        ResultActions resultActions = mockMvc.perform(patch(COMMENT_API + "/delete/{commentId}",COMMENT.getId())
+                .with(csrf()))
+            .andExpect(status().is2xxSuccessful());
+
+        resultActions.andDo(document("commentController/delete",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            responseFields(
+                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+            )
+        ));
+    }
 }
