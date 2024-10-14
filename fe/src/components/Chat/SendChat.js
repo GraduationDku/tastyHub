@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Client } from '@stomp/stompjs';
+import '../../css/SendChat.css';
 
 const SOCKET_URL = `wss://localhost/ws/chat`;
 
@@ -8,7 +9,7 @@ const SendChat = ({ roomId }) => {
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    
+
     useEffect(() => {
         const nickname = localStorage.getItem('nickname');
 
@@ -21,11 +22,11 @@ const SendChat = ({ roomId }) => {
                         'Content-Type': 'application/json'
                     }
                 });
-                
+
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-        
+
                 const data = await response.json();
                 setMessages(data);
             } catch (error) {
@@ -87,56 +88,34 @@ const SendChat = ({ roomId }) => {
             sendMessage();
         }
     };
+
     return (
-        <div>
-            <ul style={{ listStyleType: 'none', padding: 0, flex: 1, overflowY: 'auto' }}>
+        <body className='sendchat'>
+            <h2 className='chattitle'>💬</h2>
+            <ul className="message-list">
                 {messages.map((msg, index) => (
-                    <li
-                        key={index}
-                        style={{
-                            display: 'flex',
-                            justifyContent: msg.sender === localStorage.getItem('nickname') ? 'flex-end' : 'flex-start',
-                            padding: '5px 10px'
-                        }}
-                    >
-                        {msg.sender !== localStorage.getItem('nickname') && (
-                            <>
-                                <div>
-                                    <strong>{msg.sender} </strong>
-                                    {msg.content}
-                                </div>
-                                <div>
-                                    {new Date(msg.time).toLocaleString()}
-                                </div>
-                            </>
-                        )}
-                        {msg.sender === localStorage.getItem('nickname') && (
-                            <>
-                                <div>
-                                    {new Date(msg.time).toLocaleString()}
-                                </div>
-                                <div>
-                                    {msg.content}
-                                </div>
-                            </>
-                        )}
+                    <li key={index} className={`message-item ${msg.sender === localStorage.getItem('nickname') ? 'message-right' : 'message-left'}`}>
+                        <div className={msg.sender === localStorage.getItem('nickname') ? 'message-right' : 'message-left'}>
+                            {msg.content}
+                            {/* <span className="time">{new Date(msg.time).toLocaleString()}</span> */}
+                        </div>
                     </li>
                 ))}
             </ul>
-            <div style={{ display: 'flex', position: 'fixed', bottom: 0, width: '100%', backgroundColor: '#fff', padding: '10px', boxSizing: 'border-box', borderTop: '1px solid #ccc', height:'70px'}}>
+            <div className='chatinputbox'>
                 <input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="메세지를 입력하세요."
-                    disabled={!connected}/>
-                <button
-                    onClick={sendMessage}
-                    disabled={!connected}>
+                    disabled={!connected}
+                    className="chat-input-container"
+
+s                />
+                <button onClick={sendMessage} disabled={!connected} className='chatbtn'>
                     전송
-                </button>
-            </div>
-        </div>
+                </button></div>
+        </body>
     );
 };
 
