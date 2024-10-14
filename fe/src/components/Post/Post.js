@@ -182,3 +182,229 @@ function Post({ setScreen, onPostSelect, isGuest }) {
 }
 
 export default Post;
+
+// import React, { useState, useEffect } from "react";
+// import '../../css/Post.css';
+
+// function Post({ setScreen, onPostSelect, isGuest }) {
+//   const [posts, setPosts] = useState([]);
+//   const [deleteMode, setDeleteMode] = useState(false);
+//   const [selectedPosts, setSelectedPosts] = useState(new Set());
+//   const [page, setPage] = useState(0); // 현재 페이지 (0부터 시작)
+//   const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
+//   const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
+//   const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
+
+//   useEffect(() => {
+//     if (isGuest) {
+//       setScreen('signup');
+//       return;
+//     }
+//     console.log(document.cookie);
+//     const fetchAllPost = async () => {
+//       try {
+//         const response = await fetch(
+//           `${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`,
+//           {
+//             method: 'GET',
+//             withCredentials: true,
+//             headers: {
+//               'Content-Type': 'application/json',
+//               'Authorization': localStorage.getItem('accessToken')
+//             }
+//           }
+//         );
+
+//         if (response.ok) {
+//           const data = await response.json();
+//           setPosts(data.content); // 받아온 게시글 설정
+//           setTotalItems(data.totalItems); // 전체 게시글 수 설정
+//           console.log(data);
+//           console.log(document);
+//         } else if (response.status === 401) { // 401 Unauthorized 상태 처리
+//           await handleRefreshToken(); // 리프레시 토큰 처리
+//           fetchAllPost(); // 다시 시도
+//         }
+//       } catch (error) {
+//         console.error('Error fetching posts:', error);
+//       }
+//     };
+
+//     const handleRefreshToken = async () => {
+//       const refreshToken = document.cookie
+//         .split('; ')
+//         .find(row => row.startsWith('refreshToken='))
+//         ?.split('=')[1];
+
+//       if (!refreshToken) {
+//         console.error('리프레시 토큰이 없습니다.');
+//         setScreen('login'); // 로그인 화면으로 리다이렉트
+//         return;
+//       }
+
+//       try {
+//         const response = await fetch(`${process.env.REACT_APP_API_URL}/user/refresh`, {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           withCredentials: true,
+//           body: JSON.stringify({ refreshToken }), // 리프레시 토큰 전송
+//         });
+//         console.log(refreshToken);
+//         if (response.ok) {
+//           const data = await response.json();
+//           localStorage.setItem('accessToken', data.accessToken); // 새로운 액세스 토큰 저장
+//         } else {
+//           console.error('리프레시 토큰 요청 실패:', response.status);
+//           setScreen('login'); // 로그인 화면으로 리다이렉트
+//         }
+//       } catch (error) {
+//         console.error('리프레시 토큰 처리 중 오류 발생:', error);
+//       }
+//     };
+
+//     fetchAllPost(); // 페이지나 기타 변수가 변경될 때마다 호출
+//   }, [page, size, sort, setScreen, isGuest]);
+
+//   const handleDeleteModeToggle = () => {
+//     setDeleteMode(!deleteMode);
+//     setSelectedPosts(new Set());
+//   };
+
+//   const handleCheckboxChange = (postId) => {
+//     const updatedSelectedPosts = new Set(selectedPosts);
+//     if (updatedSelectedPosts.has(postId)) {
+//       updatedSelectedPosts.delete(postId);
+//     } else {
+//       updatedSelectedPosts.add(postId);
+//     }
+//     setSelectedPosts(updatedSelectedPosts);
+//   };
+
+//   const handleDeleteSelected = async () => {
+//     for (let postId of selectedPosts) {
+//       try {
+//         const response = await fetch(
+//           `${process.env.REACT_APP_API_URL}/post/delete/${postId}`,
+//           {
+//             method: 'DELETE',
+//             withCredentials: true,
+//             headers: {
+//               'Content-Type': 'application/json',
+//               'Authorization': localStorage.getItem('accessToken')
+//             }
+//           }
+//         );
+//         if (!response.ok) {
+//           throw new Error(`Failed to delete post with id ${postId}`);
+//         }
+//       } catch (error) {
+//         console.error('Error deleting post:', error);
+//       }
+//     }
+//     setPosts(posts.filter(post => !selectedPosts.has(post.postId)));
+//     setSelectedPosts(new Set());
+//     setDeleteMode(false);
+//   };
+
+//   const handleSizeChange = (e) => {
+//     setSize(parseInt(e.target.value, 10) || 5);
+//     setPage(0); // 페이지를 0으로 초기화
+//   };
+
+//   const handleSortChange = (e) => {
+//     setSort(e.target.value || 'createdAt');
+//     setPage(0); // 페이지를 0으로 초기화
+//   };
+
+//   const handlePageChange = (newPage) => {
+//     setPage(newPage); // 새로운 페이지 설정
+//   };
+
+//   const PageButton = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
+//     const totalPages = Math.ceil(totalItems / itemsPerPage); // 전체 페이지 수 계산
+//     const pages = Array.from({ length: totalPages }, (_, i) => i); // 페이지 목록 생성
+
+//     return (
+//       <div>
+//         <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 0}>
+//           이전
+//         </button>
+//         {pages.map((pageNum) => (
+//           <button
+//             key={pageNum}
+//             onClick={() => onPageChange(pageNum)}
+//             disabled={currentPage === pageNum}
+//           >
+//             {pageNum + 1} {/* 1부터 시작하도록 페이지 표시 */}
+//           </button>
+//         ))}
+//         <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+//           다음
+//         </button>
+//       </div>
+//     );
+//   };
+
+//   return (
+//     <body>
+//       <h1>재료 공유 게시글 조회</h1>
+//       <button onClick={() => setScreen('createpost')}>게시글 작성하기</button>
+//       <button onClick={handleDeleteModeToggle}>
+//         {deleteMode ? '취소' : '삭제하기'}
+//       </button>
+//       {deleteMode && (
+//         <button onClick={handleDeleteSelected} disabled={selectedPosts.size === 0}>
+//           선택된 게시글 삭제
+//         </button>
+//       )}
+//       <br /><br />
+//       <div className="postbox">
+//         <div className='select-container'>
+//           <select value={sort} onChange={handleSortChange}>
+//             <option value="createdAt">날짜</option>
+//             <option value="title">제목</option>
+//           </select>
+
+//           <select value={size} onChange={handleSizeChange}>
+//             <option value={5}>5개</option>
+//             <option value={10}>10개</option>
+//             <option value={20}>20개</option>
+//           </select>
+//         </div>
+//         <ul>
+//           {posts.map(post => (
+//             <li key={post.postId}>
+//               <div className="seperate">
+//                 {deleteMode && (
+//                   <input
+//                     type="checkbox"
+//                     checked={selectedPosts.has(post.postId)}
+//                     onChange={() => handleCheckboxChange(post.postId)}
+//                   />
+//                 )}
+//                 <h3 onClick={() => !deleteMode && onPostSelect(post.postId)}>
+//                   {post.title}
+//                 </h3>
+//                 <div className="seperate">
+//                   {/* <p>{post.userImg || '정보 없음'}</p> */}
+//                   <p>{post.nickname || '정보 없음'}</p>
+//                   <p>{post.postState || '정보 없음'}</p>
+//                 </div>
+//               </div>
+//             </li>
+//           ))}
+//         </ul>
+//         <PageButton
+//           totalItems={totalItems} // 전체 게시글 수
+//           itemsPerPage={size} // 페이지당 게시글 수
+//           currentPage={page} // 현재 페이지
+//           onPageChange={handlePageChange} // 페이지 변경 시 호출될 함수
+//         />
+//       </div>
+//     </body>
+//   );
+// }
+
+// export default Post;
