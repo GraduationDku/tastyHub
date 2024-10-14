@@ -4,7 +4,7 @@ import '../../css/SendChat.css';
 
 const SOCKET_URL = `wss://localhost/ws/chat`;
 
-const SendChat = ({ roomId }) => {
+const SendChat = ({ roomId, setScreen }) => {
     const [client, setClient] = useState(null);
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
@@ -91,7 +91,7 @@ const SendChat = ({ roomId }) => {
 
     return (
         <body className='sendchat'>
-            <h2 className='chattitle'>💬</h2>
+            <h2 className='chattitle' onClick={() => setScreen('mainchat')}>💬</h2>
             <ul className="message-list">
                 {messages.map((msg, index) => (
                     <li key={index} className={`message-item ${msg.sender === localStorage.getItem('nickname') ? 'message-right' : 'message-left'}`}>

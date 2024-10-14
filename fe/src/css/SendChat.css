@@ -1,7 +1,6 @@
 body.sendchat {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full height of the viewport */
   margin: 0;
 }
 
@@ -29,7 +28,7 @@ li.message-left {
 }
 
 input.chat-input-container {
-  width: 300px;
+  width: 400px;
   margin-top: 20px;
 }
 
