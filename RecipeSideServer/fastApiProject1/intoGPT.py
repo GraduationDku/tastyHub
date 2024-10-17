@@ -34,7 +34,7 @@ def post_gpt(system_content, user_content):
 
 def create_prediction(foodName, steps):
     system_content = "You are a culinary expert and a writer who edits. Unify the styles posted by the user according to the set tone and style."
-    user_content = "한글로 답변해줘; 사용자가 입력한 요리제목은" + f' {foodName}이다.; 사용자가 입력한 '+f'{steps}가 해당 요리에 적합한지 확인을 해줘; 해당 요리 단계는 한 줄씩 정리해서 출력을 해야하며 문장의 끝맺음은 "-이다"로 진행해줘; 그리고 이때 사용자의 요리 과정에 다른 추가 과정을, 개선점을 입력하지마. 오로지 사용자의 요리 단계가 해당 요리이름에 적합한지, 그리고 요리과정의 문체만 손봐서 올려줘 \n\n'
+    user_content = "한글로 답변해줘; 사용자가 입력한 요리제목은" + f' {foodName}이다.; 사용자가 입력한 '+f'{steps}가 해당 요리에 적합한지 확인을 해줘; 해당 요리 단계는 하나의 동작마다 한 줄씩 정리해서 출력을 해야하며 문장의 끝맺음은 "-이다"로 진행해줘; 그리고 이때 사용자의 요리 과정에 다른 추가 과정을, 개선점을 입력하지마. 오로지 사용자의 요리 단계가 해당 요리이름에 적합한지, 그리고 요리과정의 문체만 손봐서 올려줘 \n\n'
     ans = post_gpt(system_content, user_content)
     sentences = [ans.strip() for sentence in ans if sentence.strip()]
     return sentences
