@@ -1,0 +1,53 @@
+body.sendchat {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+h2 {
+  font-size : 50px;
+  margin-top : -20px;
+}
+ul.message-list {
+  width: 80%;
+  text-align: center;
+  flex: 1; /* Allow the message list to take up remaining space */
+
+}
+
+li.message-right {
+  background-color: #ffffff;
+  margin-left: 185px;
+  width: 40%;
+}
+
+li.message-left {
+  background-color: #ffffff;
+  margin-right: 15px;
+  width: 40%;
+}
+
+input.chat-input-container {
+  width: 400px;
+  margin-top: 20px;
+}
+
+button.chatbtn {
+  width: 80px;
+  height: 50px;
+  margin-right : 20px;
+}
+
+div.chatinputbox {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  position: fixed; /* Change to fixed */
+  bottom: 0; /* Aligns it to the bottom */
+  left: 0; /* Aligns it to the left */
+  width: 100%; /* Full width of the viewport */
+  background-color: #ffffff; /* Optional: Set a background color */
+  padding: 10px; /* Add some padding for better appearance */
+  border-top: 1px solid #ddd; /* Optional: Add a top border for separation */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for depth */
+}

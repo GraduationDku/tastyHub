@@ -26,7 +26,7 @@ function Login({ setScreen }) {
   return (
     <body className='login'>
       <div className='box'>
-        <h2>LOGIN</h2>
+        <h2 className='login'>LOGIN</h2>
         <br/>
         
         <br/><br/>
