@@ -1,0 +1,10 @@
+div.searchsort{
+    display: flex;
+    flex-direction: row; /* 명시적으로 가로 방향으로 정렬 */
+    gap: 30px; /* 두 select 요소 사이 간격 */
+    align-items: center; /* 세로 중앙 정렬 */
+  }
+  
+  div.searchsort select {
+    flex-shrink: 0; /* 선택 요소가 줄어들지 않게 설정 */
+  }
