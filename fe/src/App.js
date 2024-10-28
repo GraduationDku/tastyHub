@@ -105,7 +105,7 @@ function App() {
       {screen === 'searchResults' && (
         <div className='searchdiv'>
           <h1>검색 결과</h1>
-          <div>
+          <div className='searchdiv2'>
             <div className='searchsort'>
               <select value={sort} onChange={handleSortChange}>
                 <option value="date">날짜</option>

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import '../../css/MainMypage.css';
 
 function MainMypage({ setScreen, isGuest }) {
   const nickname = localStorage.getItem('nickname');
