@@ -1,4 +1,3 @@
-// App.js
 import React, { useState } from 'react';
 import HomeScreen from './components/HomeScreen';
 import Login from './components/User/Login';
@@ -29,11 +28,12 @@ function App() {
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [username, setUsername] = useState('');
-  const [page, setPage] = useState(1); // 현재 페이지
-  const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
-  const [sort, setSort] = useState('date'); // 정렬 방식 기본값
-  const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
-  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+  const [page, setPage] = useState(1); 
+  const [size, setSize] = useState(5); 
+  const [sort, setSort] = useState('date'); 
+  const [totalItems, setTotalItems] = useState(0); 
+  const [totalPages, setTotalPages] = useState(0); 
+  const [searchType, setSearchType] = useState('recipe');
 
   const handleRecipeSelect = (id) => {
     setSelectedRecipeId(id);
@@ -45,7 +45,6 @@ function App() {
     setScreen('searchResults');
   };
   
-
   const handleChatroomSelect = (roomId) => {
     setSelectedRoomId(roomId);
     setScreen('sendchat');
@@ -62,8 +61,8 @@ function App() {
   };
 
   const handleUserSelect = (e) => {
-
-  }
+    // User selection logic
+  };
 
   const handleSizeChange = (e) => {
     setSize(parseInt(e.target.value, 10) || 5);
@@ -83,7 +82,9 @@ function App() {
 
   return (
     <div>
-      {screen !== 'home' && screen !== 'sendchat' && screen !=='login' && screen !=='signup' && screen!== 'create' && <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />}
+      {screen !== 'home' && screen !== 'sendchat' && screen !== 'login' && screen !== 'signup' && screen !== 'create' && (
+        <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />
+      )}
       {screen === 'home' && <HomeScreen setScreen={setScreen} setIsGuest={setIsGuest} handleGuestAccess={handleGuestAccess} />}
       {screen === 'login' && <Login setScreen={setScreen} />}
       {screen === 'signup' && <Signup setScreen={setScreen} />}
@@ -102,42 +103,42 @@ function App() {
       {screen === 'postDetails' && <PostDetails postId={selectedPostId} setScreen={setScreen} />}
       {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} />}
       {screen === 'searchResults' && (
-        <div>
+        <div className='searchdiv'>
           <h1>검색 결과</h1>
           <div>
-          <div>
-              <label>정렬 기준: </label>
+            <div className='searchsort'>
               <select value={sort} onChange={handleSortChange}>
                 <option value="date">날짜</option>
                 <option value="title">제목</option>
                 <option value="nickname">작성자</option>
               </select>
 
-              <label>게시글 수: </label>
               <select value={size} onChange={handleSizeChange}>
                 <option value={5}>5개</option>
                 <option value={10}>10개</option>
                 <option value={20}>20개</option>
               </select>
-        </div>
-            {searchResults.length > 0 ? (
+            </div>
+
+            {searchResults.length > 0 && searchType === 'recipe' ? (
               <ul>
                 {searchResults.map((recipe) => (
                   <li key={recipe.foodId} onClick={() => handleRecipeSelect(recipe.foodId)}>
-                    <h2>{recipe.foodName}</h2>
-                    <img src={recipe.foodImgUrl} alt={recipe.foodName} />
+                    <h2 className='searchrecipetitle'>{recipe.foodName}</h2>
+                    <img src={recipe.foodImgUrl} alt={recipe.foodName} className='searchrecipeimg'/>
                     <div>
                       <p>{recipe.foodInformationDto.text}</p>
-                      <p>조리 시간 : {recipe.foodInformationDto.cookingTime} 분</p>
-                      <p>{recipe.foodInformationDto.serving}인분</p>
+                      <div className="recipe-info">
+                        <p>{recipe.foodInformationDto.cookingTime}분</p>
+                        <p>{recipe.foodInformationDto.serving}</p>
+                      </div>
                     </div>
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p>No recipes found</p>
-            )}
-            {searchResults.length > 0 ? (
+            ) : searchType === 'recipe' && <p>No recipes found</p>}
+
+            {searchResults.length > 0 && searchType === 'user' ? (
               <ul>
                 {searchResults.map((user) => (
                   <li key={user.userId} onClick={() => handleUserSelect(user.userId)}>
@@ -146,17 +147,9 @@ function App() {
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p>No users found</p>
-            )}
-            
+            ) : searchType === 'user' && <p>No users found</p>}
+
             <button onClick={() => setScreen('main')}>Go Back</button>
-            <br /><br />
-            <PageButton
-                totalItems={totalItems}
-                itemsPerPage={size}
-                onPageChange={handlePageChange}
-              />
           </div>
         </div>
       )}
