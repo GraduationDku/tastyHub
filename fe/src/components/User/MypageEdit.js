@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../../../src/css/MypageEdit.css';
 
 function MypageEdit() {
   // 상태 관리
@@ -87,14 +88,13 @@ function MypageEdit() {
   };
 
   return (
-    <body className='mypageedit'>
+    <body>
+      <br/><br/>
       <div className='mypageedit'>
-      <h1>마이페이지 수정</h1>
-      
       {/* 1단계: 프로필 사진 수정 */}
       {currentStep === 1 && (
         <div>
-          <h2>프로필 사진 수정</h2>
+          <h2 className='mypageedittitle'>프로필 사진 수정</h2>
           <form onSubmit={handleProfilePicSubmit}>
             <input type="file" onChange={handleFileChange} />
             <button type="submit">수정</button>
@@ -106,7 +106,7 @@ function MypageEdit() {
       {/* 2단계: 사용자 정보 수정 */}
       {currentStep === 2 && (
         <div>
-          <h2>사용자 정보 수정</h2>
+          <h2 className='mypageedittitle'>사용자 정보 수정</h2>
           <form onSubmit={handleUserInfoSubmit}>
             <input type="text" placeholder="새 닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} /><br />
             <input type="password" placeholder="현재 비밀번호" value={beforePassword} onChange={(e) => setBeforePassword(e.target.value)} /><br />
@@ -121,12 +121,18 @@ function MypageEdit() {
       {/* 3단계: 위치 수정 */}
       {currentStep === 3 && (
         <div className="village">
-          <h2>동네 수정</h2>
+          <h2 className='mypageedittitle'>동네 수정</h2>
           <button onClick={getLocation}>현재 위치 가져오기</button>
           {location.lat && location.lng && (
             <>
-              <p>위도: {location.lat}, 경도: {location.lng}</p>
-              <div className="map" id="map" style={{ width: "100%", height: "400px" }}></div>
+              <div
+              id="map" 
+              style={{
+                 width: "100%", 
+                 height: "400px",
+                 borderRadius: "20px", // 모서리를 둥글게 만듦
+                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)", // 그림자 설정
+                 }}></div>
               <button onClick={handleLocationSubmit}>위치 수정</button>
             </>
           )}

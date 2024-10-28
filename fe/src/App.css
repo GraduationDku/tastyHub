@@ -1,43 +1,39 @@
-.HomeScreen {
-  background-color: #FAF6C0; /* 원하는 배경색 */
-  min-height: 100vh; /* 전체 뷰포트 높이 */
-  width: 100%; /* 전체 너비 */
+.searchdiv {
+  width: 400px;
 }
 
-.search-results{
-  background-color: #FAF6C0; /* 배경색 지정 */
-  min-height: 100vh; /* 뷰포트 전체 높이만큼 최소 높이 설정 */
-  padding: 20px; /* 내부 여백 추가 */
-  color : #5C5F5C;
-}
-
-
-.search-results h1 {
-  padding: 4px;
-  background-color: #AEC7A1;
-  width: 400px; /* 제목의 너비를 box와 동일하게 조정 */
-  height: 40px;
-  text-align: center;
-  
-  border-radius: 10px 10px 0 0;
-  margin: auto; /* 수평 가운데 정렬 */
-  color: #5C5F5C;
-  font-size: 25px;
-}
-
-.search-results .box {
-  background-color: white; /* Optional: style for the inner box */
+.searchdiv2 {
+  background-color: white;
+  width: 370px;
   padding: 20px;
-  border-radius: 10px; /* Optional: rounded corners for the box */
-  max-width: 800px; /* Limit the maximum width */
-  margin: auto; /* Center the box horizontally */
-  width: 800px;
-}
-.search-results img{
-  border-radius:20px;
-  width:50%;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
 }
 
-.search-results h2{
-  font-size:20px;
+
+.searchsort {
+  display: flex;
+  flex-direction: row; /* 명시적으로 가로 방향으로 정렬 */
+  gap: 30px; /* 두 select 요소 사이 간격 */
+  align-items: center; /* 세로 중앙 정렬 */
 }
+
+.searchsort select {
+  flex-shrink: 0; /* 선택 요소가 줄어들지 않게 설정 */
+}
+
+.searchrecipetitle {
+  font-size : 20px;
+  text-align : center;
+  margin-top : 15px;
+}
+
+.recipe-info {
+  display: flex; /* 가로로 정렬 */
+  gap: 20px; /* 간격 설정 */
+  align-items: center; /* 세로로 중앙 정렬 */
+  flex-direction: row;
+}
+
+
