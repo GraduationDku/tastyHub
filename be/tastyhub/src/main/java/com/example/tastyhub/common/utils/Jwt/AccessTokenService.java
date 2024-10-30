@@ -30,7 +30,7 @@ public class AccessTokenService {
   public static final String REFRESH_HEADER = "Refresh";
   public static final String AUTHORIZATION_KEY = "auth";
   private static final String BEARER_PREFIX = "Bearer ";
-  private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L;
+  private static final long ACCESS_TOKEN_TIME = 10 * 1000L;
 
   //    @Value("${jwt.secret.key}")
 
