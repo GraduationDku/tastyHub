@@ -35,16 +35,18 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+@app.get("/hello/{foodName}/{step}")
+async def say_hello(foodName: str, step: str):
+    temp_cookStep = create_prediction(foodName,step)
+
+    return {"message": f"Hello {temp_cookStep}"}
 
 
 # 영상만 타임라인 받는 엔드포인트
 @app.post("/recipe/video/timeline")
 async def upload_video(steps: str, foodName: str, video: UploadFile = File(...)):
     # gpt 프로프트
-    temp_cookStep = create_prediction(steps, foodName)
+    temp_cookStep = create_prediction(foodName,steps)
 
     # 영상 처리 로직 진행
     videoTimeLine = processingVideo(video, temp_cookStep)
