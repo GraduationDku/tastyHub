@@ -10,144 +10,35 @@
 
 button.back-button {
   width : 80px;
-}/* 
-
-h2 {
-  color: #3EAB5C;
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 20px;
 }
 
-input, textarea {
-  width: 380px;
+.mode-toggle {
+  display: flex;
+  justify-content: space-between;
+  flex-direction : row;
+  border-radius: 30px;
+  margin-bottom: 20px;
+  width: 100%; /* 전체 너비로 설정 */
+  height :70px;
+  max-width: 300px; /* 필요에 따라 최대 너비 설정 */
+  padding : 10px;
+}
+
+.mode-toggle button {
+  flex: 1;
   padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-input[type='file'] {
-  padding: 5px;
-}
-
-textarea {
-  height: 120px;
-}
-
-button {
-  background-color: #3EAB5C;
-  color: white;
-  padding: 10px 20px;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  margin: 10px 5px;
-}
-
-button:hover {
-  background-color: #36a34d;
-}
-
-
-
-.save {
-  background-color: #4CAF50;
-}
-
-.save:hover {
-  background-color: #45a049;
-}
-
-input[type='number'] {
-  max-width: 100px;
-}
-
-input.label4in{
-  width : 50px;
-}
-
-input[type='text'] {
-  max-width: 100%;
-}
-
-.label1in, .label2in, .label3in, .label4in, .label5in, .label6in {
-  margin-bottom: 20px;
-}
-
-.label1, .label2, .label3, .label4, .label5, .label6 {
   text-align: center;
-  display: flex;
-  justify-items : center;
-  gap: 10px;
 }
 
-input.label5in {
-  margin-bottom : -20px;
-  width : 200px;
+.mode-toggle .active {
+  background-color: #4caf50; /* 선택된 버튼의 배경색 */
+  color: #fff;
 }
 
-div.label5 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.step-number {
-  font-size: 18px;
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.input-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-input[type='number'], span {
-  margin-right: 5px;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-}
-
-@media (max-width: 480px) {
-  .createrecipe {
-    padding: 10px;
-  }
-
-  button {
-    width: 100%;
-    margin-top: 10px;
-  }
-}
-
-.input-wrapper {
-  display: block;
-}
-
-.input-container {
-  margin-bottom: 15px;
-}
-
-input.label4in {
-  display: block;
-  width: 100px;
-  margin-bottom: 5px;
-}
-
-span {
-  font-size: 16px;
+.mode-toggle button:not(.active) {
+  background-color: #fff;
   color: #333;
 }
 
-button.plus {
-  width : 30%;
-} */

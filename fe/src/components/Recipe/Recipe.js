@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import PageButton from '../../../src/components/PageButton';
 import '../../css/Recipe.css';
 
 function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   const [recipes, setRecipes] = useState([]);
   const [page, setPage] = useState(0); // 현재 페이지
   const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
-  const [sort, setSort] = useState('date'); // 정렬 방식 기본값
+  const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
   const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
   const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
 
@@ -45,7 +44,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   };
 
   const handleSortChange = (e) => {
-    setSort(e.target.value || 'date');
+    setSort(e.target.value || 'createdAt');
     setPage(0); // 페이지를 1로 초기화
   };
 
@@ -90,7 +89,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
         <div className='select-container'>
         <br />
             <select value={sort} onChange={handleSortChange}>
-              <option value="createAt">날짜</option>
+              <option value="createdAt">날짜</option>
               <option value="foodName">제목</option>
               {/*<option value="nickname">작성자</option>*/}
             </select>

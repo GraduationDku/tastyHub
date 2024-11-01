@@ -1,9 +1,8 @@
-// src/components/User/Login.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/User/loginState';
 import '../../css/Login.css';
-
+import GoogleLoginButton from '../GoogleLoginButton'; // Google Login Button 불러오기
 
 function Login({ setScreen }) {
   const dispatch = useDispatch();
@@ -26,12 +25,12 @@ function Login({ setScreen }) {
   return (
     <body className='login'>
       <div className='box'>
-        <h2>LOGIN</h2>
+        <h2 className='login'>LOGIN</h2>
         <br/>
         
         <br/><br/>
        
-          <input
+        <input
           type="text"
           placeholder="ID"
           value={userName}
@@ -44,17 +43,22 @@ function Login({ setScreen }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-          <button className='loginbtn' onClick={handleLogin} disabled={loading}>
-            {loading ? '로그인 중...' : '로그인'}
-          </button>
-          <br/><br/>
-          <div className='signupbtn'>
+        <button className='loginbtn' onClick={handleLogin} disabled={loading}>
+          {loading ? '로그인 중...' : '로그인'}
+        </button>
+        <br/><br/>
+
+        {/* Google 로그인 버튼 추가 */}
+        <GoogleLoginButton />
+
+        <br/><br/>
+        <div className='signupbtn'>
           <button onClick={() => setScreen('signup')}>회원가입</button>
           <button onClick={() => setScreen('findUsername')}>아이디 찾기</button>
-        </div></div>
+        </div>
+      </div>
     </body>
   );
 }
 
 export default Login;
-

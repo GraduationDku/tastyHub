@@ -30,7 +30,8 @@ public class AccessTokenService {
   public static final String REFRESH_HEADER = "Refresh";
   public static final String AUTHORIZATION_KEY = "auth";
   private static final String BEARER_PREFIX = "Bearer ";
-  private static final long ACCESS_TOKEN_TIME = 15000L;
+  private static final long ACCESS_TOKEN_TIME = 12 * 60 * 60 * 60 * 1000L;
+  ;
 
   private static SecretKey makeKey() {
     return Keys.secretKeyFor(SignatureAlgorithm.HS512);
@@ -67,7 +68,6 @@ public class AccessTokenService {
         .signWith(key, signatureAlgorithm) // 사용할 암호화 알고리즘과 , signature 에 들어갈 key값 세팅
         .compact();
   }
-
 
 
   // 요청 header에서 AccessToken을 가져오는 메서드
