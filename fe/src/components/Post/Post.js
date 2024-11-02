@@ -10,33 +10,68 @@ function Post({ setScreen, onPostSelect, isGuest }) {
   const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
   const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
 
+  // 리프레시 토큰을 이용하여 엑세스 토큰 갱신하는 함수
+  async function refreshAccessToken() {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/refresh`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          refreshToken: localStorage.getItem('refreshToken')
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('accessToken', data.accessToken);
+        return data.accessToken;
+      } else {
+        // 리프레시 토큰이 유효하지 않은 경우 로그아웃 처리
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        setScreen('login');
+      }
+    } catch (error) {
+      console.error('Error refreshing access token:', error);
+    }
+  }
+
+  // 게시글 목록을 가져오는 함수
+  async function fetchAllPost() {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': accessToken
+          }
+        }
+      );
+
+      if (response.status === 401) { // 엑세스 토큰이 만료된 경우
+        const newAccessToken = await refreshAccessToken();
+        if (newAccessToken) {
+          return fetchAllPost(); // 새 토큰으로 다시 호출
+        }
+      } else if (response.ok) {
+        const data = await response.json();
+        setPosts(data.content); // 받아온 게시글 설정
+        setTotalItems(data.totalItems); // 전체 게시글 수 설정
+      }
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  }
+
   useEffect(() => {
     if (isGuest) {
       setScreen('signup');
       return;
-    }
-
-    async function fetchAllPost() {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/post/list?page=${page}&size=${size}&sort=${sort}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': localStorage.getItem('accessToken')
-            }
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setPosts(data.content); // 받아온 게시글 설정
-          setTotalItems(data.totalItems); // 전체 게시글 수 설정
-        }
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
     }
     fetchAllPost(); // 페이지나 기타 변수가 변경될 때마다 호출
   }, [page, size, sort, setScreen, isGuest]);
@@ -124,22 +159,21 @@ function Post({ setScreen, onPostSelect, isGuest }) {
     <body>
       <h1>재료 공유 게시글 조회</h1>
       <button onClick={() => setScreen('createpost')}>게시글 작성하기</button>
-        <button onClick={handleDeleteModeToggle}>
-          {deleteMode ? '취소' : '삭제하기'}
+      <button onClick={handleDeleteModeToggle}>
+        {deleteMode ? '취소' : '삭제하기'}
+      </button>
+      {deleteMode && (
+        <button onClick={handleDeleteSelected} disabled={selectedPosts.size === 0}>
+          선택된 게시글 삭제
         </button>
-        {deleteMode && (
-          <button onClick={handleDeleteSelected} disabled={selectedPosts.size === 0}>
-            선택된 게시글 삭제
-          </button>
-        )}
-        <br/><br/>
+      )}
+      <br/><br/>
       <div className="postbox">
-      <div className='select-container'>
+        <div className='select-container'>
           <select value={sort} onChange={handleSortChange}>
             <option value="createdAt">날짜</option>
             <option value="title">제목</option>
           </select>
-
 
           <select value={size} onChange={handleSizeChange}>
             <option value={5}>5개</option>
@@ -162,7 +196,6 @@ function Post({ setScreen, onPostSelect, isGuest }) {
                   {post.title}
                 </h3>
                 <div className="seperate">
-                  {/* <p>{post.userImg || '정보 없음'}</p> */}
                   <p>{post.nickname || '정보 없음'}</p>
                   <p>{post.postState || '정보 없음'}</p>
                 </div>
@@ -171,10 +204,10 @@ function Post({ setScreen, onPostSelect, isGuest }) {
           ))}
         </ul>
         <PageButton
-          totalItems={totalItems} // 전체 게시글 수
-          itemsPerPage={size} // 페이지당 게시글 수
-          currentPage={page} // 현재 페이지
-          onPageChange={handlePageChange} // 페이지 변경 시 호출될 함수
+          totalItems={totalItems}
+          itemsPerPage={size}
+          currentPage={page}
+          onPageChange={handlePageChange}
         />
       </div>
     </body>
