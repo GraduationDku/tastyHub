@@ -1,7 +1,9 @@
 package com.example.tastyhub.common.utils.Jwt;
 
+import com.querydsl.core.Fetchable;
 import java.io.IOException;
 
+import java.util.Arrays;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -24,6 +26,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
   private final AccessTokenService accessTokenService;
   private final UserDetailsServiceImpl userDetailsService;
+
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain)
@@ -31,6 +34,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     try {
       String accessToken = accessTokenService.resolveAccessToken(request);
+      if (accessToken.isBlank()) {
+        throw new NullPointerException("token is blank");
+      }
       if (!accessTokenService.validateAccessToken(accessToken)) {
         throw new JwtAuthException("JWT Authentication error!");
       }
@@ -40,10 +46,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
       setAuthentication(name, role);
     } catch (JwtAuthException | UsernameNotFoundException exception) {
       log.error("JwtAuthentication Authentication Exception Occurs! - {}", exception.getClass());
+    } catch (NullPointerException exception) {
+      log.info("JWT 가 null인 요청입니다.");
     }
-
     filterChain.doFilter(request, response);
-
   }
 
   public Authentication createAuthentication(String username) {
@@ -63,6 +69,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     context.setAuthentication(authentication);
     SecurityContextHolder.setContext(context);
   }
-
 
 }

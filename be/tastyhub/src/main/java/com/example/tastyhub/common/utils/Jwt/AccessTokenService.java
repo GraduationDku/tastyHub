@@ -76,17 +76,13 @@ public class AccessTokenService {
     if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
       return bearerToken.substring(7);
     }
-    return null;
+    return "";
   }
 
   // 요청 header에서 RefeshToken을 가져오는 메서드
 
   // 토큰 유효성 체크하는 메서드
   public boolean validateAccessToken(String token) {
-    if (token == null) {
-      log.info("JWT is null, JWT 토큰이 null입니다.");
-      return false;
-    }
 
     try {
       Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
