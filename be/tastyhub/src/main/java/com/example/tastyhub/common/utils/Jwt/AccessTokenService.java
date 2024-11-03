@@ -30,7 +30,7 @@ public class AccessTokenService {
   public static final String REFRESH_HEADER = "Refresh";
   public static final String AUTHORIZATION_KEY = "auth";
   private static final String BEARER_PREFIX = "Bearer ";
-  private static final long ACCESS_TOKEN_TIME = 12 * 60 * 60 * 60 * 1000L;
+  private static final long ACCESS_TOKEN_TIME = 10 * 60 * 60 * 60 * 1000L;
   ;
 
   private static SecretKey makeKey() {
@@ -49,6 +49,7 @@ public class AccessTokenService {
     byte[] bytes = Base64.getDecoder().decode(secretKey);
     key = Keys.hmacShaKeyFor(bytes);
   }
+
 
   // username, userType를 가지고 AccessToken 을 생성하는 메서드
   public String createAccessToken(String username, userType role) {
