@@ -9,7 +9,6 @@ function GoogleLoginButton() {
   const handleLoginSuccess = async (credentialResponse) => {
     const tokenId = credentialResponse.credential;
     console.log(tokenId)
-    // Optionally, send tokenId to the server for validation/authentication
     const response = await fetch(`https://localhost/oauth2/authorization/google?tokenId=${tokenId}`, {
       method: "POST",
       headers: {
