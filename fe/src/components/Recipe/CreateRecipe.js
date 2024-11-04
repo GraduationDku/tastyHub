@@ -101,13 +101,16 @@ function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
   return (
     <div className='createrecipe'>
       {/* 상단에 되돌아가기 버튼 추가 */}
-      <button className='back-button' onClick={() => setScreen('recipe')}> 돌아가기 </button>
+      <button className='back-button' onClick={() => setScreen('recipe')}>
+  &lt;
+</button>
+
 
       <form onSubmit={handleSubmit}>
         {currentStep === 1 && (
           <div className='label1'>
             <br/>
-            <h2>레시피 이름을 작성해주세요 !</h2>
+            <h2 className='create'>레시피 이름을 작성해주세요 !</h2>
             <br/>
             <input className='label1in' type="text" name="foodName" value={form.foodName} onChange={handleChange} />
             <br /><br /><br/>
@@ -119,7 +122,7 @@ function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
         {currentStep === 2 && (
           <div className='label2'>
             <br/>
-            <h2>대표 사진을 등록해주세요 !</h2>
+            <h2 className='create'>대표 사진을 등록해주세요 !</h2>
             <br/>
             <div className='label2in'>
             <input type="file" accept="image/*" onChange={handleImageChange} />
@@ -138,7 +141,8 @@ function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
         {currentStep === 3 && (
           <div className='label3'>
             <br/>
-            <h2>레시피에 대한 설명을 작성해주세요 !</h2>
+            <h2 className='create'>레시피에 대한 설명을</h2>
+            <h2 className='create'>작성해주세요 !</h2>
             <br/>
             <textarea className='label3in' name="content" value={form.foodInformation.content} onChange={handleChange} />
             <br/><br/>
@@ -152,7 +156,7 @@ function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
 {currentStep === 4 && (
   <div className='label6'>
     <br/>
-    <h2>조리 시간과 양은 얼마나 되나요 ?</h2>
+    <h2 className='create'>조리 시간과 양을 적어주세요 !</h2>
     <br/>
     <div className='input-wrapper'>
       <div className='input-container'>
@@ -190,7 +194,7 @@ function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
         {currentStep === 5 && (
           <div className='label5'>
             <br/>
-            <h2>재료는 어떤 것이 필요한가요 ?</h2>
+            <h2 className='create'>재료는 어떤 것이 필요한가요 ?</h2>
             <br/>
             {form.ingredients.map((ingredient, index) => (
               <div key={index}>
@@ -226,7 +230,7 @@ function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
         {currentStep === 6 && (
           <div className='label5'>
             <br/>
-            <h2>조리 순서를 작성해주세요 !</h2>
+            <h2 className='create'>조리 순서를 작성해주세요 !</h2>
             <br/>
             {form.cookSteps.map((step, index) => (
               <div key={index}>
