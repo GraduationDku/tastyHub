@@ -98,7 +98,7 @@ function App() {
       {screen === 'post' && <Post setScreen={setScreen} onPostSelect={handlePostSelect} isGuest={isGuest} />}
       {screen === 'createpost' && !isGuest && <CreatePost setScreen={setScreen} />}
       {screen === 'mypage' && <MainMypage setScreen={setScreen} isGuest={isGuest} />}
-      {screen === 'sendchat' && selectedRoomId && !isGuest && <SendChat roomId={selectedRoomId} username={username} />}
+      {screen === 'sendchat' && selectedRoomId && !isGuest && <SendChat roomId={selectedRoomId} setScreen={setScreen} username={username} />}
       {screen === 'mypageedit' && !isGuest && <MypageEdit setScreen={setScreen} />}
       {screen === 'postDetails' && <PostDetails postId={selectedPostId} setScreen={setScreen} />}
       {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} />}
