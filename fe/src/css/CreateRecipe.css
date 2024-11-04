@@ -9,16 +9,17 @@
 }
 
 button.back-button {
-  width : 80px;
-}/* 
+  width : 50px;
+  
+}
 
-h2 {
+h2.create{
   color: #3EAB5C;
-  font-size: 24px;
+  font-size: 20px;
   text-align: center;
   margin-bottom: 20px;
 }
-
+/* 
 input, textarea {
   width: 380px;
   padding: 10px;
