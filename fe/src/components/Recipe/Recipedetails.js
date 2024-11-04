@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CreateRecipeReview from '../Review/CreateRecipeReview';
 import LikeButton from '../Like/Like'; // Ensure you import the LikeButton component correctly
 import ScrapButton from '../Scrap/Scrap'; // Import the ScrapButton component
+import '../../css/RecipeDetail.css';
 
 function RecipeDetails({ recipeId }) {
   const [recipeDetails, setRecipeDetails] = useState(null);
@@ -71,9 +72,9 @@ function RecipeDetails({ recipeId }) {
 
         <div>
           <h3>재료</h3>
-          <ul>
+          <ul className='recipedetail'>
             {recipeDetails.ingredients.map((ingredient, index) => (
-              <li key={ingredient.ingredientId || index} >
+              <li className='recipedetail' key={ingredient.ingredientId || index} >
                 {ingredient.ingredientName} - {ingredient.amount}
               </li>
             ))}
@@ -82,9 +83,9 @@ function RecipeDetails({ recipeId }) {
 
         <div>
           <h3>순서</h3>
-          <ol>
+          <ol className='recipedetail'>
             {recipeDetails.cookSteps.map((step, index) => (
-              <li key={step.cookStepId || index}>
+              <li className='recipedetail' key={step.cookStepId || index}>
                  {step.content}<br/><br/>
                 {step.stepImgUrl && <img src={step.stepImgUrl} alt={`Step ${step.stepNumber}`} style={{ width: '100%', maxHeight: '200px' }} />}
               </li>
@@ -93,13 +94,12 @@ function RecipeDetails({ recipeId }) {
         </div>
 
         <p style={{ display: 'flex', gap: '20px' }}>
-          <LikeButton recipeId={recipeId} />
+          <LikeButton className='recipedetail'recipeId={recipeId} />
           <ScrapButton recipeId={recipeId} />
         </p>
         <br/><br/><br/>
         <div className='review'>
           <div>
-            <h3>리뷰</h3>
             <ul>
               {recipeReviews.map((review, index) => (
                 <li key={index}>
