@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import '../../css/PostDetail.css';
 
 const Comment = ({ postId, refreshComments, comments }) => {
     const [content, setContent] = useState('');
@@ -75,7 +76,7 @@ const Comment = ({ postId, refreshComments, comments }) => {
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="댓글을 작성하세요."
             ></textarea>
-            <button className="btnsubmit" onClick={createComment}>Submit</button>
+            <button className="btnsubmit" onClick={createComment}>전송</button><br/>
 
             {comments.map(comment => (
                 <div key={comment.userId}>
@@ -84,14 +85,16 @@ const Comment = ({ postId, refreshComments, comments }) => {
                             <textarea
                                 value={editingContent}
                                 onChange={(e) => setEditingContent(e.target.value)}></textarea>
-                            <button onClick={() => editComment(comment.userId)}>Save</button>
-                            <button onClick={() => setEditingCommentId(null)}>Cancel</button>
+                            <button onClick={() => editComment(comment.userId)}>저장하기</button>
                         </>
                     ) : (
                         <>
-                            <p>{comment.content}</p>
-                            <button onClick={() => setEditingCommentId(comment.userId)}>Edit</button>
-                            <button onClick={() => deleteComment(comment.userId)}>Delete</button>
+                    
+                            <div className="postdetailcontent">{comment.content}
+                            <div className="postdetail">
+                            <button className='editbtn' onClick={() => setEditingCommentId(comment.userId)}>수정</button>
+                            <button className='deletebtn' onClick={() => deleteComment(comment.userId)}>삭제</button>
+                            </div></div>
                         </>
                     )}
                 </div>

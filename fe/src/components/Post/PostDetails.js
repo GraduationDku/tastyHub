@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
+import '../../css/PostDetail.css';
 
 function PostDetails({ postId, setScreen }) {
   const [postDetails, setPostDetails] = useState(null);
@@ -115,9 +116,10 @@ function PostDetails({ postId, setScreen }) {
   }
 
   return (
-    <div className="postdetails">
+    <div>
       <div className="box">
         <div className="box2">
+        <button className='but' onClick={() => setScreen('post')}>&lt;</button>
           <h1>{postDetails.title}</h1>
           <hr />
           <p className="nick">{postDetails.nickname}</p>
@@ -125,8 +127,8 @@ function PostDetails({ postId, setScreen }) {
           <p className="state">{postDetails.postState}</p>
           <p className="time">{postDetails.latestUpdateTime}</p>
           <hr />
-          <button className='but' onClick={() => setScreen('post')}>목록으로 돌아가기</button>
           <button
+          className="enterchat"
             onClick={enterChatRoom}
             style={{
               backgroundColor: roomExists ? '#6ca6d6' : 'gray',

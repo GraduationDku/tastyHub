@@ -1,0 +1,31 @@
+button.enterchat {
+  width : 150px;
+}
+
+button.btnsubmit {
+  width : 100px;
+  margin-left : 203px;
+}
+
+button.editbtn {
+  width : 150px;
+}
+button.deletebtn {
+  width : 150px;
+}
+
+div.postdetail {
+  display: flex; /* 수평 정렬 */
+  flex-direction: row;
+}
+
+div.postdetailcontent{
+  background-color : #F5F5F5;
+  padding : 40px;
+  border-radius : 20px;
+}
+
+button.but{
+  width : 40px;
+  padding : 10px;
+}
