@@ -3,7 +3,7 @@ from fastapi import FastAPI, File, UploadFile
 import boto3
 from botocore.exceptions import NoCredentialsError
 from intoGPT import create_prediction
-from useVideo import processingVideo
+from video.useVideoServiceAction import processingVideo,temp
 
 
 app = FastAPI()
@@ -50,6 +50,7 @@ async def upload_video(steps: str, foodName: str, video: UploadFile = File(...))
 
     # 영상 처리 로직 진행
     videoTimeLine = processingVideo(video, temp_cookStep)
+    print(videoTimeLine)
 
     # 영상 처리 후 저장
     filename = video.filename
@@ -63,7 +64,14 @@ async def upload_video(steps: str, foodName: str, video: UploadFile = File(...))
 
     # 추가적으로 타임라인 처리 로직이 여기에 들어갈 수 있음
 
+
     return {"message": "Video uploaded successfully", "s3_url": s3_url}
+
+@app.get("/video")
+async def read_video():
+    l = temp()
+    return l
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8084)
