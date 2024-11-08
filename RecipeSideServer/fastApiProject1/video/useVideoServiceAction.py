@@ -121,18 +121,26 @@ def processingVideo(video_path, cooking_steps):
     num_segments = len(cooking_steps)
     predicted_actions, start_times = predict_actions_on_segments(video_path, num_segments)
 
+    def format_time(seconds):
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        seconds = int(seconds % 60)
+        return f"{hours:02}:{minutes:02}:{seconds:02}"
+
     result = []
     for i in range(num_segments):
         step = cooking_steps[i]
         verb_predictions, noun_predictions = predicted_actions[i]
+        formatted_time = format_time(start_times[i])  # 시:분:초 변환
         result.append({
             "Cooking Step": step,
-            "Start Time (s)": start_times[i],  # 타임라인 추가
+            "Start Time (s)": formatted_time,  # 변환된 시간 추가
             "Verb Predictions": verb_predictions,
             "Noun Predictions": noun_predictions
         })
 
     return result
+
 
 # 요리 과정 정의
 # 요리 과정 정의 (영어)
@@ -162,14 +170,14 @@ video_path = "video/data/sample2.mp4"
 # 프로세스 실행
 def temp():
     result = processingVideo(video_path, cooking_steps)
-    for item in result:
-        print(f"Cooking Step: {item['Cooking Step']}")
-        print(f"Start Time: {item['Start Time (s)']:.2f} seconds")  # 시작 시간 출력
-        print("Verb Predictions:")
-        for label, prob in item['Verb Predictions']:
-            print(f"  {label}: {prob:.4f}")
-        print("Noun Predictions:")
-        for label, prob in item['Noun Predictions']:
-            print(f"  {label}: {prob:.4f}")
-        print("-" * 50)
+    # for item in result:
+    #     print(f"Cooking Step: {item['Cooking Step']}")
+    #     print(f"Start Time: {item['Start Time (s)']:.2f} seconds")  # 시작 시간 출력
+    #     print("Verb Predictions:")
+    #     for label, prob in item['Verb Predictions']:
+    #         print(f"  {label}: {prob:.4f}")
+    #     print("Noun Predictions:")
+    #     for label, prob in item['Noun Predictions']:
+    #         print(f"  {label}: {prob:.4f}")
+    #     print("-" * 50)
     return result
