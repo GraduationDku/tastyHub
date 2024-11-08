@@ -168,7 +168,6 @@ function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
           onChange={handleChange}
           placeholder='조리 시간'
         />
-        <span>시간</span>
       </div>
       <div className='input-container'>
         <input
@@ -179,7 +178,6 @@ function CreateRecipe({ setScreen }) {  // setScreen을 props로 받음
           onChange={handleChange}
           placeholder='양'
         />
-        <span>인분</span>
       </div>
     </div>
     <br/>

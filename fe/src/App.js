@@ -125,7 +125,7 @@ function App() {
                 {searchResults.map((recipe) => (
                   <li key={recipe.foodId} onClick={() => handleRecipeSelect(recipe.foodId)}>
                     <h2 className='searchrecipetitle'>{recipe.foodName}</h2>
-                    <img src={recipe.foodImgUrl} alt={recipe.foodName} className='searchrecipeimg'/>
+                    <img src={recipe.foodImgUrl} alt={recipe.foodName} className='searchrecipeimg' style={{ width: '340px' }}/>
                     <div>
                       <p>{recipe.foodInformationDto.text}</p>
                       <div className="recipe-info">
@@ -143,13 +143,13 @@ function App() {
                 {searchResults.map((user) => (
                   <li key={user.userId} onClick={() => handleUserSelect(user.userId)}>
                     <h2>{user.nickname}</h2>
-                    <img src={user.userImg} alt={user.nickname} />
+                    <img src={user.userImg} alt={user.nickname}/>
                   </li>
                 ))}
               </ul>
             ) : searchType === 'user' && <p>No users found</p>}
 
-            <button onClick={() => setScreen('main')}>Go Back</button>
+            <button onClick={() => setScreen('main')}>이전</button>
           </div>
         </div>
       )}
