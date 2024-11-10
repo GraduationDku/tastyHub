@@ -1,6 +1,8 @@
 import os
 import re
+from typing import List
 
+from pydantic import BaseModel
 import openai
 
 from dotenv import load_dotenv
@@ -9,12 +11,21 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 MODEL_NAME = os.getenv("MODEL_NAME")
 
+class CookStep(BaseModel):
+    stepNumber: int
+    content: str
+
+# 요청 본문 데이터 모델 정의
+class RecipeRequest(BaseModel):
+    foodName: str
+    cookSteps: List[CookStep]
+openai.api_key = API_KEY
 
 def post_gpt(system_content, user_content):
     try:
-        openai.api_key = API_KEY
-        response = openai.Completion.create(
-            model=MODEL_NAME,
+        # 파인튜닝된 모델 호출
+        response = openai.ChatCompletion.create(
+            model="ft:gpt-4o-2024-08-06:personal:tastyhub:ARr0uzTC",
             messages=[
                 {
                     "role": "system", "content": system_content
@@ -23,19 +34,42 @@ def post_gpt(system_content, user_content):
                     "role": "user", "content": user_content
                 }
             ],
-            stop=None,
             temperature=0.9
         )
         answer = response.choices[0].message.content
         return answer
     except Exception as e:
+        print(f"Error: {e}")
         return None
 
+from typing import List
+def create_prediction(foodName: str, steps: List[CookStep]):
+    # 요리 단계 데이터 가공
+    steps_content = "\n".join([step.content for step in steps])
 
-def create_prediction(foodName, steps):
-    system_content = "You are a culinary expert and a writer who edits. Unify the styles posted by the user according to the set tone and style."
-    user_content = "한글로 답변해줘; 사용자가 입력한 요리제목은" + f' {foodName}이다.; 사용자가 입력한 '+f'{steps}가 해당 요리에 적합한지 확인을 해줘; 해당 요리 단계는 하나의 동작마다 한 줄씩 정리해서 출력을 해야하며 문장의 끝맺음은 "-이다"로 진행해줘; 그리고 이때 사용자의 요리 과정에 다른 추가 과정을, 개선점을 입력하지마. 오로지 사용자의 요리 단계가 해당 요리이름에 적합한지, 그리고 요리과정의 문체만 손봐서 올려줘 \n\n'
+    # 시스템 메시지와 사용자 요청 메시지 정의
+    system_content = (
+        "You are a culinary expert and a writer who translates cooking steps to English. "
+        "Always use only the verbs that you were specifically trained on during fine-tuning, "
+        "and ensure that all important details in each step are maintained."
+    )
+    user_content = (
+        "Translate the following cooking steps into English, ensuring each step follows a 'verb + noun' structure "
+        "and that no details are omitted. Use only the verbs you were trained on, and avoid any additional or alternative verbs. "
+        "Translate each step into a lowercase sentence. "
+        f"The recipe name provided by the user is '{foodName}'. The cooking steps are:\n\n{steps_content}\n\n"
+        "Ensure that each step captures all the necessary details provided, such as heating the pan, adding oil, etc. "
+        "Translate and structure each step as a single sentence in English, ending with a period."
+    )
+
+    # GPT 요청 함수 호출
     ans = post_gpt(system_content, user_content)
-    sentences = [ans.strip() for sentence in ans if sentence.strip()]
+
+    # None 처리 및 반환
+    if ans:
+        sentences = [sentence.strip() for sentence in ans.split('\n') if sentence.strip()]
+    else:
+        sentences = ["An error occurred and no response was received."]
     return sentences
+
 

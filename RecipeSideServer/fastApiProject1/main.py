@@ -4,9 +4,10 @@ import uvicorn
 from fastapi import FastAPI, File, UploadFile
 import boto3
 from botocore.exceptions import NoCredentialsError
-from intoGPT import create_prediction
+from intoGPT import create_prediction, RecipeRequest
 from video.useVideoServiceAction import processingVideo,temp
 from video.useYoutubeServiceAction import youtubeAnalysis
+
 
 
 app = FastAPI()
@@ -51,6 +52,14 @@ async def upload_video(youtubeUrl: str):
     # 영상 처리 로직 진행
     response_body = youtubeAnalysis(youtubeUrl)
     return response_body
+
+
+@app.post("/gpt")
+async def testGpt(request: RecipeRequest):
+    # create_prediction 함수 호출
+    result = create_prediction(request.foodName, request.cookSteps)
+    return {"predictions": result}
+
 
 @app.post("/youtube/test")
 async def upload_video():

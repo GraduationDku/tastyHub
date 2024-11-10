@@ -33,7 +33,7 @@ def youtubeAnalysis(video_url):
       # 쿼리 생성
       q = YTQuery(
           query="""
-        요리 재료와 양을 표시하고, 아래 형식으로 요리 단계를 JSON 형식으로 응답해 주세요.
+        요리 재료와 양을 표시하고, 아래 형식과 같이 요리 단계를 각 단계에 맞는 유튜브 영상 타임라인을 포함한 JSON 형식으로 응답해 주세요. 요리가 여러 개 나오는 영상이면 대표 메뉴 하나만 응답해주세요
         {
 ”foodName” :String,
 
@@ -50,11 +50,11 @@ def youtubeAnalysis(video_url):
 ”cookSteps” : [
    {
     “stepNumber” :Long
+    "timeLine" :String
     “content” :String
    },
 ]
 }
-        각 단계에 맞는 유튜브 영상 타임라인도 포함해주세요.
     """,
           video_id=video_id
       )
@@ -79,3 +79,5 @@ def youtubeAnalysis(video_url):
 
     except ApiException as e:
       print(f"YouTube Query 엔드포인트 호출 중 예외 발생: {e}")
+
+
