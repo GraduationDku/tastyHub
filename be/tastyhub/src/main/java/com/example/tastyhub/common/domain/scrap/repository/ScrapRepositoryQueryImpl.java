@@ -29,7 +29,7 @@ public class ScrapRepositoryQueryImpl implements ScrapRepositoryQuery {
     @Override
     public Page<PagingScrapResponse> findScrapedRecipe(Pageable pageable, Long userId) {
         List<PagingScrapResponse> pagingScrapResponses = jpaQueryFactory
-                .select(new QPagingScrapResponse(recipe.id, recipe.foodName, recipe.foodImgUrl))
+                .select(new QPagingScrapResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl))
                 .from(scrap)
                 .where(scrap.user.id.eq(userId))
                 .leftJoin(scrap.recipe, recipe)
