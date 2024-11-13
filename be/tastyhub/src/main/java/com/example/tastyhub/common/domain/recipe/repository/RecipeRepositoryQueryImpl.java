@@ -34,7 +34,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
   @Override
   public Page<PagingRecipeResponse> findAllandPaging(Pageable pageable) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
-        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl,
+        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl,
             foodInformation.id,
             foodInformation.content, foodInformation.cookingTime, foodInformation.serving))
         .from(recipe)
@@ -54,7 +54,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
   @Override
   public Page<PagingRecipeResponse> findMyRecipes(Pageable pageable, Long userId) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
-        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl,
+        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl,
             foodInformation.id,
             foodInformation.content, foodInformation.cookingTime, foodInformation.serving))
         .from(recipe)
@@ -78,7 +78,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
   public RestPage<PagingRecipeResponse> findPopular(Pageable pageable) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
         .select(
-            new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl,
+            new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl,
                 foodInformation.id,
                 foodInformation.content, foodInformation.cookingTime, foodInformation.serving)
         )
@@ -99,7 +99,7 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
   @Override
   public Page<PagingRecipeResponse> searchByKeyword(String keyword, Pageable pageable) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
-        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.foodImgUrl,
+        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl,
             foodInformation.id,
             foodInformation.content, foodInformation.cookingTime, foodInformation.serving))
         .from(recipe)

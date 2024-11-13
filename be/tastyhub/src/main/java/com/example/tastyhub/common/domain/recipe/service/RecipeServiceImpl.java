@@ -102,7 +102,7 @@ public class RecipeServiceImpl implements RecipeService {
   public void updateRecipe(Long recipeId, MultipartFile img, User user,
       RecipeUpdateDto recipeUpdateDto) throws java.io.IOException {
     Recipe recipe = checkRecipeAndUser(recipeId, user);
-    String originalImgUrl = recipe.getFoodImgUrl();
+    String originalImgUrl = recipe.getRecipeMediaFileUrl();
     String imgUrl = new String();
     try {
       imgUrl = s3Uploader.upload(img, "image/recipeImg");
@@ -171,7 +171,7 @@ public class RecipeServiceImpl implements RecipeService {
   @CacheEvict(value = "popularRecipes", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
   public void deleteRecipe(Long recipeId, User user) throws java.io.IOException {
     Recipe recipe = checkRecipeAndUser(recipeId, user);
-    String imgUrl = recipe.getFoodImgUrl();
+    String imgUrl = recipe.getRecipeMediaFileUrl();
     recipeRepository.delete(recipe);
     s3Uploader.delete(imgUrl);
   }

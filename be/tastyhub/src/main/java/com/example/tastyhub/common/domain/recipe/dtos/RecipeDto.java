@@ -38,7 +38,7 @@ public class RecipeDto {
             .foodName(recipe.getFoodName())
             .isLiked(isLiked)
             .isScraped(isScraped)
-            .foodImgUrl(recipe.getFoodImgUrl())
+            .foodImgUrl(recipe.getRecipeMediaFileUrl())
             .foodInformation(foodInformationDto)
             .ingredients(ingredients)
             .cookSteps(cookSteps)

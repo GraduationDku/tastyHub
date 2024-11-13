@@ -50,7 +50,8 @@ public class Recipe extends TimeStamped {
     private String foodName;
 
     @Column(name = "food_img",length = 1024)
-    private String foodImgUrl;
+    private String recipeMediaFileUrl;
+
 
 //    private Long numLike;
 
@@ -87,14 +88,14 @@ public class Recipe extends TimeStamped {
         this.ingredients = ingredients;
         this.cookSteps = cookSteps;
         this.foodName = foodName;
-        this.foodImgUrl = imgUrl;
+        this.recipeMediaFileUrl = imgUrl;
     }
 
     public static Recipe createRecipe(RecipeCreateDto recipeCreateDto, User user, String imgUrl,
         FoodInformation foodInformation, List<Ingredient> ingredients, List<CookStep> cookSteps) {
         return Recipe.builder()
             .foodName(recipeCreateDto.getFoodName())
-            .foodImgUrl(imgUrl)
+            .recipeMediaFileUrl(imgUrl)
             .user(user)
             .foodInformation(foodInformation)
             .ingredients(ingredients)
