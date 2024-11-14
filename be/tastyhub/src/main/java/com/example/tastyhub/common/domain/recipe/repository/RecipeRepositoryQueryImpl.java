@@ -6,8 +6,8 @@ import static com.example.tastyhub.common.domain.like.entity.QLike.like;
 import static com.example.tastyhub.common.domain.scrap.entity.QScrap.scrap;
 
 
+import com.example.tastyhub.common.domain.recipe.dtos.QPagingRecipeResponse;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
-import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.utils.page.RestPage;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
-import com.example.tastyhub.common.domain.recipe.dtos.QPagingRecipeResponse;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,7 +33,8 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
   @Override
   public Page<PagingRecipeResponse> findAllandPaging(Pageable pageable) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
-        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl,
+        .select(new QPagingRecipeResponse(recipe.id, recipe.recipeType, recipe.foodName,
+            recipe.recipeImgUrl,
             foodInformation.id,
             foodInformation.content, foodInformation.cookingTime, foodInformation.serving))
         .from(recipe)
@@ -54,7 +54,8 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
   @Override
   public Page<PagingRecipeResponse> findMyRecipes(Pageable pageable, Long userId) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
-        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl,
+        .select(new QPagingRecipeResponse(recipe.id, recipe.recipeType, recipe.foodName,
+            recipe.recipeImgUrl,
             foodInformation.id,
             foodInformation.content, foodInformation.cookingTime, foodInformation.serving))
         .from(recipe)
@@ -78,7 +79,8 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
   public RestPage<PagingRecipeResponse> findPopular(Pageable pageable) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
         .select(
-            new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl,
+            new QPagingRecipeResponse(recipe.id, recipe.recipeType, recipe.foodName,
+                recipe.recipeImgUrl,
                 foodInformation.id,
                 foodInformation.content, foodInformation.cookingTime, foodInformation.serving)
         )
@@ -99,7 +101,8 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
   @Override
   public Page<PagingRecipeResponse> searchByKeyword(String keyword, Pageable pageable) {
     List<PagingRecipeResponse> pagingRecipeResponses = jpaQueryFactory
-        .select(new QPagingRecipeResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl,
+        .select(new QPagingRecipeResponse(recipe.id, recipe.recipeType, recipe.foodName,
+            recipe.recipeImgUrl,
             foodInformation.id,
             foodInformation.content, foodInformation.cookingTime, foodInformation.serving))
         .from(recipe)
@@ -151,7 +154,6 @@ public class RecipeRepositoryQueryImpl implements RecipeRepositoryQuery {
 
     return count != null && count > 0;
   }
-
 
 
   // Helper method to dynamically add sort specifiers with direction

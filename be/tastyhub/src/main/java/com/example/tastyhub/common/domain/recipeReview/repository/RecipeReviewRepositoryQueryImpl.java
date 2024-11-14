@@ -47,7 +47,7 @@ public class RecipeReviewRepositoryQueryImpl implements RecipeReviewRepositoryQu
         List<PagingMyRecipeReviewResponse> pagingMyRecipeReviewResponseList =
              jpaQueryFactory.select(Projections.constructor(PagingMyRecipeReviewResponse.class,
                     recipe.id,
-                    recipe.recipeMediaFileUrl,
+                    recipe.recipeImgUrl,
                     recipe.foodName,
                     recipeReview.grade,
                     recipeReview.content

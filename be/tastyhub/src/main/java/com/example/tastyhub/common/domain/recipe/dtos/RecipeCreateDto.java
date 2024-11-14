@@ -3,6 +3,7 @@ package com.example.tastyhub.common.domain.recipe.dtos;
 import com.example.tastyhub.common.domain.cookstep.dtos.CookStepCreateRequest;
 import com.example.tastyhub.common.domain.foodInformation.dtos.FoodInformationCreateDto;
 import com.example.tastyhub.common.domain.ingredient.dtos.IngredientCreateDto;
+import com.example.tastyhub.common.domain.recipe.entity.RecipeType;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -16,15 +17,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecipeCreateDto {
 
-    private String foodName;
+  private RecipeType recipeType;
 
-    private String foodImg;
+  private String foodName;
 
-    private FoodInformationCreateDto foodInformation;
+  private String foodVideoUrl;
 
-    private List<IngredientCreateDto> ingredients;
+  private FoodInformationCreateDto foodInformation;
 
-    private List<CookStepCreateRequest> cookSteps;
+  private List<IngredientCreateDto> ingredients;
+
+  private List<CookStepCreateRequest> cookSteps;
 
 
 }

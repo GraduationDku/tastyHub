@@ -1,6 +1,5 @@
 package com.example.tastyhub.common.domain.scrap.repository;
 
-import static com.example.tastyhub.common.domain.foodInformation.entity.QFoodInformation.foodInformation;
 import static com.example.tastyhub.common.domain.recipe.entity.QRecipe.recipe;
 
 import java.util.List;
@@ -12,8 +11,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import static com.example.tastyhub.common.domain.scrap.entity.QScrap.scrap;
 
-import com.example.tastyhub.common.domain.recipe.dtos.PagingRecipeResponse;
-import com.example.tastyhub.common.domain.recipe.dtos.QPagingRecipeResponse;
 import com.example.tastyhub.common.domain.scrap.dtos.PagingScrapResponse;
 import com.example.tastyhub.common.domain.scrap.dtos.QPagingScrapResponse;
 import com.querydsl.core.types.dsl.Wildcard;
@@ -29,7 +26,7 @@ public class ScrapRepositoryQueryImpl implements ScrapRepositoryQuery {
     @Override
     public Page<PagingScrapResponse> findScrapedRecipe(Pageable pageable, Long userId) {
         List<PagingScrapResponse> pagingScrapResponses = jpaQueryFactory
-                .select(new QPagingScrapResponse(recipe.id, recipe.foodName, recipe.recipeMediaFileUrl))
+                .select(new QPagingScrapResponse(recipe.id, recipe.foodName, recipe.recipeImgUrl))
                 .from(scrap)
                 .where(scrap.user.id.eq(userId))
                 .leftJoin(scrap.recipe, recipe)
