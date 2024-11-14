@@ -5,6 +5,7 @@ function CreateRecipe({ setScreen }) {
   const [isPhotoMode, setIsPhotoMode] = useState(true); // 초기 모드는 사진
   const [isYouTubeMode, setIsYouTubeMode] = useState(false); // 유튜브 링크 입력 모드
   const [form, setForm] = useState({
+    recipeType: '',
     foodName: '',
     foodInformation: {
       content: '',
@@ -78,59 +79,106 @@ function CreateRecipe({ setScreen }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      let url;
-      let data;
-      const formData = new FormData();
+      let processedCookSteps = [];
+      let recipeType = 'photo';
 
       if (isYouTubeMode) {
-        url = `${process.env.REACT_APP_API_URL}/video/youtube/link`;
-        data = { youtubeUrl: form.youtubeUrl };
-        formData.append('data', JSON.stringify(data));
-      } else {
-        url = isPhotoMode
-          ? `${process.env.REACT_APP_API_URL}/recipe/create`
-          : `${process.env.REACT_APP_API_URL}/video/media/action`;
+        recipeType = 'youtube';
+        // 유튜브 API 호출
+        const youtubeResponse = await fetch(`${process.env.REACT_APP_API_URL}/video/youtube/link`, {
+          method: 'POST',
+          headers: {
+            'Authorization': localStorage.getItem('accessToken'),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ youtubeUrl: form.youtubeUrl }),
+        });
 
-        data = {
-          foodName: form.foodName,
-          cookSteps: isPhotoMode ? form.cookSteps : []
-        };
+        if (youtubeResponse.ok) {
+          const data = await youtubeResponse.json();
+          processedCookSteps = data.cookSteps.map((step, index) => ({
+          stepNumber: index + 1, // 단계 번호는 순서대로 부여
+          timeLine: step.time,  // 서버에서 제공한 time 값
+          content: step.content, // 서버에서 제공한 단계 설명
+          }));
+        } else {
+          throw new Error('유튜브 처리 실패');
+        }
+      } else if (!isPhotoMode) {
+        recipeType = 'video';
+        // 동영상 API 호출
+        const formData = new FormData();
+        formData.append('foodName', form.foodName);
+        formData.append('cookSteps', new Blob([JSON.stringify(form.cookSteps)], { type: 'application/json' })); // 사용자가 입력한 cookSteps
+        formData.append('foodVideo', videoFile);
 
-        formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-        formData.append('img', file); // 대표 사진 파일 추가
-        if (!isPhotoMode) formData.append('foodVideo', videoFile); // 동영상 추가
+        const videoResponse = await fetch(`${process.env.REACT_APP_API_URL}/video/media/action`, {
+          method: 'POST',
+          headers: {
+            'Authorization': localStorage.getItem('accessToken'),
+          },
+          body: formData,
+        });
+
+        if (videoResponse.ok) {
+          const data = await videoResponse.json();
+          processedCookSteps = data.timeLine.map((time, index) => ({
+          stepNumber: index + 1, // 단계 번호는 순서대로 부여
+          timeLine: time,       // 서버에서 제공한 time 값
+          content: data.cookSteps[index]?.content || '', // 서버에서 제공한 단계 설명
+          }));
+        } else {
+          throw new Error('동영상 처리 실패');
+        }
       }
 
-      const response = await fetch(url, {
+      // 최종 API 호출
+      const finalFormData = new FormData();
+      finalFormData.append(
+        'data',
+        new Blob(
+          [
+            JSON.stringify({
+              ...form,
+              cookSteps: processedCookSteps, // 추가 데이터 포함
+            }),
+          ],
+          { type: 'application/json' }
+        )
+      );
+      finalFormData.append('img', file); // 대표 사진 추가
+
+      const finalResponse = await fetch(`${process.env.REACT_APP_API_URL}/recipe/create`, {
         method: 'POST',
         headers: {
           'Authorization': localStorage.getItem('accessToken'),
         },
-        body: formData,
+        body: finalFormData,
       });
 
-      if (response.ok) {
-        alert('Recipe created successfully!');
+      if (finalResponse.ok) {
+        alert('레시피가 성공적으로 생성되었습니다!');
       } else {
-        throw new Error('Failed to create recipe');
+        throw new Error('최종 레시피 생성 실패');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error creating recipe');
+      alert('레시피 생성 중 오류가 발생했습니다.');
     }
   };
 
   return (
-    <div className='createrecipe'>
-      <button className='back-button' onClick={() => setScreen('recipe')}>&lt;</button>
+    <div className="createrecipe">
+      <button className="back-button" onClick={() => setScreen('recipe')}>&lt;</button>
       <br /><br />
       <form onSubmit={handleSubmit}>
         {currentStep === 1 && (
-          <div className='label1'>
+          <div className="label1">
             <br />
-            <h2 className='create'>레시피 이름을 작성해주세요 !</h2>
-            <input className='label1in' type="text" name="foodName" value={form.foodName} onChange={handleChange} />
+            <h2 className="create">레시피 이름을 작성해주세요 !</h2>
+            <input className="label1in" type="text" name="foodName" value={form.foodName} onChange={handleChange} />
             <br /><br /><br />
             <button type="button" onClick={nextStep}>다음</button>
             <br /><br /><br />
@@ -138,9 +186,9 @@ function CreateRecipe({ setScreen }) {
         )}
 
         {currentStep === 2 && (
-          <div className='label2'>
+          <div className="label2">
             <br />
-            <h2 className='create'>대표 사진을 등록해주세요 !</h2>
+            <h2 className="create">대표 사진을 등록해주세요 !</h2>
             <br />
             <input type="file" accept="image/*" onChange={handleFileChange} />
             <br /><br />
@@ -153,11 +201,11 @@ function CreateRecipe({ setScreen }) {
         )}
 
         {currentStep === 3 && (
-          <div className='label3'>
+          <div className="label3">
             <br />
-            <h2 className='create'>레시피에 대한 설명을 작성해주세요 !</h2>
+            <h2 className="create">레시피에 대한 설명을 작성해주세요 !</h2>
             <br />
-            <textarea className='label3in' name="content" value={form.foodInformation.content} onChange={handleChange} />
+            <textarea className="label3in" name="content" value={form.foodInformation.content} onChange={handleChange} />
             <br /><br />
             <button type="button" onClick={prevStep}>이전</button>
             <button type="button" onClick={nextStep}>다음</button>
@@ -166,9 +214,9 @@ function CreateRecipe({ setScreen }) {
         )}
 
         {currentStep === 4 && (
-          <div className='label4'>
+          <div className="label4">
             <br />
-            <h2 className='create'>조리 시간과 양을 적어주세요 !</h2>
+            <h2 className="create">조리 시간과 양을 적어주세요 !</h2>
             <br />
             <input
               type="number"
@@ -193,9 +241,9 @@ function CreateRecipe({ setScreen }) {
         )}
 
         {currentStep === 5 && (
-          <div className='label5'>
+          <div className="label5">
             <br />
-            <h2 className='create'>재료는 어떤 것이 필요한가요 ?</h2>
+            <h2 className="create">재료는 어떤 것이 필요한가요 ?</h2>
             <br />
             {form.ingredients.map((ingredient, index) => (
               <div key={index}>
@@ -227,11 +275,10 @@ function CreateRecipe({ setScreen }) {
             <br /><br /><br />
           </div>
         )}
-
 {currentStep === 6 && (
-  <div className='label6'>
+  <div className="label6">
     <br />
-    <h2 className='create'>조리 단계 입력 방법 선택</h2>
+    <h2 className="create">조리 단계 입력 방법 선택</h2>
     <br />
     <div className="mode-toggle">
       <button
@@ -295,67 +342,28 @@ function CreateRecipe({ setScreen }) {
           placeholder="유튜브 링크 입력"
         />
         <br /><br />
-        <button
-          type="button"
-          onClick={async () => {
-            try {
-              const response = await fetch(`${process.env.REACT_APP_API_URL}/video/youtube/link`, {
-                method: 'POST',
-                headers: { 'Authorization': localStorage.getItem('accessToken') },
-                body: JSON.stringify({ youtubeUrl: form.youtubeUrl })
-              });
-              if (response.ok) {
-                const data = await response.json();
-                alert('YouTube 데이터 처리 완료!');
-                console.log(data);
-              } else {
-                throw new Error('유튜브 링크 처리 실패');
-              }
-            } catch (error) {
-              console.error(error);
-              alert('Error');
-            }
-          }}
-        >
-          입력 완료
-        </button>
       </>
     ) : (
       <>
         <input type="file" accept="video/*" onChange={handleVideoChange} />
+        {videoPreview && <video src={videoPreview} controls style={{ width: '100%', height: '50%' }} />}
         <br /><br />
-        <button
-          type="button"
-          onClick={async () => {
-            try {
-              const formData = new FormData();
-              formData.append('foodName', form.foodName);
-              formData.append('foodVideo', videoFile);
-
-              const response = await fetch(`${process.env.REACT_APP_API_URL}/video/media/action`, {
-                method: 'POST',
-                headers: { 'Authorization': localStorage.getItem('accessToken') },
-                body: formData,
-              });
-
-              if (response.ok) {
-                const data = await response.json();
-                alert('동영상 데이터 처리 완료!');
-                console.log(data);
-              } else {
-                throw new Error('동영상 처리 실패');
-              }
-            } catch (error) {
-              console.error(error);
-              alert('Error');
-            }
-          }}
-        >
-          입력 완료
-        </button>
-        {videoPreview && (
-          <video src={videoPreview} controls style={{ width: '100%', height: '50%' }} />
-        )}
+        {form.cookSteps.map((step, index) => (
+          <div key={index}>
+            <br />
+            <span>{step.stepNumber}</span>
+            <input
+              name="content"
+              value={step.content}
+              onChange={(e) => handleArrayChange(e, index, 'cookSteps')}
+              placeholder="조리 단계"
+            />
+            <br /><br />
+            <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}>삭제</button>
+            <br /><br />
+          </div>
+        ))}
+        <button type="button" onClick={() => handleAddArrayItem('cookSteps')}>+</button>
       </>
     )}
     <br /><br />
@@ -365,6 +373,7 @@ function CreateRecipe({ setScreen }) {
   </div>
 )}
 
+        
       </form>
     </div>
   );
