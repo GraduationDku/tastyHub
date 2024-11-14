@@ -51,8 +51,11 @@ def create_prediction(foodName: str, steps: List[CookStep]):
     system_content = (
         "You are a culinary expert and a writer who translates cooking steps to English. "
         "Always use only the verbs that you were specifically trained on during fine-tuning, "
-        "and ensure that all important details in each step are maintained."
+        "and ensure that all important details in each step are maintained. "
+        "If a cooking step contains multiple verbs and nouns within a single sentence, "
+        "keep only the portion up to the first verb and noun pair, and exclude the rest."
     )
+
     user_content = (
         "Translate the following cooking steps into English, ensuring each step follows a 'verb + noun' structure "
         "and that no details are omitted. Use only the verbs you were trained on, and avoid any additional or alternative verbs. "
