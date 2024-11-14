@@ -10,14 +10,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CookStepDto {
 
-    private Long cookStepId;
     private Long stepNumber;
+    private String timeLine;
     private String stepImgUrl;
     private String content;
 
     public CookStepDto(CookStep cookStep) {
-        this.cookStepId = cookStep.getId();
         this.stepNumber = cookStep.getStepNumber();
+        this.timeLine = cookStep.getTimeline();
 //        this.stepImgUrl = cookStep.get;
         this.content = cookStep.getContent();
     }

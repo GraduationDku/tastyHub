@@ -55,6 +55,7 @@ public class CookStep extends TimeStamped {
   public static CookStep makeCookStep(CookStepCreateRequest cookStepCreateRequest) {
     return CookStep.builder()
         .stepNumber(cookStepCreateRequest.getStepNumber())
+        .timeline(cookStepCreateRequest.getTimeLine())
         .content(cookStepCreateRequest.getContent())
         .stepImgUrl("after S3")
         .build();
