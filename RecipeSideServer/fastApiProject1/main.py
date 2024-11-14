@@ -1,9 +1,12 @@
 import os
+from typing import List
 
 import uvicorn
 from fastapi import FastAPI, File, UploadFile
 import boto3
 from botocore.exceptions import NoCredentialsError
+from pydantic import BaseModel
+
 from intoGPT import create_prediction, RecipeRequest
 from video.useVideoServiceAction import processingVideo,temp
 from video.useYoutubeServiceAction import youtubeAnalysis
@@ -17,7 +20,11 @@ S3_BUCKET = os.getenv("S3_BUCKET")
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY")
 S3_SECRET_KEY = os.getenv("S3_SECRET_KEY")
 S3_REGION = os.getenv("S3_REGION")
-
+# Define the input data structure for cookSteps
+class CookStep(BaseModel):
+    stepNumber: int
+    timeLine: str
+    content: str
 
 # S3에 파일 업로드 함수
 def upload_to_s3(file, bucket, filename):
@@ -70,12 +77,13 @@ async def upload_video():
 
 # 영상만 타임라인 받는 엔드포인트
 @app.post("/recipe/video/timeline")
-async def upload_video(steps: str, foodName: str, video: UploadFile = File(...)):
-    # gpt 프롬프트
-    temp_cookStep = create_prediction(foodName,steps)
+async def upload_video(steps: List[CookStep], foodName: str, video: UploadFile = File(...)):
+    # Convert steps to a list of content strings for processing
+    temp_cookStep = create_prediction(foodName,[step.content for step in steps])
+
 
     # 영상 처리 로직 진행
-    videoTimeLine = processingVideo(video, temp_cookStep)
+    videoTimeLine = processingVideo(video, temp_cookStep,steps )
     print(videoTimeLine)
 
     # 영상 처리 후 저장
@@ -88,15 +96,12 @@ async def upload_video(steps: str, foodName: str, video: UploadFile = File(...))
     if "error" in s3_url:
         return {"error": "Failed to upload to S3"}
 
-    # 추가적으로 타임라인 처리 로직이 여기에 들어갈 수 있음
-
-
-    return {"message": "Video uploaded successfully", "s3_url": s3_url}
-
+    # Return the video URL and the processed timeline
+    return {"message": "Video uploaded successfully", "s3_url": s3_url, "videoTimeline": videoTimeLine}
 @app.get("/video")
 async def read_video():
     l = temp()
-    return l
+    return {"message": "Video uploaded successfully", "s3_url": "s3_url", "videoTimeline": l}
 
 
 if __name__ == "__main__":
