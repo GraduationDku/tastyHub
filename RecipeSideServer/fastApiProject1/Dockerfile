@@ -1,17 +1,34 @@
-# 베이스 이미지 선택 (Python 3.9 사용)
-FROM python:3.9
+# Use the official Python base image
+FROM python:3.11-slim
 
-# 작업 디렉토리 설정
+# Install build dependencies and additional tools
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    make \
+    libarchive-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory
 WORKDIR /app
 
-# 종속성 설치를 위한 requirements.txt 파일 복사
-COPY requirements.txt .
+# Copy the requirements files into the container
+COPY requirements-docker.txt /app/requirements.txt
 
-# 종속성 설치
+# Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# FastAPI 애플리케이션 코드 복사
-COPY . .
+# Install uvicorn explicitly
+RUN pip install uvicorn[standard]
 
-# uvicorn을 통해 FastAPI 서버 실행 (포트 8084)
+# Copy the rest of the application code
+COPY . /app
+
+# Set the environment variable for FastAPI
+ENV PYTHONUNBUFFERED 1
+
+# Expose port 8084 for the FastAPI server
+EXPOSE 8084
+
+# Command to run the FastAPI server
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084"]
