@@ -43,9 +43,9 @@ def post_gpt(system_content, user_content):
         return None
 
 from typing import List
-def create_prediction(foodName: str, steps: List[CookStep]):
+def create_prediction(foodName: str, steps: List[str]):
     # 요리 단계 데이터 가공
-    steps_content = "\n".join([step.content for step in steps])
+    steps_content = "\n".join([step for step in steps])
 
     # 시스템 메시지와 사용자 요청 메시지 정의
     system_content = (

@@ -151,6 +151,7 @@ function CreateRecipe({ setScreen }) {
 
         if (videoResponse.ok) {
           const data = await videoResponse.json();
+          console.log(data)
           processedCookSteps = data.timeLine.map((time, index) => ({
             stepNumber: index + 1,
             timeLine: time,

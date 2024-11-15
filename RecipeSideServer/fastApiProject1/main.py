@@ -1,3 +1,6 @@
+import cv2
+import numpy as np
+from io import BytesIO
 import os
 import json
 from typing import List, Optional
@@ -43,6 +46,16 @@ class YouTubeLinkRequest(BaseModel):
     youtubeUrl: str
 
 
+def read_video_from_uploadfile(upload_file: UploadFile):
+    """UploadFile 객체를 OpenCV에서 읽을 수 있는 형태로 변환"""
+    video_bytes = BytesIO(upload_file.file.read())  # 업로드된 파일 읽기
+    temp_video_path = "/tmp/temp_video.mp4"  # 임시 경로에 저장
+
+    with open(temp_video_path, "wb") as temp_file:
+        temp_file.write(video_bytes.getvalue())
+
+    return temp_video_path
+
 # S3 파일 업로드 함수
 def upload_to_s3(file, bucket, filename):
     s3 = boto3.client(
@@ -86,35 +99,39 @@ async def youtube_test():
     response_body = youtubeAnalysis(link)
     return response_body
 
-
 @app.post("/video/media/action")
 async def upload_video(
     foodName: str = Form(...),
-    cookSteps: str = Form(None),
+    cookSteps: str = Form(...),
     foodVideo: UploadFile = File(...)
 ):
-    # 데이터 확인
-    print(f"Food Name: {foodName}")
-    print(f"Cook Steps: {cookSteps}")
-    print(f"Uploaded Video: {foodVideo.filename}")
-    # JSON 형식의 cookSteps 파싱
+    import json
+
+    # cookSteps JSON 파싱
     cookSteps = json.loads(cookSteps)
-    print(cookSteps)
-    temp_cook = []
-    for i in cookSteps:
-        temp_cook.append(i.get("content"))
-    # 조리 단계 예측 생성
-    
-    temp_cookStep = create_prediction(foodName, temp_cook)
+    temp_cook = [step["content"] for step in cookSteps]
 
-    # 영상 처리 로직
-    processedCookSteps = processingVideo(foodVideo, temp_cookStep, cookSteps)
-    print(processedCookSteps)
+    # 업로드된 비디오를 OpenCV에서 읽을 수 있는 형태로 변환
+    temp_video_path = read_video_from_uploadfile(foodVideo)
 
-    # S3에 파일 저장
+    # 예측 및 처리
+    try:
+        temp_cookStep = create_prediction(foodName, temp_cook)
+        print("Generated CookStep Predictions:", temp_cookStep)
+
+        processedCookSteps = processingVideo(temp_video_path, temp_cookStep, cookSteps)
+        print("Processed CookSteps:", processedCookSteps)
+    finally:
+        # 임시 파일 삭제
+        import os
+        if os.path.exists(temp_video_path):
+            os.remove(temp_video_path)
+
+    # S3 업로드
     filename = foodVideo.filename
     file_location = f"videos/{filename}"
     s3_url = upload_to_s3(foodVideo.file, S3_BUCKET, file_location)
+    print(s3_url)
 
     if "error" in s3_url:
         return {"error": "Failed to upload to S3"}
