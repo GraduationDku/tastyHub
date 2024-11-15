@@ -1,6 +1,6 @@
 import os
 import json
-from typing import List
+from typing import List, Optional
 from fastapi import FastAPI, File, UploadFile, Form, Body
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
@@ -37,9 +37,6 @@ class CookStep(BaseModel):
     timeLine: str
     content: str
 
-class BeforeCookStep(BaseModel):
-    stepNumber: int
-    content: str
 
 
 class YouTubeLinkRequest(BaseModel):
@@ -93,15 +90,22 @@ async def youtube_test():
 @app.post("/video/media/action")
 async def upload_video(
     foodName: str = Form(...),
-    cookSteps: str = Form(...),
+    cookSteps: str = Form(None),
     foodVideo: UploadFile = File(...)
 ):
+    # 데이터 확인
+    print(f"Food Name: {foodName}")
+    print(f"Cook Steps: {cookSteps}")
+    print(f"Uploaded Video: {foodVideo.filename}")
     # JSON 형식의 cookSteps 파싱
     cookSteps = json.loads(cookSteps)
-    cookSteps = [BeforeCookStep(**step) for step in cookSteps]
-
+    print(cookSteps)
+    temp_cook = []
+    for i in cookSteps:
+        temp_cook.append(i.get("content"))
     # 조리 단계 예측 생성
-    temp_cookStep = create_prediction(foodName, [step.content for step in cookSteps])
+    
+    temp_cookStep = create_prediction(foodName, temp_cook)
 
     # 영상 처리 로직
     processedCookSteps = processingVideo(foodVideo, temp_cookStep, cookSteps)
