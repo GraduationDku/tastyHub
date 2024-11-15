@@ -1,32 +1,52 @@
 import os
+import json
 from typing import List
-
-import uvicorn
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Form, Body
+from pydantic import BaseModel
+from starlette.middleware.cors import CORSMiddleware
 import boto3
 from botocore.exceptions import NoCredentialsError
-from pydantic import BaseModel
+import uvicorn
 
+# Local imports
 from intoGPT import create_prediction, RecipeRequest
-from video.useVideoServiceAction import processingVideo,temp
+from video.useVideoServiceAction import processingVideo, temp
 from video.useYoutubeServiceAction import youtubeAnalysis
-
-
 
 app = FastAPI()
 
-# AWS S3 설정 (Bucket 이름, AWS 인증 정보)
+# CORS 설정
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://localhost:3000", "https://example.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# AWS S3 설정
 S3_BUCKET = os.getenv("S3_BUCKET")
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY")
 S3_SECRET_KEY = os.getenv("S3_SECRET_KEY")
 S3_REGION = os.getenv("S3_REGION")
-# Define the input data structure for cookSteps
+
+
+# 데이터 모델 정의
 class CookStep(BaseModel):
     stepNumber: int
     timeLine: str
     content: str
 
-# S3에 파일 업로드 함수
+class BeforeCookStep(BaseModel):
+    stepNumber: int
+    content: str
+
+
+class YouTubeLinkRequest(BaseModel):
+    youtubeUrl: str
+
+
+# S3 파일 업로드 함수
 def upload_to_s3(file, bucket, filename):
     s3 = boto3.client(
         "s3",
@@ -48,56 +68,56 @@ async def root():
 
 @app.get("/hello/{foodName}/{step}")
 async def say_hello(foodName: str, step: str):
-    temp_cookStep = create_prediction(foodName,step)
-
+    temp_cookStep = create_prediction(foodName, step)
     return {"message": f"Hello {temp_cookStep}"}
 
-# 유튜브 레시피 분석 엔드포인트
-@app.post("/video/youtube/link")
-async def upload_video(youtubeUrl: str):
 
-    # 영상 처리 로직 진행
-    response_body = youtubeAnalysis(youtubeUrl)
+@app.post("/video/youtube/link")
+async def upload_video(request: YouTubeLinkRequest):
+    response_body = youtubeAnalysis(request.youtubeUrl)
     return response_body
 
-
 @app.post("/gpt")
-async def testGpt(request: RecipeRequest):
-    # create_prediction 함수 호출
+async def test_gpt(request: RecipeRequest):
     result = create_prediction(request.foodName, request.cookSteps)
     return {"predictions": result}
 
 
 @app.post("/youtube/test")
-async def upload_video():
+async def youtube_test():
     link = "https://www.youtube.com/watch?v=pLiO21Hhb-U"
-    # 영상 처리 로직 진행
     response_body = youtubeAnalysis(link)
     return response_body
 
-# 영상만 타임라인 받는 엔드포인트
-@app.post("/recipe/video/timeline")
-async def upload_video(steps: List[CookStep], foodName: str, video: UploadFile = File(...)):
-    # Convert steps to a list of content strings for processing
-    temp_cookStep = create_prediction(foodName,[step.content for step in steps])
 
+@app.post("/video/media/action")
+async def upload_video(
+    foodName: str = Form(...),
+    cookSteps: str = Form(...),
+    foodVideo: UploadFile = File(...)
+):
+    # JSON 형식의 cookSteps 파싱
+    cookSteps = json.loads(cookSteps)
+    cookSteps = [BeforeCookStep(**step) for step in cookSteps]
 
-    # 영상 처리 로직 진행
-    cookSteps = processingVideo(video, temp_cookStep,steps )
-    print(cookSteps)
+    # 조리 단계 예측 생성
+    temp_cookStep = create_prediction(foodName, [step.content for step in cookSteps])
 
-    # 영상 처리 후 저장
-    filename = video.filename
-    file_location = f"videos/{filename}"  # S3에 저장될 경로
+    # 영상 처리 로직
+    processedCookSteps = processingVideo(foodVideo, temp_cookStep, cookSteps)
+    print(processedCookSteps)
 
-    # S3에 파일 업로드
-    s3_url = upload_to_s3(video.file, S3_BUCKET, file_location)
+    # S3에 파일 저장
+    filename = foodVideo.filename
+    file_location = f"videos/{filename}"
+    s3_url = upload_to_s3(foodVideo.file, S3_BUCKET, file_location)
 
     if "error" in s3_url:
         return {"error": "Failed to upload to S3"}
 
-    # Return the video URL and the processed timeline
-    return {"message": "Video uploaded successfully", "s3_url": s3_url, "cookSteps": cookSteps}
+    return {"message": "Video uploaded successfully", "s3_url": s3_url, "cookSteps": processedCookSteps}
+
+
 @app.get("/video")
 async def read_video():
     l = temp()
@@ -106,25 +126,3 @@ async def read_video():
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
-#
-# import subprocess
-#
-# def check_package_versions(requirements_file):
-#     with open(requirements_file) as file:
-#         for line in file:
-#             if line.strip() and not line.startswith('#'):
-#                 package = line.strip()
-#                 try:
-#                     subprocess.run(
-#                         ["pip", "install", package],
-#                         check=True,
-#                         stdout=subprocess.PIPE,
-#                         stderr=subprocess.PIPE
-#                     )
-#                     print(f"{package} 설치 가능")
-#                 except subprocess.CalledProcessError as e:
-#                     print(f"{package}는 현재 Python 버전과 호환되지 않음")
-#
-# check_package_versions("requirements.txt")
