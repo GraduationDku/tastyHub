@@ -163,7 +163,7 @@ function MainChat({ onChatroomSelect, setScreen, isGuest }) {
                                 <h3 onClick={() => handleChatroomClick(chatRoom.roomId)}>
                                     {chatRoom.chatRoomTitle}
                                 </h3>
-                                <p>{chatRoom.roomId || '정보 없음'}</p>
+                                
                             </div>
                         </li>
                     ))}

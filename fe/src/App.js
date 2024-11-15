@@ -20,9 +20,6 @@ import PostDetails from './components/Post/PostDetails';
 import MypageShow from './components/User/MypageShow';
 import PageButton from './components/PageButton';
 
-// Google OAuth 관련 추가
-import { GoogleOAuthProvider } from '@react-oauth/google'; // 추가
-
 function App() {
   const [screen, setScreen] = useState('home');
   const [isGuest, setIsGuest] = useState(false);
@@ -36,6 +33,7 @@ function App() {
   const [sort, setSort] = useState('date'); 
   const [totalItems, setTotalItems] = useState(0); 
   const [totalPages, setTotalPages] = useState(0); 
+  const [searchType, setSearchType] = useState('recipe');
 
   const handleRecipeSelect = (id) => {
     setSelectedRecipeId(id);
@@ -46,7 +44,7 @@ function App() {
     setSearchResults(results || []);
     setScreen('searchResults');
   };
-
+  
   const handleChatroomSelect = (roomId) => {
     setSelectedRoomId(roomId);
     setScreen('sendchat');
@@ -62,108 +60,100 @@ function App() {
     setScreen('main');
   };
 
-  const handleUserSelect = (e) => {};
+  const handleUserSelect = (e) => {
+    // User selection logic
+  };
 
   const handleSizeChange = (e) => {
     setSize(parseInt(e.target.value, 10) || 5);
-    setPage(1); 
+    setPage(1); // 페이지를 1로 초기화
   };
 
   const handleSortChange = (e) => {
     setSort(e.target.value || 'date');
-    setPage(1); 
+    setPage(1); // 페이지를 1로 초기화
   };
 
   const handlePageChange = (newPage) => {
-    if (newPage < 1) newPage = 1; 
-    if (newPage > totalPages) newPage = totalPages; 
+    if (newPage < 1) newPage = 1; // 페이지 번호를 1보다 작지 않도록 설정
+    if (newPage > totalPages) newPage = totalPages; // 페이지 번호를 전체 페이지 수보다 크지 않도록 설정
     setPage(newPage);
   };
 
   return (
-    <GoogleOAuthProvider clientId="611829569755-3c96cstfngrmsqnjpv3856ljifk78n9q.apps.googleusercontent.com">
-      <div>
-        {screen !== 'home' && screen !== 'sendchat' && screen !== 'login' && screen !== 'signup' && screen !== 'create' && (
-          <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />
-        )}
-        {screen === 'home' && <HomeScreen setScreen={setScreen} setIsGuest={setIsGuest} handleGuestAccess={handleGuestAccess} />}
-        {screen === 'login' && <Login setScreen={setScreen} />}
-        {screen === 'signup' && <Signup setScreen={setScreen} />}
-        {screen === 'village' && <Village setScreen={setScreen} />}
-        {screen === 'main' && <MainScreen onRecipeSelect={handleRecipeSelect} />}
-        {screen === 'recipeDetails' && <Recipedetails recipeId={selectedRecipeId} setScreen={setScreen} />}
-        {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
-        {screen === 'create' && !isGuest && <CreateRecipe setScreen={setScreen} />}
-        {screen === 'findUsername' && <FindUsername setScreen={setScreen} />}
-        {screen === 'mainchat' && <MainChat setScreen={setScreen} onChatroomSelect={handleChatroomSelect} isGuest={isGuest} />}
-        {screen === 'post' && <Post setScreen={setScreen} onPostSelect={handlePostSelect} isGuest={isGuest} />}
-        {screen === 'createpost' && !isGuest && <CreatePost setScreen={setScreen} />}
-        {screen === 'mypage' && <MainMypage setScreen={setScreen} isGuest={isGuest} />}
-        {screen === 'sendchat' && selectedRoomId && !isGuest && <SendChat roomId={selectedRoomId} username={username} />}
-        {screen === 'mypageedit' && !isGuest && <MypageEdit setScreen={setScreen} />}
-        {screen === 'postDetails' && <PostDetails postId={selectedPostId} setScreen={setScreen} />}
-        {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} />}
-        {screen === 'searchResults' && (
-          <div>
-            <h1>검색 결과</h1>
-            <div>
-              <div>
-                <label>정렬 기준: </label>
-                <select value={sort} onChange={handleSortChange}>
-                  <option value="date">날짜</option>
-                  <option value="title">제목</option>
-                  <option value="nickname">작성자</option>
-                </select>
+    <div>
+      {screen !== 'home' && screen !== 'sendchat' && screen !== 'login' && screen !== 'signup' && screen !== 'create' && (
+        <Navbar setScreen={setScreen} onSearchComplete={handleSearchComplete} />
+      )}
+      {screen === 'home' && <HomeScreen setScreen={setScreen} setIsGuest={setIsGuest} handleGuestAccess={handleGuestAccess} />}
+      {screen === 'login' && <Login setScreen={setScreen} />}
+      {screen === 'signup' && <Signup setScreen={setScreen} />}
+      {screen === 'village' && <Village setScreen={setScreen} />}
+      {screen === 'main' && <MainScreen onRecipeSelect={handleRecipeSelect} />}
+      {screen === 'recipeDetails' && <Recipedetails recipeId={selectedRecipeId} setScreen={setScreen} />}
+      {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
+      {screen === 'create' && !isGuest && <CreateRecipe setScreen={setScreen} />}
+      {screen === 'findUsername' && <FindUsername setScreen={setScreen} />}
+      {screen === 'mainchat' && <MainChat setScreen={setScreen} onChatroomSelect={handleChatroomSelect} isGuest={isGuest} />}
+      {screen === 'post' && <Post setScreen={setScreen} onPostSelect={handlePostSelect} isGuest={isGuest} />}
+      {screen === 'createpost' && !isGuest && <CreatePost setScreen={setScreen} />}
+      {screen === 'mypage' && <MainMypage setScreen={setScreen} isGuest={isGuest} />}
+      {screen === 'sendchat' && selectedRoomId && !isGuest && <SendChat roomId={selectedRoomId} setScreen={setScreen} username={username} />}
+      {screen === 'mypageedit' && !isGuest && <MypageEdit setScreen={setScreen} />}
+      {screen === 'postDetails' && <PostDetails postId={selectedPostId} setScreen={setScreen} />}
+      {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} />}
+      {screen === 'searchResults' && (
+        <div className='searchdiv'>
+          <h1>검색 결과</h1>
+          <div className='searchdiv2'>
+            <div className='searchsort'>
+              <select value={sort} onChange={handleSortChange}>
+                <option value="date">날짜</option>
+                <option value="title">제목</option>
+                <option value="nickname">작성자</option>
+              </select>
 
-                <label>게시글 수: </label>
-                <select value={size} onChange={handleSizeChange}>
-                  <option value={5}>5개</option>
-                  <option value={10}>10개</option>
-                  <option value={20}>20개</option>
-                </select>
-              </div>
-              {searchResults.length > 0 ? (
-                <ul>
-                  {searchResults.map((recipe) => (
-                    <li key={recipe.foodId} onClick={() => handleRecipeSelect(recipe.foodId)}>
-                      <h2>{recipe.foodName}</h2>
-                      <img src={recipe.foodImgUrl} alt={recipe.foodName} />
-                      <div>
-                        <p>{recipe.foodInformationDto.text}</p>
-                        <p>조리 시간 : {recipe.foodInformationDto.cookingTime} 분</p>
-                        <p>{recipe.foodInformationDto.serving}인분</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No recipes found</p>
-              )}
-              {searchResults.length > 0 ? (
-                <ul>
-                  {searchResults.map((user) => (
-                    <li key={user.userId} onClick={() => handleUserSelect(user.userId)}>
-                      <h2>{user.nickname}</h2>
-                      <img src={user.userImg} alt={user.nickname} />
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No users found</p>
-              )}
-
-              <button onClick={() => setScreen('main')}>Go Back</button>
-              <br /><br />
-              <PageButton
-                totalItems={totalItems}
-                itemsPerPage={size}
-                onPageChange={handlePageChange}
-              />
+              <select value={size} onChange={handleSizeChange}>
+                <option value={5}>5개</option>
+                <option value={10}>10개</option>
+                <option value={20}>20개</option>
+              </select>
             </div>
+
+            {searchResults.length > 0 && searchType === 'recipe' ? (
+              <ul>
+                {searchResults.map((recipe) => (
+                  <li key={recipe.foodId} onClick={() => handleRecipeSelect(recipe.foodId)}>
+                    <h2 className='searchrecipetitle'>{recipe.foodName}</h2>
+                    <img src={recipe.foodImgUrl} alt={recipe.foodName} className='searchrecipeimg' style={{ width: '340px' }}/>
+                    <div>
+                      <p>{recipe.foodInformationDto.text}</p>
+                      <div className="recipe-info">
+                        <p>{recipe.foodInformationDto.cookingTime}분</p>
+                        <p>{recipe.foodInformationDto.serving}</p>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : searchType === 'recipe' && <p>No recipes found</p>}
+
+            {searchResults.length > 0 && searchType === 'user' ? (
+              <ul>
+                {searchResults.map((user) => (
+                  <li key={user.userId} onClick={() => handleUserSelect(user.userId)}>
+                    <h2>{user.nickname}</h2>
+                    <img src={user.userImg} alt={user.nickname}/>
+                  </li>
+                ))}
+              </ul>
+            ) : searchType === 'user' && <p>No users found</p>}
+
+            <button onClick={() => setScreen('main')}>이전</button>
           </div>
-        )}
-      </div>
-    </GoogleOAuthProvider>
+        </div>
+      )}
+    </div>
   );
 }
 

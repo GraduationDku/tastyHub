@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../../css/RecipeDetail.css';
 
 const ScrapButton = ({ recipeId }) => {
   const [isScrapped, setIsScrapped] = useState(false);
@@ -38,6 +39,7 @@ const ScrapButton = ({ recipeId }) => {
   return (
     <div>
       <button
+        className='scrap'
         onClick={toggleScrap}
         style={{
           backgroundColor: isScrapped ? 'green' : 'gray',
@@ -46,8 +48,6 @@ const ScrapButton = ({ recipeId }) => {
           border: 'none',
           borderRadius: '10px',
           cursor: 'pointer',
-          width : '80px',
-          height : '50px'
           
         }}
       >

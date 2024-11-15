@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PageButton from '../../../src/components/PageButton';
+import '../../../src/css/MypageShow.css';
 
 const MypageShow = ({ userName }) => {
   const [view, setView] = useState(null);
@@ -85,25 +86,23 @@ const MypageShow = ({ userName }) => {
 
   return (
     <div className='mypageshow'>
-      <div className='box'>
-        <h1>My Page</h1>
-        <button onClick={() => { setView('scraped'); fetchScrapedRecipes(); }}>스크랩한 레시피 모아보기</button>
+        <h1>My Page</h1><div className='box'>
+        <button className='mypageshow' onClick={() => { setView('scraped'); fetchScrapedRecipes(); }}>스크랩한 레시피 모아보기</button>
         <br/>
-        <button onClick={() => { setView('written'); fetchWrittenReviews(); }}>내가 작성한 레시피 리뷰 모아보기</button>
+        <button className='mypageshow' onClick={() => { setView('written'); fetchWrittenReviews(); }}>내가 작성한 레시피 리뷰 모아보기</button>
         <br/>
-        <button onClick={() => { setView('myrecipes'); fetchMyRecipes(); }}>내가 작성한 레시피 모아보기</button>
+        <button className='mypageshow' onClick={() => { setView('myrecipes'); fetchMyRecipes(); }}>내가 작성한 레시피 모아보기</button>
         <br/>
 
         {view && (
-          <div>
-            <label>정렬 기준: </label>
-            <select value={sort} onChange={handleSortChange}>
+          <div className='searchsort'>
+            <select value={sort} onChange={handleSortChange} >
               <option value="date">날짜</option>
               <option value="title">제목</option>
               <option value="nickname">작성자</option>
             </select>
 
-            <label>게시글 수: </label>
+
             <select value={size} onChange={handleSizeChange}>
               <option value={5}>5개</option>
               <option value={10}>10개</option>
@@ -122,7 +121,8 @@ const MypageShow = ({ userName }) => {
 
 const ScrapedRecipes = ({ recipes, onPageChange }) => (
   <div className='show'>
-    <h2>레시피 스크랩</h2>
+    <br/><br/><br/>
+    <h2  className='mypageshow'>레시피 스크랩</h2>
     <ul>
       {recipes.length > 0 ? (
         recipes.map(recipe => (
@@ -132,16 +132,17 @@ const ScrapedRecipes = ({ recipes, onPageChange }) => (
           </li>
         ))
       ) : (
-        <p>No scraped recipes available.</p>
+        <p>스크랩한 레시피가 없습니다.</p>
       )}
     </ul>
-    <PageButton onPageChange={onPageChange} />
+
   </div>
 );
 
 const WrittenReviews = ({ reviews, onPageChange }) => (
-  <div className='show'>
-    <h2>작성한 레시피 리뷰</h2>
+  <div className='mypageshow'>
+    <br/><br/><br/>
+    <h2  className='mypageshow'>작성한 레시피 리뷰</h2>
     <ul>
       {reviews.length > 0 ? (
         reviews.map(review => (
@@ -153,16 +154,17 @@ const WrittenReviews = ({ reviews, onPageChange }) => (
           </li>
         ))
       ) : (
-        <p>No written reviews available.</p>
+        <p>작성한 레시피 리뷰가 없습니다.</p>
       )}
     </ul>
-    <PageButton onPageChange={onPageChange} />
+
   </div>
 );
 
 const MyRecipes = ({ recipes, onPageChange }) => (
   <div className='show'>
-    <h2>내가 작성한 레시피</h2>
+    <br/><br/><br/>
+    <h2  className='mypageshow'>내가 작성한 레시피</h2>
     <ul>
       {recipes.length > 0 ? (
         recipes.map(recipe => (
@@ -175,10 +177,10 @@ const MyRecipes = ({ recipes, onPageChange }) => (
           </li>
         ))
       ) : (
-        <p>No recipes available.</p>
+        <p>작성한 레시피가 없습니다.</p>
       )}
     </ul>
-    <PageButton onPageChange={onPageChange} />
+
   </div>
 );
 

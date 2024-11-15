@@ -13,6 +13,7 @@ public class RecipeUpdateDto {
 
     private String foodName;
 
+    private String foodVideoUrl;
 
     private FoodInformationDto foodInformation;
 

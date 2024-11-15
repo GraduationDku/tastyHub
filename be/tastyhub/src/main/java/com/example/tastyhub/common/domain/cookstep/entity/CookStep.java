@@ -45,6 +45,8 @@ public class CookStep extends TimeStamped {
 
   private String stepImgUrl;
 
+  private String timeline;
+
   //연관 관계
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = Recipe.class)
   @JoinColumn(name = "recipe_id", nullable = false)
@@ -53,6 +55,7 @@ public class CookStep extends TimeStamped {
   public static CookStep makeCookStep(CookStepCreateRequest cookStepCreateRequest) {
     return CookStep.builder()
         .stepNumber(cookStepCreateRequest.getStepNumber())
+        .timeline(cookStepCreateRequest.getTimeLine())
         .content(cookStepCreateRequest.getContent())
         .stepImgUrl("after S3")
         .build();
