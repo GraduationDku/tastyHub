@@ -93,6 +93,7 @@ class RecipeControllerTest {
             responseFields(
                 fieldWithPath("content[].foodId").type(JsonFieldType.NUMBER).description("레시피 음식 ID"),
                 fieldWithPath("content[].foodName").type(JsonFieldType.STRING).description("레시피 이름"),
+                fieldWithPath("content[].recipeType").type(JsonFieldType.STRING).description("레시피 종류"),
                 fieldWithPath("content[].foodImgUrl").type(JsonFieldType.STRING)
                     .description("레시피 이미지 URL"),
                 fieldWithPath("content[].foodInformationDto.foodInformationId").type(
@@ -112,7 +113,8 @@ class RecipeControllerTest {
                 fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 정보가 비었는지 여부"),
                 fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않았는지 여부"),
                 fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬되었는지 여부"),
-                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지에서 반환된 게시글 수"),
+                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
+                    .description("현재 페이지에서 반환된 게시글 수"),
                 fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어 있는지 여부")
             )
         )
@@ -134,6 +136,8 @@ class RecipeControllerTest {
             getDocumentResponse(),
             responseFields(
                 fieldWithPath("content[].foodId").type(JsonFieldType.NUMBER).description("레시피 음식 ID"),
+                fieldWithPath("content[].recipeType").type(JsonFieldType.STRING).description("레시피 종류"),
+
                 fieldWithPath("content[].foodName").type(JsonFieldType.STRING).description("레시피 이름"),
                 fieldWithPath("content[].foodImgUrl").type(JsonFieldType.STRING)
                     .description("레시피 이미지 URL"),
@@ -154,7 +158,8 @@ class RecipeControllerTest {
                 fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 정보가 비었는지 여부"),
                 fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않았는지 여부"),
                 fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬되었는지 여부"),
-                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지에서 반환된 게시글 수"),
+                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
+                    .description("현재 페이지에서 반환된 게시글 수"),
                 fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어 있는지 여부")
             )
         )
@@ -185,6 +190,8 @@ class RecipeControllerTest {
             responseFields(
                 fieldWithPath("content[].foodId").type(JsonFieldType.NUMBER).description("레시피 음식 ID"),
                 fieldWithPath("content[].foodName").type(JsonFieldType.STRING).description("레시피 이름"),
+                fieldWithPath("content[].recipeType").type(JsonFieldType.STRING).description("레시피 종류"),
+
                 fieldWithPath("content[].foodImgUrl").type(JsonFieldType.STRING)
                     .description("레시피 이미지 URL"),
                 fieldWithPath("content[].foodInformationDto.foodInformationId").type(
@@ -204,7 +211,8 @@ class RecipeControllerTest {
                 fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 정보가 비었는지 여부"),
                 fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않았는지 여부"),
                 fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬되었는지 여부"),
-                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지에서 반환된 게시글 수"),
+                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
+                    .description("현재 페이지에서 반환된 게시글 수"),
                 fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어 있는지 여부")
             )
         )
@@ -252,8 +260,9 @@ class RecipeControllerTest {
         requestPartFields("data",
             fieldWithPath("foodName").type(JsonFieldType.STRING)
                 .description("음식 이름"),
-            fieldWithPath("foodImg").type(JsonFieldType.STRING)
-                .description("음식 사진"),
+            fieldWithPath("recipeType").type(JsonFieldType.STRING).description("레시피 종류"),
+            fieldWithPath("foodVideoUrl").type(JsonFieldType.STRING)
+                .description("영상"),
             fieldWithPath("foodInformation").type(JsonFieldType.OBJECT)
                 .description("음식 정보 객체"),
             fieldWithPath("foodInformation.content").type(JsonFieldType.STRING)
@@ -268,8 +277,10 @@ class RecipeControllerTest {
             fieldWithPath("ingredients[].amount").type(JsonFieldType.STRING).description("재료 량"),
             fieldWithPath("cookSteps").type(JsonFieldType.ARRAY).description("조리 단계"),
             fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER).description("조리 순서"),
+            fieldWithPath("cookSteps[].timeLine").type(JsonFieldType.STRING).description("타임라인"),
             fieldWithPath("cookSteps[].stepImg").type(JsonFieldType.STRING).description("조리 이미지"),
-            fieldWithPath("cookSteps[].content").type(JsonFieldType.STRING).description("조리 단계 설명")),
+            fieldWithPath("cookSteps[].content").type(JsonFieldType.STRING)
+                .description("조리 단계 설명")),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
             fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
@@ -281,7 +292,7 @@ class RecipeControllerTest {
   @WithCustomMockUser
   @DisplayName("레시피 정보 가져오기")
   void getRecipe() throws Exception {
-    given(recipeService.getRecipe(any(),any())).willReturn(RECIPE_DTO);
+    given(recipeService.getRecipe(any(), any())).willReturn(RECIPE_DTO);
 
     ResultActions resultActions = mockMvc.perform(
             get(RECIPE_API + "/detail/{recipeId}", RECIPE.getId())
@@ -293,6 +304,8 @@ class RecipeControllerTest {
             responseFields(
                 fieldWithPath("foodId").type(JsonFieldType.NUMBER).description("음식 ID"),
                 fieldWithPath("foodName").type(JsonFieldType.STRING).description("음식 이름"),
+                fieldWithPath("recipeType").type(JsonFieldType.STRING).description("레시피 종류"),
+                fieldWithPath("foodVideoUrl").type(JsonFieldType.STRING).description("음식 영상 URL"),
                 fieldWithPath("foodImgUrl").type(JsonFieldType.STRING).description("음식 이미지 URL"),
                 fieldWithPath("foodInformation").type(JsonFieldType.OBJECT).description("음식 정보 객체"),
                 fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
@@ -312,10 +325,10 @@ class RecipeControllerTest {
                     .description("재료 이름"),
                 fieldWithPath("ingredients[].amount").type(JsonFieldType.STRING).description("재료 량"),
                 fieldWithPath("cookSteps").type(JsonFieldType.ARRAY).description("조리과정 리스트"),
-                fieldWithPath("cookSteps[].cookStepId").type(JsonFieldType.NUMBER)
-                    .description("조리과정 식별자"),
                 fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER)
                     .description("조리과정 순서"),
+                fieldWithPath("cookSteps[].timeLine").type(JsonFieldType.STRING)
+                    .description("조리과정 타임라인"),
                 fieldWithPath("cookSteps[].stepImgUrl").type(JsonFieldType.STRING)
                     .description("조리과정 이미지"),
                 fieldWithPath("cookSteps[].content").type(JsonFieldType.STRING).description("조리과정 설명"),
@@ -370,7 +383,6 @@ class RecipeControllerTest {
         objectMapper.writeValueAsString(RECIPE_UPDATE_DTO).getBytes()
     );
 
-
     doNothing().when(recipeService).updateRecipe(any(), any(), any(), any());
 
     ResultActions resultActions = mockMvc.perform(
@@ -393,6 +405,8 @@ class RecipeControllerTest {
         requestPartFields("data",
             fieldWithPath("foodName").type(JsonFieldType.STRING)
                 .description("음식 이름"),
+            fieldWithPath("foodVideoUrl").type(JsonFieldType.STRING)
+                .description("음식 영상"),
 //            fieldWithPath("foodImg").type(JsonFieldType.STRING)
 //                .description("음식 사진"),
             fieldWithPath("foodInformation").type(JsonFieldType.OBJECT)
@@ -412,11 +426,13 @@ class RecipeControllerTest {
                 .description("재료 이름"),
             fieldWithPath("ingredients[].amount").type(JsonFieldType.STRING).description("재료 량"),
             fieldWithPath("cookSteps").type(JsonFieldType.ARRAY).description("조리 단계"),
-            fieldWithPath("cookSteps[].cookStepId").type(JsonFieldType.NUMBER)
-                .description("조리과정 식별자"),
             fieldWithPath("cookSteps[].stepNumber").type(JsonFieldType.NUMBER).description("조리 순서"),
-            fieldWithPath("cookSteps[].stepImgUrl").type(JsonFieldType.STRING).description("조리 이미지"),
-            fieldWithPath("cookSteps[].content").type(JsonFieldType.STRING).description("조리 단계 설명")),
+            fieldWithPath("cookSteps[].timeLine").type(JsonFieldType.STRING).description("타임라인"),
+
+            fieldWithPath("cookSteps[].stepImgUrl").type(JsonFieldType.STRING)
+                .description("조리 이미지"),
+            fieldWithPath("cookSteps[].content").type(JsonFieldType.STRING)
+                .description("조리 단계 설명")),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
             fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")

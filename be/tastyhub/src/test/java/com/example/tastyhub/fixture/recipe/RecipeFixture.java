@@ -17,6 +17,7 @@ import com.example.tastyhub.common.domain.recipe.dtos.RecipeCreateDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeDto;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
+import com.example.tastyhub.common.domain.recipe.entity.RecipeType;
 import com.example.tastyhub.common.utils.page.RestPage;
 import java.util.Collections;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ public class RecipeFixture {
 
     public static final Recipe RECIPE = Recipe.builder()
         .id(1L)
+        .recipeType(RecipeType.Image)
         .foodName("foodname")
         .recipeImgUrl("foodImage")
         .foodInformation(FOOD_INFORMATION)
@@ -37,8 +39,10 @@ public class RecipeFixture {
 
     public static final RecipeDto RECIPE_DTO = RecipeDto.builder()
         .foodId(1L)
+        .recipeType(RecipeType.Image)
         .foodName("name")
         .foodImgUrl("url")
+        .foodVideoUrl("videoURL")
         .foodInformation(FOOD_INFORMATION_DTO)
         .cookSteps(Collections.singletonList(COOK_STEP_DTO))
         .ingredients(Collections.singletonList(INGREDIENT_DTO))
@@ -46,6 +50,8 @@ public class RecipeFixture {
 
     public static final RecipeCreateDto RECIPE_CREATE_DTO = RecipeCreateDto.builder()
         .foodName("name")
+        .recipeType(RecipeType.Image)
+        .foodVideoUrl("youtube")
         .foodInformation(FOOD_INFORMATION_CREATE_DTO)
         .cookSteps(Collections.singletonList(COOK_STEP_CREATE_DTO))
         .ingredients(Collections.singletonList(INGREDIENT_CREATE_DTO))
@@ -54,6 +60,7 @@ public class RecipeFixture {
     public static final RecipeUpdateDto RECIPE_UPDATE_DTO = RecipeUpdateDto
         .builder()
         .foodName("foodname")
+        .foodVideoUrl("url")
         .foodInformation(FOOD_INFORMATION_DTO)
         .cookSteps(COOK_STEP_UPDATE_DTO_LIST)
         .ingredients(INGREDIENT_DTO_LIST)
@@ -61,6 +68,7 @@ public class RecipeFixture {
 
 
     public static final PagingRecipeResponse PAGING_RECIPE_RESPONSE = PagingRecipeResponse.builder()
+        .recipeType(RecipeType.Image)
         .foodName("foodname")
         .foodInformationDto(FOOD_INFORMATION_DTO)
         .foodImgUrl("ImgURL")
