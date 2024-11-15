@@ -17,4 +17,7 @@ public class APIConfig {
     public final static String RECIPEREVIEW_API = "/recipe-review";
     public final static String USERREVIEW_API = "/user-review";
 
+
+    public final static String OAUTH = "/oauth2/authorization";
+
 }
