@@ -221,7 +221,7 @@ def processingVideo(video_path, temp_cooking_steps, realSteps):
             "content": step  # Cooking step content
         })
 
-    return {"cookSteps": cookSteps}  # Return in the requested structure
+    return cookSteps  # Return in the requested structure
 
 
 # 요리 과정 정의
