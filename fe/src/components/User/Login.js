@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/User/loginState';
 import '../../css/Login.css';
-import GoogleLoginButton from '../GoogleLoginButton'; // Google Login Button 불러오기
+// import GoogleLoginButton from '../GoogleLoginButton'; // Google Login Button 불러오기
 
 function Login({ setScreen }) {
   const dispatch = useDispatch();
@@ -48,8 +48,8 @@ function Login({ setScreen }) {
         </button>
         <br/><br/>
 
-        {/* Google 로그인 버튼 추가 */}
-        <GoogleLoginButton />
+        {/* Google 로그인 버튼 추가
+        <GoogleLoginButton /> */}
 
         <br/><br/>
         <div className='signupbtn'>
