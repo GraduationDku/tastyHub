@@ -85,6 +85,7 @@ function CreateRecipe({ setScreen }) {
       let recipeType = 'photo';
 
       if (isYouTubeMode) {
+        console.log('youtubeStart')
         recipeType = 'youtube';
         // 유튜브 API 호출
         const youtubeResponse = await fetch(`${process.env.REACT_APP_API_URL}/video/youtube/link`, {
@@ -97,6 +98,7 @@ function CreateRecipe({ setScreen }) {
         });
 
         if (youtubeResponse.ok) {
+          console.log(`youtube end`)
           const data = await youtubeResponse.json();
           processedCookSteps = data.cookSteps.map((step, index) => ({
           stepNumber: index + 1, // 단계 번호는 순서대로 부여
@@ -111,9 +113,10 @@ function CreateRecipe({ setScreen }) {
         // 동영상 API 호출
         const formData = new FormData();
         formData.append('foodName', form.foodName);
-        formData.append('cookSteps', new Blob([JSON.stringify(form.cookSteps)], { type: 'application/json' })); // 사용자가 입력한 cookSteps
-        formData.append('foodVideo', videoFile);
+        formData.append('cookSteps', new Blob([JSON.stringify(form.cookSteps)], { type: 'application/json' })); // JSON 형식 확인
+        formData.append('foodVideo', videoFile); // 비디오 파일이 null이 아닌지 확인
 
+        console.log(formData)
         const videoResponse = await fetch(`${process.env.REACT_APP_API_URL}/video/media/action`, {
           method: 'POST',
           headers: {
@@ -121,9 +124,12 @@ function CreateRecipe({ setScreen }) {
           },
           body: formData,
         });
-
+        console.log("action start")
         if (videoResponse.ok) {
+          console.log("action end")
+          console.log(videoResponse)
           const data = await videoResponse.json();
+          console.log(data)
           processedCookSteps = data.timeLine.map((time, index) => ({
           stepNumber: index + 1, // 단계 번호는 순서대로 부여
           timeLine: time,       // 서버에서 제공한 time 값
@@ -155,10 +161,13 @@ function CreateRecipe({ setScreen }) {
         headers: {
           'Authorization': localStorage.getItem('accessToken'),
         },
-        body: finalFormData,
+        body: finalFormData
       });
-
+      console.log(`spring 요청 시작`)
+      console.log(finalResponse)
+      console.log(finalFormData)
       if (finalResponse.ok) {
+
         alert('레시피가 성공적으로 생성되었습니다!');
       } else {
         throw new Error('최종 레시피 생성 실패');
@@ -373,7 +382,7 @@ function CreateRecipe({ setScreen }) {
   </div>
 )}
 
-        
+
       </form>
     </div>
   );
