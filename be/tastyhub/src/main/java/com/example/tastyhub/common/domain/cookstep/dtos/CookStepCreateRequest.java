@@ -8,6 +8,7 @@ import lombok.Getter;
 public class CookStepCreateRequest {
 
     private Long stepNumber;
+    private String timeLine;
     private String stepImg;
     private String content;
 }

@@ -23,8 +23,8 @@ public class CookStepFixture {
 
 
     public static final CookStepDto COOK_STEP_DTO = CookStepDto.builder()
-        .cookStepId(1L)
         .stepNumber(1L)
+        .timeLine("3:11")
         .content("text")
         .stepImgUrl("ImgUrl")
         .build();
