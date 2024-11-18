@@ -25,20 +25,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(OAUTH)
 public class OAuth2Controller {
-
-  private final OAuth2Service oAuth2Service;
-
-  @PostMapping("/google")
-  public ResponseEntity<StatusResponse> GoogleLogin(
-//      Principal principal, HttpServletResponse response
-      @RequestParam String tokenId, HttpServletResponse response
-  ) {
-
-    ResponseEntity<?> responseEntity = oAuth2Service.accessToken(tokenId);
-    System.out.println(tokenId);
-
-//    oAuth2Service.getUserInfo(accessToken,response);
-
-    return RESPONSE_OK;
-  }
+//
+//  private final OAuth2Service oAuth2Service;
+//
+//  @PostMapping("/google")
+//  public ResponseEntity<StatusResponse> GoogleLogin(
+////      Principal principal, HttpServletResponse response
+//      @RequestParam String tokenId, HttpServletResponse response
+//  ) {
+//
+//    ResponseEntity<?> responseEntity = oAuth2Service.accessToken(tokenId);
+//    System.out.println(tokenId);
+//
+////    oAuth2Service.getUserInfo(accessToken,response);
+//
+//    return RESPONSE_OK;
+//  }
 }

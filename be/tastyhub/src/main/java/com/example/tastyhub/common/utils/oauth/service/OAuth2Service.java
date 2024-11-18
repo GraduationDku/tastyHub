@@ -6,12 +6,12 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 
 public interface OAuth2Service {
-
-  NicknameDto login(Map<String, Object> attributes, HttpServletResponse response);
-
-  ResponseEntity<?> accessToken(String code);
-
-//  void getUserInfo(String accessToken, HttpServletResponse response);
-
-  ResponseEntity<?> getUserInfo(String accessToken);
+//
+//  NicknameDto login(Map<String, Object> attributes, HttpServletResponse response);
+//
+//  ResponseEntity<?> accessToken(String code);
+//
+////  void getUserInfo(String accessToken, HttpServletResponse response);
+//
+//  ResponseEntity<?> getUserInfo(String accessToken);
 }

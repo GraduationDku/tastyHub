@@ -124,11 +124,56 @@ def smooth_predictions(predictions, smoothing_window=3):
 
 
 # 세그먼트 수를 조정하여 예측하는 함수
+# def predict_actions_on_segments(video_path, num_segments=128, segment_count=64):
+#     cap = cv2.VideoCapture(video_path)
+#     if not cap.isOpened():
+#         print(f"Error: Cannot open video file {video_path}")
+#         return []
+#
+#     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+#     fps = cap.get(cv2.CAP_PROP_FPS) or 30
+#     frames_per_segment = total_frames // num_segments
+#
+#     predicted_actions = []
+#     start_times = []
+#
+#     for i in range(num_segments):
+#         start_frame = int(i * frames_per_segment)
+#         start_time = start_frame / fps
+#         start_times.append(start_time)
+#
+#         end_frame = int(start_frame + frames_per_segment)
+#         frame_indices = np.linspace(start_frame, end_frame - 1, num=segment_count, dtype=int)
+#
+#         frames = []
+#         for idx in frame_indices:
+#             cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
+#             ret, frame = cap.read()
+#             if not ret:
+#                 print(f"Warning: Could not read frame at index {idx}")
+#                 continue
+#
+#             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#             frame = Image.fromarray(frame)
+#             frame = preprocess(frame)
+#             frames.append(frame)
+#
+#         if frames and len(frames) == segment_count:
+#             verb_predictions, noun_predictions = predict_action_extended(model, frames, verb_id_to_class,
+#                                                                          noun_id_to_class)
+#             predicted_actions.append((verb_predictions, noun_predictions))
+#         else:
+#             predicted_actions.append(([], []))
+#
+#     cap.release()
+#
+#     # Apply smoothing on predictions
+#     smoothed_predictions = smooth_predictions(predicted_actions)
+#     return smoothed_predictions, start_times
 def predict_actions_on_segments(video_path, num_segments=128, segment_count=64):
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
-        print(f"Error: Cannot open video file {video_path}")
-        return []
+        raise ValueError(f"Cannot open video file: {video_path}")
 
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     fps = cap.get(cv2.CAP_PROP_FPS) or 30
@@ -153,16 +198,25 @@ def predict_actions_on_segments(video_path, num_segments=128, segment_count=64):
                 print(f"Warning: Could not read frame at index {idx}")
                 continue
 
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frame = Image.fromarray(frame)
-            frame = preprocess(frame)
-            frames.append(frame)
+            try:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                frame = Image.fromarray(frame)
+                frame = preprocess(frame)
+                frames.append(frame)
+            except Exception as e:
+                print(f"Error processing frame at index {idx}: {e}")
 
-        if frames and len(frames) == segment_count:
-            verb_predictions, noun_predictions = predict_action_extended(model, frames, verb_id_to_class,
-                                                                         noun_id_to_class)
-            predicted_actions.append((verb_predictions, noun_predictions))
+        if len(frames) == segment_count:
+            try:
+                verb_predictions, noun_predictions = predict_action_extended(
+                    model, frames, verb_id_to_class, noun_id_to_class
+                )
+                predicted_actions.append((verb_predictions, noun_predictions))
+            except Exception as e:
+                print(f"Error during prediction: {e}")
+                predicted_actions.append(([], []))
         else:
+            print(f"Insufficient frames for segment {i}. Expected: {segment_count}, Got: {len(frames)}")
             predicted_actions.append(([], []))
 
     cap.release()
@@ -170,6 +224,7 @@ def predict_actions_on_segments(video_path, num_segments=128, segment_count=64):
     # Apply smoothing on predictions
     smoothed_predictions = smooth_predictions(predicted_actions)
     return smoothed_predictions, start_times
+
 
 
 def format_time(seconds):
@@ -212,13 +267,13 @@ def processingVideo(video_path, temp_cooking_steps, realSteps):
 
     cookSteps = []
     for i in range(results_length):
-        step = realSteps[i]
+        step = realSteps[i].get("content")
         formatted_time = format_time(start_times[i])
 
         cookSteps.append({
             "stepNumber": i + 1,  # Step number starts from 1
             "timeLine": formatted_time,  # Timeline in HH:MM:SS format
-            "content": step  # Cooking step content
+            "content": step # Cooking step content
         })
 
     return cookSteps  # Return in the requested structure
