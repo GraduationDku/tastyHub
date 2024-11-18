@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final OAuth2Service oAuth2UserService;
+//  private final OAuth2Service oAuth2UserService;
   private final AccessTokenService accessTokenService;
   private final UserDetailsServiceImpl userDetailsService;
   private final String[] permitAllArray = {
