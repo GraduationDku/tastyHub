@@ -58,24 +58,40 @@ function RecipeDetails({ recipeId }) {
     }
   }, [recipeId]);
 
+  // HH:MM:SS를 초 단위로 변환하는 함수
+  const convertToSeconds = (timeString) => {
+    const timeParts = timeString.split(':').map(Number); // HH:MM:SS -> [HH, MM, SS]
+    return timeParts.reduce((acc, val) => acc * 60 + val, 0); // 초 단위로 변환
+  };
+
   const handleTimelineClick = (timeline) => {
-    if (!timeline) return;
+    try {
+      if (!timeline) return;
 
-    const timeParts = timeline.split(':').map(Number);
-    const seconds = timeParts.reduce((acc, val) => acc * 60 + val, 0); // 시간 문자열을 초 단위로 변환
+      const seconds = convertToSeconds(timeline); // HH:MM:SS를 초 단위로 변환
 
-    if (recipeDetails.recipeType === 'video' && videoRef.current) {
-      videoRef.current.currentTime = seconds; // 비디오 현재 시간 설정
-      videoRef.current.play(); // 재생
-    }
-
-    if (recipeDetails.recipeType === 'youtube' && youtubePlayerRef.current) {
-      youtubePlayerRef.current.internalPlayer.seekTo(seconds, true); // 유튜브 플레이어 시간 이동
+      if (videoRef.current) {
+        videoRef.current.currentTime = seconds; // HTML5 비디오 플레이어의 시간 설정
+        videoRef.current.play(); // 비디오 재생
+      } else {
+        console.warn('Video player is not available');
+      }
+    } catch (error) {
+      console.error('Error handling timeline click:', error);
     }
   };
 
   if (!recipeDetails) {
     return <p>Loading...</p>;
+  }
+
+  // 유튜브 videoId 추출 로직
+  const videoId = recipeDetails.foodVideoUrl?.includes('youtube.com')
+    ? new URL(recipeDetails.foodVideoUrl).searchParams.get('v')
+    : null;
+
+  if (recipeDetails.recipeType === 'youtube' && !videoId) {
+    console.error('Invalid YouTube URL:', recipeDetails.foodVideoUrl);
   }
 
   return (
@@ -84,25 +100,6 @@ function RecipeDetails({ recipeId }) {
       <div className="box">
         {/* 대표 사진 */}
         <img src={recipeDetails.foodImgUrl} alt={recipeDetails.foodName} />
-
-        {/* 비디오 */}
-        {recipeDetails.recipeType === 'video' && recipeDetails.foodVideoUrl && (
-          <video
-            ref={videoRef}
-            src={recipeDetails.foodVideoUrl}
-            controls
-            style={{ width: '100%', maxHeight: '500px' }}
-          />
-        )}
-
-        {/* 유튜브 */}
-        {recipeDetails.recipeType === 'youtube' && recipeDetails.foodVideoUrl && (
-          <YouTube
-            videoId={new URL(recipeDetails.foodVideoUrl).searchParams.get('v')} // 유튜브 링크에서 videoId 추출
-            opts={{ width: '100%', height: '500px', playerVars: { controls: 1 } }}
-            onReady={(e) => (youtubePlayerRef.current = e.target)}
-          />
-        )}
 
         {/* 요리 설명 */}
         <div>
@@ -130,6 +127,32 @@ function RecipeDetails({ recipeId }) {
         </div>
 
         {/* 순서 */}
+        {/* 비디오 */}
+        {/* {recipeDetails.recipeType === 'Video' && recipeDetails.foodVideoUrl && (
+          <video
+            ref={videoRef}
+            src={'https://tastyhub-bucket.s3.ap-northeast-2.amazonaws.com/videos/sample2.mp4'}
+            controls
+            style={{ width: '100%', maxHeight: '500px' }}
+          />
+)} */}
+        {recipeDetails.recipeType === 'Video' && (
+          <video
+            ref={videoRef}
+            src={require('/Users/sep037/Desktop/fe/fe/src/assets/sample2.mp4')}
+            controls
+            style={{ width: '100%', maxHeight: '300px' }}
+          />
+        )}
+
+        {/* 유튜브 */}
+        {recipeDetails.recipeType === 'Youtube' && recipeDetails.foodVideoUrl && videoId && (
+          <YouTube
+            videoId={videoId}
+            opts={{ width: '100%', height: '500px', playerVars: { controls: 1 } }}
+            onReady={(e) => (youtubePlayerRef.current = e.target)}
+          />
+        )}
         <div>
           <h3>순서</h3>
           <ol className="recipedetail">
@@ -138,18 +161,18 @@ function RecipeDetails({ recipeId }) {
                 className="recipedetail"
                 key={step.stepNumber || index}
                 style={{
-                  cursor:
-                    recipeDetails.recipeType === 'photo' ? 'default' : 'pointer',
+                  cursor: recipeDetails.recipeType !== 'photo' ? 'pointer' : 'default',
                 }}
                 onClick={() => handleTimelineClick(step.timeLine)}
               >
                 {step.content}
-                <br />
+
+                {/* 단계별 이미지 */}
                 {recipeDetails.recipeType === 'photo' && step.cookStepImg && (
                   <img
                     src={step.cookStepImg}
                     alt={`Step ${step.stepNumber}`}
-                    style={{ width: '100%', maxHeight: '200px' }}
+                    style={{ width: '100%', maxHeight: '200px', marginTop: '10px' }}
                   />
                 )}
               </li>

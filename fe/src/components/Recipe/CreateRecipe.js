@@ -14,7 +14,7 @@ function CreateRecipe({ setScreen }) {
     },
     ingredients: [{ ingredientName: '', amount: '' }],
     cookSteps: [{ stepNumber: 1, timeLine:'000' ,content: '' }],
-    youtubeUrl: ''
+    foodVideoUrl : ''
   });
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState('');
@@ -81,9 +81,6 @@ function CreateRecipe({ setScreen }) {
     e.preventDefault();
 
     try {
-      let processedCookSteps = [];
-      let recipeType = 'photo';
-
       if (isYouTubeMode) {
         // 유튜브 API 호출
         const youtubeResponse = await fetch(`${process.env.REACT_APP_API_URL}/video/youtube/link`, {
@@ -92,21 +89,18 @@ function CreateRecipe({ setScreen }) {
             'Authorization': localStorage.getItem('accessToken'),
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ youtubeUrl: form.youtubeUrl }),
+          body: JSON.stringify({ youtubeUrl: form.foodVideoUrl }),
         });
 
         if (youtubeResponse.ok) {
           const data = await youtubeResponse.json();
-          processedCookSteps = data.cookSteps.map((step, index) => ({
-            stepNumber: index + 1,
-            timeLine: step.time,
-            content: step.content,
-          }));
+          form.cookSteps = data.cookSteps;
+          form.foodVideoUrl = data.s3_url;
+          form.recipeType = 'Youtube';
         } else {
           throw new Error('유튜브 처리 실패');
         }
       } else if (!isPhotoMode) {
-        recipeType = 'video';
 
         // FormData 객체 생성
         const formData = new FormData();
@@ -127,17 +121,12 @@ function CreateRecipe({ setScreen }) {
         //   formData.append(`cookSteps`, JSON.stringify(step));
         // });
         formData.append('cookSteps',JSON.stringify(form.cookSteps))
-        console.log(formData)
-        console.log(form.cookSteps)
-        console.log("formdata 입력 완료")
 
 
         // 파일 첨부
         if (videoFile) {
-          console.log("입력 완료")
           formData.append('foodVideo', videoFile);
         }
-        console.log("video 입력 완료")
         for (let [key, value] of formData.entries()) {
           console.log(`${key}:`, value);
         }
@@ -151,45 +140,44 @@ function CreateRecipe({ setScreen }) {
 
         if (videoResponse.ok) {
           const data = await videoResponse.json();
-          console.log(data)
-          processedCookSteps = data.timeLine.map((time, index) => ({
-            stepNumber: index + 1,
-            timeLine: time,
-            content: data.cookSteps[index]?.content || '',
-          }));
+          form.cookSteps = data.cookSteps;
+          form.foodVideoUrl = data.s3_url;
+          form.recipeType = 'Video';
         } else {
           throw new Error('동영상 처리 실패');
         }
       }
-
-      // 최종 API 호출
+     else if (isPhotoMode){
+      form.recipeType = 'Photo';
+     }
       const finalFormData = new FormData();
-      finalFormData.append(
-          'data',
-          new Blob(
-              [
-                JSON.stringify({
-                  ...form,
-                  cookSteps: processedCookSteps,
-                }),
-              ],
-              { type: 'application/json' }
-          )
+      finalFormData.append (
+        'data'
+        ,
+        new Blob( [JSON.stringify(form)], { type: 'application/json' })
       );
-
-      if (file) {
+       if (file) {
         finalFormData.append('img', file);
-      }
-      console.log(finalFormData)
+         }
+
+       for (let [key, value] of finalFormData.entries()) {
+        console.log(`${key}:`, value);
+        }
+            
+            
+
       const finalResponse = await fetch(`${process.env.REACT_APP_API_URL}/recipe/create`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Authorization': localStorage.getItem('accessToken'),
         },
         body: finalFormData,
       });
+      console.log(finalResponse);
 
       if (finalResponse.ok) {
+        console.log('최종 레시피 생성', form);
         alert('레시피가 성공적으로 생성되었습니다!');
       } else {
         throw new Error('최종 레시피 생성 실패');
@@ -199,6 +187,8 @@ function CreateRecipe({ setScreen }) {
       alert('레시피 생성 중 오류가 발생했습니다.');
     }
   };
+
+  
 
   return (
       <div className="createrecipe">
@@ -369,7 +359,7 @@ function CreateRecipe({ setScreen }) {
                       <input
                           type="text"
                           name="youtubeUrl"
-                          value={form.youtubeUrl}
+                          value={form.foodVideoUrl}
                           onChange={handleChange}
                           placeholder="유튜브 링크 입력"
                       />
