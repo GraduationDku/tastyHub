@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { BiLogoYoutube } from 'react-icons/bi';
+import { BiVideo } from 'react-icons/bi';
+import { MdPhotoAlbum } from 'react-icons/md';
 import '../../css/CreateRecipe.css';
 
 function CreateRecipe({ setScreen }) {
@@ -322,7 +325,6 @@ function CreateRecipe({ setScreen }) {
                           onChange={(e) => handleArrayChange(e, index, 'ingredients')}
                           placeholder="양"
                       /></div>
-                      <br />
                     </div>
                 ))}
                 <button type="button" onClick={() => handleAddArrayItem('ingredients')}
@@ -333,7 +335,6 @@ function CreateRecipe({ setScreen }) {
                     border: '1.5px solid #3EAB5C',
                     textAlign : 'center',
                     }}>+</button>
-                <br /><br />
                 <div style={{ display: 'flex', flexDirection: 'row',
                 alignItems: 'center', justifyContent: 'space-between'}}>
                 <button type="button" onClick={prevStep} style={{
@@ -401,7 +402,7 @@ function CreateRecipe({ setScreen }) {
                       cursor: 'pointer',
                     }}
                   >
-                    Photo
+                    <MdPhotoAlbum />
                   </button>
                   <button
                     type="button"
@@ -420,7 +421,7 @@ function CreateRecipe({ setScreen }) {
                       cursor: 'pointer',
                     }}
                   >
-                    Video
+                    <BiVideo />
                   </button>
                   <button
                     type="button"
@@ -439,12 +440,12 @@ function CreateRecipe({ setScreen }) {
                       cursor: 'pointer',
                     }}
                   >
-                    Youtube
+                    <BiLogoYoutube />
                   </button>
                 </div></div>
 
                 </div>
-                <br/><br/><br/>
+                <br/>
                 {isPhotoMode ? (
                     <>
                       {form.cookSteps.map((step, index) => (
@@ -460,7 +461,6 @@ function CreateRecipe({ setScreen }) {
                             borderRadius : '100px',
                             textAlign : 'center',
                           }}>X</button>
-                          <br/>
                             <input
                                 name="content"
                                 value={step.content}
@@ -481,6 +481,7 @@ function CreateRecipe({ setScreen }) {
                     </>
                 ) : isYouTubeMode ? (
                     <>
+                    <br/>
                       <input
                           type="text"
                           name="youtubeUrl"
@@ -488,13 +489,13 @@ function CreateRecipe({ setScreen }) {
                           onChange={handleChange}
                           placeholder="유튜브 링크 입력"
                       />
-                      <br /><br />
+                      <br />
                     </>
                 ) : (
                     <>
+                      <br/>
                       <input type="file" accept="video/*" onChange={handleVideoChange} />
                       {videoPreview && <video src={videoPreview} controls style={{ width: '100%', height: '50%' }} />}
-                      <br /><br />
                       {form.cookSteps.map((step, index) => (
                           <div key={index}>
                             <br />
@@ -526,7 +527,6 @@ function CreateRecipe({ setScreen }) {
                           }}>+</button>
                     </>
                 )}
-                <br /><br />
                 <div style={{ display: 'flex', flexDirection: 'row',
                 alignItems: 'center', justifyContent: 'space-between'}}>
                 <button type="button" onClick={prevStep} style={{
