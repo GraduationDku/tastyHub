@@ -93,3 +93,87 @@ button {
 button:hover {
   background-color: #368e50; /* 호버 시 색상 */
 }
+
+/* 배너 스타일링 */
+.recipe-banner {
+  position: relative;
+  width: 100%; /* 화면 가로 크기 */
+  overflow: hidden; /* 넘치는 부분 숨기기 */
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  box-sizing: border-box;
+}
+
+.recipe-banner ul {
+  display: flex; /* 가로 배치 */
+  gap: 20px; /* 아이템 간격 */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  animation: scrollBanner 10s linear infinite; /* 애니메이션 설정 */
+}
+
+.recipe-banner li {
+  flex: 0 0 auto; /* 크기를 고정 */
+  text-align: center;
+}
+
+.recipe-banner img {
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out; /* 호버 시 이미지 확대 효과 */
+}
+
+.recipe-banner li:hover img {
+  transform: scale(1.1); /* 확대 */
+}
+
+/* 애니메이션 키프레임 */
+@keyframes scrollBanner {
+  0% {
+    transform: translateX(0); /* 처음 위치 */
+  }
+  100% {
+    transform: translateX(-100%); /* 끝까지 이동 */
+  }
+}
+
+/* 게시글 배너 스타일 */
+.post-banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.post-banner ul {
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  animation: scrollBannerPosts 15s linear infinite; /* 실시간 게시글 배너용 애니메이션 */
+}
+
+.post-banner li {
+  flex: 0 0 auto;
+  text-align: center;
+  background-color: #f9f9f9; /* 배경 색 추가 */
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+  transition: transform 0.3s ease-in-out;
+}
+
+.post-banner li:hover {
+  transform: scale(1.05); /* 살짝 확대 */
+}
+
+/* 애니메이션 키프레임 */
+@keyframes scrollBannerPosts {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
