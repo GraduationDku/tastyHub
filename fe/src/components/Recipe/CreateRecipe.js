@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { BiLogoYoutube } from 'react-icons/bi';
+import { BiVideo } from 'react-icons/bi';
+import { MdPhotoAlbum } from 'react-icons/md';
 import '../../css/CreateRecipe.css';
 
 function CreateRecipe({ setScreen }) {
@@ -200,8 +203,12 @@ function CreateRecipe({ setScreen }) {
                 <br />
                 <h2 className="create">레시피 이름을 작성해주세요 !</h2>
                 <input className="label1in" type="text" name="foodName" value={form.foodName} onChange={handleChange} />
-                <br /><br /><br />
-                <button type="button" onClick={nextStep}>다음</button>
+                <br /><br />
+                <button type="button" onClick={nextStep}
+                style={{
+                  width: '50%',
+                  marginLeft : '120px'
+                  }}>다음</button>
                 <br /><br /><br />
               </div>
           )}
@@ -215,8 +222,15 @@ function CreateRecipe({ setScreen }) {
                 <br /><br />
                 {filePreview && <img src={filePreview} alt="Preview" style={{ width: '100%', height: '50%' }} />}
                 <br /><br />
-                <button type="button" onClick={prevStep}>이전</button>
-                <button type="button" onClick={nextStep}>다음</button>
+                <div style={{ display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between'}}>
+                <button type="button" onClick={prevStep} style={{
+                  width: '50%'
+                  }}>이전</button>
+                <button type="button" onClick={nextStep}
+                style={{
+                  width: '50%'
+                  }}>다음</button></div>
                 <br /><br /><br />
               </div>
           )}
@@ -224,12 +238,20 @@ function CreateRecipe({ setScreen }) {
           {currentStep === 3 && (
               <div className="label3">
                 <br />
-                <h2 className="create">레시피에 대한 설명을 작성해주세요 !</h2>
+                <h2 className="create">레시피에 대한 </h2>
+                <h2 className="create">설명을 작성해주세요 !</h2>
                 <br />
                 <textarea className="label3in" name="content" value={form.foodInformation.content} onChange={handleChange} />
                 <br /><br />
-                <button type="button" onClick={prevStep}>이전</button>
-                <button type="button" onClick={nextStep}>다음</button>
+                <div style={{ display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between'}}>
+                <button type="button" onClick={prevStep} style={{
+                  width: '50%'
+                  }}>이전</button>
+                <button type="button" onClick={nextStep}
+                style={{
+                  width: '50%'
+                  }}>다음</button></div>
                 <br /><br /><br />
               </div>
           )}
@@ -237,8 +259,11 @@ function CreateRecipe({ setScreen }) {
           {currentStep === 4 && (
               <div className="label4">
                 <br />
-                <h2 className="create">조리 시간과 양을 적어주세요 !</h2>
+                <h2 className="create">조리 시간과 </h2>
+                  <h2 className="create">몇 인분인지 적어주세요 !</h2>
                 <br />
+                <div style={{ display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between'}}>
                 <input
                     type="number"
                     name="cookingTime"
@@ -246,17 +271,23 @@ function CreateRecipe({ setScreen }) {
                     onChange={handleChange}
                     placeholder="조리 시간"
                 />
-                <br /><br />
                 <input
                     type="text"
                     name="serving"
                     value={form.foodInformation.serving}
                     onChange={handleChange}
-                    placeholder="양"
-                />
+                    placeholder="몇 인분인가요 ?"
+                /></div>
                 <br /><br />
-                <button type="button" onClick={prevStep}>이전</button>
-                <button type="button" onClick={nextStep}>다음</button>
+                <div style={{ display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between'}}>
+                <button type="button" onClick={prevStep} style={{
+                  width: '50%'
+                  }}>이전</button>
+                <button type="button" onClick={nextStep}
+                style={{
+                  width: '50%'
+                  }}>다음</button></div>
                 <br /><br /><br />
               </div>
           )}
@@ -268,6 +299,18 @@ function CreateRecipe({ setScreen }) {
                 <br />
                 {form.ingredients.map((ingredient, index) => (
                     <div key={index}>
+                      <button type="button" onClick={() => handleRemoveArrayItem(index, 'ingredients')}
+                        style={{
+                          width: '18%',
+                          padding:'8px',
+                          backgroundColor:'white',
+                          color : '#3EAB5C',
+                          border: '1.5px solid #3EAB5C',
+                          borderRadius : '100px',
+                          textAlign : 'center',
+                          }}>X</button>
+                      <div style={{ display: 'flex', flexDirection: 'row',
+                      alignItems: 'center', justifyContent: 'space-between'}}>
                       <input
                           type="text"
                           name="ingredientName"
@@ -275,24 +318,32 @@ function CreateRecipe({ setScreen }) {
                           onChange={(e) => handleArrayChange(e, index, 'ingredients')}
                           placeholder="재료 이름"
                       />
-                      <br /><br />
                       <input
                           type="text"
                           name="amount"
                           value={ingredient.amount}
                           onChange={(e) => handleArrayChange(e, index, 'ingredients')}
                           placeholder="양"
-                      />
-                      <br /><br />
-                      <button type="button" onClick={() => handleRemoveArrayItem(index, 'ingredients')}>삭제</button>
-                      <br />
+                      /></div>
                     </div>
                 ))}
-                <br />
-                <button type="button" onClick={() => handleAddArrayItem('ingredients')}>+</button>
-                <br /><br />
-                <button type="button" onClick={prevStep}>이전</button>
-                <button type="button" onClick={nextStep}>다음</button>
+                <button type="button" onClick={() => handleAddArrayItem('ingredients')}
+                  style={{
+                    width: '100%',
+                    backgroundColor:'white',
+                    color : '#3EAB5C',
+                    border: '1.5px solid #3EAB5C',
+                    textAlign : 'center',
+                    }}>+</button>
+                <div style={{ display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between'}}>
+                <button type="button" onClick={prevStep} style={{
+                  width: '50%'
+                  }}>이전</button>
+                <button type="button" onClick={nextStep}
+                style={{
+                  width: '50%'
+                  }}>다음</button></div>
                 <br /><br /><br />
               </div>
           )}
@@ -300,62 +351,137 @@ function CreateRecipe({ setScreen }) {
           {currentStep === 6 && (
               <div className="label6">
                 <br />
-                <h2 className="create">조리 단계 입력 방법 선택</h2>
+                <h2 className="create">조리 단계를 어떤 방식으로</h2>
+                <h2 className='create'>입력하실 건가요 ?</h2>
                 <br />
                 <div className="mode-toggle">
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '230px', // 전체 슬라이더 너비
+                    height: '40px', // 슬라이더 높이
+                    backgroundColor: '#f0f0f0', // 슬라이더 배경색
+                    borderRadius: '25px', // 둥근 모서리
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '5px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // 약간의 그림자 효과
+                  }}
+                >
+                  {/* 슬라이더 */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '5px',
+                      left: isPhotoMode ? '5px' : isYouTubeMode ? '165px' : '85px', // 슬라이더 위치 설정
+                      width: '70px', // 슬라이더 너비
+                      height: '40px', // 슬라이더 높이
+                      backgroundColor: '#3EAB5C', // 슬라이더 색상
+                      borderRadius: '20px', // 둥근 모서리
+                      transition: 'left 0.3s ease-in-out', // 슬라이더 이동 애니메이션
+                    }}
+                  ></div>
+                  <br/>
+                  {/* 버튼들 */}
+                  <div style={{ display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between'}}>
                   <button
-                      type="button"
-                      onClick={() => {
-                        setIsPhotoMode(true);
-                        setIsYouTubeMode(false);
-                      }}
-                      className={isPhotoMode ? 'active' : ''}
+                    type="button"
+                    onClick={() => {
+                      setIsPhotoMode(true);
+                      setIsYouTubeMode(false);
+                    }}
+                    style={{
+                      flex: 1, // 버튼 크기 균등
+                      backgroundColor: 'transparent', // 버튼 배경 투명
+                      border: 'none', // 버튼 테두리 제거
+                      color: isPhotoMode ? '#3EAB5C' : '#000', // 선택된 버튼은 흰색 텍스트
+                      fontWeight: 'normal', // 선택된 버튼은 굵게
+                      textAlign: 'center', // 텍스트 가운데 정렬
+                      zIndex: 1, // 슬라이더 위에 버튼 배치
+                      cursor: 'pointer',
+                    }}
                   >
-                    사진 입력
+                    <MdPhotoAlbum />
                   </button>
                   <button
-                      type="button"
-                      onClick={() => {
-                        setIsPhotoMode(false);
-                        setIsYouTubeMode(false);
-                      }}
-                      className={!isPhotoMode && !isYouTubeMode ? 'active' : ''}
+                    type="button"
+                    onClick={() => {
+                      setIsPhotoMode(false);
+                      setIsYouTubeMode(false);
+                    }}
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: !isPhotoMode && !isYouTubeMode ? '#3EAB5C' : '#000',
+                      fontWeight: 'normal',
+                      textAlign: 'center',
+                      zIndex: 1,
+                      cursor: 'pointer',
+                    }}
                   >
-                    동영상 입력
+                    <BiVideo />
                   </button>
                   <button
-                      type="button"
-                      onClick={() => {
-                        setIsYouTubeMode(true);
-                        setIsPhotoMode(false);
-                      }}
-                      className={isYouTubeMode ? 'active' : ''}
+                    type="button"
+                    onClick={() => {
+                      setIsYouTubeMode(true);
+                      setIsPhotoMode(false);
+                    }}
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: isYouTubeMode ? '#3EAB5C' : '#000',
+                      fontWeight: 'normal',
+                      textAlign: 'center',
+                      zIndex: 1,
+                      cursor: 'pointer',
+                    }}
                   >
-                    링크 입력
+                    <BiLogoYoutube />
                   </button>
+                </div></div>
+
                 </div>
-                <br /><br />
+                <br/>
                 {isPhotoMode ? (
                     <>
                       {form.cookSteps.map((step, index) => (
                           <div key={index}>
                             <br />
-                            <span>{step.stepNumber}</span>
+                            <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}
+                          style={{
+                            width: '18%',
+                            padding:'8px',
+                            backgroundColor:'white',
+                            color : '#3EAB5C',
+                            border: '1.5px solid #3EAB5C',
+                            borderRadius : '100px',
+                            textAlign : 'center',
+                          }}>X</button>
                             <input
                                 name="content"
                                 value={step.content}
                                 onChange={(e) => handleArrayChange(e, index, 'cookSteps')}
-                                placeholder="조리 단계"
+                                placeholder={step.stepNumber}
                             />
-                            <br /><br />
-                            <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}>삭제</button>
-                            <br /><br />
+                            
                           </div>
                       ))}
-                      <button type="button" onClick={() => handleAddArrayItem('cookSteps')}>+</button>
+                      <button type="button" onClick={() => handleAddArrayItem('cookSteps')}
+                        style={{
+                          width: '100%',
+                          backgroundColor:'white',
+                          color : '#3EAB5C',
+                          border: '1.5px solid #3EAB5C',
+                          textAlign : 'center',
+                          }}>+</button>
                     </>
                 ) : isYouTubeMode ? (
                     <>
+                    <br/>
                       <input
                           type="text"
                           name="youtubeUrl"
@@ -363,34 +489,57 @@ function CreateRecipe({ setScreen }) {
                           onChange={handleChange}
                           placeholder="유튜브 링크 입력"
                       />
-                      <br /><br />
+                      <br />
                     </>
                 ) : (
                     <>
+                      <br/>
                       <input type="file" accept="video/*" onChange={handleVideoChange} />
                       {videoPreview && <video src={videoPreview} controls style={{ width: '100%', height: '50%' }} />}
-                      <br /><br />
                       {form.cookSteps.map((step, index) => (
                           <div key={index}>
                             <br />
-                            <span>{step.stepNumber}</span>
+                            <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}
+                        style={{
+                          width: '18%',
+                          padding:'8px',
+                          backgroundColor:'white',
+                          color : '#3EAB5C',
+                          border: '1.5px solid #3EAB5C',
+                          borderRadius : '100px',
+                          textAlign : 'center',
+                        }}>X</button>
                             <input
                                 name="content"
                                 value={step.content}
                                 onChange={(e) => handleArrayChange(e, index, 'cookSteps')}
-                                placeholder="조리 단계"
+                                placeholder={step.stepNumber}
                             />
-                            <br /><br />
-                            <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}>삭제</button>
-                            <br /><br />
                           </div>
                       ))}
-                      <button type="button" onClick={() => handleAddArrayItem('cookSteps')}>+</button>
+                      <button type="button" onClick={() => handleAddArrayItem('cookSteps')}
+                        style={{
+                          width: '100%',
+                          backgroundColor:'white',
+                          color : '#3EAB5C',
+                          border: '1.5px solid #3EAB5C',
+                          textAlign : 'center',
+                          }}>+</button>
                     </>
                 )}
-                <br /><br />
-                <button type="button" onClick={prevStep}>이전</button>
-                <button type="submit">제출</button>
+                <div style={{ display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between'}}>
+                <button type="button" onClick={prevStep} style={{
+                  width: '50%'
+                  }}>
+                  이전
+                </button>
+                <button type="submit" style={{
+                  width: '50%'
+                  }}>
+                  제출
+                </button>
+              </div>
                 <br /><br /><br />
               </div>
           )}
