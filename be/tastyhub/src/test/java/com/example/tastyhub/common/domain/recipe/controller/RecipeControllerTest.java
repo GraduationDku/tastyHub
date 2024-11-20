@@ -56,10 +56,10 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
-//@WebMvcTest(controllers = RecipeController.class)
-//@MockBean(JpaMetamodelMappingContext.class)
-//@AutoConfigureRestDocs
+@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
+@WebMvcTest(controllers = RecipeController.class)
+@MockBean(JpaMetamodelMappingContext.class)
+@AutoConfigureRestDocs
 class RecipeControllerTest {
 
   @Autowired
