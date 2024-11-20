@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa'; // React Icons
 import '../../css/RecipeDetail.css';
 
 const ScrapButton = ({ recipeId }) => {
@@ -17,9 +18,9 @@ const ScrapButton = ({ recipeId }) => {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/scrap/${recipeId}`, {
         method: 'POST',
         headers: {
-          'Authorization': localStorage.getItem('accessToken'),
-          'Content-Type': 'application/json'
-        }
+          Authorization: localStorage.getItem('accessToken'),
+          'Content-Type': 'application/json',
+        },
       });
 
       if (response.ok) {
@@ -42,16 +43,20 @@ const ScrapButton = ({ recipeId }) => {
         className='scrap'
         onClick={toggleScrap}
         style={{
-          backgroundColor: isScrapped ? 'green' : 'gray',
-          color: 'white',
-          padding: '10px',
+          background: 'none',
           border: 'none',
-          borderRadius: '10px',
           cursor: 'pointer',
-          
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          color: isScrapped ? '#3eab5c' : '#787878',
+          fontSize: '16px',
+          transition: 'transform 0.3s',
         }}
+        onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+        onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
       >
-        {isScrapped ? 'Scrapped' : 'Scrap'}
+        {isScrapped ? <FaBookmark /> : <FaRegBookmark />} {isScrapped ? 'Scrapped' : 'Scrap'}
       </button>
     </div>
   );

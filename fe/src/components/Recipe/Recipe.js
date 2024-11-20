@@ -7,28 +7,32 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
   const [size, setSize] = useState(5); // 페이지 당 아이템 수 기본값
   const [sort, setSort] = useState('createdAt'); // 정렬 방식 기본값
   const [totalItems, setTotalItems] = useState(0); // 전체 게시글 수
-  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
-
 
   useEffect(() => {
     async function fetchAllRecipes() {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/list?page=${page}&size=${size}&sort=${sort}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization' : localStorage.getItem('accessToken')
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/recipe/list?page=${page}&size=${size}&sort=${sort}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: localStorage.getItem('accessToken'),
+            }
           }
-        });
-        if(response.ok){
-        }
-        const data = await response.json();
-        if (Array.isArray(data.content)) {
-          setRecipes(data.content);
-          setTotalItems(data.content.length);
-          setTotalPages(data.content.length / size);
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data.content)) {
+            setRecipes(data.content);
+            // totalItems 설정을 비워둡니다
+            setTotalItems(0); // 강제로 0으로 설정
+          } else {
+            console.error('Invalid data format:', data);
+          }
         } else {
-          console.error('Invalid data format:', data);
+          console.error('Error fetching recipes:', response.statusText);
         }
       } catch (error) {
         console.error('Error fetching recipes:', error);
@@ -36,22 +40,20 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
     }
 
     fetchAllRecipes();
-  }, [ page, size, sort ]);
+  }, [page, size, sort]);
 
   const handleSizeChange = (e) => {
     setSize(parseInt(e.target.value, 10) || 5);
-    setPage(0); // 페이지를 1로 초기화
+    setPage(0); // 페이지를 0으로 초기화
   };
 
   const handleSortChange = (e) => {
     setSort(e.target.value || 'createdAt');
-    setPage(0); // 페이지를 1로 초기화
+    setPage(0); // 페이지를 0으로 초기화
   };
 
   const handlePageChange = (newPage) => {
-    if (newPage < 0) newPage = 0; // 페이지 번호를 1보다 작지 않도록 설정
-    if (newPage > totalPages) newPage = totalPages; // 페이지 번호를 전체 페이지 수보다 크지 않도록 설정
-    setPage(newPage);
+    setPage(newPage); // 새로운 페이지 설정
   };
 
   const PageButton = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
@@ -81,45 +83,63 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
 
   return (
     <body>
-        <h1>전체 레시피 조회</h1>
-        <button onClick={() => setScreen('create')}>레시피 작성하기</button>
-        <br /><br />
-        <div className='recipebox'>
-        
-        <div className='select-container'>
+      <h1>전체 레시피 조회</h1>
+      <button onClick={() => setScreen('create')}>레시피 작성하기</button>
+      <br /><br />
+      <div className="recipebox">
+        <div className="select-container">
+          <br />
+          <select value={sort} onChange={handleSortChange}>
+            <option value="createdAt">날짜</option>
+            <option value="title">제목</option>
+          </select>
+          <select value={size} onChange={handleSizeChange}>
+            <option value={5}>5개</option>
+            <option value={10}>10개</option>
+            <option value={20}>20개</option>
+          </select>
+        </div>
         <br />
-            <select value={sort} onChange={handleSortChange}>
-              <option value="createdAt">날짜</option>
-              <option value="foodName">제목</option>
-              {/*<option value="nickname">작성자</option>*/}
-            </select>
-            <select value={size} onChange={handleSizeChange}>
-              <option value={5}>5개</option>
-              <option value={10}>10개</option>
-              <option value={20}>20개</option>
-            </select>
-          </div>
-          <br/>
-          <br/>
-        <div className='seperate'>
-        <ul>
-          {recipes.map(recipe => (
-            <li key={recipe.foodId} onClick={() => onRecipeSelect(recipe.foodId)}>
-              <h3>{recipe.foodName}</h3>
-              <img src={recipe.foodImgUrl} alt={recipe.foodName} style={{ width: '50%'}} />
-              <div>
-                <p>요리 시간: {recipe.foodInformationDto ? recipe.foodInformationDto.cookingTime + '분' : '정보 없음'} | {recipe.foodInformationDto ? recipe.foodInformationDto.serving : '정보 없음'}인분</p>
-                <p>설명: {recipe.foodInformationDto ? recipe.foodInformationDto.content : '정보 없음'}</p>
-                
-              </div>
-              
-            </li>
-          ))}
-        </ul>
-        </div><PageButton
-            itemsPerPage={size} // 페이지당 게시글 수
-            onPageChange={handlePageChange} // 페이지 변경 시 호출될 함수
-          />
+        <br />
+        <div className="seperate">
+          <ul>
+            {recipes.map((recipe) => (
+              <li key={recipe.foodId} onClick={() => onRecipeSelect(recipe.foodId)}>
+                <h3>{recipe.foodName}</h3>
+                <img
+                  src={recipe.foodImgUrl}
+                  alt={recipe.foodName}
+                  style={{ width: '50%' }}
+                />
+                <div>
+                  <p>
+                    요리 시간:{' '}
+                    {recipe.foodInformationDto
+                      ? recipe.foodInformationDto.cookingTime + '분'
+                      : '정보 없음'}{' '}
+                    |{' '}
+                    {recipe.foodInformationDto
+                      ? recipe.foodInformationDto.serving
+                      : '정보 없음'}
+                    인분
+                  </p>
+                  <p>
+                    설명:{' '}
+                    {recipe.foodInformationDto
+                      ? recipe.foodInformationDto.content
+                      : '정보 없음'}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <PageButton
+          totalItems={totalItems}
+          itemsPerPage={size}
+          currentPage={page}
+          onPageChange={handlePageChange}
+        />
       </div>
     </body>
   );
