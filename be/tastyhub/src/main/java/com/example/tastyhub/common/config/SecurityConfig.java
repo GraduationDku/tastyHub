@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.config;
 
+import com.example.tastyhub.common.utils.oauth.service.OAuth2Service;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+//  private final OAuth2Service oAuth2UserService;
   private final AccessTokenService accessTokenService;
   private final UserDetailsServiceImpl userDetailsService;
   private final String[] permitAllArray = {
@@ -49,28 +51,17 @@ public class SecurityConfig {
       "/recipe/search/{keyword}",
       "/like/count/{recipeId}",
       "/ws/chat",
-      "/ws/chat/**"
+      "/ws/chat/**",
+      "/oauth2/**"
   };
-  //private final String[] permitAllArray = {
-//    "/email",
-//    "/email/**",
-//    "/user/overlap/**",
-//    "/user/login",
-//    "/user/signup",
-//    "/recipe/list",
-//    "/recipe/popular",
-//    "/recipe/search/**",
-//    "/recipe/search/{keyword}",
-//    "/like/count/{recipeId}",
-//    "/chat",
-//    "/chat/**"
-//};
+
   private final String[] permitOrigin = {
       "http://localhost:8080",
       "https://apic.app",
       "http://localhost:3000",
       "http://13.209.238.65",
-      "https://localhost:3000"
+      "https://localhost:3000",
+      "https://www.googleapis.com/oauth2/**"
   };
 
   CorsConfigurationSource corsConfigurationSource() {
@@ -100,11 +91,6 @@ public class SecurityConfig {
             .requestMatchers(permitAllArray).permitAll()
             .anyRequest().authenticated()
         );
-//        .oauth2Login(oauth2 ->
-//            oauth2.defaultSuccessUrl("/home", true)
-//                .failureUrl("/login?=error=true")
-//                .userInfoEndpoint(user ->
-//                    user.userService(oAuth2UserService())));
 
     http.addFilterBefore(jwtAuthFilter(),
         UsernamePasswordAuthenticationFilter.class);

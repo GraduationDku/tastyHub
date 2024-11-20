@@ -78,6 +78,25 @@ const loginSlice = createSlice({
         state.user = null;
         state.error = action.payload || '로그인 실패';
       });
+
+    // .addCase(googleLogin.pending, (state) => {
+    //   state.loading = true;
+    //   state.error = null;
+    // })
+    // .addCase(googleLogin.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.isAuthenticated = true;
+    //   state.user = {
+    //     nickname: action.payload.nickname,
+    //   };
+    //   state.error = null;
+    // })
+    // .addCase(googleLogin.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.isAuthenticated = false;
+    //   state.user = null;
+    //   state.error = action.payload || '구글 로그인 실패';
+    // });
   },
 });
 
