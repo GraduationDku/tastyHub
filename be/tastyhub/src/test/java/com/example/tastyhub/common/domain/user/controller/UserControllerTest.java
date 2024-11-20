@@ -4,6 +4,7 @@ import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentRequest
 import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentResponse;
 import static com.example.tastyhub.common.config.APIConfig.USER_API;
 import static com.example.tastyhub.fixture.user.UserFixture.CHANGE_PASSWORD_REQUEST;
+import static com.example.tastyhub.fixture.user.UserFixture.FIND_ID_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.NICKNAME_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.SIGNUP_REQUEST;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
@@ -214,28 +215,28 @@ class UserControllerTest {
 
   }
 //
-//  @Test
-//  @WithMockUser
-//  @DisplayName("사용자 아이디 찾기")
-//  void findId() throws Exception {
-////        doNothing().when(userService).findId(FIND_ID_REQUEST);
-////        when(userService.findId(FIND_ID_REQUEST)).thenReturn(USER.getUsername());
-//
-//    ResultActions resultActions = mockMvc.perform(post(USER_API + "/find/id")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(objectMapper.writeValueAsString(FIND_ID_REQUEST))
-//            .with(csrf()))
-//        .andExpect(status().isOk());
-//
-//    resultActions.andDo(document("userController/find/id",
-//        getDocumentRequest(),
-//        getDocumentResponse(),
-//        requestFields(
-//            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
-//        )
-//    ));
-//
-//  }
+  @Test
+  @WithMockUser
+  @DisplayName("사용자 아이디 찾기")
+  void findId() throws Exception {
+//        doNothing().when(userService).findId(FIND_ID_REQUEST);
+//        when(userService.findId(FIND_ID_REQUEST)).thenReturn(USER.getUsername());
+
+    ResultActions resultActions = mockMvc.perform(get(USER_API + "/find/id")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(FIND_ID_REQUEST))
+            .with(csrf()))
+        .andExpect(status().isOk());
+
+    resultActions.andDo(document("userController/find/id",
+        getDocumentRequest(),
+        getDocumentResponse(),
+        requestFields(
+            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
+        )
+    ));
+
+  }
 
   @Test
   @WithCustomMockUser
