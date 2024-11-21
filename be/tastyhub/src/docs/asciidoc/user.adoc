@@ -71,22 +71,22 @@ include::{snippets}/userController/reset/password/http-response.adoc[]
 
 === Request
 
-include::{snippets}/userController/search-list/http-request.adoc[]
+include::{snippets}/userController/search/list/http-request.adoc[]
 
 === Response
 
-include::{snippets}/userController/search-list/http-response.adoc[]
+include::{snippets}/userController/search/list/http-response.adoc[]
 
 
 == 회원 아이디 찾기
 
 === Request
 
-include::{snippets}/userController/findid/http-request.adoc[]
+include::{snippets}/userController/find/id/http-request.adoc[]
 
 === Response
 
-include::{snippets}/userController/findid/http-response.adoc[]
+include::{snippets}/userController/find/id/http-response.adoc[]
 
 == 회원 탈퇴하기
 

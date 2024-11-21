@@ -2,9 +2,8 @@ name: Build and Deploy REST Docs
 
 # 워크플로 실행 조건: main 브랜치에 푸시될 때 실행
 on:
-  push:
-    branches:
-      - totalTest
+  pull_request:
+    branches: [ "dev" ]
 
 jobs:
   build-and-deploy:
@@ -20,10 +19,13 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: 17
+        distribution: 'temurin'
 
     # 3. REST Docs 빌드
     - name: Build REST Docs
       run: ./gradlew clean build asciidoctor
+      working-directory: ${{ secrets.WORKINGDIRECTORY }}
+
 
     # 4. GitHub Pages에 배포
     - name: Deploy to GitHub Pages

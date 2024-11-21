@@ -73,46 +73,37 @@ function MainScreen() {
 
   return (
     <body>
-      <h1>주간 인기 레시피</h1>
+      <br/><br/><br/>
+      <h1 style={{fontSize:'23px'}}>오늘은 어떤 음식을 먹어볼까요 ? 🍴</h1>
       <div className='mainbox'>
-        <ul>
-          {recipes.map((recipe) => (
-            <li key={recipe.foodId} onClick={() => handleRecipeClick(recipe)}>
-              {recipe.title}  {recipe.foodName}
-            </li>
-          ))}
-        </ul>
-      
-        {selectedRecipe && (
-          <div>
-            <h2>{selectedRecipe.title}</h2>
-            <img src={selectedRecipe.foodImgUrl} alt={selectedRecipe.foodName} style={{ width: '300px' }} />
-            {selectedRecipe.foodInformationDto ? (
-              <>
-                <p className='info'>요리 시간: {selectedRecipe.foodInformationDto.cookingTime || 'N/A'}분 | {selectedRecipe.foodInformationDto.serving || 'N/A'}</p>
-                <p></p>
-                <p>{selectedRecipe.foodInformationDto.content || 'No description available'}</p>
-              </>
-            ) : (
-              <p>No additional food information available.</p>
-            )}
-          </div>
-        )}
-      </div>
-      <h1>실시간 게시글</h1>
-      <div className='posts'>
-        
-        <ul>
-          {posts.map((post) => (
-            <li key={post.postId}>
-              <h3>{post.title}</h3>
-              <p>{post.userName}</p>
-              {/* <img src={post.userImg} alt={post.userName} style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> */}
-              <p>{post.postState}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
+  <div className='recipe-banner'>
+    <ul>
+      {recipes.map((recipe) => (
+        <li key={recipe.foodId} onClick={() => handleRecipeClick(recipe)}>
+          <img src={recipe.foodImgUrl} alt={selectedRecipe?.foodName || recipe.foodName} style={{ width: '100px' }} />
+          <br/><br/>
+          {recipe.title} {recipe.foodName}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<h1 style={{fontSize:'23px'}}>지금 이런 재료를 공유하고 있어요 ! 🥦</h1>
+<div className='posts'>
+  <div className='post-banner'>
+    <ul>
+      {posts.map((post) => (
+        <li key={post.postId}>
+          <h3>{post.title}</h3>
+          <p>{post.userName}</p>
+          <p>{post.postState}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
     </body>
   );
 }

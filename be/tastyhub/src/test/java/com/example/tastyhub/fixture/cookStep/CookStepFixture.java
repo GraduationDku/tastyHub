@@ -18,6 +18,7 @@ public class CookStepFixture {
     public static final CookStepCreateRequest COOK_STEP_CREATE_DTO = CookStepCreateRequest.builder()
         .stepNumber(1L)
         .content("text")
+        .timeLine("timeline")
         .stepImg("ImgUrl")
         .build();
 
