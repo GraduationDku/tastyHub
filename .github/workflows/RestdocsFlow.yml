@@ -35,8 +35,6 @@ jobs:
         run: ./gradlew asciidoctor
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
-        working-directory: ${{ secrets.WORKINGDIRECTORY }}
-
 
         with:
           path: ".${{ secrets.WORKINGDIRECTORY }}/build/docs/asciidoc"
