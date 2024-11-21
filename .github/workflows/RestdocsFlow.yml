@@ -7,7 +7,6 @@ on:
 concurrency:
   group: github-pages
   cancel-in-progress: true
-
 jobs:
   deploy:
     permissions:
@@ -32,10 +31,10 @@ jobs:
           cache: "gradle"
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ${{ secrets.WORKINGDIRECTORY }}/gradlew
 
       - name: Build Asciidoc
-        run: ./gradlew asciidoctor
+        run: ${{ secrets.WORKINGDIRECTORY }}/gradlew asciidoctor
         working-directory: ${{ secrets.WORKINGDIRECTORY }}
 
       - name: Upload pages artifact
