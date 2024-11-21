@@ -2,7 +2,7 @@ name: Build and Deploy REST Docs
 
 # 워크플로 실행 조건: main 브랜치에 푸시될 때 실행
 on:
-  pull_request:
+  push:
     branches: [ "dev" ]
 concurrency:
   group: github-pages
