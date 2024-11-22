@@ -117,15 +117,16 @@ function PostDetails({ postId, setScreen }) {
 
   return (
     <div>
+      <br/><br/>
       <div className="box">
         <div className="box2">
         <button className='but' onClick={() => setScreen('post')}>&lt;</button>
+        <p className="nick">{postDetails.nickname}</p>
           <h1>{postDetails.title}</h1>
           <hr />
-          <p className="nick">{postDetails.nickname}</p>
           <p>{postDetails.content}</p>
           <p className="state">{postDetails.postState}</p>
-          <p className="time">{postDetails.latestUpdateTime}</p>
+          {/* <p className="time">{postDetails.latestUpdateTime}</p> */}
           <hr />
           <button
           className="enterchat"
@@ -139,7 +140,7 @@ function PostDetails({ postId, setScreen }) {
           >
             {roomExists ? '채팅방 입장' : '채팅방 생성'}
           </button>
-          <br /><br />
+          <br />
         </div>
         <br />
         <div className="box3">
