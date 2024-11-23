@@ -16,8 +16,8 @@ function CreateRecipe({ setScreen }) {
       serving: ''
     },
     ingredients: [{ ingredientName: '', amount: '' }],
-    cookSteps: [{ stepNumber: 1, timeLine:'000' ,content: '' }],
-    foodVideoUrl : ''
+    cookSteps: [{ stepNumber: 1, timeLine: '00:00:00', content: '' }],
+    foodVideoUrl: ''
   });
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState('');
@@ -52,7 +52,10 @@ function CreateRecipe({ setScreen }) {
     } else if (type === 'cookSteps') {
       setForm({
         ...form,
-        cookSteps: [...form.cookSteps, { stepNumber: form.cookSteps.length + 1, content: '' }]
+        cookSteps: [
+          ...form.cookSteps,
+          { stepNumber: form.cookSteps.length + 1, timeLine: '00:00:00', content: '' }
+        ]
       });
     }
   };
@@ -104,34 +107,12 @@ function CreateRecipe({ setScreen }) {
           throw new Error('유튜브 처리 실패');
         }
       } else if (!isPhotoMode) {
-
-        // FormData 객체 생성
+        // 동영상 API 호출
         const formData = new FormData();
         formData.append('foodName', form.foodName);
-
-        // items: '[{"id": 1, "name": "apple"}, {"id": 2, "name": "banana"}, {"id": 3, "name": "cherry"}]'
-
-
-        // const cookSteps = form.cookSteps.map((step) => ({
-        //   stepNumber: step.stepNumber,
-        //   timeLine: step.timeLine || "00:00", // 기본값 설정
-        //   content: step.content,
-        // }));
-        // formData.append('cookSteps', JSON.stringify(cookSteps)); // JSON 문자열로 추가
-
-        // cookSteps를 서버가 예상하는 형식에 맞게 추가
-        // form.cookSteps.forEach((step, index) => {
-        //   formData.append(`cookSteps`, JSON.stringify(step));
-        // });
-        formData.append('cookSteps',JSON.stringify(form.cookSteps))
-
-
-        // 파일 첨부
+        formData.append('cookSteps', JSON.stringify(form.cookSteps));
         if (videoFile) {
           formData.append('foodVideo', videoFile);
-        }
-        for (let [key, value] of formData.entries()) {
-          console.log(`${key}:`, value);
         }
         const videoResponse = await fetch(`${process.env.REACT_APP_API_URL}/video/media/action`, {
           method: 'POST',
@@ -149,38 +130,44 @@ function CreateRecipe({ setScreen }) {
         } else {
           throw new Error('동영상 처리 실패');
         }
-      }
-     else if (isPhotoMode){
-      form.recipeType = 'Photo';
-     }
-      const finalFormData = new FormData();
-      finalFormData.append (
-        'data'
-        ,
-        new Blob( [JSON.stringify(form)], { type: 'application/json' })
-      );
-       if (file) {
-        finalFormData.append('img', file);
-         }
+      } else if (isPhotoMode) {
+        // 사진 모드 로직
+        form.recipeType = 'Image';
 
-       for (let [key, value] of finalFormData.entries()) {
-        console.log(`${key}:`, value);
-        }
-            
-            
+        // 모든 cookSteps의 timeLine을 '00:00:00'으로 설정
+        form.cookSteps = form.cookSteps.map((step) => ({
+          ...step,
+          timeLine: '00:00:00'
+        }));
+      }
+
+      const finalFormData = new FormData();
+      finalFormData.append(
+        'data',
+        new Blob([JSON.stringify(form)], { type: 'application/json' })
+      );
+      if (file) {
+        finalFormData.append('img', file);
+      }
+      for (let [key, value] of finalFormData.entries()) {
+        console.log(`${key}:`, value); // Key와 Value 출력
+      }
+
+      console.log(form.recipeType);
+      console.log(form.foodInformation);
+      console.log(form.foodName);
+      console.log(form.cookSteps);
+      console.log(form.ingredients);
 
       const finalResponse = await fetch(`${process.env.REACT_APP_API_URL}/recipe/create`, {
         method: 'POST',
-        credentials: 'include',
         headers: {
-          'Authorization': localStorage.getItem('accessToken'),
+          Authorization: localStorage.getItem('accessToken'),
         },
         body: finalFormData,
       });
-      console.log(finalResponse);
 
       if (finalResponse.ok) {
-        console.log('최종 레시피 생성', form);
         alert('레시피가 성공적으로 생성되었습니다!');
       } else {
         throw new Error('최종 레시피 생성 실패');
@@ -191,14 +178,120 @@ function CreateRecipe({ setScreen }) {
     }
   };
 
-  
-
   return (
-      <div className="createrecipe">
+         <div className="createrecipe">
         <button className="back-button" onClick={() => setScreen('recipe')}>&lt;</button>
         <br /><br />
         <form onSubmit={handleSubmit}>
-          {currentStep === 1 && (
+        {currentStep === 1 && (
+          <div className="label0">
+            <br />
+            <h2 className="create">레시피를 어떤 방식으로 작성할까요?</h2>
+            <div className="mode-toggle">
+              <div
+                style={{
+                  position: 'relative',
+                  width: '230px', // 전체 슬라이더 너비
+                  height: '40px', // 슬라이더 높이
+                  backgroundColor: '#f0f0f0', // 슬라이더 배경색
+                  borderRadius: '25px', // 둥근 모서리
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '5px',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // 약간의 그림자 효과
+                }}
+              >
+                {/* 슬라이더 */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '5px',
+                    left: isPhotoMode ? '5px' : isYouTubeMode ? '165px' : '85px', // 슬라이더 위치 설정
+                    width: '70px', // 슬라이더 너비
+                    height: '40px', // 슬라이더 높이
+                    backgroundColor: '#3EAB5C', // 슬라이더 색상
+                    borderRadius: '20px', // 둥근 모서리
+                    transition: 'left 0.3s ease-in-out', // 슬라이더 이동 애니메이션
+                  }}
+                ></div>
+                <br/><br/>
+                <div style={{ display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between'}}>
+                {/* 버튼들 */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPhotoMode(true);
+                    setIsYouTubeMode(false);
+                    setForm({ ...form, recipeType: 'Photo' });
+                  }}
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    color: isPhotoMode ? '#3EAB5C' : '#000',
+                    fontWeight: 'normal',
+                    textAlign: 'center',
+                    zIndex: 1,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <MdPhotoAlbum />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPhotoMode(false);
+                    setIsYouTubeMode(false);
+                    setForm({ ...form, recipeType: 'Video' });
+                  }}
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    color: !isPhotoMode && !isYouTubeMode ? '#3EAB5C' : '#000',
+                    fontWeight: 'normal',
+                    textAlign: 'center',
+                    zIndex: 1,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <BiVideo />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsYouTubeMode(true);
+                    setIsPhotoMode(false);
+                    setForm({ ...form, recipeType: 'Youtube' });
+                  }}
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    color: isYouTubeMode ? '#3EAB5C' : '#000',
+                    fontWeight: 'normal',
+                    textAlign: 'center',
+                    zIndex: 1,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <BiLogoYoutube />
+                </button>
+              </div></div>
+            </div>
+            <br /><br /><br />
+            <button type="button" onClick={nextStep} style={{ width: '50%', marginLeft: '120px' }}>
+              다음
+            </button>
+            <br />
+            <br />
+            <br />
+          </div>
+        )}
+
+
+          {currentStep === 2 && (
               <div className="label1">
                 <br />
                 <h2 className="create">레시피 이름을 작성해주세요 !</h2>
@@ -213,7 +306,7 @@ function CreateRecipe({ setScreen }) {
               </div>
           )}
 
-          {currentStep === 2 && (
+          {currentStep === 3 && (
               <div className="label2">
                 <br />
                 <h2 className="create">대표 사진을 등록해주세요 !</h2>
@@ -235,7 +328,7 @@ function CreateRecipe({ setScreen }) {
               </div>
           )}
 
-          {currentStep === 3 && (
+          {currentStep === 4 && (
               <div className="label3">
                 <br />
                 <h2 className="create">레시피에 대한 </h2>
@@ -256,7 +349,7 @@ function CreateRecipe({ setScreen }) {
               </div>
           )}
 
-          {currentStep === 4 && (
+          {currentStep === 5 && (
               <div className="label4">
                 <br />
                 <h2 className="create">조리 시간과 </h2>
@@ -292,23 +385,13 @@ function CreateRecipe({ setScreen }) {
               </div>
           )}
 
-          {currentStep === 5 && (
+          {currentStep === 6 && (
               <div className="label5">
                 <br />
                 <h2 className="create">재료는 어떤 것이 필요한가요 ?</h2>
                 <br />
                 {form.ingredients.map((ingredient, index) => (
                     <div key={index}>
-                      <button type="button" onClick={() => handleRemoveArrayItem(index, 'ingredients')}
-                        style={{
-                          width: '18%',
-                          padding:'8px',
-                          backgroundColor:'white',
-                          color : '#3EAB5C',
-                          border: '1.5px solid #3EAB5C',
-                          borderRadius : '100px',
-                          textAlign : 'center',
-                          }}>X</button>
                       <div style={{ display: 'flex', flexDirection: 'row',
                       alignItems: 'center', justifyContent: 'space-between'}}>
                       <input
@@ -324,7 +407,18 @@ function CreateRecipe({ setScreen }) {
                           value={ingredient.amount}
                           onChange={(e) => handleArrayChange(e, index, 'ingredients')}
                           placeholder="양"
-                      /></div>
+                      /><button type="button" onClick={() => handleRemoveArrayItem(index, 'ingredients')}
+                      style={{
+                        width: '18%',
+                        padding:'8px',
+                        backgroundColor:'white',
+                        color : '#3EAB5C',
+                        border: '1.5px solid #3EAB5C',
+                        borderRadius : '100px',
+                        textAlign : 'center',
+                        marginBottom: '30px'
+                        }}>X</button></div>
+                      
                     </div>
                 ))}
                 <button type="button" onClick={() => handleAddArrayItem('ingredients')}
@@ -348,104 +442,10 @@ function CreateRecipe({ setScreen }) {
               </div>
           )}
 
-          {currentStep === 6 && (
+          {currentStep === 7 && (
               <div className="label6">
                 <br />
-                <h2 className="create">조리 단계를 어떤 방식으로</h2>
-                <h2 className='create'>입력하실 건가요 ?</h2>
-                <br />
-                <div className="mode-toggle">
-                <div
-                  style={{
-                    position: 'relative',
-                    width: '230px', // 전체 슬라이더 너비
-                    height: '40px', // 슬라이더 높이
-                    backgroundColor: '#f0f0f0', // 슬라이더 배경색
-                    borderRadius: '25px', // 둥근 모서리
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '5px',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // 약간의 그림자 효과
-                  }}
-                >
-                  {/* 슬라이더 */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '5px',
-                      left: isPhotoMode ? '5px' : isYouTubeMode ? '165px' : '85px', // 슬라이더 위치 설정
-                      width: '70px', // 슬라이더 너비
-                      height: '40px', // 슬라이더 높이
-                      backgroundColor: '#3EAB5C', // 슬라이더 색상
-                      borderRadius: '20px', // 둥근 모서리
-                      transition: 'left 0.3s ease-in-out', // 슬라이더 이동 애니메이션
-                    }}
-                  ></div>
-                  <br/>
-                  {/* 버튼들 */}
-                  <div style={{ display: 'flex', flexDirection: 'row',
-                alignItems: 'center', justifyContent: 'space-between'}}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsPhotoMode(true);
-                      setIsYouTubeMode(false);
-                    }}
-                    style={{
-                      flex: 1, // 버튼 크기 균등
-                      backgroundColor: 'transparent', // 버튼 배경 투명
-                      border: 'none', // 버튼 테두리 제거
-                      color: isPhotoMode ? '#3EAB5C' : '#000', // 선택된 버튼은 흰색 텍스트
-                      fontWeight: 'normal', // 선택된 버튼은 굵게
-                      textAlign: 'center', // 텍스트 가운데 정렬
-                      zIndex: 1, // 슬라이더 위에 버튼 배치
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <MdPhotoAlbum />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsPhotoMode(false);
-                      setIsYouTubeMode(false);
-                    }}
-                    style={{
-                      flex: 1,
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      color: !isPhotoMode && !isYouTubeMode ? '#3EAB5C' : '#000',
-                      fontWeight: 'normal',
-                      textAlign: 'center',
-                      zIndex: 1,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <BiVideo />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsYouTubeMode(true);
-                      setIsPhotoMode(false);
-                    }}
-                    style={{
-                      flex: 1,
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      color: isYouTubeMode ? '#3EAB5C' : '#000',
-                      fontWeight: 'normal',
-                      textAlign: 'center',
-                      zIndex: 1,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <BiLogoYoutube />
-                  </button>
-                </div></div>
-
-                </div>
-                <br/>
+                <h2 className="create">조리 단계를 입력하세요 !</h2>
                 {isPhotoMode ? (
                     <>
                       {form.cookSteps.map((step, index) => (
@@ -544,8 +544,7 @@ function CreateRecipe({ setScreen }) {
               </div>
           )}
         </form>
-      </div>
-  );
+      </div>  );
 }
 
 export default CreateRecipe;

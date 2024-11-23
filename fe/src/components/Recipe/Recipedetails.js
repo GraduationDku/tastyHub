@@ -152,7 +152,7 @@ function RecipeDetails({ recipeId }) {
           style={{
             backgroundColor: '#f9f9f9',
             borderRadius: '8px',
-            paddingBottom: '40px',
+            padding: '30px',
             marginBottom: '16px',
             boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
           }}

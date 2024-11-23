@@ -47,6 +47,7 @@ function CreatePost({ setScreen }) {  // setScreen을 props로 받습니다.
 
   return (
     <>
+    <br /><br/>
       <div className="createpost">
         {/* 뒤로가기 버튼 추가 */}
         <button className="back-button" onClick={handleBack}>&lt;</button>

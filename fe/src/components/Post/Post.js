@@ -183,7 +183,10 @@ function Post({ setScreen, onPostSelect, isGuest }) {
         </div>
         <ul>
           {posts.map(post => (
-            <li key={post.postId}>
+            <li key={post.postId}
+            style={{
+              backgroundColor:'white'
+            }}>
               <div className="seperate">
                 {deleteMode && (
                   <input
@@ -196,7 +199,7 @@ function Post({ setScreen, onPostSelect, isGuest }) {
                   {post.title}
                 </h3>
                 <div className="seperate">
-                  <p>{post.nickname || '정보 없음'}</p>
+                  {/* <p>{post.nickname || '정보 없음'}</p> */}
                   <p>{post.postState || '정보 없음'}</p>
                 </div>
               </div>

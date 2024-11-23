@@ -25,7 +25,7 @@ export const checkUsernameAvailability = createAsyncThunk(
   'signup/checkUsernameAvailability',
   async (userName, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/overlap/userName?userName=${userName}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/overlap/username?username=${userName}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
