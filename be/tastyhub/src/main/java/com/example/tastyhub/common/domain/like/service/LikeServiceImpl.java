@@ -1,5 +1,6 @@
 package com.example.tastyhub.common.domain.like.service;
 
+import com.example.tastyhub.common.domain.like.dtos.LikeCheckDto;
 import com.example.tastyhub.common.domain.recipe.service.RecipeService;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +23,17 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     @Transactional
-    public boolean like(Long recipeId, User user) {
+    public LikeCheckDto like(Long recipeId, User user) {
         Recipe recipe = recipeService.findById(recipeId);
         Long userId = user.getId();
         if(checkLike(recipeId, userId)){
             likeRepository.deleteByRecipeIdAndUserId(recipeId, userId);
-            return true;
+            return new LikeCheckDto().builder().check(true).build();
         }
+
         Like like = Like.createLike(user, recipe);
         likeRepository.save(like);
-        return false;
+        return new LikeCheckDto().builder().check(false).build();
     }
 
 
