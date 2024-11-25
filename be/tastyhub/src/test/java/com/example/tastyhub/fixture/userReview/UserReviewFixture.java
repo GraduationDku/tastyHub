@@ -3,7 +3,9 @@ package com.example.tastyhub.fixture.userReview;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
 
 import com.example.tastyhub.common.utils.OrderSpecifierUtil;
+import com.example.tastyhub.common.utils.page.RestPage;
 import com.querydsl.core.types.OrderSpecifier;
+import java.util.Collections;
 import java.util.List;
 
 import com.example.tastyhub.common.domain.userReview.dtos.PagingUserReviewResponse;
@@ -41,8 +43,11 @@ public class UserReviewFixture {
 
     public static Pageable pageable = PageRequest.of(0, 1);
 
-    public static final Page<PagingUserReviewResponse> PAGING_USER_REVIEW_RESPONSES = new PageImpl(List.of(PAGING_USER_REVIEW_RESPONSE),pageable, 1);
 
+
+    public static final RestPage<PagingUserReviewResponse> PAGING_USER_REVIEW_RESPONSES = new RestPage<>(
+        Collections.singletonList(PAGING_USER_REVIEW_RESPONSE)
+    );
     public static OrderSpecifier<?>[] orderSpecifiers = OrderSpecifierUtil.getOrderSpecifiers(pageable, UserReview.class, "userReview");
 
 }
