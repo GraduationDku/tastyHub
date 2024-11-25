@@ -3,7 +3,6 @@ package com.example.tastyhub.common.domain.recipe.service;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.PAGING_RECIPE_RESPONSE_PAGE;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_CREATE_DTO;
-import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_UPDATE_DTO;
 import static com.example.tastyhub.fixture.user.UserFixture.USER;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,11 +17,10 @@ import static org.mockito.Mockito.when;
 import com.example.tastyhub.common.domain.cookstep.service.CookStepService;
 import com.example.tastyhub.common.domain.foodInformation.service.FoodInformationService;
 import com.example.tastyhub.common.domain.ingredient.service.IngredientService;
-import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import com.example.tastyhub.common.domain.recipe.repository.RecipeRepository;
-import com.example.tastyhub.common.domain.user.entity.User;
 import com.example.tastyhub.common.utils.S3.S3Uploader;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,7 +52,7 @@ class RecipeServiceImplTest {
    @DisplayName("레시피 생성 성공")
    void createRecipe() throws Exception {
      when(s3Uploader.upload(any(), any())).thenReturn("someUrl");
-     recipeService.createRecipe(RECIPE_CREATE_DTO, any(), USER);
+     recipeService.createRecipe(RECIPE_CREATE_DTO, null, new ArrayList<>(), USER);
      verify(recipeRepository, times(1)).save(any());
 
    }

@@ -6,10 +6,11 @@ import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface CookStepService {
 
-  List<CookStep> createCookSteps(List<CookStepCreateRequest> cookSteps);
+  List<CookStep> createCookSteps(List<CookStepCreateRequest> cookSteps, List<MultipartFile> images);
 
 
   void relationRecipe(List<CookStep> cookSteps, Recipe recipe);

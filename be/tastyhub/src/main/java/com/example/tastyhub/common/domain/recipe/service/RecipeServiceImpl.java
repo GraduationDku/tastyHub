@@ -50,7 +50,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   @Transactional
-  public void createRecipe(RecipeCreateDto recipeCreateDto, MultipartFile img, User user)
+  public void createRecipe(RecipeCreateDto recipeCreateDto, MultipartFile recipeImg, List<MultipartFile> cookStepImgs, User user)
       throws Exception {
     String imgUrl = new String();
 
@@ -58,11 +58,11 @@ public class RecipeServiceImpl implements RecipeService {
 
     List<Ingredient> ingredients = ingredientService.createIngredients(
         recipeCreateDto.getIngredients());
-
-    List<CookStep> cookSteps = cookStepService.createCookSteps(recipeCreateDto.getCookSteps());
+    log.info(String.valueOf(cookStepImgs.size()));
+    List<CookStep> cookSteps = cookStepService.createCookSteps(recipeCreateDto.getCookSteps(),cookStepImgs);
 
     try {
-      imgUrl = s3Uploader.upload(img, "image/recipeImg");
+      imgUrl = s3Uploader.upload(recipeImg, "image/recipeImg");
 
       Recipe recipe = Recipe.createRecipe(recipeCreateDto, user, imgUrl, foodInformation,
           ingredients,

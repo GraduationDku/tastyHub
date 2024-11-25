@@ -52,12 +52,12 @@ public class CookStep extends TimeStamped {
   @JoinColumn(name = "recipe_id", nullable = false)
   private Recipe recipe;
 
-  public static CookStep makeCookStep(CookStepCreateRequest cookStepCreateRequest) {
+  public static CookStep makeCookStep(CookStepCreateRequest cookStepCreateRequest, String imageUrl) {
     return CookStep.builder()
         .stepNumber(cookStepCreateRequest.getStepNumber())
         .timeline(cookStepCreateRequest.getTimeLine())
         .content(cookStepCreateRequest.getContent())
-        .stepImgUrl("after S3")
+        .stepImgUrl(imageUrl)
         .build();
   }
 
