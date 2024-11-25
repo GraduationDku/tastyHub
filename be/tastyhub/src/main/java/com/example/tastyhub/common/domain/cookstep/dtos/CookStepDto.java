@@ -18,7 +18,7 @@ public class CookStepDto {
     public CookStepDto(CookStep cookStep) {
         this.stepNumber = cookStep.getStepNumber();
         this.timeLine = cookStep.getTimeline();
-//        this.stepImgUrl = cookStep.get;
+        this.stepImgUrl = cookStep.getStepImgUrl();
         this.content = cookStep.getContent();
     }
 }

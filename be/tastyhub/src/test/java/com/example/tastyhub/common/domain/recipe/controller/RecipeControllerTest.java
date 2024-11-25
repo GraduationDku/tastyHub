@@ -1,16 +1,12 @@
 package com.example.tastyhub.common.domain.recipe.controller;
 
 import com.example.tastyhub.annotation.WithCustomMockUser;
-import com.example.tastyhub.common.domain.post.controller.PostController;
 import com.example.tastyhub.common.domain.recipe.service.RecipeService;
 import com.example.tastyhub.common.utils.SetHttpHeaders;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,17 +23,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.tastyhub.asciidocs.ApiDocumentUtils.getDocumentResponse;
-import static com.example.tastyhub.common.config.APIConfig.POST_API;
 import static com.example.tastyhub.common.config.APIConfig.RECIPE_API;
-import static com.example.tastyhub.fixture.post.PostFixture.POST_CREATE_REQUEST;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.PAGING_RECIPE_RESPONSE_PAGE;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_CREATE_DTO;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_DTO;
 import static com.example.tastyhub.fixture.recipe.RecipeFixture.RECIPE_UPDATE_DTO;
-import static com.example.tastyhub.fixture.user.UserFixture.USER;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -226,8 +218,14 @@ class RecipeControllerTest {
   void createRecipe() throws Exception {
 
     // 이미지 파일 파트
+    MockMultipartFile cookStepImgsFile = new MockMultipartFile(
+        "cookStepImgs",
+        "test.png",
+        "image/png",
+        "test image content".getBytes()
+    );
     MockMultipartFile imgFile = new MockMultipartFile(
-        "img",
+        "recipeImg",
         "test.png",
         "image/png",
         "test image content".getBytes()
@@ -241,11 +239,12 @@ class RecipeControllerTest {
         objectMapper.writeValueAsString(RECIPE_CREATE_DTO).getBytes()
     );
 
-    doNothing().when(recipeService).createRecipe(any(), any(), any());
+    doNothing().when(recipeService).createRecipe(any(), any(), any(), any());
 
     ResultActions resultActions = mockMvc.perform(multipart(RECIPE_API + "/create")
             .file(imgFile)
             .file(dataFile)
+            .file(cookStepImgsFile)
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .with(csrf()))
         .andExpect(status().isCreated());
@@ -254,7 +253,8 @@ class RecipeControllerTest {
         getDocumentRequest(),
         getDocumentResponse(),
         requestParts(
-            partWithName("img").description("프로필 이미지 파일"),
+            partWithName("recipeImg").description("프로필 이미지 파일"),
+            partWithName("cookStepImgs").description("프로필 이미지 파일"),
             partWithName("data").description("회원 가입 데이터 (JSON)")
         ),
         requestPartFields("data",

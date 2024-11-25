@@ -8,6 +8,7 @@ import static com.example.tastyhub.common.utils.HttpResponseEntity.RESPONSE_OK;
 import com.example.tastyhub.common.utils.page.RestPage;
 import java.io.IOException;
 
+import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -45,81 +46,89 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 public class RecipeController {
 
-    private final RecipeService recipeService;
-    private final SetHttpHeaders setHttpHeaders;
+  private final RecipeService recipeService;
+  private final SetHttpHeaders setHttpHeaders;
 
-    @GetMapping("/popular")
-    public ResponseEntity<Page<PagingRecipeResponse>> getPopuralRecipes(
-        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
-            .body(recipeService.getPopularRecipes(pageable));
+  @GetMapping("/popular")
+  public ResponseEntity<Page<PagingRecipeResponse>> getPopuralRecipes(
+      @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+    return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
+        .body(recipeService.getPopularRecipes(pageable));
+  }
+
+  @GetMapping("/list")
+  public ResponseEntity<Page<PagingRecipeResponse>> getAllRecipes(
+      @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+    return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
+        .body(recipeService.getAllRecipes(pageable));
+  }
+
+  @GetMapping("/mylist")
+  public ResponseEntity<Page<PagingRecipeResponse>> getMyRecipes(
+      @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable,
+      @AuthenticationPrincipal
+      UserDetailsImpl userDetails) {
+    return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
+        .body(recipeService.getMyRecipes(pageable, userDetails.getUser()));
+  }
+
+  @GetMapping("/search/{keyword}")
+  public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(
+      @PathVariable String keyword,
+      @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+    log.info("CTL : " + keyword);
+    return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(
+        recipeService.getSearchedRecipes(keyword, pageable));
+  }
+
+  /**
+   * writer : skyriv213 method : 레시피 생성하기
+   */
+  @PostMapping("/create")
+  public ResponseEntity<StatusResponse> createRecipe(
+      @RequestPart("recipeImg") MultipartFile recipeImg,
+      @RequestPart("cookStepImgs") List<MultipartFile> cookStepImgs,
+      @RequestPart("data") RecipeCreateDto recipeCreateDto,
+      @AuthenticationPrincipal
+      UserDetailsImpl userDetails) {
+    try {
+      recipeService.createRecipe(recipeCreateDto, recipeImg, cookStepImgs, userDetails.getUser());
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<Page<PagingRecipeResponse>> getAllRecipes(
-        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
-            .body(recipeService.getAllRecipes(pageable));
-    }
-    @GetMapping("/mylist")
-    public ResponseEntity<Page<PagingRecipeResponse>> getMyRecipes(
-        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable, @AuthenticationPrincipal
-        UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson())
-            .body(recipeService.getMyRecipes(pageable, userDetails.getUser()));
-    }
+    return RESPONSE_CREATED;
+  }
 
-    @GetMapping("/search/{keyword}")
-    public ResponseEntity<Page<PagingRecipeResponse>> getSearchedRecipes(
-        @PathVariable String keyword,
-        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
-        log.info("CTL : " + keyword);
-        return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(
-            recipeService.getSearchedRecipes(keyword, pageable));
-    }
+  /**
+   * writer : skyriv213 method : 단일레시피 조회하기
+   */
+  @GetMapping("/detail/{recipeId}")
+  public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long recipeId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    RecipeDto recipeDto = recipeService.getRecipe(recipeId, userDetails.getUser());
+    return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(recipeDto);
+  }
 
-    /**
-     * writer : skyriv213 method : 레시피 생성하기
-     */
-    @PostMapping("/create")
-    public ResponseEntity<StatusResponse> createRecipe(@RequestPart("img") MultipartFile img, @RequestPart("data") RecipeCreateDto recipeCreateDto,
-        @AuthenticationPrincipal
-        UserDetailsImpl userDetails) {
-        try {
-            recipeService.createRecipe(recipeCreateDto,img, userDetails.getUser());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        return RESPONSE_CREATED;
-    }
-
-    /**
-     * writer : skyriv213 method : 단일레시피 조회하기
-     */
-    @GetMapping("/detail/{recipeId}")
-    public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long recipeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        RecipeDto recipeDto = recipeService.getRecipe(recipeId, userDetails.getUser());
-        return ResponseEntity.ok().headers(setHttpHeaders.setHttpHeaderTypeJson()).body(recipeDto);
-    }
-
-    /**
-     * writer : skyriv213 method : 레시피 수정하기
-     * @throws IOException 
-     */
-    @PatchMapping(value = "/modify/{recipeId}")
-    public ResponseEntity<StatusResponse> updateRecipe(@PathVariable Long recipeId, @RequestPart("img") MultipartFile img,
-        @RequestPart("data") RecipeUpdateDto recipeUpdateDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+  /**
+   * writer : skyriv213 method : 레시피 수정하기
+   *
+   * @throws IOException
+   */
+  @PatchMapping(value = "/modify/{recipeId}")
+  public ResponseEntity<StatusResponse> updateRecipe(@PathVariable Long recipeId,
+      @RequestPart("img") MultipartFile img,
+      @RequestPart("data") RecipeUpdateDto recipeUpdateDto,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
 //
-        recipeService.updateRecipe(recipeId, img, userDetails.getUser(), recipeUpdateDto);
-        return RESPONSE_OK;
-    }
+    recipeService.updateRecipe(recipeId, img, userDetails.getUser(), recipeUpdateDto);
+    return RESPONSE_OK;
+  }
 
-    @DeleteMapping("/{recipeId}")
-    public ResponseEntity<StatusResponse> deleteRecipe(@PathVariable Long recipeId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-        recipeService.deleteRecipe(recipeId, userDetails.getUser());
-        return DELETE_SUCCESS;
-    }
+  @DeleteMapping("/{recipeId}")
+  public ResponseEntity<StatusResponse> deleteRecipe(@PathVariable Long recipeId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+    recipeService.deleteRecipe(recipeId, userDetails.getUser());
+    return DELETE_SUCCESS;
+  }
 }
