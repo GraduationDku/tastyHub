@@ -186,7 +186,7 @@ function RecipeDetails({ recipeId }) {
         {recipeDetails.recipeType === 'Video' && (
           <video
             ref={videoRef}
-            src={require('/Users/sep037/Desktop/fe/fe/src/assets/sample2.mp4')}
+            src={require('src/assets/sample2.mp4')}
             controls
             style={{ width: '100%', maxHeight: '300px' }}
           />
