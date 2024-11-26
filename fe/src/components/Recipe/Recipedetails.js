@@ -26,6 +26,7 @@ function RecipeDetails({ recipeId }) {
         });
         if (response.ok) {
           const data = await response.json();
+          console.log(data);
           setRecipeDetails(data);
         } else {
           throw new Error('Failed to fetch recipe details');
@@ -207,15 +208,14 @@ function RecipeDetails({ recipeId }) {
                 className="recipedetail"
                 key={step.stepNumber || index}
                 style={{
-                  cursor: recipeDetails.recipeType !== 'photo' ? 'pointer' : 'default',
+                  cursor: recipeDetails.recipeType !== 'Image' ? 'pointer' : 'default',
                 }}
                 onClick={() => handleTimelineClick(step.timeLine)}
               >
                 {step.content}
-                {/* 단계별 이미지 */}
-                {recipeDetails.recipeType === 'photo' && step.cookStepImg && (
+                {recipeDetails.recipeType === 'Image' && step.stepImgUrl && (
                   <img
-                    src={step.cookStepImg}
+                    src={step.stepImgUrl}
                     alt={`Step ${step.stepNumber}`}
                     style={{ width: '100%', maxHeight: '200px', marginTop: '10px' }}
                   />
