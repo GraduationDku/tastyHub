@@ -1,0 +1,51 @@
+= UserReview API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+---
+
+== 사용자 리뷰 생성하기
+
+=== Request
+
+include::{snippets}/user-review/create/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/user-review/create/http-response.adoc[]
+
+
+== 사용자 리뷰 조회
+
+=== Request
+
+include::{snippets}/user-review/get-list/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/user-review/get-list/http-response.adoc[]
+
+
+== 사용자 리뷰 수정하기
+
+=== Request
+
+include::{snippets}/user-review/update/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/user-review/update/http-response.adoc[]
+
+
+== 사용자 리뷰 삭제하기
+
+=== Request
+
+include::{snippets}/user-review/delete/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/user-review/delete/http-response.adoc[]
