@@ -19,6 +19,7 @@ function CreateRecipe({ setScreen }) {
     cookSteps: [{ stepNumber: 1, timeLine: '00:00:00', content: '' }],
     foodVideoUrl: ''
   });
+  const [cookStepImgs, setCookStepImgs] = useState([]); // 쿡스텝 이미지 리스트
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState('');
   const [videoFile, setVideoFile] = useState(null);
@@ -57,6 +58,7 @@ function CreateRecipe({ setScreen }) {
           { stepNumber: form.cookSteps.length + 1, timeLine: '00:00:00', content: '' }
         ]
       });
+      setCookStepImgs([...cookStepImgs, null]); // 새로운 쿡스텝에 대한 이미지 자리 추가
     }
   };
 
@@ -64,6 +66,11 @@ function CreateRecipe({ setScreen }) {
     const list = [...form[type]];
     list.splice(index, 1);
     setForm({ ...form, [type]: list });
+    if (type === 'cookSteps') {
+      const imgList = [...cookStepImgs];
+      imgList.splice(index, 1); // 이미지 리스트에서도 삭제
+      setCookStepImgs(imgList);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -71,6 +78,14 @@ function CreateRecipe({ setScreen }) {
     setFile(file);
     const preview = URL.createObjectURL(file);
     setFilePreview(preview);
+  };
+
+  const handleCookStepImgChange = (e, index) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const newCookStepImgs = [...cookStepImgs];
+    newCookStepImgs[index] = file; // 해당 index에 이미지 추가
+    setCookStepImgs(newCookStepImgs);
   };
 
   const handleVideoChange = (e) => {
@@ -147,12 +162,17 @@ function CreateRecipe({ setScreen }) {
         new Blob([JSON.stringify(form)], { type: 'application/json' })
       );
       if (file) {
-        finalFormData.append('img', file);
+        finalFormData.append('recipeImg', file);
       }
-      for (let [key, value] of finalFormData.entries()) {
-        console.log(`${key}:`, value); // Key와 Value 출력
-      }
-
+      
+      cookStepImgs.forEach((img, index) => {
+        if (img) {
+          finalFormData.append(`cookStepImgs`, img); // 동일한 필드 이름으로 여러 파일 추가
+        }
+      });
+      
+      
+      console.log(cookStepImgs);
       console.log(form.recipeType);
       console.log(form.foodInformation);
       console.log(form.foodName);
@@ -467,7 +487,11 @@ function CreateRecipe({ setScreen }) {
                                 onChange={(e) => handleArrayChange(e, index, 'cookSteps')}
                                 placeholder={step.stepNumber}
                             />
-                            
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => handleCookStepImgChange(e, index)}
+                            />
                           </div>
                       ))}
                       <button type="button" onClick={() => handleAddArrayItem('cookSteps')}
@@ -547,4 +571,4 @@ function CreateRecipe({ setScreen }) {
       </div>  );
 }
 
-export default CreateRecipe;
+export default CreateRecipe; 
