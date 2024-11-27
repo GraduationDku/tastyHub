@@ -43,12 +43,15 @@ function RecipeDetails({ recipeId , setScreen}) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('accessToken'),
           },
         });
-        
+        console.log(response);
         if (response.ok) {
           const reviewdata = await response.json();
-          setRecipeReviews(reviewdata);
+          console.log(reviewdata.content)
+          setRecipeReviews(reviewdata.content)
+          // setRecipeReviews(reviewdata);
         } else {
           throw new Error('Failed to fetch recipe reviews');
         }
