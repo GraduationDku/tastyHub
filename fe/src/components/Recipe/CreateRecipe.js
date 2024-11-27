@@ -124,21 +124,12 @@ function CreateRecipe({ setScreen }) {
 
         if (youtubeResponse.ok) {
           const data = await youtubeResponse.json();
-          setForm((prevForm) => ({
-            ...prevForm, // 기존 상태 유지
-            foodName: data.foodName, // 새로운 foodName 반영
-            foodInformation: {
-              ...prevForm.foodInformation,
-              content: data.foodInformation.content,
-              cookingTime: data.foodInformation.cookingTime,
-              serving: data.foodInformation.serving,
-            },
-            ingredients: data.ingredients, // 새로운 재료 리스트 반영
-            cookSteps: data.cookSteps, // 새로운 조리 단계 반영
-            foodVideoUrl: data.s3_url, // 유튜브 URL 반영
-          }));
-          
-          console.log(data)
+          form.foodName = data.foodName;
+          form.foodInformation = data.foodInformation;
+          form.ingredients = data.ingredients;
+          form.cookSteps = data.cookSteps;
+          console.log('폼',form)
+          console.log('데이터',data)
         } else {
           throw new Error('유튜브 처리 실패');
         }
