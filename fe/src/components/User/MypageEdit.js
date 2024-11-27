@@ -84,7 +84,35 @@ function MypageEdit() {
   };
 
   const handleLocationSubmit = async () => {
-    // 위치 정보 수정 API 호출
+    if (!location.lat || !location.lng) {
+      alert("위치 정보를 먼저 설정하세요.");
+      return;
+    }
+  
+    try {
+  
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/village/modify/location`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': localStorage.getItem('accessToken')
+        },
+        body: JSON.stringify({
+          lat: location.lat,
+          lng: location.lng,
+        }),
+      });
+       console.log(location);
+  
+      if (response.ok) {
+        alert("위치가 성공적으로 수정되었습니다!");
+      } else {
+        const errorData = await response.json();
+        alert(`위치 수정 실패: ${errorData.message || "알 수 없는 오류"}`);
+      }
+    } catch (error) {
+      alert(`위치 수정 요청 중 오류가 발생했습니다: ${error.message}`);
+    }
   };
 
   return (

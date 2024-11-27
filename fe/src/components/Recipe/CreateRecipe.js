@@ -207,6 +207,7 @@ function CreateRecipe({ setScreen }) {
 
       if (finalResponse.ok) {
         alert('레시피가 성공적으로 생성되었습니다!');
+        setScreen('recipe'); // 화면 전환
       } else {
         throw new Error('최종 레시피 생성 실패');
       }
