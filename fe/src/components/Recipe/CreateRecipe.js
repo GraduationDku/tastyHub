@@ -12,7 +12,7 @@ function CreateRecipe({ setScreen }) {
     foodName: '',
     foodInformation: {
       content: '',
-      cookingTime: 0,
+      cookingTime: '',
       serving: ''
     },
     ingredients: [{ ingredientName: '', amount: '' }],
@@ -124,14 +124,20 @@ function CreateRecipe({ setScreen }) {
 
         if (youtubeResponse.ok) {
           const data = await youtubeResponse.json();
-          setForm({
-            ...form,
-            foodName: data.foodName,
-            foodInformation: data.foodInformation,
-            ingredients: data.ingredients,
-            cookSteps: data.cookSteps,
-            foodVideoUrl: data.s3_url,
-          });
+          setForm((prevForm) => ({
+            ...prevForm, // 기존 상태 유지
+            foodName: data.foodName, // 새로운 foodName 반영
+            foodInformation: {
+              ...prevForm.foodInformation,
+              content: data.foodInformation.content,
+              cookingTime: data.foodInformation.cookingTime,
+              serving: data.foodInformation.serving,
+            },
+            ingredients: data.ingredients, // 새로운 재료 리스트 반영
+            cookSteps: data.cookSteps, // 새로운 조리 단계 반영
+            foodVideoUrl: data.s3_url, // 유튜브 URL 반영
+          }));
+          
           console.log(data)
         } else {
           throw new Error('유튜브 처리 실패');
@@ -180,7 +186,9 @@ function CreateRecipe({ setScreen }) {
         finalFormData.append('recipeImg', file);
       }
       
-      if (cookStepImgs.length === 0) {
+      if (!isPhotoMode && !isYouTubeMode) { // 사용자 영상 모드일 때
+        finalFormData.append('cookStepImgs', new Blob([], { type: 'application/octet-stream' })); // 빈 Blob 추가
+      } else if (cookStepImgs.length === 0) { // 사진 모드에서 cookStepImgs가 비어 있을 때
         finalFormData.append('cookStepImgs', new Blob([], { type: 'application/octet-stream' })); // 빈 Blob 추가
       } else {
         cookStepImgs.forEach((img) => {
@@ -338,6 +346,26 @@ function CreateRecipe({ setScreen }) {
             <br /><br />
             {filePreview && <img src={filePreview} alt="Preview" style={{ width: '100%', height: '50%' }} />}
             <br /><br />
+            
+            <h2 className="create">조리 시간과 몇 인분인지 적어주세요!</h2>
+            <br />
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <input
+                type="text"
+                name="cookingTime"
+                value={form.foodInformation.cookingTime}
+                onChange={handleChange}
+                placeholder="조리 시간 (분)"
+              />
+              <input
+                type="text"
+                name="serving"
+                value={form.foodInformation.serving}
+                onChange={handleChange}
+                placeholder="몇 인분인가요?"
+              />
+            </div>
+            <br /><br />
             <h2 className="create">유튜브 링크를 입력해주세요!</h2>
             <input
               type="text"
@@ -347,12 +375,18 @@ function CreateRecipe({ setScreen }) {
               placeholder="유튜브 링크"
             />
             <br /><br />
-            <button type="submit" style={{ width: '100%' }}>
-              제출
-            </button>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <button type="button" onClick={prevStep} style={{ width: '50%' }}>
+                이전
+              </button>
+              <button type="submit" style={{ width: '50%' }}>
+                제출
+              </button>
+            </div>
             <br /><br />
           </div>
         )}
+
   
         {/* Photo/Video 모드 - Step 2: 레시피 이름 입력 */}
         {!isYouTubeMode && currentStep === 2 && (
@@ -361,9 +395,13 @@ function CreateRecipe({ setScreen }) {
             <h2 className="create">레시피 이름을 작성해주세요!</h2>
             <input className="label1in" type="text" name="foodName" value={form.foodName} onChange={handleChange} />
             <br /><br />
-            <button type="button" onClick={nextStep} style={{ width: '50%', marginLeft: '120px' }}>
-              다음
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <button type="button" onClick={prevStep} style={{ width: '50%' }}>
+                이전 
             </button>
+            <button type="button" onClick={nextStep} style={{ width: '50%', marginLeft: '10px' }}>
+              다음
+            </button></div>
             <br /><br /><br />
           </div>
         )}
@@ -423,11 +461,11 @@ function CreateRecipe({ setScreen }) {
             <br />
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <input
-                type="number"
+                type="text"
                 name="cookingTime"
                 value={form.foodInformation.cookingTime}
                 onChange={handleChange}
-                placeholder="조리 시간"
+                placeholder="조리 시간 (분)"
               />
               <input
                 type="text"
