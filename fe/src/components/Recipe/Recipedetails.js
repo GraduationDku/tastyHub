@@ -123,8 +123,9 @@ function RecipeDetails({ recipeId , setScreen}) {
           'Authorization': localStorage.getItem('accessToken'),
         },
       });
-
     } catch (error) {
+    } finally {
+      setScreen('recipe'); 
     }
   };
 
@@ -210,7 +211,7 @@ function RecipeDetails({ recipeId , setScreen}) {
 
         {/* 재료 */}
         <div>
-          <h3>재료</h3>
+          <h3 strong style={{ color: '#3eab5c' }}>재료</h3>
           <ul className="recipedetail">
             {recipeDetails.ingredients.map((ingredient, index) => (
               <li className="recipedetail" key={ingredient.ingredientId || index}>
@@ -220,7 +221,6 @@ function RecipeDetails({ recipeId , setScreen}) {
           </ul>
         </div>
 
-        {/* 순서 */}
         {recipeDetails.recipeType === 'Video' && (
           <video
             ref={videoRef}
@@ -246,7 +246,7 @@ function RecipeDetails({ recipeId , setScreen}) {
         />
         )}
         <div>
-          <h3>순서</h3>
+          <h3 strong style={{ color: '#3eab5c' }}>순서</h3>
           <ol className="recipedetail">
             {recipeDetails.cookSteps.map((step, index) => (
               <li
@@ -254,10 +254,14 @@ function RecipeDetails({ recipeId , setScreen}) {
                 key={step.stepNumber || index}
                 style={{
                   cursor: recipeDetails.recipeType !== 'Image' ? 'pointer' : 'default',
+                  listStyle: 'none',
+                  marginRight: '30px'
                 }}
                 onClick={() => handleTimelineClick(step.timeLine)}
               >
-                {step.content}
+
+                {step.stepNumber} -  
+                &nbsp;{step.content}
                 {recipeDetails.recipeType === 'Image' && step.stepImgUrl && (
                   <img
                     src={step.stepImgUrl}
