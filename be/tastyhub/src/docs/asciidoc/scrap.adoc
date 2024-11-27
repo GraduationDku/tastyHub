@@ -22,9 +22,9 @@
 
 === Request
 
-include::{snippets}/commentController/modify/http-request.adoc[]
+include::{snippets}/scrap/get-list/http-request.adoc[]
 
 === Response
 
-include::{snippets}/commentController/modify/http-response.adoc[]
+include::{snippets}/scrap/get-list/http-response.adoc[]
 
