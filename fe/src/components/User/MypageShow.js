@@ -32,7 +32,7 @@ const MypageShow = ({ userName }) => {
 
   const fetchScrapedRecipes = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/scrap/list/${userName}?page=${page}&size=${size}&sort=${sort}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/scrap/list`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
@@ -127,7 +127,7 @@ const ScrapedRecipes = ({ recipes, onPageChange }) => (
       {recipes.length > 0 ? (
         recipes.map(recipe => (
           <li key={recipe.foodId}>
-            <img src={recipe.foodImgUrl} alt={recipe.foodName} />
+            <img src={recipe.foodImgUrl} alt={recipe.foodName} style={{width:"240px"}} />
             <p>{recipe.foodName}</p>
           </li>
         ))
