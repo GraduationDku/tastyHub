@@ -59,7 +59,7 @@ public class RecipeServiceImpl implements RecipeService {
     List<Ingredient> ingredients = ingredientService.createIngredients(
         recipeCreateDto.getIngredients());
     log.info(String.valueOf(cookStepImgs.size()));
-    List<CookStep> cookSteps = cookStepService.createCookSteps(recipeCreateDto.getCookSteps(),cookStepImgs);
+    List<CookStep> cookSteps = cookStepService.createCookSteps(recipeCreateDto.getRecipeType(),recipeCreateDto.getCookSteps(),cookStepImgs);
 
     try {
       imgUrl = s3Uploader.upload(recipeImg, "image/recipeImg");

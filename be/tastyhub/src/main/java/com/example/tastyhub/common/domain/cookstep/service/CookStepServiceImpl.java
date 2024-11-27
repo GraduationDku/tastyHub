@@ -6,6 +6,7 @@ import com.example.tastyhub.common.domain.cookstep.entity.CookStep;
 import com.example.tastyhub.common.domain.cookstep.repository.CookStepRepository;
 import com.example.tastyhub.common.domain.recipe.dtos.RecipeUpdateDto;
 import com.example.tastyhub.common.domain.recipe.entity.Recipe;
+import com.example.tastyhub.common.domain.recipe.entity.RecipeType;
 import com.example.tastyhub.common.utils.S3.S3Uploader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,9 +24,15 @@ public class CookStepServiceImpl implements CookStepService {
   private final S3Uploader s3Uploader;
 
   @Override
-  public List<CookStep> createCookSteps(List<CookStepCreateRequest> cookStepRequests,
+  public List<CookStep> createCookSteps(RecipeType recipeType,List<CookStepCreateRequest> cookStepRequests,
       List<MultipartFile> cookStepImgs) {
     List<CookStep> cookSteps = new ArrayList<>();
+    if (recipeType != RecipeType.Image){
+      for (CookStepCreateRequest cookStepRequest : cookStepRequests) {
+        cookSteps.add(CookStep.makeCookStep(cookStepRequest, "video or youtube"));
+      }
+      return cookSteps;
+    }
     for (int i = 0; i < cookStepImgs.size(); i++) {
       try {
         String imgUrl = s3Uploader.upload(cookStepImgs.get(i), "image/cookStepImg");
@@ -34,6 +41,7 @@ public class CookStepServiceImpl implements CookStepService {
         throw new RuntimeException(e);
       }
     }
+
     return cookSteps;
   }
 
