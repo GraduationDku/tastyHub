@@ -18,49 +18,57 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 @RequiredArgsConstructor
-public class RecipeReviewRepositoryQueryImpl implements RecipeReviewRepositoryQuery{
+public class RecipeReviewRepositoryQueryImpl implements RecipeReviewRepositoryQuery {
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PagingRecipeReviewResponse> findAllRecipeReviewResponse(Long recipeId, Pageable pageable, OrderSpecifier<?>[] orderSpecifiers) {
+    public Page<PagingRecipeReviewResponse> findAllRecipeReviewResponse(Long recipeId,
+        Pageable pageable, OrderSpecifier<?>[] orderSpecifiers) {
         List<PagingRecipeReviewResponse> pagingRecipeReviewResponseList =
-             jpaQueryFactory.select(Projections.constructor(PagingRecipeReviewResponse.class,
-                    user.id,
-                    user.nickname,
-                    recipeReview.grade,
-                    recipeReview.content
-                    ))
-                    .from(recipeReview)
-                    .where(recipeReview.recipe.id.eq(recipeId))
-                    .leftJoin(recipeReview.user,user)
-                 .orderBy(orderSpecifiers) // Dynamic sorting
-                 .offset(pageable.getOffset()) // Set offset for paging
-                 .limit(pageable.getPageSize()) // Set page size
-                 .fetch();
+            jpaQueryFactory.select(Projections.fields(
+                    PagingRecipeReviewResponse.class,
+                    user.nickname.as("nickname"),  // 필드 이름 매핑
+                    recipeReview.grade.as("grade"),
+                    recipeReview.content.as("content")
+                ))
+                .from(recipeReview)
+                .where(recipeReview.recipe.id.eq(recipeId))
+                .leftJoin(recipeReview.user, user)
+                .orderBy(orderSpecifiers)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
         long totalSize = pagingRecipeReviewResponseList.size();
-        return PageableExecutionUtils.getPage(pagingRecipeReviewResponseList, pageable, () -> totalSize);
+        return PageableExecutionUtils.getPage(pagingRecipeReviewResponseList, pageable,
+            () -> totalSize);
     }
+
 
     @Override
-    public Page<PagingMyRecipeReviewResponse> findAllMyRecipeReviewResponse(Long userId, Pageable pageable, OrderSpecifier<?>[] orderSpecifiers) {
+    public Page<PagingMyRecipeReviewResponse> findAllMyRecipeReviewResponse(Long userId,
+        Pageable pageable, OrderSpecifier<?>[] orderSpecifiers) {
         List<PagingMyRecipeReviewResponse> pagingMyRecipeReviewResponseList =
-             jpaQueryFactory.select(Projections.constructor(PagingMyRecipeReviewResponse.class,
-                    recipe.id,
-                    recipe.recipeImgUrl,
-                    recipe.foodName,
-                    recipeReview.grade,
-                    recipeReview.content
-                    ))
-                    .from(recipeReview)
-                    .where(recipeReview.user.id.eq(userId))
-                    .leftJoin(recipeReview.recipe, recipe)
-                 .orderBy(orderSpecifiers) // Dynamic sorting
-                 .offset(pageable.getOffset()) // Set offset for paging
-                 .limit(pageable.getPageSize()) // Set page size
-                    .fetch();
-        long totalSize = pagingMyRecipeReviewResponseList.size();
-        return PageableExecutionUtils.getPage(pagingMyRecipeReviewResponseList, pageable, () -> totalSize);
+            jpaQueryFactory.select(Projections.fields(
+                    PagingMyRecipeReviewResponse.class,
+                    recipe.id.as("recipeId"),
+                    recipe.recipeImgUrl.as("recipeImgUrl"),
+                    recipe.foodName.as("foodName"),
+                    recipeReview.grade.as("grade"),
+                    recipeReview.content.as("content")
+                ))
+                .from(recipeReview)
+                .where(recipeReview.user.id.eq(userId))
+                .leftJoin(recipeReview.recipe, recipe)
+                .orderBy(orderSpecifiers)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
+        long totalSize = pagingMyRecipeReviewResponseList.size();
+        return PageableExecutionUtils.getPage(pagingMyRecipeReviewResponseList, pageable,
+            () -> totalSize);
     }
+
 }
