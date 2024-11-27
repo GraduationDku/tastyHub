@@ -43,9 +43,9 @@ function RecipeDetails({ recipeId , setScreen}) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken'),
           },
         });
+        
         if (response.ok) {
           const reviewdata = await response.json();
           setRecipeReviews(reviewdata);
@@ -55,6 +55,7 @@ function RecipeDetails({ recipeId , setScreen}) {
       } catch (error) {
         console.error('Error fetching recipe reviews:', error);
       }
+      
     }
 
     if (recipeId) {
@@ -73,6 +74,10 @@ function RecipeDetails({ recipeId , setScreen}) {
         },
         body: JSON.stringify({ grade: rating, content: reviewContent }),
       });
+      console.log('Submit Review Request URL:', `${process.env.REACT_APP_API_URL}/recipe-review/create/${recipeId}`);
+      console.log('Authorization Token:', localStorage.getItem('accessToken'));
+      console.log('Payload:', { grade: rating, content: reviewContent });
+
   
       if (response.ok) {
         const newReview = { nickname: '사용자', grade: rating, content: reviewContent }; // 새 리뷰 데이터
@@ -371,4 +376,4 @@ function RecipeDetails({ recipeId , setScreen}) {
   );
 }
 
-export default RecipeDetails;
+export default RecipeDetails; 
