@@ -10,7 +10,7 @@ const MypageShow = ({ userName }) => {
   const [myRecipes, setMyRecipes] = useState([]);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
-  const [sort, setSort] = useState('date');
+  const [sort, setSort] = useState('createdAt');
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -97,7 +97,7 @@ const MypageShow = ({ userName }) => {
         {view && (
           <div className='searchsort'>
             <select value={sort} onChange={handleSortChange} >
-              <option value="date">날짜</option>
+              <option value="createdAt">날짜</option>
               <option value="title">제목</option>
               <option value="nickname">작성자</option>
             </select>
@@ -169,11 +169,9 @@ const MyRecipes = ({ recipes, onPageChange }) => (
       {recipes.length > 0 ? (
         recipes.map(recipe => (
           <li key={recipe.foodId}>
-            <img src={recipe.foodImgUrl} alt={recipe.foodName} />
+            <img src={recipe.foodImgUrl} alt={recipe.foodName}
+            style={{width:"240px"}}/>
             <p>{recipe.foodName}</p>
-            <p>{recipe.foodInformationDto.content}</p>
-            <p>조리 시간 : {recipe.foodInformationDto.cookingTime} minutes</p>
-            <p>양 : {recipe.foodInformationDto.serving}</p>
           </li>
         ))
       ) : (
