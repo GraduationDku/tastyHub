@@ -87,7 +87,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
       <button onClick={() => setScreen('create')}>레시피 작성하기</button>
       <br /><br />
       <div className="recipebox">
-        <div className="select-container">
+        <div className="select-container" >
           <br />
           <select value={sort} onChange={handleSortChange}>
             <option value="createdAt">날짜</option>
@@ -101,7 +101,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
         </div>
         <br />
         <br />
-        <div className="seperate">
+        <div className="seperate" style={{width:'250px', marginLeft:'60px'}}>
           <ul>
             {recipes.map((recipe) => (
               <li key={recipe.foodId} onClick={() => onRecipeSelect(recipe.foodId)}>
@@ -109,7 +109,7 @@ function Recipe({ onRecipeSelect, setScreen, onEdit }) {
                 <img
                   src={recipe.foodImgUrl}
                   alt={recipe.foodName}
-                  style={{ width: '50%' }}
+                  style={{ width: '80%', marginLeft:'20px'}}
                 />
                 <div>
                 </div>
