@@ -56,7 +56,8 @@ def read_video_from_uploadfile(upload_file: UploadFile):
 
     return temp_video_path
 
-# S3 파일 업로드 함수
+import mimetypes
+
 def upload_to_s3(file, bucket, filename):
     s3 = boto3.client(
         "s3",
@@ -65,12 +66,27 @@ def upload_to_s3(file, bucket, filename):
         region_name=S3_REGION
     )
     try:
-        s3.upload_fileobj(file, bucket, filename)
+        # 파일의 MIME 타입 추론
+        content_type, _ = mimetypes.guess_type(filename)
+        if content_type is None:
+            content_type = "application/octet-stream"  # 기본값 설정
+
+        s3.upload_fileobj(
+            file,
+            bucket,
+            filename,
+            ExtraArgs={
+                "ACL": "public-read",
+                "ContentType": content_type
+            }
+        )
         return f"https://{bucket}.s3.{S3_REGION}.amazonaws.com/{filename}"
     except NoCredentialsError:
         return {"error": "AWS credentials not available"}
+    except Exception as e:
+        return {"error": str(e)}
 
-
+    
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -98,7 +114,6 @@ async def youtube_test():
     link = "https://www.youtube.com/watch?v=pLiO21Hhb-U"
     response_body = youtubeAnalysis(link)
     return response_body
-
 @app.post("/video/media/action")
 async def upload_video(
     foodName: str = Form(...),
@@ -126,6 +141,8 @@ async def upload_video(
         import os
         if os.path.exists(temp_video_path):
             os.remove(temp_video_path)
+    # 스트림 위치 초기화
+    foodVideo.file.seek(0)
 
     # S3 업로드
     filename = foodVideo.filename
@@ -137,8 +154,6 @@ async def upload_video(
         return {"error": "Failed to upload to S3"}
 
     return {"message": "Video uploaded successfully", "s3_url": s3_url, "cookSteps": processedCookSteps}
-
-
 @app.get("/video")
 async def read_video():
     l = temp()

@@ -303,7 +303,7 @@ real_cooking_steps = [
 ]
 
 # 비디오 파일 경로 예시
-video_path = "video/data/sample2.mp4"
+video_path2 = "video/data/sample2.mp4"
 
 
 # # 프로세스 실행
@@ -322,7 +322,7 @@ video_path = "video/data/sample2.mp4"
 
 # 프로세스 실행
 def temp():
-    result = processingVideo(video_path, cooking_steps,real_cooking_steps)
+    result = processingVideo(video_path2, cooking_steps,real_cooking_steps)
     # for item in result:
     #     print(f"Cooking Step: {item['Cooking Step']}")
     #     print(f"Start Time: {item['Start Time (s)']:.2f} seconds")  # 시작 시간 출력

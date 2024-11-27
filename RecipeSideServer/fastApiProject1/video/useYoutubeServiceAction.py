@@ -31,31 +31,44 @@ def youtubeAnalysis(video_url):
       print("YouTube Query 엔드포인트 호출 중")
 
       # 쿼리 생성
+      # 쿼리 생성
       q = YTQuery(
-          query="""
-          요리 재료와 양을 표시하고, 아래 형식과 같이 요리 단계를 6개에서 10개 사이의 단계로 나누어 주세요. 각 요리 단계 내용은 자세하게 작성해주세요. 이 각 요리 단계에 맞는 유튜브 영상 시:분:초 양식의 타임라인을 포함한 JSON 형식으로 응답해 주세요. 요리가 여러 개 나오는 영상이면 대표 메뉴 하나만 응답해주세요. 최종 응답값, json filed name은 영어로 그대로 놔두고 json filed value만 한글로 번역해서 각 항목을 채워주세요.
-        {
-”foodName” :String,
+        query="""
+              요리 영상을 분석하여 아래 형식에 따라 JSON 응답을 생성해 주세요. 
 
-”foodInformation” :
-   {
-     “content” :String
-   }
-”ingredients” : [
-   {
-     “ingredientName” :String
-     “amount” :String
-   },
-]
-”cookSteps” : [
-   {
-    “stepNumber” :Long
-    "timeLine" :String
-    “content” :String
-   },
-]
-}
-    """,
+      1. **대표 메뉴 이름 (`foodName`)**: 요리 영상에서 만들어지는 대표적인 요리의 이름을 추출하세요. 
+      2. **요리 정보 (`foodInformation`)**: 대표 메뉴에 대한 간단한 설명을 작성하세요.
+      3. **재료 정보 (`ingredients`)**: 요리에서 사용된 재료와 각각의 양을 추출하세요.
+      4. **요리 단계 (`cookSteps`)**:
+         - 요리 과정을 6개에서 10개의 단계로 나누어 주세요.
+         - 각 단계는 순서 번호(`stepNumber`), 타임라인(`timeLine`), 그리고 자세한 설명(`content`)을 포함합니다.
+         - 타임라인은 해당 요리 단계가 시작하는 시각을 소수점 없이 초 단위로 **정확히** 제공해 주세요.
+      5. **특별 지시사항**: 
+         - 영상에서 여러 요리가 등장하면, 대표 메뉴 하나만 선택해 주세요.
+         - JSON 구조는 아래 형식을 유지하며, `field name`은 영어로 그대로 두고 `field value`는 한국어로 번역해 주세요.
+
+      요구하는 JSON 형식:
+      ```json
+      {
+        "foodName": "String",
+        "foodInformation": {
+          "content": "String"
+        },
+        "ingredients": [
+          {
+            "ingredientName": "String",
+            "amount": "String"
+          }
+        ],
+        "cookSteps": [
+          {
+            "stepNumber": Long,
+            "timeLine": "String",
+            "content": "String"
+          }
+        ]
+      }
+          """,
           video_id=video_id
       )
 
