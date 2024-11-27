@@ -6,7 +6,7 @@ import StarRatings from 'react-star-ratings';
 import YouTube from 'react-youtube'; // YouTube 라이브러리
 import '../../css/RecipeDetail.css';
 
-function RecipeDetails({ recipeId }) {
+function RecipeDetails({ recipeId , setScreen}) {
   const [recipeDetails, setRecipeDetails] = useState(null);
   const [recipeReviews, setRecipeReviews] = useState([]);
   const [rating, setRating] = useState(0); // 별점 상태
@@ -28,6 +28,7 @@ function RecipeDetails({ recipeId }) {
           const data = await response.json();
           console.log(data);
           setRecipeDetails(data);
+          console.log('cookSteps:', recipeDetails.cookSteps);
         } else {
           throw new Error('Failed to fetch recipe details');
         }
@@ -112,6 +113,20 @@ function RecipeDetails({ recipeId }) {
     }
   };
   
+  const handleDeleteRecipe = async () => {
+  
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe/${recipeId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('accessToken'),
+        },
+      });
+
+    } catch (error) {
+    }
+  };
 
   if (!recipeDetails) {
     return <p>Loading...</p>;
@@ -130,6 +145,24 @@ function RecipeDetails({ recipeId }) {
     <div className="recipedetails">
       <br /><br />
       <div className="box">
+      <div
+            style={{
+              display: "flex", // 가로 배치를 위한 flex 컨테이너
+              flexDirection: "row", // 가로 방향으로 배치
+              justifyContent: "flex-start", // 왼쪽 정렬
+              alignItems: "center", // 세로 중앙 정렬
+              gap: "15px", // 별과 텍스트 영역 사이 간격
+              width: "100%", // 컨테이너의 너비
+            }}
+          >
+      <button className="back-button" onClick={() => setScreen('recipe')}>&lt;</button>
+      <button
+          onClick={handleDeleteRecipe}
+          style={{
+            width: ' 100px',
+            marginLeft : '150px'
+          }}
+        >삭제하기</button></div>
         <h1
           style={{
             fontSize: '24px',
@@ -237,10 +270,16 @@ function RecipeDetails({ recipeId }) {
         </div>
 
         {/* 좋아요 & 스크랩 버튼 */}
-        <p style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ display: 'flex',
+              flexDirection: "row", // 가로 방향으로 배치
+              justifyContent: "flex-start", // 왼쪽 정렬
+              alignItems: "center", // 세로 중앙 정렬
+              gap: "15px", // 별과 텍스트 영역 사이 간격
+              width: "100%", // 컨테이너의 너비
+            }}>
           <LikeButton className="recipedetail" recipeId={recipeId} />
           <ScrapButton recipeId={recipeId} />
-        </p>
+        </div>
         <hr />
         {/* 리뷰 섹션 */}
         <div className="review" style={{ marginTop: '40px' }}>
