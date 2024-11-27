@@ -352,7 +352,8 @@ function RecipeDetails({ recipeId , setScreen}) {
               border: 'none',
               cursor: 'pointer',
               width:'80px',
-              marginBottom :'20px'
+              marginBottom :'20px',
+              fontSize :'14.1px'
             }}>
             제출
           </button>
