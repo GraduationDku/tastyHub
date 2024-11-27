@@ -32,8 +32,8 @@ function CreateRecipe({ setScreen }) {
       setForm({ ...form, [name]: value });
     } else if (name === 'content' || name === 'cookingTime' || name === 'serving') {
       setForm({ ...form, foodInformation: { ...form.foodInformation, [name]: value } });
-    } else if (name === 'youtubeUrl') {
-      setForm({ ...form, youtubeUrl: value });
+    } else if (name === 'foodVideoUrl') { // 수정됨
+      setForm({ ...form, foodVideoUrl: value });
     }
   };
 
@@ -98,12 +98,21 @@ function CreateRecipe({ setScreen }) {
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const prevStep = () => setCurrentStep((prev) => prev - 1);
 
+  function isValidYouTubeUrl(url) {
+    const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+    return pattern.test(url);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (isYouTubeMode && !isValidYouTubeUrl(form.foodVideoUrl)) {
+      alert('유효한 유튜브 URL을 입력하세요.');
+      return;
+    }
 
     try {
       if (isYouTubeMode) {
-        // 유튜브 API 호출
         const youtubeResponse = await fetch(`${process.env.REACT_APP_API_URL}/video/youtube/link`, {
           method: 'POST',
           headers: {
@@ -115,13 +124,19 @@ function CreateRecipe({ setScreen }) {
 
         if (youtubeResponse.ok) {
           const data = await youtubeResponse.json();
-          form.cookSteps = data.cookSteps;
-          form.foodVideoUrl = data.s3_url;
-          form.recipeType = 'Youtube';
+          setForm({
+            ...form,
+            foodName: data.foodName,
+            foodInformation: data.foodInformation,
+            ingredients: data.ingredients,
+            cookSteps: data.cookSteps,
+            foodVideoUrl: data.s3_url,
+          });
+          console.log(data)
         } else {
           throw new Error('유튜브 처리 실패');
         }
-      } else if (!isPhotoMode) {
+      }else if (!isPhotoMode) {
         // 동영상 API 호출
         const formData = new FormData();
         formData.append('foodName', form.foodName);
@@ -165,11 +180,15 @@ function CreateRecipe({ setScreen }) {
         finalFormData.append('recipeImg', file);
       }
       
-      cookStepImgs.forEach((img, index) => {
-        if (img) {
-          finalFormData.append(`cookStepImgs`, img); // 동일한 필드 이름으로 여러 파일 추가
-        }
-      });
+      if (cookStepImgs.length === 0) {
+        finalFormData.append('cookStepImgs', new Blob([], { type: 'application/octet-stream' })); // 빈 Blob 추가
+      } else {
+        cookStepImgs.forEach((img) => {
+          if (img) {
+            finalFormData.append('cookStepImgs', img);
+          }
+        });
+      }
       
       
       console.log(cookStepImgs);
@@ -199,10 +218,11 @@ function CreateRecipe({ setScreen }) {
   };
 
   return (
-         <div className="createrecipe">
-        <button className="back-button" onClick={() => setScreen('recipe')}>&lt;</button>
-        <br /><br />
-        <form onSubmit={handleSubmit}>
+    <div className="createrecipe">
+      <button className="back-button" onClick={() => setScreen('recipe')}>&lt;</button>
+      <br /><br />
+      <form onSubmit={handleSubmit}>
+        {/* Step 1: 작성 방식 선택 */}
         {currentStep === 1 && (
           <div className="label0">
             <br />
@@ -211,94 +231,92 @@ function CreateRecipe({ setScreen }) {
               <div
                 style={{
                   position: 'relative',
-                  width: '230px', // 전체 슬라이더 너비
-                  height: '40px', // 슬라이더 높이
-                  backgroundColor: '#f0f0f0', // 슬라이더 배경색
-                  borderRadius: '25px', // 둥근 모서리
+                  width: '230px',
+                  height: '40px',
+                  backgroundColor: '#f0f0f0',
+                  borderRadius: '25px',
                   display: 'flex',
                   alignItems: 'center',
                   padding: '5px',
-                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // 약간의 그림자 효과
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                 }}
               >
-                {/* 슬라이더 */}
                 <div
                   style={{
                     position: 'absolute',
                     top: '5px',
-                    left: isPhotoMode ? '5px' : isYouTubeMode ? '165px' : '85px', // 슬라이더 위치 설정
-                    width: '70px', // 슬라이더 너비
-                    height: '40px', // 슬라이더 높이
-                    backgroundColor: '#3EAB5C', // 슬라이더 색상
-                    borderRadius: '20px', // 둥근 모서리
-                    transition: 'left 0.3s ease-in-out', // 슬라이더 이동 애니메이션
+                    left: isPhotoMode ? '5px' : isYouTubeMode ? '165px' : '85px',
+                    width: '70px',
+                    height: '40px',
+                    backgroundColor: '#3EAB5C',
+                    borderRadius: '20px',
+                    transition: 'left 0.3s ease-in-out',
                   }}
                 ></div>
                 <br/><br/>
-                <div style={{ display: 'flex', flexDirection: 'row',
-                alignItems: 'center', justifyContent: 'space-between'}}>
-                {/* 버튼들 */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsPhotoMode(true);
-                    setIsYouTubeMode(false);
-                    setForm({ ...form, recipeType: 'Photo' });
-                  }}
-                  style={{
-                    flex: 1,
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    color: isPhotoMode ? '#3EAB5C' : '#000',
-                    fontWeight: 'normal',
-                    textAlign: 'center',
-                    zIndex: 1,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <MdPhotoAlbum />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsPhotoMode(false);
-                    setIsYouTubeMode(false);
-                    setForm({ ...form, recipeType: 'Video' });
-                  }}
-                  style={{
-                    flex: 1,
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    color: !isPhotoMode && !isYouTubeMode ? '#3EAB5C' : '#000',
-                    fontWeight: 'normal',
-                    textAlign: 'center',
-                    zIndex: 1,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <BiVideo />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsYouTubeMode(true);
-                    setIsPhotoMode(false);
-                    setForm({ ...form, recipeType: 'Youtube' });
-                  }}
-                  style={{
-                    flex: 1,
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    color: isYouTubeMode ? '#3EAB5C' : '#000',
-                    fontWeight: 'normal',
-                    textAlign: 'center',
-                    zIndex: 1,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <BiLogoYoutube />
-                </button>
-              </div></div>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsPhotoMode(true);
+                      setIsYouTubeMode(false);
+                      setForm({ ...form, recipeType: 'Photo' });
+                    }}
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: isPhotoMode ? '#3EAB5C' : '#000',
+                      fontWeight: 'normal',
+                      textAlign: 'center',
+                      zIndex: 1,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <MdPhotoAlbum />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsPhotoMode(false);
+                      setIsYouTubeMode(false);
+                      setForm({ ...form, recipeType: 'Video' });
+                    }}
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: !isPhotoMode && !isYouTubeMode ? '#3EAB5C' : '#000',
+                      fontWeight: 'normal',
+                      textAlign: 'center',
+                      zIndex: 1,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <BiVideo />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsYouTubeMode(true);
+                      setIsPhotoMode(false);
+                      setForm({ ...form, recipeType: 'Youtube' });
+                    }}
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: isYouTubeMode ? '#3EAB5C' : '#000',
+                      fontWeight: 'normal',
+                      textAlign: 'center',
+                      zIndex: 1,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <BiLogoYoutube />
+                  </button>
+                </div>
+              </div>
             </div>
             <br /><br /><br />
             <button type="button" onClick={nextStep} style={{ width: '50%', marginLeft: '120px' }}>
@@ -309,266 +327,306 @@ function CreateRecipe({ setScreen }) {
             <br />
           </div>
         )}
-
-
-          {currentStep === 2 && (
-              <div className="label1">
-                <br />
-                <h2 className="create">레시피 이름을 작성해주세요 !</h2>
-                <input className="label1in" type="text" name="foodName" value={form.foodName} onChange={handleChange} />
-                <br /><br />
-                <button type="button" onClick={nextStep}
-                style={{
-                  width: '50%',
-                  marginLeft : '120px'
-                  }}>다음</button>
-                <br /><br /><br />
-              </div>
-          )}
-
-          {currentStep === 3 && (
-              <div className="label2">
-                <br />
-                <h2 className="create">대표 사진을 등록해주세요 !</h2>
-                <br />
-                <input type="file" accept="image/*" onChange={handleFileChange} />
-                <br /><br />
-                {filePreview && <img src={filePreview} alt="Preview" style={{ width: '100%', height: '50%' }} />}
-                <br /><br />
-                <div style={{ display: 'flex', flexDirection: 'row',
-                alignItems: 'center', justifyContent: 'space-between'}}>
-                <button type="button" onClick={prevStep} style={{
-                  width: '50%'
-                  }}>이전</button>
-                <button type="button" onClick={nextStep}
-                style={{
-                  width: '50%'
-                  }}>다음</button></div>
-                <br /><br /><br />
-              </div>
-          )}
-
-          {currentStep === 4 && (
-              <div className="label3">
-                <br />
-                <h2 className="create">레시피에 대한 </h2>
-                <h2 className="create">설명을 작성해주세요 !</h2>
-                <br />
-                <textarea className="label3in" name="content" value={form.foodInformation.content} onChange={handleChange} />
-                <br /><br />
-                <div style={{ display: 'flex', flexDirection: 'row',
-                alignItems: 'center', justifyContent: 'space-between'}}>
-                <button type="button" onClick={prevStep} style={{
-                  width: '50%'
-                  }}>이전</button>
-                <button type="button" onClick={nextStep}
-                style={{
-                  width: '50%'
-                  }}>다음</button></div>
-                <br /><br /><br />
-              </div>
-          )}
-
-          {currentStep === 5 && (
-              <div className="label4">
-                <br />
-                <h2 className="create">조리 시간과 </h2>
-                  <h2 className="create">몇 인분인지 적어주세요 !</h2>
-                <br />
-                <div style={{ display: 'flex', flexDirection: 'row',
-                alignItems: 'center', justifyContent: 'space-between'}}>
-                <input
-                    type="number"
-                    name="cookingTime"
-                    value={form.foodInformation.cookingTime}
-                    onChange={handleChange}
-                    placeholder="조리 시간"
-                />
-                <input
+  
+        {/* 유튜브 모드 - Step 2: 대표 사진과 유튜브 링크 입력 */}
+        {isYouTubeMode && currentStep === 2 && (
+          <div className="labelYoutube">
+            <br />
+            <h2 className="create">대표 사진을 등록해주세요!</h2>
+            <br />
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+            <br /><br />
+            {filePreview && <img src={filePreview} alt="Preview" style={{ width: '100%', height: '50%' }} />}
+            <br /><br />
+            <h2 className="create">유튜브 링크를 입력해주세요!</h2>
+            <input
+              type="text"
+              name="foodVideoUrl"
+              value={form.foodVideoUrl}
+              onChange={handleChange}
+              placeholder="유튜브 링크"
+            />
+            <br /><br />
+            <button type="submit" style={{ width: '100%' }}>
+              제출
+            </button>
+            <br /><br />
+          </div>
+        )}
+  
+        {/* Photo/Video 모드 - Step 2: 레시피 이름 입력 */}
+        {!isYouTubeMode && currentStep === 2 && (
+          <div className="label1">
+            <br />
+            <h2 className="create">레시피 이름을 작성해주세요!</h2>
+            <input className="label1in" type="text" name="foodName" value={form.foodName} onChange={handleChange} />
+            <br /><br />
+            <button type="button" onClick={nextStep} style={{ width: '50%', marginLeft: '120px' }}>
+              다음
+            </button>
+            <br /><br /><br />
+          </div>
+        )}
+  
+        {/* Photo/Video 모드 - Step 3: 대표 사진 입력 */}
+        {!isYouTubeMode && currentStep === 3 && (
+          <div className="label2">
+            <br />
+            <h2 className="create">대표 사진을 등록해주세요!</h2>
+            <br />
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+            <br /><br />
+            {filePreview && <img src={filePreview} alt="Preview" style={{ width: '100%', height: '50%' }} />}
+            <br /><br />
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <button type="button" onClick={prevStep} style={{ width: '50%' }}>
+                이전
+              </button>
+              <button type="button" onClick={nextStep} style={{ width: '50%' }}>
+                다음
+              </button>
+            </div>
+            <br /><br /><br />
+          </div>
+        )}
+  
+        {/* Photo/Video 모드 - Step 4: 레시피 설명 입력 */}
+        {!isYouTubeMode && currentStep === 4 && (
+          <div className="label3">
+            <br />
+            <h2 className="create">레시피에 대한 설명을 작성해주세요!</h2>
+            <br />
+            <textarea
+              className="label3in"
+              name="content"
+              value={form.foodInformation.content}
+              onChange={handleChange}
+            />
+            <br /><br />
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <button type="button" onClick={prevStep} style={{ width: '50%' }}>
+                이전
+              </button>
+              <button type="button" onClick={nextStep} style={{ width: '50%' }}>
+                다음
+              </button>
+            </div>
+            <br /><br /><br />
+          </div>
+        )}
+  
+        {/* Photo/Video 모드 - Step 5: 조리 시간과 인분 입력 */}
+        {!isYouTubeMode && currentStep === 5 && (
+          <div className="label4">
+            <br />
+            <h2 className="create">조리 시간과 몇 인분인지 적어주세요!</h2>
+            <br />
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <input
+                type="number"
+                name="cookingTime"
+                value={form.foodInformation.cookingTime}
+                onChange={handleChange}
+                placeholder="조리 시간"
+              />
+              <input
+                type="text"
+                name="serving"
+                value={form.foodInformation.serving}
+                onChange={handleChange}
+                placeholder="몇 인분인가요?"
+              />
+            </div>
+            <br /><br />
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <button type="button" onClick={prevStep} style={{ width: '50%' }}>
+                이전
+              </button>
+              <button type="button" onClick={nextStep} style={{ width: '50%' }}>
+                다음
+              </button>
+            </div>
+            <br /><br /><br />
+          </div>
+        )}
+  
+        {/* Photo/Video 모드 - Step 6: 재료 입력 */}
+        {!isYouTubeMode && currentStep === 6 && (
+          <div className="label5">
+            <br />
+            <h2 className="create">재료는 어떤 것이 필요한가요?</h2>
+            <br />
+            {form.ingredients.map((ingredient, index) => (
+              <div key={index}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <input
                     type="text"
-                    name="serving"
-                    value={form.foodInformation.serving}
-                    onChange={handleChange}
-                    placeholder="몇 인분인가요 ?"
-                /></div>
-                <br /><br />
-                <div style={{ display: 'flex', flexDirection: 'row',
-                alignItems: 'center', justifyContent: 'space-between'}}>
-                <button type="button" onClick={prevStep} style={{
-                  width: '50%'
-                  }}>이전</button>
-                <button type="button" onClick={nextStep}
-                style={{
-                  width: '50%'
-                  }}>다음</button></div>
-                <br /><br /><br />
+                    name="ingredientName"
+                    value={ingredient.ingredientName}
+                    onChange={(e) => handleArrayChange(e, index, 'ingredients')}
+                    placeholder="재료 이름"
+                  />
+                  <input
+                    type="text"
+                    name="amount"
+                    value={ingredient.amount}
+                    onChange={(e) => handleArrayChange(e, index, 'ingredients')}
+                    placeholder="양"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveArrayItem(index, 'ingredients')}
+                    style={{
+                      width: '18%',
+                      padding: '8px',
+                      backgroundColor: 'white',
+                      color: '#3EAB5C',
+                      border: '1.5px solid #3EAB5C',
+                      borderRadius: '100px',
+                      textAlign: 'center',
+                      marginBottom: '30px',
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
               </div>
-          )}
-
-          {currentStep === 6 && (
-              <div className="label5">
-                <br />
-                <h2 className="create">재료는 어떤 것이 필요한가요 ?</h2>
-                <br />
-                {form.ingredients.map((ingredient, index) => (
-                    <div key={index}>
-                      <div style={{ display: 'flex', flexDirection: 'row',
-                      alignItems: 'center', justifyContent: 'space-between'}}>
-                      <input
-                          type="text"
-                          name="ingredientName"
-                          value={ingredient.ingredientName}
-                          onChange={(e) => handleArrayChange(e, index, 'ingredients')}
-                          placeholder="재료 이름"
-                      />
-                      <input
-                          type="text"
-                          name="amount"
-                          value={ingredient.amount}
-                          onChange={(e) => handleArrayChange(e, index, 'ingredients')}
-                          placeholder="양"
-                      /><button type="button" onClick={() => handleRemoveArrayItem(index, 'ingredients')}
-                      style={{
-                        width: '18%',
-                        padding:'8px',
-                        backgroundColor:'white',
-                        color : '#3EAB5C',
-                        border: '1.5px solid #3EAB5C',
-                        borderRadius : '100px',
-                        textAlign : 'center',
-                        marginBottom: '30px'
-                        }}>X</button></div>
-                      
-                    </div>
-                ))}
-                <button type="button" onClick={() => handleAddArrayItem('ingredients')}
-                  style={{
-                    width: '100%',
-                    backgroundColor:'white',
-                    color : '#3EAB5C',
-                    border: '1.5px solid #3EAB5C',
-                    textAlign : 'center',
-                    }}>+</button>
-                <div style={{ display: 'flex', flexDirection: 'row',
-                alignItems: 'center', justifyContent: 'space-between'}}>
-                <button type="button" onClick={prevStep} style={{
-                  width: '50%'
-                  }}>이전</button>
-                <button type="button" onClick={nextStep}
-                style={{
-                  width: '50%'
-                  }}>다음</button></div>
-                <br /><br /><br />
-              </div>
-          )}
-
-          {currentStep === 7 && (
-              <div className="label6">
-                <br />
-                <h2 className="create">조리 단계를 입력하세요 !</h2>
-                {isPhotoMode ? (
-                    <>
-                      {form.cookSteps.map((step, index) => (
-                          <div key={index}>
-                            <br />
-                            <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}
-                          style={{
-                            width: '18%',
-                            padding:'8px',
-                            backgroundColor:'white',
-                            color : '#3EAB5C',
-                            border: '1.5px solid #3EAB5C',
-                            borderRadius : '100px',
-                            textAlign : 'center',
-                          }}>X</button>
-                            <input
-                                name="content"
-                                value={step.content}
-                                onChange={(e) => handleArrayChange(e, index, 'cookSteps')}
-                                placeholder={step.stepNumber}
-                            />
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => handleCookStepImgChange(e, index)}
-                            />
-                          </div>
-                      ))}
-                      <button type="button" onClick={() => handleAddArrayItem('cookSteps')}
-                        style={{
-                          width: '100%',
-                          backgroundColor:'white',
-                          color : '#3EAB5C',
-                          border: '1.5px solid #3EAB5C',
-                          textAlign : 'center',
-                          }}>+</button>
-                    </>
-                ) : isYouTubeMode ? (
-                    <>
-                    <br/>
-                      <input
-                          type="text"
-                          name="youtubeUrl"
-                          value={form.foodVideoUrl}
-                          onChange={handleChange}
-                          placeholder="유튜브 링크 입력"
-                      />
-                      <br />
-                    </>
-                ) : (
-                    <>
-                      <br/>
-                      <input type="file" accept="video/*" onChange={handleVideoChange} />
-                      {videoPreview && <video src={videoPreview} controls style={{ width: '100%', height: '50%' }} />}
-                      {form.cookSteps.map((step, index) => (
-                          <div key={index}>
-                            <br />
-                            <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}
-                        style={{
-                          width: '18%',
-                          padding:'8px',
-                          backgroundColor:'white',
-                          color : '#3EAB5C',
-                          border: '1.5px solid #3EAB5C',
-                          borderRadius : '100px',
-                          textAlign : 'center',
-                        }}>X</button>
-                            <input
-                                name="content"
-                                value={step.content}
-                                onChange={(e) => handleArrayChange(e, index, 'cookSteps')}
-                                placeholder={step.stepNumber}
-                            />
-                          </div>
-                      ))}
-                      <button type="button" onClick={() => handleAddArrayItem('cookSteps')}
-                        style={{
-                          width: '100%',
-                          backgroundColor:'white',
-                          color : '#3EAB5C',
-                          border: '1.5px solid #3EAB5C',
-                          textAlign : 'center',
-                          }}>+</button>
-                    </>
-                )}
-                <div style={{ display: 'flex', flexDirection: 'row',
-                alignItems: 'center', justifyContent: 'space-between'}}>
-                <button type="button" onClick={prevStep} style={{
-                  width: '50%'
-                  }}>
-                  이전
-                </button>
-                <button type="submit" style={{
-                  width: '50%'
-                  }}>
-                  제출
-                </button>
-              </div>
-                <br /><br /><br />
-              </div>
-          )}
-        </form>
-      </div>  );
+            ))}
+            <button
+              type="button"
+              onClick={() => handleAddArrayItem('ingredients')}
+              style={{
+                width: '100%',
+                backgroundColor: 'white',
+                color: '#3EAB5C',
+                border: '1.5px solid #3EAB5C',
+                textAlign: 'center',
+              }}
+            >
+              +
+            </button>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <button type="button" onClick={prevStep} style={{ width: '50%' }}>
+                이전
+              </button>
+              <button type="button" onClick={nextStep} style={{ width: '50%' }}>
+                다음
+              </button>
+            </div>
+            <br /><br /><br />
+          </div>
+        )}
+  
+        {/* Photo/Video 모드 - Step 7: 조리 단계 입력 */}
+        {!isYouTubeMode && currentStep === 7 && (
+           <div className="label6">
+           <br />
+           <h2 className="create">조리 단계를 입력하세요 !</h2>
+           {isPhotoMode ? (
+               <>
+                 {form.cookSteps.map((step, index) => (
+                     <div key={index}>
+                       <br />
+                       <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}
+                     style={{
+                       width: '18%',
+                       padding:'8px',
+                       backgroundColor:'white',
+                       color : '#3EAB5C',
+                       border: '1.5px solid #3EAB5C',
+                       borderRadius : '100px',
+                       textAlign : 'center',
+                     }}>X</button>
+                       <input
+                           name="content"
+                           value={step.content}
+                           onChange={(e) => handleArrayChange(e, index, 'cookSteps')}
+                           placeholder={step.stepNumber}
+                       />
+                       <input
+                         type="file"
+                         accept="image/*"
+                         onChange={(e) => handleCookStepImgChange(e, index)}
+                       />
+                     </div>
+                 ))}
+                 <button type="button" onClick={() => handleAddArrayItem('cookSteps')}
+                   style={{
+                     width: '100%',
+                     backgroundColor:'white',
+                     color : '#3EAB5C',
+                     border: '1.5px solid #3EAB5C',
+                     textAlign : 'center',
+                     }}>+</button>
+               </>
+           ) : isYouTubeMode ? (
+               <>
+               <br/>
+                 <input
+                     type="text"
+                     name="youtubeUrl"
+                     value={form.foodVideoUrl}
+                     onChange={handleChange}
+                     placeholder="유튜브 링크 입력"
+                 />
+                 <br />
+               </>
+           ) : (
+               <>
+                 <br/>
+                 <input type="file" accept="video/*" onChange={handleVideoChange} />
+                 {videoPreview && <video src={videoPreview} controls style={{ width: '100%', height: '50%' }} />}
+                 {form.cookSteps.map((step, index) => (
+                     <div key={index}>
+                       <br />
+                       <button type="button" onClick={() => handleRemoveArrayItem(index, 'cookSteps')}
+                   style={{
+                     width: '18%',
+                     padding:'8px',
+                     backgroundColor:'white',
+                     color : '#3EAB5C',
+                     border: '1.5px solid #3EAB5C',
+                     borderRadius : '100px',
+                     textAlign : 'center',
+                   }}>X</button>
+                       <input
+                           name="content"
+                           value={step.content}
+                           onChange={(e) => handleArrayChange(e, index, 'cookSteps')}
+                           placeholder={step.stepNumber}
+                       />
+                     </div>
+                 ))}
+                 <button type="button" onClick={() => handleAddArrayItem('cookSteps')}
+                   style={{
+                     width: '100%',
+                     backgroundColor:'white',
+                     color : '#3EAB5C',
+                     border: '1.5px solid #3EAB5C',
+                     textAlign : 'center',
+                     }}>+</button>
+               </>
+           )}
+           <div style={{ display: 'flex', flexDirection: 'row',
+           alignItems: 'center', justifyContent: 'space-between'}}>
+           <button type="button" onClick={prevStep} style={{
+             width: '50%'
+             }}>
+             이전
+           </button>
+           <button type="submit" style={{
+             width: '50%'
+             }}>
+             제출
+           </button>
+         </div>
+           <br /><br /><br />
+         </div>
+     )}
+      </form>
+    </div>
+  );
+  
 }
 
 export default CreateRecipe; 

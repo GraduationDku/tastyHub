@@ -94,19 +94,24 @@ function RecipeDetails({ recipeId }) {
   const handleTimelineClick = (timeline) => {
     try {
       if (!timeline) return;
-
+  
       const seconds = convertToSeconds(timeline); // HH:MM:SS를 초 단위로 변환
-
-      if (videoRef.current) {
-        videoRef.current.currentTime = seconds; // HTML5 비디오 플레이어의 시간 설정
-        videoRef.current.play(); // 비디오 재생
+  
+      if (recipeDetails.recipeType === 'Video' && videoRef.current) {
+        // HTML5 비디오 플레이어
+        videoRef.current.currentTime = seconds;
+        videoRef.current.play();
+      } else if (recipeDetails.recipeType === 'Youtube' && youtubePlayerRef.current) {
+        // YouTube 플레이어
+        youtubePlayerRef.current.seekTo(seconds, true); // 특정 시점으로 이동
       } else {
-        console.warn('Video player is not available');
+        console.warn('No valid video player available');
       }
     } catch (error) {
       console.error('Error handling timeline click:', error);
     }
   };
+  
 
   if (!recipeDetails) {
     return <p>Loading...</p>;
@@ -195,10 +200,16 @@ function RecipeDetails({ recipeId }) {
         {/* 유튜브 */}
         {recipeDetails.recipeType === 'Youtube' && recipeDetails.foodVideoUrl && videoId && (
           <YouTube
-            videoId={videoId}
-            opts={{ width: '100%', height: '500px', playerVars: { controls: 1 } }}
-            onReady={(e) => (youtubePlayerRef.current = e.target)}
-          />
+          videoId={videoId}
+          opts={{
+            width: '100%',
+            height: '180px',
+            playerVars: { controls: 1 },
+          }}
+          onReady={(e) => {
+            youtubePlayerRef.current = e.target; // YouTube API 객체 저장
+          }}
+        />
         )}
         <div>
           <h3>순서</h3>
