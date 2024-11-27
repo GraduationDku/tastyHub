@@ -224,7 +224,8 @@ function RecipeDetails({ recipeId , setScreen}) {
         {recipeDetails.recipeType === 'Video' && (
           <video
             ref={videoRef}
-            src={require('../../../src/assets/sample2.mp4')}
+            // src={require('../../../src/assets/sample2.mp4')}
+            src={recipeDetails.foodVideoUrl}
             controls
             style={{ width: '100%', maxHeight: '300px' }}
           />
