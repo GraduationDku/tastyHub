@@ -50,7 +50,7 @@ const MypageShow = ({ userName }) => {
 
   const fetchWrittenReviews = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/mylist?page=${page}&size=${size}&sort=${sort}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/recipe-review/mylist`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': localStorage.getItem('accessToken')
