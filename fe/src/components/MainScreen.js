@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../css/MainScreen.css';
 
-function MainScreen() {
+function MainScreen({ onRecipeSelect, onPostSelect }) {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -79,7 +79,7 @@ function MainScreen() {
   <div className='recipe-banner'>
     <ul>
       {recipes.map((recipe) => (
-        <li key={recipe.foodId} onClick={() => handleRecipeClick(recipe)}>
+        <li key={recipe.foodId} onClick={() => onRecipeSelect(recipe.foodId)}>
           <img src={recipe.foodImgUrl} alt={selectedRecipe?.foodName || recipe.foodName} style={{ width: '100px' }} />
           <br/><br/>
           {recipe.title} {recipe.foodName}
@@ -94,7 +94,7 @@ function MainScreen() {
   <div className='post-banner'>
     <ul>
       {posts.map((post) => (
-        <li key={post.postId}>
+        <li key={post.postId} onClick={() => onPostSelect(post.postId)}>
           <h3>{post.title}</h3>
           <p>{post.userName}</p>
           <p>{post.postState}</p>

@@ -89,7 +89,7 @@ function App() {
       {screen === 'login' && <Login setScreen={setScreen} />}
       {screen === 'signup' && <Signup setScreen={setScreen} />}
       {screen === 'village' && <Village setScreen={setScreen} />}
-      {screen === 'main' && <MainScreen onRecipeSelect={handleRecipeSelect} />}
+      {screen === 'main' && <MainScreen onRecipeSelect={handleRecipeSelect} onPostSelect={handlePostSelect}/>}
       {screen === 'recipeDetails' && <Recipedetails recipeId={selectedRecipeId} setScreen={setScreen} />}
       {screen === 'recipe' && <Recipe onRecipeSelect={handleRecipeSelect} setScreen={setScreen} />}
       {screen === 'create' && !isGuest && <CreateRecipe setScreen={setScreen} />}
@@ -97,11 +97,12 @@ function App() {
       {screen === 'mainchat' && <MainChat setScreen={setScreen} onChatroomSelect={handleChatroomSelect} isGuest={isGuest} />}
       {screen === 'post' && <Post setScreen={setScreen} onPostSelect={handlePostSelect} isGuest={isGuest} />}
       {screen === 'createpost' && !isGuest && <CreatePost setScreen={setScreen} />}
-      {screen === 'mypage' && <MainMypage setScreen={setScreen} isGuest={isGuest} />}
+      {screen === 'mypage' && <MainMypage onRecipeSelect={handleRecipeSelect} onPostSelect={handlePostSelect} setScreen={setScreen} isGuest={isGuest} />}
       {screen === 'sendchat' && selectedRoomId && !isGuest && <SendChat roomId={selectedRoomId} setScreen={setScreen} username={username} />}
       {screen === 'mypageedit' && !isGuest && <MypageEdit setScreen={setScreen} />}
       {screen === 'postDetails' && <PostDetails postId={selectedPostId} setScreen={setScreen} />}
-      {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} />}
+      {screen === 'mypageshow' && !isGuest && <MypageShow setScreen={setScreen} onRecipeSelect={handleRecipeSelect}/>}
+      
       {screen === 'searchResults' && (
         <div className='searchdiv'>
           <h1>검색 결과</h1>
