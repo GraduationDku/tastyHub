@@ -42,7 +42,7 @@ public class CookStep extends TimeStamped {
   @Size(max = 1024)
   // 조리 시 필요한 내용
   private String content;
-
+  @Column(name = "step_img_url", length = 2000) // 길이를 2000으로 설정
   private String stepImgUrl;
 
   private String timeline;
