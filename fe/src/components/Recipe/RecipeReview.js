@@ -12,6 +12,7 @@ function RecipeReview({ recipeId }) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('accessToken')
           }
         });
         if (response.ok) {
