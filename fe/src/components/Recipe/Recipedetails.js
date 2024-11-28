@@ -169,7 +169,8 @@ function RecipeDetails({ recipeId , setScreen}) {
           onClick={handleDeleteRecipe}
           style={{
             width: ' 100px',
-            marginLeft : '150px'
+            marginLeft : '150px',
+            fontSize : '13px'
           }}
         >삭제하기</button></div>
         <h1
